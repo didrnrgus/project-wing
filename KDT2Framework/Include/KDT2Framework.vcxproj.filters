@@ -1,0 +1,267 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{e44eec18-5c1c-499d-9540-cb250613798b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene\03. Collision">
+      <UniqueIdentifier>{65e4b891-b787-4203-89d5-2b4a5e0f7471}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object">
+      <UniqueIdentifier>{8b82dce4-441b-42fd-aecb-2ccb1b791249}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\01. Player">
+      <UniqueIdentifier>{cfd808e5-0ad3-4f4e-8519-4598825b37da}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\02. Bullet">
+      <UniqueIdentifier>{beb7f0a3-8483-47a5-9692-15f75b10cc5d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\03. Monster">
+      <UniqueIdentifier>{50dabad2-28aa-4463-862a-bc64f7b7093b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\04. Effect">
+      <UniqueIdentifier>{324b654a-6b0a-4865-aaf5-0c5e40b82f42}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Object\05. TileMap">
+      <UniqueIdentifier>{7fe14551-ea01-4bae-9f3c-29433df175c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component">
+      <UniqueIdentifier>{4ec1df76-18c2-4bea-9058-24476de4fb79}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\01. SceneComponent">
+      <UniqueIdentifier>{d24730c2-16c6-4c5a-84f6-639c06b035e5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\01. SceneComponent\03. Collider">
+      <UniqueIdentifier>{20c5644e-4906-4f5e-86ed-7de6e424d7cd}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\01. SceneComponent\03. Collider\01. 2D">
+      <UniqueIdentifier>{81dcd6d0-36c3-495c-afa6-e87ebae84de5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Component\01. SceneComponent\03. Collider\02. 3D">
+      <UniqueIdentifier>{20e602de-af3b-4fd5-9578-8b40d74ec3a3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI">
+      <UniqueIdentifier>{9b94c38c-21df-4067-9d1f-cffe60b879ad}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="UI\02. UserWidget">
+      <UniqueIdentifier>{cbe1fd15-6a5f-4097-a424-7d141c15a111}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Shader">
+      <UniqueIdentifier>{fa77e1f2-55c6-410a-9cbb-4b5e57e72e64}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneMain.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PlayerObject.cpp">
+      <Filter>Object\01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BulletObject.cpp">
+      <Filter>Object\02. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TalonR.cpp">
+      <Filter>Object\02. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TornadoBullet.cpp">
+      <Filter>Object\02. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\MonsterObject.cpp">
+      <Filter>Object\03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\GunnerMonster.cpp">
+      <Filter>Object\03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\NearingMonster.cpp">
+      <Filter>Object\03. Monster</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\GravityBullet.cpp">
+      <Filter>Object\02. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderBase.cpp">
+      <Filter>Component\01. SceneComponent\03. Collider</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderAABB2D.cpp">
+      <Filter>Component\01. SceneComponent\03. Collider\01. 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneCollision.cpp">
+      <Filter>Scene\03. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\CollisionQuadTree.cpp">
+      <Filter>Scene\03. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderSphere2D.cpp">
+      <Filter>Component\01. SceneComponent\03. Collider\01. 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderOBB2D.cpp">
+      <Filter>Component\01. SceneComponent\03. Collider\01. 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\BulletDot.cpp">
+      <Filter>Object\02. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\PenetrationBullet.cpp">
+      <Filter>Object\02. Bullet</Filter>
+    </ClCompile>
+    <ClCompile Include="Component\ColliderLine2D.cpp">
+      <Filter>Component\01. SceneComponent\03. Collider\01. 2D</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneStart.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneEditor.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\TileMapObj.cpp">
+      <Filter>Object\05. TileMap</Filter>
+    </ClCompile>
+    <ClCompile Include="Object\EditorPlayer.cpp">
+      <Filter>Object\01. Player</Filter>
+    </ClCompile>
+    <ClCompile Include="Collision.cpp">
+      <Filter>Scene\03. Collision</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneTitle.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UserWidget\TitleWidget.cpp">
+      <Filter>UI\02. UserWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UserWidget\MainWidget.cpp">
+      <Filter>UI\02. UserWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UserWidget\StartWidget.cpp">
+      <Filter>UI\02. UserWidget</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="resource.h">
+      <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneMain.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerObject.h">
+      <Filter>Object\01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletObject.h">
+      <Filter>Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TalonR.h">
+      <Filter>Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TornadoBullet.h">
+      <Filter>Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\MonsterObject.h">
+      <Filter>Object\03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\GunnerMonster.h">
+      <Filter>Object\03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\NearingMonster.h">
+      <Filter>Object\03. Monster</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\GravityBullet.h">
+      <Filter>Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderBase.h">
+      <Filter>Component\01. SceneComponent\03. Collider</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderAABB2D.h">
+      <Filter>Component\01. SceneComponent\03. Collider\01. 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneCollision.h">
+      <Filter>Scene\03. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\CollisionQuadTree.h">
+      <Filter>Scene\03. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderSphere2D.h">
+      <Filter>Component\01. SceneComponent\03. Collider\01. 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderOBB2D.h">
+      <Filter>Component\01. SceneComponent\03. Collider\01. 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\BulletDot.h">
+      <Filter>Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PenetrationBullet.h">
+      <Filter>Object\02. Bullet</Filter>
+    </ClInclude>
+    <ClInclude Include="Component\ColliderLine2D.h">
+      <Filter>Component\01. SceneComponent\03. Collider\01. 2D</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneStart.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneEditor.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\TileMapObj.h">
+      <Filter>Object\05. TileMap</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\EditorPlayer.h">
+      <Filter>Object\01. Player</Filter>
+    </ClInclude>
+    <ClInclude Include="Collision.h">
+      <Filter>Scene\03. Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneTitle.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserWidget\TitleWidget.h">
+      <Filter>UI\02. UserWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserWidget\MainWidget.h">
+      <Filter>UI\02. UserWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserWidget\StartWidget.h">
+      <Filter>UI\02. UserWidget</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="KDT2Framework.rc">
+      <Filter>리소스 파일</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="icon1.ico">
+      <Filter>리소스 파일</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="..\Bin\Shader\UI.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\ColorMesh.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Mesh.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Share.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\Sprite.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+    <FxCompile Include="..\Bin\Shader\TileMap.fx">
+      <Filter>Shader</Filter>
+    </FxCompile>
+  </ItemGroup>
+</Project>
