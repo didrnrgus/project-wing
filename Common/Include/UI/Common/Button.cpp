@@ -65,6 +65,13 @@ void CButton::SetTint(EButtonState::Type State, float r, float g, float b)
     mBrush[State].Tint.z = b;
 }
 
+void CButton::SetTint(EButtonState::Type State, FVector3D rgb)
+{
+    mBrush[State].Tint.x = rgb.x;
+    mBrush[State].Tint.y = rgb.y;
+    mBrush[State].Tint.z = rgb.z;
+}
+
 void CButton::SetOpacity(EButtonState::Type State, float Opacity)
 {
     mBrush[State].Tint.w = Opacity;

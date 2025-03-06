@@ -43,6 +43,9 @@
     <Filter Include="Component\SceneComponent\Collider\2D">
       <UniqueIdentifier>{81dcd6d0-36c3-495c-afa6-e87ebae84de5}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Data">
+      <UniqueIdentifier>{27360e84-5699-4a21-9347-e1dbbe9fd32b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -78,6 +81,12 @@
     <ClCompile Include="UI\UserWidget\TitleWidget.cpp">
       <Filter>UI\UserWidget</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\SceneLobby.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UserWidget\LobbyWidget.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -112,6 +121,12 @@
     </ClInclude>
     <ClInclude Include="UI\UserWidget\TitleWidget.h">
       <Filter>UI\UserWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneLobby.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserWidget\LobbyWidget.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

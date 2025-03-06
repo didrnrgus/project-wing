@@ -105,6 +105,7 @@ public:
 		const TCHAR* FileName);
 	void SetTexture(EButtonState::Type State, class CTexture* Texture);
 	void SetTint(EButtonState::Type State, float r, float g, float b);
+	void SetTint(EButtonState::Type State, FVector3D rgb);
 	void SetOpacity(EButtonState::Type State, float Opacity);
 	void SetBrushAnimation(EButtonState::Type State, bool Animation);
 	void AddBrushFrame(EButtonState::Type State,
@@ -130,10 +131,25 @@ public:
 
 public:
 	template <typename T>
-	void SetEventCallback(EButtonEventState::Type State, 
-		T* Obj, void(T::* Func)())
+	void SetEventCallback(EButtonEventState::Type State, T* Obj, void(T::* Func)())
 	{
 		mEventCallback[State] = std::bind(Func, Obj);
+	}
+
+	// 람다 넣으려고.
+	using T = std::function<void()>;
+	void SetEventCallback(EButtonEventState::Type State, T&& Func)
+	{
+		/*
+		// 두번쓰면 앞에꺼 덮어씌워짐.
+		mMultiPlayButton->SetEventCallback(EButtonEventState::Click,
+			[]()
+			{
+				CLog::PrintLog("CTitleWidget::MultiPlayButtonClick()");
+			}
+		);
+		*/
+		mEventCallback[State] = std::move(Func);
 	}
 };
 

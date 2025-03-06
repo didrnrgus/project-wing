@@ -2,6 +2,7 @@
 #include "Device.h"
 #include "GameManager.h"
 #include "Scene/Scene.h"
+#include "Scene/SceneLobby.h"
 #include "Scene/SceneUIManager.h"
 #include "Scene/SceneManager.h"
 #include "UI/Common/Button.h"
@@ -74,6 +75,7 @@ bool CTitleWidget::Init()
 	mSinglePlayButton->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, &CTitleWidget::SinglePlayButtonClick);
 	mMultiPlayButton->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, &CTitleWidget::MultiPlayButtonClick);
 	mExitButton->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, &CTitleWidget::ExitButtonClick);
+	
 	return true;
 }
 
@@ -81,7 +83,7 @@ void CTitleWidget::SinglePlayButtonClick()
 {
 	// 로비로 가야 함.
 	CLog::PrintLog("CTitleWidget::SinglePlayButtonClick()");
-	//CSceneManager::GetInst()->CreateLoadScene<CSceneMain>();
+	CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 }
 
 void CTitleWidget::MultiPlayButtonClick()

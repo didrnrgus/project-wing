@@ -3,6 +3,7 @@
 #include "../Device.h"
 #include "Scene.h"
 #include "CameraManager.h"
+#include "Share/Log.h"
 
 CInput::CInput()
 {
@@ -379,6 +380,9 @@ void CInput::UpdateInput(float DeltaTime)
                 {
                     mMouseDown[i] = true;
                     mMouseHold[i] = true;
+
+					CLog::PrintLog("x: " + std::to_string(mMousePos.x)
+						+ ", y: " + std::to_string(mMousePos.y));
                 }
 
                 // 이전 프레임에도 눌렀고 지금도 누르고 있다는 것이다.
