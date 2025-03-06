@@ -160,26 +160,9 @@
     <ClCompile Include="Component\ColliderOBB2D.cpp" />
     <ClCompile Include="Component\ColliderSphere2D.cpp" />
     <ClCompile Include="main.cpp" />
-    <ClCompile Include="Object\BulletDot.cpp" />
-    <ClCompile Include="Object\BulletObject.cpp" />
-    <ClCompile Include="Object\EditorPlayer.cpp" />
-    <ClCompile Include="Object\GravityBullet.cpp" />
-    <ClCompile Include="Object\GunnerMonster.cpp" />
-    <ClCompile Include="Object\MonsterObject.cpp" />
-    <ClCompile Include="Object\NearingMonster.cpp" />
-    <ClCompile Include="Object\PenetrationBullet.cpp" />
-    <ClCompile Include="Object\PlayerObject.cpp" />
-    <ClCompile Include="Object\TalonR.cpp" />
-    <ClCompile Include="Object\TileMapObj.cpp" />
-    <ClCompile Include="Object\TornadoBullet.cpp" />
     <ClCompile Include="Scene\CollisionQuadTree.cpp" />
     <ClCompile Include="Scene\SceneCollision.cpp" />
-    <ClCompile Include="Scene\SceneEditor.cpp" />
-    <ClCompile Include="Scene\SceneMain.cpp" />
-    <ClCompile Include="Scene\SceneStart.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
-    <ClCompile Include="UI\UserWidget\MainWidget.cpp" />
-    <ClCompile Include="UI\UserWidget\StartWidget.cpp" />
     <ClCompile Include="UI\UserWidget\TitleWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -189,27 +172,10 @@
     <ClInclude Include="Component\ColliderLine2D.h" />
     <ClInclude Include="Component\ColliderOBB2D.h" />
     <ClInclude Include="Component\ColliderSphere2D.h" />
-    <ClInclude Include="Object\BulletDot.h" />
-    <ClInclude Include="Object\BulletObject.h" />
-    <ClInclude Include="Object\EditorPlayer.h" />
-    <ClInclude Include="Object\GravityBullet.h" />
-    <ClInclude Include="Object\GunnerMonster.h" />
-    <ClInclude Include="Object\MonsterObject.h" />
-    <ClInclude Include="Object\NearingMonster.h" />
-    <ClInclude Include="Object\PenetrationBullet.h" />
-    <ClInclude Include="Object\PlayerObject.h" />
-    <ClInclude Include="Object\TalonR.h" />
-    <ClInclude Include="Object\TileMapObj.h" />
-    <ClInclude Include="Object\TornadoBullet.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\CollisionQuadTree.h" />
     <ClInclude Include="Scene\SceneCollision.h" />
-    <ClInclude Include="Scene\SceneEditor.h" />
-    <ClInclude Include="Scene\SceneMain.h" />
-    <ClInclude Include="Scene\SceneStart.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
-    <ClInclude Include="UI\UserWidget\MainWidget.h" />
-    <ClInclude Include="UI\UserWidget\StartWidget.h" />
     <ClInclude Include="UI\UserWidget\TitleWidget.h" />
   </ItemGroup>
   <ItemGroup>
