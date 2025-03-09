@@ -42,6 +42,8 @@ protected:
 	int			mZOrder = 0;
 	bool		mMouseOn = false;
 
+	FVector4D mColor = FVector4D::White;
+
 public:
 	void SetOwnerObject(class CSceneObject* Object)
 	{
@@ -168,6 +170,28 @@ public:
 	void SetZOrder(int ZOrder)
 	{
 		mZOrder = ZOrder;
+	}
+
+	void SetColor(const FVector4D& Color)
+	{
+		mColor = Color;
+	}
+
+	void SetColor(float r, float g, float b, float a)
+	{
+		mColor = FVector4D(r, g, b, a);
+	}
+
+	void SetColor(float r, float g, float b)
+	{
+		mColor.x = r;
+		mColor.y = g;
+		mColor.z = b;
+	}
+
+	void SetOpacity(float Opacity)
+	{
+		mColor.w = Opacity;
 	}
 
 public:

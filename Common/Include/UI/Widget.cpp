@@ -67,6 +67,8 @@ void CWidget::Render()
     {
         mRenderPos = mPos;
     }
+
+    mUICBuffer->SetWidgetColor(mColor);
 }
 
 void CWidget::Render(const FVector3D& Pos)

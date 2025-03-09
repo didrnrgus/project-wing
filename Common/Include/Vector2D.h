@@ -425,4 +425,12 @@ struct FVector2D
 	}
 
 #pragma endregion Function
+
+#pragma region StaticVariable
+
+	static FVector2D	Zero;
+	static FVector2D	One;
+	static FVector2D	Axis[EAxis::End];
+
+#pragma endregion StaticVariable
 };

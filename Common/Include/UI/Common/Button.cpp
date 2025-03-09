@@ -219,8 +219,6 @@ void CButton::Render()
 
     mTransformCBuffer->UpdateBuffer();
 
-    mUICBuffer->SetWidgetColor(mColor);
-
     mUICBuffer->SetTint(mBrush[mState].Tint);
 
     if (mBrush[mState].Texture)

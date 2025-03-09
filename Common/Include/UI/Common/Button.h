@@ -41,8 +41,6 @@ protected:
 	CSharedPtr<class CSound>	mSound[EButtonEventState::End];
 	std::function<void()>		mEventCallback[EButtonEventState::End];
 
-	FVector4D		mColor = FVector4D::White;
-
 public:
 	void ButtonEnable(bool Enable)
 	{
@@ -74,28 +72,6 @@ public:
 
 		if (mChild)
 			mChild->SetSize(mSize);
-	}
-
-	void SetColor(const FVector4D& Color)
-	{
-		mColor = Color;
-	}
-
-	void SetColor(float r, float g, float b, float a)
-	{
-		mColor = FVector4D(r, g, b, a);
-	}
-
-	void SetColor(float r, float g, float b)
-	{
-		mColor.x = r;
-		mColor.y = g;
-		mColor.z = b;
-	}
-
-	void SetOpacity(float Opacity)
-	{
-		mColor.w = Opacity;
 	}
 
 

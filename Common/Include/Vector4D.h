@@ -467,6 +467,7 @@ struct FVector4D
 
 #pragma endregion Function
 
+	static FVector4D	Transparent;
 	static FVector4D	Black;
 	static FVector4D	White;
 	static FVector4D	Red;

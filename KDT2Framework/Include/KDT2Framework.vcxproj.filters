@@ -85,7 +85,7 @@
       <Filter>Scene</Filter>
     </ClCompile>
     <ClCompile Include="UI\UserWidget\LobbyWidget.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>UI\UserWidget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -126,7 +126,7 @@
       <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="UI\UserWidget\LobbyWidget.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>UI\UserWidget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -198,6 +198,7 @@
     <ClCompile Include="UI\UserWidget\UserWidget.cpp" />
     <ClCompile Include="UI\UserWidget\WindowWidget.cpp" />
     <ClCompile Include="UI\Widget.cpp" />
+    <ClCompile Include="Vector2D.cpp" />
     <ClCompile Include="Vector3D.cpp" />
     <ClCompile Include="Vector4D.cpp" />
   </ItemGroup>
