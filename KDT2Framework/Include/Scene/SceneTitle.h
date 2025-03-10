@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Scene\Scene.h"
 class CSceneTitle : public CScene
 {

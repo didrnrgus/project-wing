@@ -1,4 +1,4 @@
-#include "TitleWidget.h"
+ï»¿#include "TitleWidget.h"
 #include "Device.h"
 #include "GameManager.h"
 #include "Scene/Scene.h"
@@ -81,14 +81,14 @@ bool CTitleWidget::Init()
 
 void CTitleWidget::SinglePlayButtonClick()
 {
-	// ·Îºñ·Î °¡¾ß ÇÔ.
+	// ë¡œë¹„ë¡œ ê°€ì•¼ í•¨.
 	CLog::PrintLog("CTitleWidget::SinglePlayButtonClick()");
 	CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 }
 
 void CTitleWidget::MultiPlayButtonClick()
 {
-	// ·Îºñ·Î °¡¾ß ÇÔ.
+	// ë¡œë¹„ë¡œ ê°€ì•¼ í•¨.
 	CLog::PrintLog("CTitleWidget::MultiPlayButtonClick()");
 }
 

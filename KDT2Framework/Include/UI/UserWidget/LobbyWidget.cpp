@@ -1,4 +1,4 @@
-#include "LobbyWidget.h"
+ï»¿#include "LobbyWidget.h"
 #include "Device.h"
 #include "GameManager.h"
 #include "Scene/Scene.h"
@@ -18,14 +18,21 @@ CLobbyWidget::CLobbyWidget()
 	itemTypeCount = 3;
 	curSelectedSlot = -1;
 
+	mSlotTextureNamePrefix = "ButtonBackImage_";
+	mItemTextureNamePrefix = "ButtonImage_";
+	mSlotButtonNamePrefix = "SlotButton_";
+
 	mItemImagePaths.push_back(TEXT("Texture\\Icon\\milk.png"));
 	mItemImagePaths.push_back(TEXT("Texture\\Icon\\pharagraphspacing.png"));
 	mItemImagePaths.push_back(TEXT("Texture\\Icon\\ghost.png"));
 
-	SlotPosBase = FVector2D(100, 100);
-	SlotPosAdd = FVector2D(120, 0);
-	SlotSize = FVector2D(100.0f, 100.0f);
-	SlotInnerItemSizeRate = 0.8f;
+	mSlotImagePaths.push_back(TEXT("Texture\\Icon\\add-square.png"));
+	mSlotImagePaths.push_back(TEXT("Texture\\Icon\\empty-square.png"));
+
+	mSlotPosBase = FVector2D(100, 100);
+	mSlotPosAdd = FVector2D(120, 0);
+	mSlotSize = FVector2D(100.0f, 100.0f);
+	mSlotInnerItemSizeRate = 0.8f;
 }
 
 CLobbyWidget::~CLobbyWidget()
@@ -67,25 +74,37 @@ bool CLobbyWidget::Init()
 	SetButton(*(mMapLeftButton.Get()), "MapLeftButton", pathLeft);
 	SetButton(*(mMapRightButton.Get()), "MapRightButton", pathRight);
 
-	// ½½·ÔÀº ÀÌ¹ÌÁö·Î °¡ÀÚ -> Åõ¸í¹öÆ° -> ÀÌ¹ÌÁö(CImage) -> Áß°£¿¡ ÀÌ¹ÌÁö ¹Ù²Ù´Â°Å µÊ.
+	// ìŠ¬ë¡¯ì€ ì´ë¯¸ì§€ë¡œ ê°€ì -> íˆ¬ëª…ë²„íŠ¼ -> ì´ë¯¸ì§€(CImage) -> ì¤‘ê°„ì— ì´ë¯¸ì§€ ë°”ê¾¸ëŠ”ê±° ë¨.
 	for (int i = 0; i < itemSlotCount; i++)
 	{
-		FVector2D tempPos = SlotPosBase + SlotPosAdd * i;
-		// ½½·Ô¿¡ '+' ÀÖ´Â°Í°ú ¾Æ¹«°Íµµ ¾ø´Â ½½·Ô ½ºÀ§Äª ÇÒ°ÍÀÓ.
-		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>("ButtonBackImage");
+		FVector2D tempPos = mSlotPosBase + mSlotPosAdd * i;
+		// ìŠ¬ë¡¯ì— '+' ìˆëŠ”ê²ƒê³¼ ì•„ë¬´ê²ƒë„ ì—†ëŠ” ìŠ¬ë¡¯ ìŠ¤ìœ„ì¹­ í• ê²ƒì„.
+		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mSlotTextureNamePrefix);
 		AddWidget(buttonBackImage);
-		mItemImages.push_back(buttonBackImage);
-		buttonBackImage->SetTexture("ButtonBackImage", TEXT("Texture\\Icon\\add-square.png"));
+		mItemSlotImages.push_back(buttonBackImage);
+		buttonBackImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::Type::ToAdd)
+			, mSlotImagePaths[(int)SlotType::Type::ToAdd]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
-		buttonBackImage->SetSize(SlotSize);
+		buttonBackImage->SetSize(mSlotSize);
 		buttonBackImage->SetColor(FVector4D::Green);
 		buttonBackImage->SetPos(tempPos);
 
-		// ¹öÆ°ÀÌ ÀÎÇ² ÀÌº¥Æ®¿¡ ÀÔ·ÂµÇ¾î¾ß ÇÏ¹Ç·Î.
-		CSharedPtr<CButton> slotButton = mScene->GetUIManager()->CreateWidget<CButton>("SlotButton_" + std::to_string(i));
+		// ìŠ¬ë¡¯ ë‚´ë¶€ ì•„ì´í…œ ì´ë¯¸ì§€.
+		CSharedPtr<CImage> buttonImage = mScene->GetUIManager()->CreateWidget<CImage>(mItemTextureNamePrefix);
+		AddWidget(buttonImage);
+		mItemImages.push_back(buttonImage);
+		buttonImage->SetTexture(mItemTextureNamePrefix + std::to_string(i), mItemImagePaths[i]);
+		buttonImage->SetPivot(FVector2D::One * 0.5f);
+		buttonImage->SetSize(mSlotSize * mSlotInnerItemSizeRate * mSlotInnerItemSizeRate);
+		buttonImage->SetColor(FVector4D::Green);
+		buttonImage->SetPos(tempPos);
+		buttonImage->SetEnable(false);
+
+		// ë²„íŠ¼ì´ ì¸í’‹ ì´ë²¤íŠ¸ì— ì…ë ¥ë˜ì–´ì•¼ í•˜ë¯€ë¡œ.
+		CSharedPtr<CButton> slotButton = mScene->GetUIManager()->CreateWidget<CButton>(mSlotButtonNamePrefix + std::to_string(i));
 		AddWidget(slotButton);
 		mItemSlots.push_back(slotButton);
-		slotButton->SetSize(SlotSize);
+		slotButton->SetSize(mSlotSize);
 		slotButton->SetPivot(FVector2D::One * 0.5f);
 		slotButton->SetColor(FVector4D::Transparent);
 		slotButton->SetPos(tempPos);
@@ -97,8 +116,8 @@ bool CLobbyWidget::Init()
 			});
 	}
 
-	// ½½·Ô ´­·¶À»¶§ ¾ÆÀÌÅÛ ¹öÆ° ¼¼°³ ÂÉ¸£¸¤ ³ª¿À´Â°Å ¼¼ÆÃ.
-	// ÇÏÀÌ¶óÅ° ¼¼ÆÃÀº ÇÏÁö¸»ÀÚ.
+	// ìŠ¬ë¡¯ ëˆŒë €ì„ë•Œ ì•„ì´í…œ ë²„íŠ¼ ì„¸ê°œ ìª¼ë¥´ë¥µ ë‚˜ì˜¤ëŠ”ê±° ì„¸íŒ….
+	// í•˜ì´ë¼í‚¤ ì„¸íŒ…ì€ í•˜ì§€ë§ì.
 	for (int i = 0; i < itemTypeCount; i++)
 	{
 		std::string name = "SelectItemButton_" + std::to_string(i);
@@ -108,7 +127,7 @@ bool CLobbyWidget::Init()
 		this->SetButton(*selectItemButton.Get(), name.c_str(), mItemImagePaths[i]);
 
 		selectItemButton->SetPivot(FVector2D::One * 0.5f);
-		selectItemButton->SetSize(SlotSize * SlotInnerItemSizeRate);
+		selectItemButton->SetSize(mSlotSize * mSlotInnerItemSizeRate);
 		selectItemButton->SetEnable(false);
 		selectItemButton->SetEventCallback(EButtonEventState::Click
 			, [this, i]()
@@ -124,13 +143,25 @@ bool CLobbyWidget::Init()
 
 void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemIndex)
 {
-	asdf
+	// ìŠ¬ë¡¯ ë‚´ ì•„ì´í…œ ì´ë¯¸ì§€ê°€ ë³€ê²½ì´ ë˜ì–´ì•¼ í•¨. 
+	CLog::PrintLog("SelectItemForSlot");
+	CLog::PrintLog("_slotIndex: " + std::to_string(_slotIndex));
+	CLog::PrintLog("_itemIndex: " + std::to_string(_itemIndex));
+
+	auto slotImage = mItemSlotImages[_slotIndex];
+	slotImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::Type::Added)
+		, mSlotImagePaths[(int)SlotType::Type::Added]);
+
+	auto itemImage = mItemImages[_slotIndex];
+	itemImage->SetTexture(mItemTextureNamePrefix + std::to_string(_itemIndex)
+		, mItemImagePaths[_itemIndex]);
+	itemImage->SetEnable(true);
 }
 
 /// <summary>
-/// ½½·Ô Å¬¸¯ÇÏ°í, ¾ÆÀÌÅÛ N°³Áß ÇÏ³ª¸¦ ¼±ÅÃÇßÀ»‹š ÀÎµ¦½º º¸³»±â. [´Ù¸¥¿ëµµ -1]
+/// ìŠ¬ë¡¯ í´ë¦­í•˜ê³ , ì•„ì´í…œ Nê°œì¤‘ í•˜ë‚˜ë¥¼ ì„ íƒí–ˆì„ë–„ ì¸ë±ìŠ¤ ë³´ë‚´ê¸°. [ë‹¤ë¥¸ìš©ë„ -1]
 /// </summary>
-/// <param name="_index">¸ğµÎ ²ø¶© -1·Î</param>
+/// <param name="_index">ëª¨ë‘ ëŒë• -1ë¡œ</param>
 void CLobbyWidget::TriggerItemButtons(int _index)
 {
 	curSelectedSlot = _index;
@@ -144,12 +175,12 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 		return;
 	}
 
-	// ÀÎµ¦½º µé¾î¿Â ÁöÁ¡¿¡, ¼ø¼­´ë·Î ¼¼·Î À§·Î ÂÉ¸£¸¤ ¾ÆÀÌÅÛ ³ª¿­ -> ¼±ÅÃ °¡´ÉÇÏ°Ô²û.
+	// ì¸ë±ìŠ¤ ë“¤ì–´ì˜¨ ì§€ì ì—, ìˆœì„œëŒ€ë¡œ ì„¸ë¡œ ìœ„ë¡œ ìª¼ë¥´ë¥µ ì•„ì´í…œ ë‚˜ì—´ -> ì„ íƒ ê°€ëŠ¥í•˜ê²Œë”.
 	for (int i = 0; i < itemTypeCount; i++)
 	{
-		FVector2D tempPos = SlotPosBase + SlotPosAdd * _index // °¡·Î ½½·Ô ±âÁØ À§Ä¡ -> ¸î¹ø¤Š ½½·Ô¿¡¼­ ´­·ÈÁö?
-			+ FVector2D(0, SlotSize.y * (i + 1)) * SlotInnerItemSizeRate // ¼¼·Î·Î ÇÑÄ­¾¿ ¿Ã¸±²¨
-			+ FVector2D(0, 10) * (i + 1); // °£°İ
+		FVector2D tempPos = mSlotPosBase + mSlotPosAdd * _index // ê°€ë¡œ ìŠ¬ë¡¯ ê¸°ì¤€ ìœ„ì¹˜ -> ëª‡ë²ˆì¨° ìŠ¬ë¡¯ì—ì„œ ëˆŒë ¸ì§€?
+			+ FVector2D(0, mSlotSize.y * (i + 1)) * mSlotInnerItemSizeRate // ì„¸ë¡œë¡œ í•œì¹¸ì”© ì˜¬ë¦´êº¼
+			+ FVector2D(0, 10) * (i + 1); // ê°„ê²©
 		mItemButtons[i]->SetEnable(true);
 		mItemButtons[i]->SetPos(tempPos);
 	}
@@ -159,7 +190,7 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t* _path)
 {
 	FVector3D TintNormal = FVector3D(0, 1, 0);
-	FVector3D TintHovered = FVector3D(0, SlotInnerItemSizeRate, 0);
+	FVector3D TintHovered = FVector3D(0, mSlotInnerItemSizeRate, 0);
 	FVector3D TintClick = FVector3D(0, 0.6f, 0);
 
 	_button.SetTexture(EButtonState::Normal, _name, _path);

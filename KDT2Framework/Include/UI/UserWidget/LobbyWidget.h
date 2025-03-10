@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "UI\UserWidget\UserWidget.h"
 
 class CLobbyWidget : public CUserWidget
@@ -16,22 +16,24 @@ protected:
 	CSharedPtr<class CButton> mMapLeftButton;
 	CSharedPtr<class CButton> mMapRightButton;
 
-	// Åõ¸í¹öÆ°
+	// íˆ¬ëª…ë²„íŠ¼
 	std::vector<CSharedPtr<class CButton>> mItemSlots;
-
-	// ¾ÆÀÌÅÛ Å¬¸¯ ÇÏ°í, ¹Ù²ğ ÀÌ¹ÌÁö
+	// ì•„ì´í…œ ìŠ¬ë¡¯ ì´ë¯¸ì§€ + / empty
+	std::vector<CSharedPtr<class CImage>> mItemSlotImages;
+	// ì•„ì´í…œ í´ë¦­ í•˜ê³ , ë°”ë€” ì´ë¯¸ì§€
 	std::vector<CSharedPtr<class CImage>> mItemImages;
 
-	// ½½·ÔÀ» ´©¸£¸é ¾ÆÀÌÅÛÀÌ À­ÂÊ ¹æÇâ ¼¼·Î·Î Âß ³ª¿Â´Ù
-	// ¾ÆÀÌÅÛ ¹öÆ°µéÀÌ ³ª¿ÔÀ»¶§ ÇÏ³ª ¼±ÅÃ(Å¬¸¯) ÇÏ¸é »ç¶óÁü 3°³
-	// »ç¶óÁö¸é ½½·Ô ¾È¿¡ ¼±ÅÃÇÑ ¾ÆÀÌÅÛÀÌ ³ª¿À°Ô µÈ´Ù
+	// ìŠ¬ë¡¯ì„ ëˆ„ë¥´ë©´ ì•„ì´í…œì´ ìœ—ìª½ ë°©í–¥ ì„¸ë¡œë¡œ ì­‰ ë‚˜ì˜¨ë‹¤
+	// ì•„ì´í…œ ë²„íŠ¼ë“¤ì´ ë‚˜ì™”ì„ë•Œ í•˜ë‚˜ ì„ íƒ(í´ë¦­) í•˜ë©´ ì‚¬ë¼ì§ 3ê°œ
+	// ì‚¬ë¼ì§€ë©´ ìŠ¬ë¡¯ ì•ˆì— ì„ íƒí•œ ì•„ì´í…œì´ ë‚˜ì˜¤ê²Œ ëœë‹¤
 	std::vector<CSharedPtr<class CButton>> mItemButtons; 
 	std::vector<const wchar_t*> mItemImagePaths;
+	std::vector<const wchar_t*> mSlotImagePaths;
 
-	FVector2D SlotPosBase;
-	FVector2D SlotPosAdd;
-	FVector2D SlotSize;
-	float SlotInnerItemSizeRate;
+	FVector2D mSlotPosBase;
+	FVector2D mSlotPosAdd;
+	FVector2D mSlotSize;
+	float mSlotInnerItemSizeRate;
 	
 	bool mIsHost;
 	bool mIsMultiPlay;
@@ -40,6 +42,10 @@ protected:
 	int itemSlotCount;
 
 	int curSelectedSlot;
+
+	std::string mSlotTextureNamePrefix;
+	std::string mItemTextureNamePrefix;
+	std::string mSlotButtonNamePrefix;
 
 public:
 	virtual bool Init();
