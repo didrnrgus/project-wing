@@ -160,6 +160,7 @@
     <ClCompile Include="Component\ColliderOBB2D.cpp" />
     <ClCompile Include="Component\ColliderSphere2D.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Object\PlayerGraphicObject.cpp" />
     <ClCompile Include="Scene\CollisionQuadTree.cpp" />
     <ClCompile Include="Scene\SceneCollision.cpp" />
     <ClCompile Include="Scene\SceneLobby.cpp" />
@@ -174,6 +175,8 @@
     <ClInclude Include="Component\ColliderLine2D.h" />
     <ClInclude Include="Component\ColliderOBB2D.h" />
     <ClInclude Include="Component\ColliderSphere2D.h" />
+    <ClInclude Include="Interface\IPlayerController.h" />
+    <ClInclude Include="Object\PlayerGraphicObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\CollisionQuadTree.h" />
     <ClInclude Include="Scene\SceneCollision.h" />

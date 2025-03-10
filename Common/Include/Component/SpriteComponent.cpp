@@ -102,6 +102,19 @@ void CSpriteComponent::SetOpacity(float Opacity)
     mTint.w = Opacity;
 }
 
+void CSpriteComponent::SetColor(float r, float g, float b, float a)
+{
+    mTint.x = r;
+    mTint.y = g;
+    mTint.z = b;
+    mTint.w = a;
+}
+
+void CSpriteComponent::SetColor(FVector4D color)
+{
+    mTint = color;
+}
+
 void CSpriteComponent::SetTextureIndex(int Index)
 {
     mTextureIndex = Index;

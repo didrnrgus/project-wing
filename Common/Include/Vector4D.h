@@ -473,4 +473,6 @@ struct FVector4D
 	static FVector4D	Red;
 	static FVector4D	Blue;
 	static FVector4D	Green;
+	static FVector4D	Yellow;
+	static FVector4D	Cyan;
 };

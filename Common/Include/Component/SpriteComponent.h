@@ -44,6 +44,8 @@ public:
 		int TextureIndex = 0);
 	void SetTint(float r, float g, float b);
 	void SetOpacity(float Opacity);
+	void SetColor(float r, float g, float b, float a);
+	void SetColor(FVector4D color);
 	void SetTextureIndex(int Index);
 
 public:

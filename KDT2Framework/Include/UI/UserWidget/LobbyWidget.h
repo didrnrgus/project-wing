@@ -16,6 +16,8 @@ protected:
 	CSharedPtr<class CButton> mMapLeftButton;
 	CSharedPtr<class CButton> mMapRightButton;
 
+	CSharedPtr<class CImage> mMapDifficultyImage;
+
 	// 투명버튼
 	std::vector<CSharedPtr<class CButton>> mItemSlots;
 	// 아이템 슬롯 이미지 + / empty
@@ -29,12 +31,16 @@ protected:
 	std::vector<CSharedPtr<class CButton>> mItemButtons; 
 	std::vector<const wchar_t*> mItemImagePaths;
 	std::vector<const wchar_t*> mSlotImagePaths;
+	std::vector<const wchar_t*> mMapDifficultyImagePaths;
 
 	FVector2D mSlotPosBase;
 	FVector2D mSlotPosAdd;
 	FVector2D mSlotSize;
+	FVector2D mMapDifficultyImagePos;
+
 	float mSlotInnerItemSizeRate;
-	
+	float mMapDifficultySinAngle;
+
 	bool mIsHost;
 	bool mIsMultiPlay;
 
@@ -42,22 +48,26 @@ protected:
 	int itemSlotCount;
 
 	int curSelectedSlot;
+	int curPlayerGraphicIndex;
+	int curDifficulty;
+	int maxDifficulty;
 
 	std::string mSlotTextureNamePrefix;
 	std::string mItemTextureNamePrefix;
 	std::string mSlotButtonNamePrefix;
+	std::string mMapDifficultyImageNamePrefix;
 
 public:
-	virtual bool Init();
-
+	virtual bool Init() override;
+	virtual void Update(float DeltaTime) override;
 private:
-	void CharacterLeftButtonClick();
-	void CharacterRightButtonClick();
-	void MapLeftButtonClick();
-	void MapRightButtonClick();
+	void InitScrollSelectButtons();
+	void InitItemButtons();
 
-	void ItemSlotClick(int Index);
-	void ItemClick(int Index);
+	void OnCharacterLeftButtonClick();
+	void OnCharacterRightButtonClick();
+	void OnMapLeftButtonClick();
+	void OnMapRightButtonClick();
 
 	void SelectItemForSlot(int _slotIndex, int _itemIndex);
 	void TriggerItemButtons(int _index);

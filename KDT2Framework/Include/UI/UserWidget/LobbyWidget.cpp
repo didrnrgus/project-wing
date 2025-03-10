@@ -8,6 +8,7 @@
 #include "UI/Common/Image.h"
 #include "UI/Common/TextBlock.h"
 #include "Share/Log.h"
+#include <Interface/IPlayerController.h>
 
 CLobbyWidget::CLobbyWidget()
 {
@@ -17,10 +18,18 @@ CLobbyWidget::CLobbyWidget()
 	itemSlotCount = 3;
 	itemTypeCount = 3;
 	curSelectedSlot = -1;
+	curPlayerGraphicIndex = 0;
+	curDifficulty = 0;
+	maxDifficulty = 3;
 
 	mSlotTextureNamePrefix = "ButtonBackImage_";
 	mItemTextureNamePrefix = "ButtonImage_";
 	mSlotButtonNamePrefix = "SlotButton_";
+	mMapDifficultyImageNamePrefix = "MapImage_";
+
+	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-happy.png"));
+	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-normal.png"));
+	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-sad.png"));
 
 	mItemImagePaths.push_back(TEXT("Texture\\Icon\\milk.png"));
 	mItemImagePaths.push_back(TEXT("Texture\\Icon\\pharagraphspacing.png"));
@@ -32,7 +41,9 @@ CLobbyWidget::CLobbyWidget()
 	mSlotPosBase = FVector2D(100, 100);
 	mSlotPosAdd = FVector2D(120, 0);
 	mSlotSize = FVector2D(100.0f, 100.0f);
+	mMapDifficultyImagePos = FVector2D(1010, 410);
 	mSlotInnerItemSizeRate = 0.8f;
+	mMapDifficultySinAngle = 0.0f;
 }
 
 CLobbyWidget::~CLobbyWidget()
@@ -42,6 +53,40 @@ CLobbyWidget::~CLobbyWidget()
 bool CLobbyWidget::Init()
 {
 	CUserWidget::Init();
+
+	InitScrollSelectButtons();
+	InitItemButtons();
+
+	mMapDifficultyImage = mScene->GetUIManager()->CreateWidget<CImage>(mMapDifficultyImageNamePrefix);
+	AddWidget(mMapDifficultyImage);
+	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(0)
+		, mMapDifficultyImagePaths[0]);
+	mMapDifficultyImage->SetPivot(FVector2D::One * 0.5f);
+	mMapDifficultyImage->SetSize(FVector2D::One * 128 * 1.2f);
+	mMapDifficultyImage->SetPos(mMapDifficultyImagePos);
+
+	return true;
+}
+
+void CLobbyWidget::Update(float DeltaTime)
+{
+	// 맵 선택 이미지 웨이브.
+	{
+		mMapDifficultySinAngle += DeltaTime * 100.0f;
+
+		if (mMapDifficultySinAngle >= 360.0f)
+		{
+			mMapDifficultySinAngle = 0.0f;
+		}
+
+		FVector2D tempPos = mMapDifficultyImage->GetPos();
+		tempPos.y += sin(DirectX::XMConvertToRadians(mMapDifficultySinAngle)) * 1.0f;
+		mMapDifficultyImage->SetPos(tempPos);
+	}
+}
+
+void CLobbyWidget::InitScrollSelectButtons()
+{
 	FResolution RS = CDevice::GetInst()->GetResolution();
 
 	mCharacterLeftButton = mScene->GetUIManager()->CreateWidget<CButton>("CharacterLeftButton");
@@ -66,6 +111,14 @@ bool CLobbyWidget::Init()
 	mMapLeftButton->SetSize(sizeArrow);
 	mMapRightButton->SetSize(sizeArrow);
 
+	mCharacterLeftButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnCharacterLeftButtonClick);
+	mCharacterRightButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnCharacterRightButtonClick);
+	mMapLeftButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnMapLeftButtonClick);
+	mMapRightButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnMapRightButtonClick);
+}
+
+void CLobbyWidget::InitItemButtons()
+{
 	auto pathLeft = TEXT("Texture\\Icon\\direct-left.png");
 	auto pathRight = TEXT("Texture\\Icon\\direct-right.png");
 
@@ -82,8 +135,8 @@ bool CLobbyWidget::Init()
 		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mSlotTextureNamePrefix);
 		AddWidget(buttonBackImage);
 		mItemSlotImages.push_back(buttonBackImage);
-		buttonBackImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::Type::ToAdd)
-			, mSlotImagePaths[(int)SlotType::Type::ToAdd]);
+		buttonBackImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::ToAdd)
+			, mSlotImagePaths[(int)SlotType::ToAdd]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize);
 		buttonBackImage->SetColor(FVector4D::Green);
@@ -137,8 +190,6 @@ bool CLobbyWidget::Init()
 				this->TriggerItemButtons(-1);
 			});
 	}
-
-	return true;
 }
 
 void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemIndex)
@@ -149,8 +200,8 @@ void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemIndex)
 	CLog::PrintLog("_itemIndex: " + std::to_string(_itemIndex));
 
 	auto slotImage = mItemSlotImages[_slotIndex];
-	slotImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::Type::Added)
-		, mSlotImagePaths[(int)SlotType::Type::Added]);
+	slotImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::Added)
+		, mSlotImagePaths[(int)SlotType::Added]);
 
 	auto itemImage = mItemImages[_slotIndex];
 	itemImage->SetTexture(mItemTextureNamePrefix + std::to_string(_itemIndex)
@@ -202,26 +253,45 @@ void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t*
 
 }
 
-void CLobbyWidget::CharacterLeftButtonClick()
+void CLobbyWidget::OnCharacterLeftButtonClick()
 {
+	CLog::PrintLog("CharacterLeftButtonClick()");
+	auto playerController = dynamic_cast<IPlayerController*>(mScene);
+
+	if (playerController)
+	{
+		curPlayerGraphicIndex++;
+
+		if (curPlayerGraphicIndex == playerController->GetGraphicCount())
+			curPlayerGraphicIndex = 0;
+
+		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
+	}
 }
 
-void CLobbyWidget::CharacterRightButtonClick()
+void CLobbyWidget::OnCharacterRightButtonClick()
 {
+	CLog::PrintLog("CharacterRightButtonClick()");
+	auto playerController = dynamic_cast<IPlayerController*>(mScene);
+
+	if (playerController)
+	{
+		if (curPlayerGraphicIndex > 0)
+			curPlayerGraphicIndex--;
+		else
+			curPlayerGraphicIndex = playerController->GetGraphicCount() - 1;
+
+		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
+	}
 }
 
-void CLobbyWidget::MapLeftButtonClick()
+void CLobbyWidget::OnMapLeftButtonClick()
 {
+	CLog::PrintLog("MapLeftButtonClick()");
 }
 
-void CLobbyWidget::MapRightButtonClick()
+void CLobbyWidget::OnMapRightButtonClick()
 {
+	CLog::PrintLog("MapRightButtonClick()");
 }
 
-void CLobbyWidget::ItemSlotClick(int Index)
-{
-}
-
-void CLobbyWidget::ItemClick(int Index)
-{
-}

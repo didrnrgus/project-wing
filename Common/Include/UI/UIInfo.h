@@ -17,7 +17,7 @@ struct FUIBrush
 
 namespace SlotType
 {
-	enum class Type
+	enum Type
 	{
 		ToAdd = 0, // +모양
 		Added = 1, // 빈칸 -> 내부에 다른 이미지 나올것임.
@@ -26,7 +26,7 @@ namespace SlotType
 
 namespace ItemType
 {
-	enum class Type
+	enum Type
 	{
 		Heal = 0,
 		Dex = 1,
