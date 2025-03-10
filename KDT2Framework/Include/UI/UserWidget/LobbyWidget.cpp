@@ -20,7 +20,7 @@ CLobbyWidget::CLobbyWidget()
 	curSelectedSlot = -1;
 	curPlayerGraphicIndex = 0;
 	curDifficulty = 0;
-	maxDifficulty = 3;
+	maxDifficulty = 2;
 
 	mSlotTextureNamePrefix = "ButtonBackImage_";
 	mItemTextureNamePrefix = "ButtonImage_";
@@ -30,6 +30,10 @@ CLobbyWidget::CLobbyWidget()
 	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-happy.png"));
 	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-normal.png"));
 	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-sad.png"));
+
+	mMapDifficultyImageColors.push_back(FVector4D::Cyan);
+	mMapDifficultyImageColors.push_back(FVector4D::Yellow);
+	mMapDifficultyImageColors.push_back(FVector4D::Red);
 
 	mItemImagePaths.push_back(TEXT("Texture\\Icon\\milk.png"));
 	mItemImagePaths.push_back(TEXT("Texture\\Icon\\pharagraphspacing.png"));
@@ -62,26 +66,28 @@ bool CLobbyWidget::Init()
 	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(0)
 		, mMapDifficultyImagePaths[0]);
 	mMapDifficultyImage->SetPivot(FVector2D::One * 0.5f);
-	mMapDifficultyImage->SetSize(FVector2D::One * 128 * 1.2f);
+	mMapDifficultyImage->SetSize(FVector2D::One * 128 * 1.0f);
 	mMapDifficultyImage->SetPos(mMapDifficultyImagePos);
+	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficulty]);
 
 	return true;
 }
 
 void CLobbyWidget::Update(float DeltaTime)
 {
+	CUserWidget::Update(DeltaTime);
+
 	// 맵 선택 이미지 웨이브.
 	{
-		mMapDifficultySinAngle += DeltaTime * 100.0f;
+		mMapDifficultySinAngle += DeltaTime * 180.0f;
 
 		if (mMapDifficultySinAngle >= 360.0f)
 		{
 			mMapDifficultySinAngle = 0.0f;
 		}
 
-		FVector2D tempPos = mMapDifficultyImage->GetPos();
-		tempPos.y += sin(DirectX::XMConvertToRadians(mMapDifficultySinAngle)) * 1.0f;
-		mMapDifficultyImage->SetPos(tempPos);
+		float tempVal = sin(DirectX::XMConvertToRadians(mMapDifficultySinAngle));
+		mMapDifficultyImage->SetPos(mMapDifficultyImagePos + FVector2D(0.0f, tempVal * 10));
 	}
 }
 
@@ -173,6 +179,17 @@ void CLobbyWidget::InitItemButtons()
 	// 하이라키 세팅은 하지말자.
 	for (int i = 0; i < itemTypeCount; i++)
 	{
+		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mSlotTextureNamePrefix);
+		AddWidget(buttonBackImage);
+		mItemSlotImages.push_back(buttonBackImage);
+		buttonBackImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::Added)
+			, mSlotImagePaths[(int)SlotType::Added]);
+		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
+		buttonBackImage->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 1));
+		buttonBackImage->SetColor(FVector4D::Green);
+		buttonBackImage->SetEnable(false);
+		mItemButtonSlotImages.push_back(buttonBackImage);
+
 		std::string name = "SelectItemButton_" + std::to_string(i);
 		CSharedPtr<CButton> selectItemButton = mScene->GetUIManager()->CreateWidget<CButton>(name);
 		AddWidget(selectItemButton);
@@ -180,7 +197,7 @@ void CLobbyWidget::InitItemButtons()
 		this->SetButton(*selectItemButton.Get(), name.c_str(), mItemImagePaths[i]);
 
 		selectItemButton->SetPivot(FVector2D::One * 0.5f);
-		selectItemButton->SetSize(mSlotSize * mSlotInnerItemSizeRate);
+		selectItemButton->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 3));
 		selectItemButton->SetEnable(false);
 		selectItemButton->SetEventCallback(EButtonEventState::Click
 			, [this, i]()
@@ -222,6 +239,7 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 		for (int i = 0; i < itemTypeCount; i++)
 		{
 			mItemButtons[i]->SetEnable(false);
+			mItemButtonSlotImages[i]->SetEnable(false);
 		}
 		return;
 	}
@@ -229,11 +247,13 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 	// 인덱스 들어온 지점에, 순서대로 세로 위로 쪼르륵 아이템 나열 -> 선택 가능하게끔.
 	for (int i = 0; i < itemTypeCount; i++)
 	{
-		FVector2D tempPos = mSlotPosBase + mSlotPosAdd * _index // 가로 슬롯 기준 위치 -> 몇번쨰 슬롯에서 눌렸지?
+		FVector2D tempPos = mSlotPosBase + FVector2D::Axis[EAxis::Y] * 10 + mSlotPosAdd * _index // 가로 슬롯 기준 위치 -> 몇번쨰 슬롯에서 눌렸지?
 			+ FVector2D(0, mSlotSize.y * (i + 1)) * mSlotInnerItemSizeRate // 세로로 한칸씩 올릴꺼
-			+ FVector2D(0, 10) * (i + 1); // 간격
+			+ FVector2D(0, 5) * (i + 1); // 간격
 		mItemButtons[i]->SetEnable(true);
 		mItemButtons[i]->SetPos(tempPos);
+		mItemButtonSlotImages[i]->SetEnable(true);
+		mItemButtonSlotImages[i]->SetPos(tempPos);
 	}
 
 }
@@ -241,7 +261,7 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t* _path)
 {
 	FVector3D TintNormal = FVector3D(0, 1, 0);
-	FVector3D TintHovered = FVector3D(0, mSlotInnerItemSizeRate, 0);
+	FVector3D TintHovered = FVector3D(0, 0.8f, 0);
 	FVector3D TintClick = FVector3D(0, 0.6f, 0);
 
 	_button.SetTexture(EButtonState::Normal, _name, _path);
@@ -288,10 +308,28 @@ void CLobbyWidget::OnCharacterRightButtonClick()
 void CLobbyWidget::OnMapLeftButtonClick()
 {
 	CLog::PrintLog("MapLeftButtonClick()");
+
+	curDifficulty--;
+
+	if (curDifficulty < 0)
+		curDifficulty = maxDifficulty;
+
+	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficulty)
+		, mMapDifficultyImagePaths[curDifficulty]);
+	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficulty]);
 }
 
 void CLobbyWidget::OnMapRightButtonClick()
 {
 	CLog::PrintLog("MapRightButtonClick()");
+
+	curDifficulty++;
+
+	if (curDifficulty > maxDifficulty)
+		curDifficulty = 0;
+
+	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficulty)
+		, mMapDifficultyImagePaths[curDifficulty]);
+	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficulty]);
 }
 

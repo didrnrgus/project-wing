@@ -15,20 +15,21 @@ bool CAnimation2DManager::Init()
 {
 	CAnimation2D::CreateCBuffer();
 
-	//기본 헬기 이미지
+	// 새 이미지
 	{
 		CreateAnimation("PlayerIdle");
 		SetAnimationTextureType("PlayerIdle", EAnimationTextureType::SpriteSheet);
-		SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture\\player_12x128.png")); // 423 * 600
+		SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture\\bird_4x1_798x135.png")); // 798 * 135
 
-		int sizeX = 128;
-		int sizeY = 128;
+		int sizeX = 798 / 4;
+		int sizeY = 135;
 
-		for (int i = 0; i < 12; ++i)
+		for (int i = 0; i < 2; ++i)
 		{
 			AddFrame("PlayerIdle", sizeX * i, sizeY, sizeX, sizeY);
 		}
 	}
+
 
 	return true;
 }

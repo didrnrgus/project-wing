@@ -29,9 +29,12 @@ protected:
 	// 아이템 버튼들이 나왔을때 하나 선택(클릭) 하면 사라짐 3개
 	// 사라지면 슬롯 안에 선택한 아이템이 나오게 된다
 	std::vector<CSharedPtr<class CButton>> mItemButtons; 
+	std::vector<CSharedPtr<class CImage>> mItemButtonSlotImages;
 	std::vector<const wchar_t*> mItemImagePaths;
 	std::vector<const wchar_t*> mSlotImagePaths;
 	std::vector<const wchar_t*> mMapDifficultyImagePaths;
+
+	std::vector<FVector4D> mMapDifficultyImageColors;
 
 	FVector2D mSlotPosBase;
 	FVector2D mSlotPosAdd;

@@ -18,6 +18,8 @@ protected:
 
 	std::vector<FVector4D> mPlayerColors;
 
+	FVector3D mRootInitPos;
+	float mMapDifficultySinAngle;
 public:
 	virtual bool Init() override;
 	virtual void Update(float DeltaTime) override;

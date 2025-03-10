@@ -27,6 +27,9 @@ bool CPlayerGraphicObject::Init()
 	mPlayerColors.push_back(FVector4D::Green);
 	mPlayerColors.push_back(FVector4D::Cyan);
 	mPlayerColors.push_back(FVector4D::Yellow);
+	
+	mRootInitPos = FVector3D(370.f, 242.f, 0.f);
+	mMapDifficultySinAngle = 0.0f;
 
 	mRoot = CreateComponent<CSpriteComponent>("Player");
 	mCamera = CreateComponent<CCameraComponent>();
@@ -34,15 +37,15 @@ bool CPlayerGraphicObject::Init()
 	mCamera->SetWorldPos(FVector3D::Zero);
 
 	mRoot->SetPivot(0.5f, 0.5f);
-	mRoot->SetWorldPos(370.f, 242.f, 0.f);
-	FVector3D tempRootSize = FVector3D(128.f, 128.f, 1.f);
-	mRoot->SetWorldScale(tempRootSize * 1.2f);
+	mRoot->SetWorldPos(mRootInitPos);
+	FVector3D tempRootSize = FVector3D(200.0f, 135.0f, 1.f);
+	mRoot->SetWorldScale(tempRootSize * 1.0f);
 	mRoot->SetColor(mPlayerColors[0]);
 	SetRootComponent(mRoot);
 
 
 	mAnimation = mRoot->CreateAnimation2D<CAnimation2D>();
-	mAnimation->AddSequence("PlayerIdle", 1.0f, 1.f, true, false);
+	mAnimation->AddSequence("PlayerIdle", 0.3f, 1.f, true, false);
 	mAnimation->ChangeAnimation("PlayerIdle");
 
 	return true;
@@ -51,6 +54,19 @@ bool CPlayerGraphicObject::Init()
 void CPlayerGraphicObject::Update(float DeltaTime)
 {
 	CSceneObject::Update(DeltaTime);
+
+	// 맵 선택 이미지 웨이브.
+	{
+		mMapDifficultySinAngle += DeltaTime * 180.0f;
+
+		if (mMapDifficultySinAngle >= 360.0f)
+		{
+			mMapDifficultySinAngle = 0.0f;
+		}
+
+		float tempVal = cos(DirectX::XMConvertToRadians(mMapDifficultySinAngle));
+		mRoot->SetWorldPos(mRootInitPos + FVector3D::Axis[EAxis::Y] * tempVal * 10);
+	}
 }
 
 int CPlayerGraphicObject::GetGraphicCount()
