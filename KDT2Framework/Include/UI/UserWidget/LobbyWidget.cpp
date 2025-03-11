@@ -9,6 +9,8 @@
 #include "UI/Common/TextBlock.h"
 #include "Share/Log.h"
 #include <Interface/IPlayerController.h>
+#include <Scene/SceneInGame.h>
+#include <Scene/SceneTitle.h>
 
 CLobbyWidget::CLobbyWidget()
 {
@@ -61,6 +63,7 @@ bool CLobbyWidget::Init()
 	InitScrollSelectButtons();
 	InitItemButtons();
 
+	// difficulty Image
 	mMapDifficultyImage = mScene->GetUIManager()->CreateWidget<CImage>(mMapDifficultyImageNamePrefix);
 	AddWidget(mMapDifficultyImage);
 	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(0)
@@ -70,6 +73,7 @@ bool CLobbyWidget::Init()
 	mMapDifficultyImage->SetPos(mMapDifficultyImagePos);
 	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficulty]);
 
+	// next button
 	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>("NextButton");
 	AddWidget(mNextButton);
 	SetButton(*mNextButton.Get(), "NextButton", TEXT("Texture\\Icon\\arrow-square-right.png"));
@@ -80,7 +84,21 @@ bool CLobbyWidget::Init()
 		, []()
 		{
 			CLog::PrintLog("mNextButton Click");
+			CSceneManager::GetInst()->CreateLoadScene<CSceneInGame>();
+		});
 
+	// previous button
+	mPrevButton = mScene->GetUIManager()->CreateWidget<CButton>("PrevButton");
+	AddWidget(mPrevButton);
+	SetButton(*mPrevButton.Get(), "PrevButton", TEXT("Texture\\Icon\\arrow-square-left.png"));
+	mPrevButton->SetPivot(FVector2D::One * 0.5f);
+	mPrevButton->SetSize(FVector2D::One * 96.0f * 1.0f);
+	mPrevButton->SetPos(FVector2D(100, 650));
+	mPrevButton->SetEventCallback(EButtonEventState::Click
+		, []()
+		{
+			CLog::PrintLog("mPrevButton Click");
+			CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
 		});
 
 	return true;

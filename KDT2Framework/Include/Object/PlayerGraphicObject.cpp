@@ -32,10 +32,6 @@ bool CPlayerGraphicObject::Init()
 	mMapDifficultySinAngle = 0.0f;
 
 	mRoot = CreateComponent<CSpriteComponent>("Player");
-	mCamera = CreateComponent<CCameraComponent>();
-	mCamera->SetProjectionType(ECameraProjectionType::Ortho);
-	mCamera->SetWorldPos(FVector3D::Zero);
-
 	mRoot->SetPivot(0.5f, 0.5f);
 	mRoot->SetWorldPos(mRootInitPos);
 	FVector3D tempRootSize = FVector3D(200.0f, 135.0f, 1.f);

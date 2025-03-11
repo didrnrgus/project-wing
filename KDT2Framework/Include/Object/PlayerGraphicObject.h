@@ -13,7 +13,6 @@ protected:
 
 protected:
 	CSharedPtr<class CSpriteComponent> mRoot;
-	CSharedPtr<class CCameraComponent> mCamera;
 	class CAnimation2D* mAnimation = nullptr;
 
 	std::vector<FVector4D> mPlayerColors;

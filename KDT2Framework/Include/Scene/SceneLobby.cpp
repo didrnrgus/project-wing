@@ -2,6 +2,7 @@
 #include "UI/UserWidget/LobbyWidget.h"
 #include "Scene/SceneUIManager.h"
 #include "Object/PlayerGraphicObject.h"
+#include <Object/CameraObject.h>
 
 CSceneLobby::CSceneLobby()
 {
@@ -13,6 +14,7 @@ CSceneLobby::~CSceneLobby()
 
 bool CSceneLobby::InitAsset()
 {
+    CCameraObject* Camera = CreateObj<CCameraObject>("Camera");
     CPlayerGraphicObject* PlayerGraphic = CreateObj<CPlayerGraphicObject>("PlayerGraphic");
     players.push_back(PlayerGraphic);
 

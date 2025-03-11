@@ -99,6 +99,9 @@
     <ClCompile Include="Scene\Collision.cpp">
       <Filter>Scene\Collision</Filter>
     </ClCompile>
+    <ClCompile Include="Object\CameraObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -151,6 +154,9 @@
     </ClInclude>
     <ClInclude Include="Scene\Collision.h">
       <Filter>Scene\Collision</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\CameraObject.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
