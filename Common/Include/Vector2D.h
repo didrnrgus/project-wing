@@ -404,24 +404,9 @@ struct FVector2D
 		return v1.Length();
 	}
 
-	float GetAngle(const FVector2D& v)	const
+	static float GetAngle(const FVector2D& start, const FVector2D& end)
 	{
-		FVector2D	v1 = *this;
-		FVector2D	v2 = v;
-
-		v1.Normalize();
-		v2.Normalize();
-
-		float Angle = v1.Dot(v2);
-
-		Angle = DirectX::XMConvertToDegrees(acosf(Angle));
-
-		return Angle;
-	}
-
-	static float GetAngle(const FVector2D& v1, const FVector2D& v2)
-	{
-		return 0.f;
+		return DirectX::XMConvertToDegrees(atan2(end.y - start.y, end.x - start.x)) - 90.0f;
 	}
 
 #pragma endregion Function

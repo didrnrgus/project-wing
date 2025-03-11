@@ -20,6 +20,8 @@
 #include <dwrite_3.h>	// 위의 기능에 Window10 기능 추가
 #include <d2d1.h>
 
+#include <nlohmann/json.hpp>
+
 #include "Vector2D.h"
 #include "Vector3D.h"
 #include "Vector4D.h"
@@ -200,6 +202,21 @@ struct FLine2D
 {
 	FVector2D	Start;
 	FVector2D	End;
+
+	FVector2D GetMidPoint() const
+	{
+		return FVector2D((Start.x + End.x) / 2.0f, (Start.y + End.y) / 2.0f);
+	}
+
+	float GetRotationAngle() const
+	{
+		return FVector2D::GetAngle(Start, End);
+	}
+
+	float GetLength() const
+	{
+		return FVector2D(End.x - Start.x, End.y - Start.y).Length();
+	}
 };
 
 namespace ECollisionChannel
@@ -208,10 +225,7 @@ namespace ECollisionChannel
 	{
 		Default,
 		Player,
-		Monster,
-		PlayerAttack,
-		MonsterAttack,
-		MonsterDetect,
+		Map,
 		End
 	};
 }

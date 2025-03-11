@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Common\Include\;$(SolutionDir)AssetProj\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)AssetProj\Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Common\Include\;$(SolutionDir)AssetProj\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)AssetProj\Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -160,6 +160,7 @@
     <ClCompile Include="Component\ColliderSphere2D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\CameraObject.cpp" />
+    <ClCompile Include="Object\LineGroupObject.cpp" />
     <ClCompile Include="Object\PlayerGraphicObject.cpp" />
     <ClCompile Include="Scene\Collision.cpp" />
     <ClCompile Include="Scene\CollisionQuadTree.cpp" />
@@ -178,7 +179,9 @@
     <ClInclude Include="Component\ColliderOBB2D.h" />
     <ClInclude Include="Component\ColliderSphere2D.h" />
     <ClInclude Include="Interface\IPlayerController.h" />
+    <ClInclude Include="JsonContainer.h" />
     <ClInclude Include="Object\CameraObject.h" />
+    <ClInclude Include="Object\LineGroupObject.h" />
     <ClInclude Include="Object\PlayerGraphicObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\Collision.h" />

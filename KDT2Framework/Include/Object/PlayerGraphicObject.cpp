@@ -27,7 +27,7 @@ bool CPlayerGraphicObject::Init()
 	mPlayerColors.push_back(FVector4D::Green);
 	mPlayerColors.push_back(FVector4D::Cyan);
 	mPlayerColors.push_back(FVector4D::Yellow);
-	
+
 	mRootInitPos = FVector3D(370.f, 242.f, 0.f);
 	mMapDifficultySinAngle = 0.0f;
 
@@ -67,7 +67,7 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 
 int CPlayerGraphicObject::GetGraphicCount()
 {
-	return mPlayerColors.size();
+	return (int)mPlayerColors.size();
 }
 
 bool CPlayerGraphicObject::SetChangeGraphic(int index)
