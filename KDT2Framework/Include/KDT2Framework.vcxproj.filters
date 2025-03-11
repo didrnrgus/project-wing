@@ -75,9 +75,6 @@
     <ClCompile Include="Component\ColliderLine2D.cpp">
       <Filter>Component\SceneComponent\Collider\2D</Filter>
     </ClCompile>
-    <ClCompile Include="Collision.cpp">
-      <Filter>Scene\Collision</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\SceneTitle.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -92,6 +89,15 @@
     </ClCompile>
     <ClCompile Include="Object\PlayerGraphicObject.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneInGame.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="UI\UserWidget\InGameWidget.cpp">
+      <Filter>UI\UserWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Collision.cpp">
+      <Filter>Scene\Collision</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -119,9 +125,6 @@
     <ClInclude Include="Component\ColliderLine2D.h">
       <Filter>Component\SceneComponent\Collider\2D</Filter>
     </ClInclude>
-    <ClInclude Include="Collision.h">
-      <Filter>Scene\Collision</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\SceneTitle.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -139,6 +142,15 @@
     </ClInclude>
     <ClInclude Include="Interface\IPlayerController.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneInGame.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserWidget\InGameWidget.h">
+      <Filter>UI\UserWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Collision.h">
+      <Filter>Scene\Collision</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

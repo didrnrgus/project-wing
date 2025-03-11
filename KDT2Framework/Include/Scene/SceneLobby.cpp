@@ -31,6 +31,8 @@ bool CSceneLobby::InitWidget()
     return true;
 }
 
+#pragma region IPlayerController
+
 CSceneObject* CSceneLobby::GetPlayer(int index)
 {
     return players[index];
@@ -61,3 +63,5 @@ bool CSceneLobby::SetChangeGraphic(int playerIndex, int graphicIndex)
     auto result = tempPlayer->SetChangeGraphic(graphicIndex);
     return result;
 }
+
+#pragma endregion

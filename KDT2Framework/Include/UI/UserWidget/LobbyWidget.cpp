@@ -70,6 +70,19 @@ bool CLobbyWidget::Init()
 	mMapDifficultyImage->SetPos(mMapDifficultyImagePos);
 	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficulty]);
 
+	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>("NextButton");
+	AddWidget(mNextButton);
+	SetButton(*mNextButton.Get(), "NextButton", TEXT("Texture\\Icon\\arrow-square-right.png"));
+	mNextButton->SetPivot(FVector2D::One * 0.5f);
+	mNextButton->SetSize(FVector2D::One * 128 * 1.0f);
+	mNextButton->SetPos(FVector2D(1150, 100));
+	mNextButton->SetEventCallback(EButtonEventState::Click
+		, []()
+		{
+			CLog::PrintLog("mNextButton Click");
+
+		});
+
 	return true;
 }
 

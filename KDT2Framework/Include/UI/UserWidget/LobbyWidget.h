@@ -18,6 +18,8 @@ protected:
 
 	CSharedPtr<class CImage> mMapDifficultyImage;
 
+	CSharedPtr<class CButton> mNextButton;
+
 	// 투명버튼
 	std::vector<CSharedPtr<class CButton>> mItemSlots;
 	// 아이템 슬롯 이미지 + / empty

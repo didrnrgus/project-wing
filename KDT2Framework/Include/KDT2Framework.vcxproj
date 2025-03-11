@@ -153,7 +153,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Collision.cpp" />
     <ClCompile Include="Component\ColliderAABB2D.cpp" />
     <ClCompile Include="Component\ColliderBase.cpp" />
     <ClCompile Include="Component\ColliderLine2D.cpp" />
@@ -161,15 +160,17 @@
     <ClCompile Include="Component\ColliderSphere2D.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\PlayerGraphicObject.cpp" />
+    <ClCompile Include="Scene\Collision.cpp" />
     <ClCompile Include="Scene\CollisionQuadTree.cpp" />
     <ClCompile Include="Scene\SceneCollision.cpp" />
+    <ClCompile Include="Scene\SceneInGame.cpp" />
     <ClCompile Include="Scene\SceneLobby.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
+    <ClCompile Include="UI\UserWidget\InGameWidget.cpp" />
     <ClCompile Include="UI\UserWidget\LobbyWidget.cpp" />
     <ClCompile Include="UI\UserWidget\TitleWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Collision.h" />
     <ClInclude Include="Component\ColliderAABB2D.h" />
     <ClInclude Include="Component\ColliderBase.h" />
     <ClInclude Include="Component\ColliderLine2D.h" />
@@ -178,10 +179,13 @@
     <ClInclude Include="Interface\IPlayerController.h" />
     <ClInclude Include="Object\PlayerGraphicObject.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene\Collision.h" />
     <ClInclude Include="Scene\CollisionQuadTree.h" />
     <ClInclude Include="Scene\SceneCollision.h" />
+    <ClInclude Include="Scene\SceneInGame.h" />
     <ClInclude Include="Scene\SceneLobby.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
+    <ClInclude Include="UI\UserWidget\InGameWidget.h" />
     <ClInclude Include="UI\UserWidget\LobbyWidget.h" />
     <ClInclude Include="UI\UserWidget\TitleWidget.h" />
   </ItemGroup>
