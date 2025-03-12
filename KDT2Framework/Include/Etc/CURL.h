@@ -1,21 +1,21 @@
 #pragma once
 
 #include "GameInfo.h"
+ 
+#define HEADER_AUTHORIZATION "Authorization: "
+#define HEADER_NOTION_VERSION "Notion-Version: "
+#define HEADER_CONTENT_TYPE "Content-Type: application/json"
+
+#define CACERT_PATH "./pem/cacert.pem"
+#define CONFIG_PATH "https://didrnrgus.github.io/project-wing-webserver/config.json"
+
+#define METHOD_POST "POST"
+#define METHOD_PATCH "PATCH"
+#define METHOD_DELETE "DELETE"
+#define METHOD_GET "GET"
 
 class CCURL
 {
-private:
-    const std::string HEADER_AUTHORIZATION = "Authorization: ";
-    const std::string HEADER_NOTION_VERSION = "Notion-Version: ";
-    const std::string HEADER_CONTENT_TYPE = "Content-Type: application/json";
-
-public:
-    const std::string CACERT_PATH = "./pem/cacert.pem";
-    const std::string METHOD_POST = "POST";
-    const std::string METHOD_PATCH = "PATCH";
-    const std::string METHOD_DELETE = "DELETE";
-    const std::string METHOD_GET = "GET";
-    
 public:
     // GET Àº InJsonData »ý¶ô.
     std::string SendRequest(const std::string& InURL, const std::string& InMethod, const std::string& InJsonData = "");

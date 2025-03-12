@@ -26,8 +26,6 @@ public:
 private:
 	void SetButtonWithTextBlock(class CButton* button, std::string name, FVector2D pos
 		, void(CTitleWidget::* Func)(), class CTextBlock* textBlock, const wchar_t* textBlockContent);
-	void LoadData();
-
 	void SinglePlayButtonClick();
 	void MultiPlayButtonClick();
 	void RankButtonClick();

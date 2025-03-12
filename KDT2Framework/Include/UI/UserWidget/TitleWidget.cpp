@@ -9,6 +9,8 @@
 #include "UI/Common/Image.h"
 #include "UI/Common/TextBlock.h"
 #include "Share/Log.h"
+#include "Etc/CURL.h"
+#include "Etc/TaskManager.h"
 
 CTitleWidget::CTitleWidget()
 {
@@ -37,6 +39,15 @@ bool CTitleWidget::Init()
 	SetButtonWithTextBlock(mExitButton, "Exit", exitPos
 		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
 
+	//CTaskManager::GetInst()->AddTask(std::move(std::thread(
+	//	[]() 
+	//	{ 
+	//		//config load
+	//		auto configResult = CCURL::GetInst()->SendRequest(CONFIG_PATH, METHOD_GET);
+	//		CLog::PrintLog("configResult: " + configResult);
+	//	})));
+
+
 	return true;
 }
 
@@ -58,11 +69,6 @@ void CTitleWidget::SetButtonWithTextBlock(CButton* button, std::string name, FVe
 	textBlock->SetShadowEnable(true);
 	textBlock->SetShadowOffset(3.f, 3.f);
 	textBlock->SetTextShadowColor(FVector4D(0.5f, 0.5f, 0.5f, 1.0f));
-}
-
-void CTitleWidget::LoadData()
-{
-
 }
 
 void CTitleWidget::SinglePlayButtonClick()

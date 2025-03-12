@@ -23,44 +23,49 @@ size_t WriteCallback(void* contents, size_t size, size_t nmemb, std::string* out
 }
 
 std::string CCURL::SendRequest(const std::string& InURL
-    , const std::string& InMethod
-    , const std::string& InJsonData)
+	, const std::string& InMethod
+	, const std::string& InJsonData)
 {
 	CURL* curl = curl_easy_init();
 	if (!curl) return "Failed to initialize cURL";
 
 	// SSL 인증서 파일 설정 (SSL 검증을 위한 인증서 경로)
-	curl_easy_setopt(curl, CURLOPT_CAINFO, CACERT_PATH.c_str());
+	curl_easy_setopt(curl, CURLOPT_CAINFO, CACERT_PATH);
 
 	std::string response;
 	std::string auth = HEADER_AUTHORIZATION + CNotionDBController::GetInst()->GetNotionAPIKey();
 	std::string version = HEADER_NOTION_VERSION + CNotionDBController::GetInst()->GetLastUpdateDate();
 
-	// 헤더 추가
-	struct curl_slist* headers = NULL;
-	headers = curl_slist_append(headers, auth.c_str());
-	headers = curl_slist_append(headers, version.c_str());
-	headers = curl_slist_append(headers, HEADER_CONTENT_TYPE.c_str());
-
 	curl_easy_setopt(curl, CURLOPT_URL, InURL.c_str());
-	curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
 	curl_easy_setopt(curl, CURLOPT_WRITEDATA, &response);
 
-	// HTTP Method 설정
-	if (InMethod == METHOD_POST)
+	struct curl_slist* headers = NULL;
+
+	if (InMethod == METHOD_GET)
 	{
-		curl_easy_setopt(curl, CURLOPT_POST, 1L);
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, InJsonData.c_str());
-	}
-	else if (InMethod == METHOD_PATCH)
-	{
-		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, METHOD_PATCH.c_str());
-		curl_easy_setopt(curl, CURLOPT_POSTFIELDS, InJsonData.c_str());
-	}
-	else if (InMethod == METHOD_DELETE)
-	{
-		curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, METHOD_DELETE.c_str());
+		// 헤더 추가
+		headers = curl_slist_append(headers, auth.c_str());
+		headers = curl_slist_append(headers, version.c_str());
+		headers = curl_slist_append(headers, HEADER_CONTENT_TYPE);
+
+		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);
+
+		// HTTP Method 설정
+		if (InMethod == METHOD_POST)
+		{
+			curl_easy_setopt(curl, CURLOPT_POST, 1L);
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, InJsonData.c_str());
+		}
+		else if (InMethod == METHOD_PATCH)
+		{
+			curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, METHOD_PATCH);
+			curl_easy_setopt(curl, CURLOPT_POSTFIELDS, InJsonData.c_str());
+		}
+		else if (InMethod == METHOD_DELETE)
+		{
+			curl_easy_setopt(curl, CURLOPT_CUSTOMREQUEST, METHOD_DELETE);
+		}
 	}
 
 	CURLcode res = curl_easy_perform(curl);

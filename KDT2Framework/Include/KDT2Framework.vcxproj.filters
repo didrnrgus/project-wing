@@ -120,6 +120,9 @@
     <ClCompile Include="Etc\DataStorageManager.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
+    <ClCompile Include="Etc\TaskManager.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -195,6 +198,9 @@
       <Filter>Etc</Filter>
     </ClInclude>
     <ClInclude Include="Etc\DataStorageManager.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\TaskManager.h">
       <Filter>Etc</Filter>
     </ClInclude>
   </ItemGroup>
