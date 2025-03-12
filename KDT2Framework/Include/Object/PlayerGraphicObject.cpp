@@ -23,7 +23,7 @@ bool CPlayerGraphicObject::Init()
 	CSceneObject::Init();
 
 	mPlayerColors.push_back(FVector4D::White);
-	mPlayerColors.push_back(FVector4D::Red);
+	mPlayerColors.push_back(FVector4D::Pink);
 	mPlayerColors.push_back(FVector4D::Green);
 	mPlayerColors.push_back(FVector4D::Cyan);
 	mPlayerColors.push_back(FVector4D::Yellow);

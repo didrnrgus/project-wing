@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include <math.h>
+#include "string"
 #include "EngineMath.h"
 
 struct FVector4D
@@ -475,4 +476,7 @@ struct FVector4D
 	static FVector4D	Green;
 	static FVector4D	Yellow;
 	static FVector4D	Cyan;
+	static FVector4D	Pink;
+
+	static FVector4D GetColorFromString(std::string colorName);
 };
