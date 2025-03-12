@@ -8,7 +8,6 @@
 #include "UI/Common/Button.h"
 #include "UI/Common/Image.h"
 #include "UI/Common/TextBlock.h"
-#include "Share/Log.h"
 #include "Etc/CURL.h"
 #include "Etc/TaskManager.h"
 

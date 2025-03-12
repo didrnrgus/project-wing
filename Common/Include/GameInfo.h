@@ -29,6 +29,7 @@
 #include "Matrix.h"
 
 #include "Share/SharedPtr.h"
+#include "Share/Log.h"
 
 // extern 은 선언된 전역변수를 다른곳에서 사용할 수 있게
 // 해주는 기능이다.

@@ -3,7 +3,6 @@
 #include "../Device.h"
 #include "Scene.h"
 #include "CameraManager.h"
-#include "Share/Log.h"
 
 CInput::CInput()
 {

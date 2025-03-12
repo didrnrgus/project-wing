@@ -5,7 +5,6 @@
 #include "Device.h"
 #include "Scene/Input.h"
 #include "Scene/Scene.h"
-#include "Share/Log.h"
 
 CLineGroupObject::CLineGroupObject()
 {

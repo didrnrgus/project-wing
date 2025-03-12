@@ -1,5 +1,4 @@
 #include "TaskManager.h"
-#include "Share/Log.h"
 
 DEFINITION_SINGLE(CTaskManager);
 

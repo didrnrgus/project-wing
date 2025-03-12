@@ -7,7 +7,6 @@
 #include "UI/Common/Button.h"
 #include "UI/Common/Image.h"
 #include "UI/Common/TextBlock.h"
-#include "Share/Log.h"
 #include <Interface/IPlayerController.h>
 #include <Scene/SceneInGame.h>
 #include <Scene/SceneTitle.h>

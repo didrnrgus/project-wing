@@ -1,5 +1,4 @@
 ﻿#include "Sound.h"
-#include "Share/Log.h"
 
 #ifdef _DEBUG
 #pragma comment(lib, "../Bin/Debug/fmod_vc.lib")

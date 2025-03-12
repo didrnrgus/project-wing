@@ -9,7 +9,6 @@
 #include "Shader/Shader.h"
 #include "Shader/TransformCBuffer.h"
 #include "Scene/SceneManager.h"
-#include "Share/Log.h"
 #include "ProfileManager.h"
 #include "Render/RenderManager.h"
 #include "Render/RenderStateManager.h"
