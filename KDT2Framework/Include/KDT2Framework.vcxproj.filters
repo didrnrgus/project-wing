@@ -49,6 +49,9 @@
     <Filter Include="Interface">
       <UniqueIdentifier>{79711572-08f7-479f-9aa0-26bb9df98bcc}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Etc">
+      <UniqueIdentifier>{3c18f210-da75-4ee4-8ab6-8427756544e0}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -104,6 +107,18 @@
     </ClCompile>
     <ClCompile Include="Object\LineGroupObject.cpp">
       <Filter>Object</Filter>
+    </ClCompile>
+    <ClCompile Include="Etc\CURL.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Etc\JsonController.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Etc\NotionDBController.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
+    <ClCompile Include="Etc\DataStorageManager.cpp">
+      <Filter>Etc</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -164,8 +179,23 @@
     <ClInclude Include="Object\LineGroupObject.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="JsonContainer.h">
-      <Filter>헤더 파일</Filter>
+    <ClInclude Include="Etc\ConstString.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\CURL.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\JsonContainer.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\JsonController.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\NotionDBController.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\DataStorageManager.h">
+      <Filter>Etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

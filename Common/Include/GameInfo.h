@@ -21,6 +21,7 @@
 #include <d2d1.h>
 
 #include <nlohmann/json.hpp>
+#include <curl/curl.h>
 
 #include "Vector2D.h"
 #include "Vector3D.h"
@@ -40,6 +41,7 @@ extern char   gRootPathMultibyte[MAX_PATH];
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "d2d1.lib")
+#pragma comment(lib, "libcurl-x64.lib")
 
 #define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }
 #define	SAFE_DELETE_ARRAY(p)	if(p)	{ delete[] p; p = nullptr; }

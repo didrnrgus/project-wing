@@ -1,6 +1,6 @@
 #pragma once
 #include "Object/SceneObject.h"
-#include "JsonContainer.h"
+#include "Etc/JsonContainer.h"
 
 //namespace EPositionType
 //{
@@ -41,9 +41,8 @@ public:
 	virtual void Update(float DeltaTime) override;
 
 public:
-	// 씬에서 호출.
-	//void InitLines(EPositionType::Type type, );
-	void InitLines(FLineNode* nodes);
+	// 씬에서 호출 -> 로드된 데이터를 받는 용도.
+	void InitLines();
 	void AddLine(FLine2D lineInfo);
 	void RemoveLine();
 	void MoveLines(float DeltaTime);

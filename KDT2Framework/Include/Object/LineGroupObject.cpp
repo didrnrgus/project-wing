@@ -6,7 +6,6 @@
 #include "Scene/Input.h"
 #include "Scene/Scene.h"
 #include "Share/Log.h"
-//#include "JsonContainer.h"
 
 CLineGroupObject::CLineGroupObject()
 {
@@ -39,10 +38,10 @@ bool CLineGroupObject::Init()
 	mScene->GetInput()->AddBindKey("PauseMove", 'P');
 	mScene->GetInput()->AddBindFunction<CLineGroupObject>("PauseMove",
 		EInputType::Down, this, &CLineGroupObject::PauseMove);
+	MakeJson(); // test
 #endif // _DEBUG
 	
 	
-	MakeJson(); // test
 
 	return true;
 }
@@ -57,8 +56,9 @@ void CLineGroupObject::Update(float DeltaTime)
 	MoveLines(DeltaTime);
 }
 
-void CLineGroupObject::InitLines(FLineNode* nodes)
+void CLineGroupObject::InitLines()
 {
+	// 데이터는 매니저에서 꺼내 쓰자.
 	for (int i = 0; i < maxLineCount; i++)
 	{
 		FLine2D lineInfo;

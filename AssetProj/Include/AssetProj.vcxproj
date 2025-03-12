@@ -124,7 +124,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)KDT2Framework\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\curl-8.12.1_1-win64-mingw\include;$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)KDT2Framework\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -139,7 +139,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)KDT2Framework\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\curl-8.12.1_1-win64-mingw\include;$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)KDT2Framework\Include\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

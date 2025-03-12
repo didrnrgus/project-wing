@@ -126,7 +126,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)AssetProj\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\curl-8.12.1_1-win64-mingw\include;$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)AssetProj\Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -142,7 +142,7 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)AssetProj\Include\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)KDT2Framework\Include\curl-8.12.1_1-win64-mingw\include;$(SolutionDir)KDT2Framework\Include\json-develop\include;$(SolutionDir)Common\Include\;$(SolutionDir)AssetProj\Include\</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -158,6 +158,10 @@
     <ClCompile Include="Component\ColliderLine2D.cpp" />
     <ClCompile Include="Component\ColliderOBB2D.cpp" />
     <ClCompile Include="Component\ColliderSphere2D.cpp" />
+    <ClCompile Include="Etc\CURL.cpp" />
+    <ClCompile Include="Etc\DataStorageManager.cpp" />
+    <ClCompile Include="Etc\JsonController.cpp" />
+    <ClCompile Include="Etc\NotionDBController.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\CameraObject.cpp" />
     <ClCompile Include="Object\LineGroupObject.cpp" />
@@ -178,8 +182,13 @@
     <ClInclude Include="Component\ColliderLine2D.h" />
     <ClInclude Include="Component\ColliderOBB2D.h" />
     <ClInclude Include="Component\ColliderSphere2D.h" />
+    <ClInclude Include="Etc\ConstString.h" />
+    <ClInclude Include="Etc\CURL.h" />
+    <ClInclude Include="Etc\DataStorageManager.h" />
+    <ClInclude Include="Etc\JsonContainer.h" />
+    <ClInclude Include="Etc\JsonController.h" />
+    <ClInclude Include="Etc\NotionDBController.h" />
     <ClInclude Include="Interface\IPlayerController.h" />
-    <ClInclude Include="JsonContainer.h" />
     <ClInclude Include="Object\CameraObject.h" />
     <ClInclude Include="Object\LineGroupObject.h" />
     <ClInclude Include="Object\PlayerGraphicObject.h" />

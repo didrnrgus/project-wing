@@ -16,6 +16,10 @@
 #include "Render/RenderState.h"
 #include "Asset/Sound/SoundManager.h"
 #include "UI/Widget.h"
+#include "Etc/DataStorageManager.h"
+#include "Etc/CURL.h"
+#include "Etc/JsonController.h"
+#include "Etc/NotionDBController.h"
 
 #define ID_MENU_OPTION1  1000  // 옵션1 메뉴 ID
 #define ID_MENU_CHECKBOX 1001  // 체크박스 ID
@@ -56,6 +60,11 @@ CGameManager::~CGameManager()
     CDevice::DestroyInst();
 
     ReleaseDC(mhWnd, mhDC);
+
+    CDataStorageManager::DestroyInst();
+    CCURL::DestroyInst();
+    CJsonController::DestroyInst();
+    CNotionDBController::DestroyInst();
 
     CLog::Destroy();
 }
