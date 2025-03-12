@@ -21,3 +21,11 @@ AssetProj/**/*.idb
 Common/**/*.lib
 Common/**/*.pdb
 Common/**/*.idb
+
+KDT2Framework/Bin/**/Common.lib
+KDT2Framework/Bin/**/Common.idb
+KDT2Framework/Bin/**/Common.pdb
+
+KDT2Framework/Bin/**/AssetProj.lib
+KDT2Framework/Bin/**/AssetProj.idb
+KDT2Framework/Bin/**/AssetProj.pdb
