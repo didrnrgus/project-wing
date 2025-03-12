@@ -14,6 +14,12 @@
 #define ATT_ARCHIVED "archived"
 
 #define PROP_NAME "name"
-#define PROP_PHONE_NUMBER "phone_number"
-#define PROP_AGE "age"
-#define PROP_IS_MARRIAGE "is_marriage"
+#define PROP_MAP "map"
+#define PROP_DISTANCE "distance"
+#define PROP_TIME "time"
+
+#define PROP_TOP_Y_POS "topYPos"
+#define PROP_BOTTOM_Y_POS "bottomYPos"
+#define PROP_ITEM_TYPE "itemType"
+#define PROP_OBSTACLE_TYPE "obstacleType"
+

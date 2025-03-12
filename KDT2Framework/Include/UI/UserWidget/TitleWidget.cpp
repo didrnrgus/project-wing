@@ -22,61 +22,47 @@ bool CTitleWidget::Init()
 {
 	CUserWidget::Init();
 	FResolution RS = CDevice::GetInst()->GetResolution();
+	FVector2D size = FVector2D(200.0f, 100.0f);
+	FVector2D singlePos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 4) - size * 0.5f;
+	FVector2D multiPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 3) - size * 0.5f;
+	FVector2D rankPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 2) - size * 0.5f;
+	FVector2D exitPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 1) - size * 0.5f;
 
-	mSinglePlayButton = mScene->GetUIManager()->CreateWidget<CButton>("SinglePlayButton");
-	mMultiPlayButton = mScene->GetUIManager()->CreateWidget<CButton>("MultiPlayButton");
-	mExitButton = mScene->GetUIManager()->CreateWidget<CButton>("ExitButton");
+	SetButtonWithTextBlock(mSinglePlayButton, "SinglePlay", singlePos
+		, &CTitleWidget::SinglePlayButtonClick, mSinglePlayTextBlock, TEXT("SinglePlay"));
+	SetButtonWithTextBlock(mMultiPlayButton, "MultiPlay", multiPos
+		, &CTitleWidget::MultiPlayButtonClick, mMultiPlayTextBlock, TEXT("MultiPlay"));
+	SetButtonWithTextBlock(mRankButton, "Rank", rankPos
+		, &CTitleWidget::RankButtonClick, mRankTextBlock, TEXT("Rank"));
+	SetButtonWithTextBlock(mExitButton, "Exit", exitPos
+		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
 
-	AddWidget(mSinglePlayButton);
-	AddWidget(mExitButton);
-	AddWidget(mMultiPlayButton);
-
-	mSinglePlayButton->SetPos(RS.Width * 0.5f - 100.f, RS.Height * 0.5f + 100.f);
-	mMultiPlayButton->SetPos(RS.Width * 0.5f - 100.f, RS.Height * 0.5f - 50.f);
-	mExitButton->SetPos(RS.Width * 0.5f - 100.f, RS.Height * 0.5f - 200.f);
-
-	mExitButton->SetSize(200.f, 100.f);
-	mMultiPlayButton->SetSize(200.f, 100.f);
-	mSinglePlayButton->SetSize(200.f, 100.f);
-
-	CSharedPtr<CTextBlock> SinglePlayText = mScene->GetUIManager()->CreateWidget<CTextBlock>("SinglePlayText");
-	SinglePlayText->SetText(TEXT("SinglePlay"));
-	SinglePlayText->SetTextColor(0, 255, 0, 255);
-	SinglePlayText->SetAlignH(ETextAlignH::Center);
-	SinglePlayText->SetFontSize(30.f);
-	SinglePlayText->SetShadowEnable(true);
-	SinglePlayText->SetShadowOffset(3.f, 3.f);
-	SinglePlayText->SetTextShadowColor(FVector4D(0.5f, 0.5f, 0.5f, 1.0f));
-	mSinglePlayButton->SetChild(SinglePlayText);
-	mSinglePlayButton->SetColor(0, 0, 0, 0);
-
-	CSharedPtr<CTextBlock> MultiPlayText = mScene->GetUIManager()->CreateWidget<CTextBlock>("MultiPlayText");
-	MultiPlayText->SetText(TEXT("MultiPlay"));
-	MultiPlayText->SetTextColor(0, 255, 0, 255);
-	MultiPlayText->SetAlignH(ETextAlignH::Center);
-	MultiPlayText->SetFontSize(30.f);
-	MultiPlayText->SetShadowEnable(true);
-	MultiPlayText->SetShadowOffset(3.f, 3.f);
-	MultiPlayText->SetTextShadowColor(FVector4D(0.5f, 0.5f, 0.5f, 1.0f));
-	mMultiPlayButton->SetChild(MultiPlayText);
-	mMultiPlayButton->SetColor(0, 0, 0, 0);
-
-	CSharedPtr<CTextBlock> ExitText = mScene->GetUIManager()->CreateWidget<CTextBlock>("ExitText");
-	ExitText->SetText(TEXT("Exit"));
-	ExitText->SetTextColor(0, 255, 0, 255);
-	ExitText->SetAlignH(ETextAlignH::Center);
-	ExitText->SetFontSize(30.f);
-	ExitText->SetShadowEnable(true);
-	ExitText->SetShadowOffset(3.f, 3.f);
-	ExitText->SetTextShadowColor(FVector4D(0.5f, 0.5f, 0.5f, 1.0f));
-	mExitButton->SetChild(ExitText);
-	mExitButton->SetColor(0, 0, 0, 0);
-
-	mSinglePlayButton->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, &CTitleWidget::SinglePlayButtonClick);
-	mMultiPlayButton->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, &CTitleWidget::MultiPlayButtonClick);
-	mExitButton->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, &CTitleWidget::ExitButtonClick);
-	
 	return true;
+}
+
+void CTitleWidget::SetButtonWithTextBlock(CButton* button, std::string name, FVector2D pos
+	, void(CTitleWidget::* Func)(), CTextBlock* textBlock, const wchar_t* textBlockContent)
+{
+	button = mScene->GetUIManager()->CreateWidget<CButton>(name + "Button");
+	AddWidget(button);
+	button->SetPos(pos);
+	button->SetSize(200.f, 100.f);
+	button->SetColor(0, 0, 0, 0);
+	button->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, Func);
+	textBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>(name + "Text");
+	button->SetChild(textBlock);
+	textBlock->SetText(textBlockContent);
+	textBlock->SetTextColor(0, 255, 0, 255);
+	textBlock->SetAlignH(ETextAlignH::Center);
+	textBlock->SetFontSize(30.f);
+	textBlock->SetShadowEnable(true);
+	textBlock->SetShadowOffset(3.f, 3.f);
+	textBlock->SetTextShadowColor(FVector4D(0.5f, 0.5f, 0.5f, 1.0f));
+}
+
+void CTitleWidget::LoadData()
+{
+
 }
 
 void CTitleWidget::SinglePlayButtonClick()
@@ -90,6 +76,12 @@ void CTitleWidget::MultiPlayButtonClick()
 {
 	// 로비로 가야 함.
 	CLog::PrintLog("CTitleWidget::MultiPlayButtonClick()");
+}
+
+void CTitleWidget::RankButtonClick()
+{
+	// Move Rank Scene 
+	CLog::PrintLog("CTitleWidget::RankButtonClick()");
 }
 
 void CTitleWidget::ExitButtonClick()

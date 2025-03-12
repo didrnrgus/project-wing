@@ -4,7 +4,6 @@
 
 struct FLineNode
 {
-	int ID;
 	float TopYPos = 0.0f;
 	float BottomYPos = 0.0f;
 	int ItemType = 0;
@@ -18,17 +17,19 @@ struct FLineNode
 
 struct FUserInfo
 {
-	std::string Name;
-	std::string Map;
-	int Age;
-	bool bIsMarriage;
+	std::string Name = "";
+	std::string Map = "";
+	int Distance = 0; // Rank
+	int Time = 0;
 
 	FUserInfo() {};
+	FUserInfo(std::string name, std::string map, int dist, int time)
+		: Name(name), Map(map), Distance(dist), Time(time) {};
 };
 
 struct FMapInfo
 {
-	int ID;
+	int Index;
 	std::string Name;
 	std::vector<FLineNode> lineNodes;
 };
