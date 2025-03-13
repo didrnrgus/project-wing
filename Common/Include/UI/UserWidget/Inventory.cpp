@@ -20,10 +20,10 @@ bool CInventory::Init()
     CWindowWidget::Init();
 
     mScene->GetAssetManager()->LoadTexture("IconSword",
-        TEXT("Texture\\Icon_Sword.PNG"));
+        TEXT("Texture/Icon_Sword.PNG"));
 
     mScene->GetAssetManager()->LoadTexture("IconShield",
-        TEXT("Texture\\Icon_Shield.PNG"));
+        TEXT("Texture/Icon_Shield.PNG"));
 
     SetSize(400.f, 420.f);
 
@@ -32,7 +32,7 @@ bool CInventory::Init()
 
     TitleBar->SetSize(360.f, 20.f);
     TitleBar->SetPos(0.f, 400.f);
-    TitleBar->SetTexture("MPBar", TEXT("Texture\\MPBar.png"));
+    TitleBar->SetTexture("MPBar", TEXT("Texture/MPBar.png"));
     TitleBar->SetText(TEXT("인벤토리"));
 
     TitleBar->SetUpdateWidget(this);
@@ -45,20 +45,20 @@ bool CInventory::Init()
     Button->SetSize(40.f, 20.f);
     //Button->SetTint(EButtonState::Normal, 1.f, 0.f, 0.f);
     Button->SetTexture(EButtonState::Normal, "StartButton",
-        TEXT("Texture\\End.png"));
+        TEXT("Texture/End.png"));
     Button->SetTexture(EButtonState::Hovered, "StartButton",
-        TEXT("Texture\\End.png"));
+        TEXT("Texture/End.png"));
     Button->SetTexture(EButtonState::Click, "StartButton",
-        TEXT("Texture\\End.png"));
+        TEXT("Texture/End.png"));
 
     Button->SetTint(EButtonState::Normal, 0.8f, 0.8f, 0.8f);
     Button->SetTint(EButtonState::Hovered, 1.f, 1.f, 1.f);
     Button->SetTint(EButtonState::Click, 0.6f, 0.6f, 0.6f);
 
     /*Button->SetSound(EButtonEventState::Hovered, "ButtonHovered",
-        "Sound\\TeemoSmile.mp3");
+        "Sound/TeemoSmile.mp3");
     Button->SetSound(EButtonEventState::Click, "ButtonClick",
-        "Sound\\TeemoStartClicck.mp3");*/
+        "Sound/TeemoStartClicck.mp3");*/
 
     Button->SetEventCallback<CInventory>(EButtonEventState::Click,
         this, &CInventory::CloseButton);

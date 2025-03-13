@@ -1,9 +1,9 @@
 ﻿#include "Sound.h"
 
 #ifdef _DEBUG
-#pragma comment(lib, "../Bin/Debug/fmod_vc.lib")
+#pragma comment(lib, "../Debug/fmod_vc.lib")
 #else
-#pragma comment(lib, "../Bin/Release/fmod_vc.lib")
+#pragma comment(lib, "../Release/fmod_vc.lib")
 #endif // _DEBUG
 
 CSound::CSound()
@@ -26,7 +26,7 @@ bool CSound::LoadSound(FMOD::System* System, FMOD::ChannelGroup* Group,
 	char	FullPath[MAX_PATH] = {};
 
 	strcpy_s(FullPath, gRootPathMultibyte);
-	strcat_s(FullPath, "..\\Asset\\");
+	strcat_s(FullPath, "../Bin/Asset/");
 	strcat_s(FullPath, FileName);
 
 	FMOD_MODE	Mode = FMOD_DEFAULT;

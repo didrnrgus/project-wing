@@ -649,7 +649,7 @@ void CTileMapComponent::Save(const char* FileName)
     char	FullPath[MAX_PATH] = {};
 
     strcpy_s(FullPath, gRootPathMultibyte);
-    strcat_s(FullPath, "..\\Asset\\Data\\");
+    strcat_s(FullPath, "../Bin/Asset/Data/");
     strcat_s(FullPath, FileName);
 
     FILE* File = nullptr;
@@ -742,7 +742,7 @@ void CTileMapComponent::Load(const char* FileName)
     char	FullPath[MAX_PATH] = {};
 
     strcpy_s(FullPath, gRootPathMultibyte);
-    strcat_s(FullPath, "..\\Asset\\Data\\");
+    strcat_s(FullPath, "../Bin/Asset/Data/");
     strcat_s(FullPath, FileName);
 
     FILE* File = nullptr;

@@ -118,7 +118,7 @@ bool CSlot::Init()
 
     mBack = mScene->GetUIManager()->CreateWidget<CImage>("Back");
 
-    mBack->SetTexture("SlotBack", TEXT("Texture\\SlotBack.png"));
+    mBack->SetTexture("SlotBack", TEXT("Texture/SlotBack.png"));
 
     AddWidget(mBack);
 

@@ -26,7 +26,7 @@ bool CFontManager::Init()
         __uuidof(mWriteFactory), (IUnknown**)&mWriteFactory)))
         return false;
 
-    LoadFontCollection("Default", TEXT("Font\\NotoSansKR-Regular.otf"));
+    LoadFontCollection("Default", TEXT("Font/NotoSansKR-Regular.otf"));
 
     // en-us
     // GetFontFaceName 함수를 이용해서 DefaultCollection에 있는

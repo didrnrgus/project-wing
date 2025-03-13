@@ -80,12 +80,12 @@
     <IntDir>../BinObj/</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <OutDir>$(SolutionDir)KDT2Framework/Bin/Debug/</OutDir>
+    <OutDir>$(SolutionDir)KDT2Framework/Debug/</OutDir>
     <IntDir>../BinObj/</IntDir>
     <TargetName>$(ProjectName)</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)KDT2Framework/Bin/Release/</OutDir>
+    <OutDir>$(SolutionDir)KDT2Framework/Release/</OutDir>
     <IntDir>../BinObj/</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">

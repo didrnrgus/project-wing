@@ -19,6 +19,7 @@
 #include "Etc/CURL.h"
 #include "Etc/JsonController.h"
 #include "Etc/NotionDBController.h"
+#include "Etc/TaskManager.h"
 
 #define ID_MENU_OPTION1  1000  // 옵션1 메뉴 ID
 #define ID_MENU_CHECKBOX 1001  // 체크박스 ID
@@ -64,6 +65,7 @@ CGameManager::~CGameManager()
     CCURL::DestroyInst();
     CJsonController::DestroyInst();
     CNotionDBController::DestroyInst();
+    CTaskManager::DestroyInst();
 
     CLog::Destroy();
 }
@@ -91,29 +93,36 @@ bool CGameManager::Init(HINSTANCE hInst)
     mhDC = GetDC(mhWnd);
 
     // 디바이스 초기화
+    CLog::PrintLog("CDevice::GetInst()->Init()");
     if (!CDevice::GetInst()->Init(mhWnd, 1280, 720, true))
         return false;
 
     // Shader 관리자 초기화
+    CLog::PrintLog("CShaderManager::GetInst()->Init()");
     if (!CShaderManager::GetInst()->Init())
         return false;
 
     // 애셋 관리자 초기화
+    CLog::PrintLog("CAssetManager::GetInst()->Init()");
     if (!CAssetManager::GetInst()->Init())
         return false;
 
     // Profile 관리자 초기화
+    CLog::PrintLog("CProfileManager::GetInst()->Init()");
     if (!CProfileManager::GetInst()->Init())
         return false;
 
     // Render 관리자 초기화
+    CLog::PrintLog("CRenderManager::GetInst()->Init()");
     if (!CRenderManager::GetInst()->Init())
         return false;
 
     // 타이머 초기화
+    CLog::PrintLog("CTimer::Init()");
     CTimer::Init();
 
     // 장면관리자 초기화
+    CLog::PrintLog("CSceneManager::GetInst()->Init()");
     if (!CSceneManager::GetInst()->Init())
         return false;
 

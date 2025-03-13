@@ -19,7 +19,7 @@ bool CAnimation2DManager::Init()
 	{
 		CreateAnimation("PlayerIdle");
 		SetAnimationTextureType("PlayerIdle", EAnimationTextureType::SpriteSheet);
-		SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture\\bird_4x1_798x135.png")); // 798 * 135
+		SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture/bird_4x1_798x135.png")); // 798 * 135
 
 		float sizeX = 798 / 4;
 		float sizeY = 135;

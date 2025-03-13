@@ -18,7 +18,7 @@ bool CHeadInfo::Init()
     mHPBar->SetSize(100.f, 20.f);
     mHPBar->SetTint(EProgressBarImageType::Back, 0.3f, 0.3f, 0.3f);
     mHPBar->SetTexture(EProgressBarImageType::Fill, "HPBar",
-        TEXT("Texture\\HPBar.png"));
+        TEXT("Texture/HPBar.png"));
 
     //mHPBar->SetPercent(0.7f);
 

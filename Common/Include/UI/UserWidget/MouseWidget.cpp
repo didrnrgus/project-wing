@@ -20,7 +20,7 @@ bool CMouseWidget::Init()
     mImage = CSceneUIManager::CreateWidgetStatic<CImage>("Mouse");
 
     mImage->SetTexture("MouseDefault", 
-        TEXT("Texture\\Mouse\\Default\\0.png"));
+        TEXT("Texture/Mouse/Default/0.png"));
 
     mImage->SetSize(32.f, 32.f);
 

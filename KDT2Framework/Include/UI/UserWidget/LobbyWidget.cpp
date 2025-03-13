@@ -28,20 +28,20 @@ CLobbyWidget::CLobbyWidget()
 	mSlotButtonNamePrefix = "SlotButton_";
 	mMapDifficultyImageNamePrefix = "MapImage_";
 
-	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-happy.png"));
-	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-normal.png"));
-	mMapDifficultyImagePaths.push_back(TEXT("Texture\\Icon\\emoji-sad.png"));
+	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-happy.png"));
+	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-normal.png"));
+	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-sad.png"));
 
 	mMapDifficultyImageColors.push_back(FVector4D::Cyan);
 	mMapDifficultyImageColors.push_back(FVector4D::Yellow);
 	mMapDifficultyImageColors.push_back(FVector4D::Red);
 
-	mItemImagePaths.push_back(TEXT("Texture\\Icon\\milk.png"));
-	mItemImagePaths.push_back(TEXT("Texture\\Icon\\pharagraphspacing.png"));
-	mItemImagePaths.push_back(TEXT("Texture\\Icon\\ghost.png"));
+	mItemImagePaths.push_back(TEXT("Texture/Icon/milk.png"));
+	mItemImagePaths.push_back(TEXT("Texture/Icon/pharagraphspacing.png"));
+	mItemImagePaths.push_back(TEXT("Texture/Icon/ghost.png"));
 
-	mSlotImagePaths.push_back(TEXT("Texture\\Icon\\add-square.png"));
-	mSlotImagePaths.push_back(TEXT("Texture\\Icon\\empty-square.png"));
+	mSlotImagePaths.push_back(TEXT("Texture/Icon/add-square.png"));
+	mSlotImagePaths.push_back(TEXT("Texture/Icon/empty-square.png"));
 
 	mSlotPosBase = FVector2D(100, 100);
 	mSlotPosAdd = FVector2D(120, 0);
@@ -75,7 +75,7 @@ bool CLobbyWidget::Init()
 	// next button
 	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>("NextButton");
 	AddWidget(mNextButton);
-	SetButton(*mNextButton.Get(), "NextButton", TEXT("Texture\\Icon\\arrow-square-right.png"));
+	SetButton(*mNextButton.Get(), "NextButton", TEXT("Texture/Icon/arrow-square-right.png"));
 	mNextButton->SetPivot(FVector2D::One * 0.5f);
 	mNextButton->SetSize(FVector2D::One * 128 * 1.0f);
 	mNextButton->SetPos(FVector2D(1150, 100));
@@ -89,7 +89,7 @@ bool CLobbyWidget::Init()
 	// previous button
 	mPrevButton = mScene->GetUIManager()->CreateWidget<CButton>("PrevButton");
 	AddWidget(mPrevButton);
-	SetButton(*mPrevButton.Get(), "PrevButton", TEXT("Texture\\Icon\\arrow-square-left.png"));
+	SetButton(*mPrevButton.Get(), "PrevButton", TEXT("Texture/Icon/arrow-square-left.png"));
 	mPrevButton->SetPivot(FVector2D::One * 0.5f);
 	mPrevButton->SetSize(FVector2D::One * 96.0f * 1.0f);
 	mPrevButton->SetPos(FVector2D(100, 650));
@@ -155,8 +155,8 @@ void CLobbyWidget::InitScrollSelectButtons()
 
 void CLobbyWidget::InitItemButtons()
 {
-	auto pathLeft = TEXT("Texture\\Icon\\direct-left.png");
-	auto pathRight = TEXT("Texture\\Icon\\direct-right.png");
+	auto pathLeft = TEXT("Texture/Icon/direct-left.png");
+	auto pathRight = TEXT("Texture/Icon/direct-right.png");
 
 	SetButton(*(mCharacterLeftButton.Get()), "CharacterLeftButton", pathLeft);
 	SetButton(*(mCharacterRightButton.Get()), "CharacterRightButton", pathRight);

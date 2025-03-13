@@ -3,11 +3,11 @@
 
 #ifdef _DEBUG
 
-#pragma comment(lib, "../Bin/Debug/DirectXTex_Debug.lib")
+#pragma comment(lib, "../Debug/DirectXTex_Debug.lib")
 
 #else
 
-#pragma comment(lib, "../Bin/Release/DirectXTex.lib")
+#pragma comment(lib, "../Release/DirectXTex.lib")
 
 #endif // _DEBUG
 
@@ -32,7 +32,7 @@ bool CTexture::LoadTexture(const TCHAR* FileName)
 	TCHAR	FullPath[MAX_PATH] = {};
 
 	lstrcpy(FullPath, gRootPath);
-	lstrcat(FullPath, TEXT("..\\Asset\\"));
+	lstrcat(FullPath, TEXT("../Bin/Asset/"));
 	lstrcat(FullPath, FileName);
 
 	return LoadTextureFullPath(FullPath);

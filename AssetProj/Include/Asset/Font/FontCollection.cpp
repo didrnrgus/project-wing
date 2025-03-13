@@ -15,7 +15,7 @@ bool CFontCollection::LoadCollection(IDWriteFactory5* Factory,
 	TCHAR	FullPath[MAX_PATH] = {};
 
 	lstrcpy(FullPath, gRootPath);
-	lstrcat(FullPath, TEXT("..\\Asset\\"));
+	lstrcat(FullPath, TEXT("../Bin/Asset/"));
 	lstrcat(FullPath, FileName);
 
 	IDWriteFontFile* FontFile = nullptr;

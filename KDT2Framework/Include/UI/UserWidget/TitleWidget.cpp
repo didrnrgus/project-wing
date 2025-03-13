@@ -22,6 +22,8 @@ CTitleWidget::~CTitleWidget()
 bool CTitleWidget::Init()
 {
 	CUserWidget::Init();
+	CLog::PrintLog("CTitleWidget::Init()");
+
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	FVector2D size = FVector2D(200.0f, 100.0f);
 	FVector2D singlePos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 4) - size * 0.5f;
@@ -38,13 +40,13 @@ bool CTitleWidget::Init()
 	SetButtonWithTextBlock(mExitButton, "Exit", exitPos
 		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
 
-	//CTaskManager::GetInst()->AddTask(std::move(std::thread(
-	//	[]() 
-	//	{ 
-	//		//config load
-	//		auto configResult = CCURL::GetInst()->SendRequest(CONFIG_PATH, METHOD_GET);
-	//		CLog::PrintLog("configResult: " + configResult);
-	//	})));
+	CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[]() 
+		{ 
+			//config load
+			auto configResult = CCURL::GetInst()->SendRequest(CONFIG_PATH, METHOD_GET);
+			CLog::PrintLog("configResult: " + configResult);
+		})));
 
 
 	return true;
