@@ -10,6 +10,7 @@
 #include "UI/Common/TextBlock.h"
 #include "Etc/CURL.h"
 #include "Etc/TaskManager.h"
+#include "Etc/DataStorageManager.h"
 
 CTitleWidget::CTitleWidget()
 {
@@ -44,8 +45,12 @@ bool CTitleWidget::Init()
 		[]() 
 		{ 
 			//config load
-			auto configResult = CCURL::GetInst()->SendRequest(CONFIG_PATH, METHOD_GET);
+			std::string configResult = CCURL::GetInst()->SendRequest(CONFIG_PATH, METHOD_GET);
 			CLog::PrintLog("configResult: " + configResult);
+
+			CDataStorageManager::GetInst()->SetConfigData(configResult);
+
+
 		})));
 
 

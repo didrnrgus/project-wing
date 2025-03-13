@@ -5,9 +5,14 @@
 
 class CDataStorageManager
 {
-public:
+private:
+	FConfig mConfigData;
 	std::map<int, FMapInfo> mMapStorageDatas;
 
+public:
+	void SetConfigData(std::string);
+
+private:
 	DECLARE_SINGLE(CDataStorageManager)
 };
 

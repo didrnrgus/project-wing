@@ -56,10 +56,17 @@ namespace nlohmann {
 class CJsonController
 {
 public:
-	//nlohmann::json ConvertToJson(const FUserInfo& userInfo);
-	nlohmann::json ConvertToJson(const FLineNode& lineNodeInfo);
-	//bool ParseUserInfo(const nlohmann::json& jsonData, std::map<std::string, FUserInfo>& users);
-	bool ParseLineNodeInfo(const nlohmann::json& jsonData, std::map<std::string, FLineNode>& nodes);
+	template<typename T>
+	nlohmann::json ConvertToJson(const T& data);
 
+	template<typename T>
+	bool ParseJson(const nlohmann::json& json, T& data);
+
+	//bool ParseLineNodeInfo(const nlohmann::json& jsonData, std::map<std::string, FLineNode>& nodes);
+
+	//nlohmann::json ConvertToJson(const FUserInfo& userInfo);
+	//bool ParseUserInfo(const nlohmann::json& jsonData, std::map<std::string, FUserInfo>& users);
+
+private:
 	DECLARE_SINGLE(CJsonController);
 };
