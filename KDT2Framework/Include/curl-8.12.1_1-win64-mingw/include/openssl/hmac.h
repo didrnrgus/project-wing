@@ -1,4 +1,4 @@
-/* $OpenBSD: hmac.h,v 1.20 2024/08/31 10:42:21 tb Exp $ */
+﻿/* $OpenBSD: hmac.h,v 1.20 2024/08/31 10:42:21 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

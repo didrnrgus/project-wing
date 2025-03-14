@@ -1,4 +1,4 @@
-//===- FuzzerLoop.cpp - Fuzzer's main loop --------------------------------===//
+﻿//===- FuzzerLoop.cpp - Fuzzer's main loop --------------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

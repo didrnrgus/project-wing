@@ -1,4 +1,4 @@
-/* $OpenBSD: evp.h,v 1.137 2024/08/31 10:38:49 tb Exp $ */
+﻿/* $OpenBSD: evp.h,v 1.137 2024/08/31 10:38:49 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

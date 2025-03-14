@@ -1,4 +1,4 @@
-//     __ _____ _____ _____
+﻿//     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++ (supporting code)
 // |  |  |__   |  |  | | | |  version 3.11.3
 // |_____|_____|_____|_|___|  https://github.com/nlohmann/json
@@ -18,19 +18,19 @@ namespace
 bool wstring_is_utf16();
 bool wstring_is_utf16()
 {
-    return (std::wstring(L"💩") == std::wstring(L"\U0001F4A9"));
+    return (std::wstring(L"ðŸ’©") == std::wstring(L"\U0001F4A9"));
 }
 
 bool u16string_is_utf16();
 bool u16string_is_utf16()
 {
-    return (std::u16string(u"💩") == std::u16string(u"\U0001F4A9"));
+    return (std::u16string(u"ðŸ’©") == std::u16string(u"\U0001F4A9"));
 }
 
 bool u32string_is_utf32();
 bool u32string_is_utf32()
 {
-    return (std::u32string(U"💩") == std::u32string(U"\U0001F4A9"));
+    return (std::u32string(U"ðŸ’©") == std::u32string(U"\U0001F4A9"));
 }
 } // namespace
 
@@ -40,9 +40,9 @@ TEST_CASE("wide strings")
     {
         if (wstring_is_utf16())
         {
-            std::wstring const w = L"[12.2,\"Ⴥaäö💤🧢\"]";
+            std::wstring const w = L"[12.2,\"áƒ…aÃ¤Ã¶ðŸ’¤ðŸ§¢\"]";
             json const j = json::parse(w);
-            CHECK(j.dump() == "[12.2,\"Ⴥaäö💤🧢\"]");
+            CHECK(j.dump() == "[12.2,\"áƒ…aÃ¤Ã¶ðŸ’¤ðŸ§¢\"]");
         }
     }
 
@@ -60,9 +60,9 @@ TEST_CASE("wide strings")
     {
         if (u16string_is_utf16())
         {
-            std::u16string const w = u"[12.2,\"Ⴥaäö💤🧢\"]";
+            std::u16string const w = u"[12.2,\"áƒ…aÃ¤Ã¶ðŸ’¤ðŸ§¢\"]";
             json const j = json::parse(w);
-            CHECK(j.dump() == "[12.2,\"Ⴥaäö💤🧢\"]");
+            CHECK(j.dump() == "[12.2,\"áƒ…aÃ¤Ã¶ðŸ’¤ðŸ§¢\"]");
         }
     }
 
@@ -80,9 +80,9 @@ TEST_CASE("wide strings")
     {
         if (u32string_is_utf32())
         {
-            std::u32string const w = U"[12.2,\"Ⴥaäö💤🧢\"]";
+            std::u32string const w = U"[12.2,\"áƒ…aÃ¤Ã¶ðŸ’¤ðŸ§¢\"]";
             json const j = json::parse(w);
-            CHECK(j.dump() == "[12.2,\"Ⴥaäö💤🧢\"]");
+            CHECK(j.dump() == "[12.2,\"áƒ…aÃ¤Ã¶ðŸ’¤ðŸ§¢\"]");
         }
     }
 

@@ -1,4 +1,4 @@
-//===- FuzzerIO.cpp - IO utils. -------------------------------------------===//
+﻿//===- FuzzerIO.cpp - IO utils. -------------------------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

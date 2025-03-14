@@ -1,4 +1,4 @@
-/* $OpenBSD: rand.h,v 1.25 2024/04/10 14:53:01 beck Exp $ */
+﻿/* $OpenBSD: rand.h,v 1.25 2024/04/10 14:53:01 beck Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

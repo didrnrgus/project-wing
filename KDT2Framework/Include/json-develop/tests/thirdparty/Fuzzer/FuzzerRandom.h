@@ -1,4 +1,4 @@
-//===- FuzzerRandom.h - Internal header for the Fuzzer ----------*- C++ -* ===//
+﻿//===- FuzzerRandom.h - Internal header for the Fuzzer ----------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

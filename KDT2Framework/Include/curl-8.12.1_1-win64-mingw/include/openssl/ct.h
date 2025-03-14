@@ -1,4 +1,4 @@
-/*	$OpenBSD: ct.h,v 1.8 2024/08/08 23:50:29 tb Exp $ */
+﻿/*	$OpenBSD: ct.h,v 1.8 2024/08/08 23:50:29 tb Exp $ */
 /*
  * Public API for Certificate Transparency (CT).
  * Written by Rob Percival (robpercival@google.com) for the OpenSSL project.

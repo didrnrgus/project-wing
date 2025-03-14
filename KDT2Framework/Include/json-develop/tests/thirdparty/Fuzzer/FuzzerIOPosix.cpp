@@ -1,4 +1,4 @@
-//===- FuzzerIOPosix.cpp - IO utils for Posix. ----------------------------===//
+﻿//===- FuzzerIOPosix.cpp - IO utils for Posix. ----------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

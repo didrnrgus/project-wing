@@ -1,4 +1,4 @@
-/*	$OpenBSD: kdf.h,v 1.9 2024/07/09 16:20:17 tb Exp $ */
+﻿/*	$OpenBSD: kdf.h,v 1.9 2024/07/09 16:20:17 tb Exp $ */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.

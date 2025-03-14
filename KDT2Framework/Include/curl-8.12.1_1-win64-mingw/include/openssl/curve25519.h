@@ -1,4 +1,4 @@
-/*	$OpenBSD: curve25519.h,v 1.7 2022/11/13 14:05:04 tb Exp $ */
+﻿/*	$OpenBSD: curve25519.h,v 1.7 2022/11/13 14:05:04 tb Exp $ */
 /*
  * Copyright (c) 2015, Google Inc.
  *

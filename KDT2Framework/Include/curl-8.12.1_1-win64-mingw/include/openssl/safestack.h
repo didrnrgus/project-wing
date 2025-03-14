@@ -1,4 +1,4 @@
-/* $OpenBSD: safestack.h,v 1.33 2024/03/02 11:22:48 tb Exp $ */
+﻿/* $OpenBSD: safestack.h,v 1.33 2024/03/02 11:22:48 tb Exp $ */
 /* ====================================================================
  * Copyright (c) 1999 The OpenSSL Project.  All rights reserved.
  *

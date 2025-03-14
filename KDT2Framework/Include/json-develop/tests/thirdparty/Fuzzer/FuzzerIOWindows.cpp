@@ -1,4 +1,4 @@
-//===- FuzzerIOWindows.cpp - IO utils for Windows. ------------------------===//
+﻿//===- FuzzerIOWindows.cpp - IO utils for Windows. ------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

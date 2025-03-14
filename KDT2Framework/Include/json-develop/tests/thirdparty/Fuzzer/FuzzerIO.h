@@ -1,4 +1,4 @@
-//===- FuzzerIO.h - Internal header for IO utils ----------------*- C++ -* ===//
+﻿//===- FuzzerIO.h - Internal header for IO utils ----------------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

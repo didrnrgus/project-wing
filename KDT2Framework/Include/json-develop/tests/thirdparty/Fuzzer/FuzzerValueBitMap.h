@@ -1,4 +1,4 @@
-//===- FuzzerValueBitMap.h - INTERNAL - Bit map -----------------*- C++ -* ===//
+﻿//===- FuzzerValueBitMap.h - INTERNAL - Bit map -----------------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

@@ -1,4 +1,4 @@
-/* $OpenBSD: sha.h,v 1.25 2024/06/01 08:11:44 tb Exp $ */
+﻿/* $OpenBSD: sha.h,v 1.25 2024/06/01 08:11:44 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

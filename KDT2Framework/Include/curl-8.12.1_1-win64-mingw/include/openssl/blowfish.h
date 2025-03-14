@@ -1,4 +1,4 @@
-/* $OpenBSD: blowfish.h,v 1.17 2023/07/31 05:04:06 tb Exp $ */
+﻿/* $OpenBSD: blowfish.h,v 1.17 2023/07/31 05:04:06 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

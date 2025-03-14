@@ -1,4 +1,4 @@
-//===- FuzzerUtilLinux.cpp - Misc utils for Linux. ------------------------===//
+﻿//===- FuzzerUtilLinux.cpp - Misc utils for Linux. ------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

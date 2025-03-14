@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl.h,v 1.242 2024/08/31 10:51:48 tb Exp $ */
+﻿/* $OpenBSD: ssl.h,v 1.242 2024/08/31 10:51:48 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

@@ -1,4 +1,4 @@
-/* $OpenBSD: pkcs7.h,v 1.21 2023/04/25 18:04:03 tb Exp $ */
+﻿/* $OpenBSD: pkcs7.h,v 1.21 2023/04/25 18:04:03 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

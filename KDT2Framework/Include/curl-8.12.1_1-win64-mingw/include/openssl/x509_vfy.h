@@ -1,4 +1,4 @@
-/* $OpenBSD: x509_vfy.h,v 1.69 2024/08/31 10:19:17 tb Exp $ */
+﻿/* $OpenBSD: x509_vfy.h,v 1.69 2024/08/31 10:19:17 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

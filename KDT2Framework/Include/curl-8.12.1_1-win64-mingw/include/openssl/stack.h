@@ -1,4 +1,4 @@
-/* $OpenBSD: stack.h,v 1.11 2024/03/02 11:20:36 tb Exp $ */
+﻿/* $OpenBSD: stack.h,v 1.11 2024/03/02 11:20:36 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

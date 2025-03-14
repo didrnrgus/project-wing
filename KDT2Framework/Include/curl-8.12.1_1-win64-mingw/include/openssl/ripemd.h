@@ -1,4 +1,4 @@
-/* $OpenBSD: ripemd.h,v 1.19 2024/06/01 18:42:49 tb Exp $ */
+﻿/* $OpenBSD: ripemd.h,v 1.19 2024/06/01 18:42:49 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

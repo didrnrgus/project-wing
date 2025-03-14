@@ -1,4 +1,4 @@
-/* $OpenBSD: pkcs12.h,v 1.28 2024/03/02 10:15:16 tb Exp $ */
+﻿/* $OpenBSD: pkcs12.h,v 1.28 2024/03/02 10:15:16 tb Exp $ */
 /* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project 1999.
  */

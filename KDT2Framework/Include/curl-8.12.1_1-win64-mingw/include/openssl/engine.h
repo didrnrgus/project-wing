@@ -1,4 +1,4 @@
-/* $OpenBSD: engine.h,v 1.44 2024/03/02 10:22:07 tb Exp $ */
+﻿/* $OpenBSD: engine.h,v 1.44 2024/03/02 10:22:07 tb Exp $ */
 /* Written by Geoff Thorpe (geoff@geoffthorpe.net) for the OpenSSL
  * project 2000.
  */

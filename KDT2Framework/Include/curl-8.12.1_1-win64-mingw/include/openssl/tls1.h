@@ -1,4 +1,4 @@
-/* $OpenBSD: tls1.h,v 1.59 2024/03/02 11:46:55 tb Exp $ */
+﻿/* $OpenBSD: tls1.h,v 1.59 2024/03/02 11:46:55 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

@@ -1,4 +1,4 @@
-#include <iostream>
+﻿#include <iostream>
 #include <nlohmann/json.hpp>
 
 using json = nlohmann::json;
@@ -8,7 +8,7 @@ int main()
     // create JSON values
     json j_object = {{"one", 1}, {"two", 2}};
     json j_array = {1, 2, 4, 8, 16};
-    json j_string = "Hellö 😀!";
+    json j_string = "HellÃ¶ ðŸ˜€!";
 
     // call dump()
     std::cout << "objects:" << '\n'
@@ -30,7 +30,7 @@ int main()
               << j_string.dump(-1, ' ', true) << '\n';
 
     // create JSON value with invalid UTF-8 byte sequence
-    json j_invalid = "ä\xA9ü";
+    json j_invalid = "Ã¤\xA9Ã¼";
     try
     {
         std::cout << j_invalid.dump() << std::endl;

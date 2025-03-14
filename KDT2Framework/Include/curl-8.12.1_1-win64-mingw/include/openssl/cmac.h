@@ -1,4 +1,4 @@
-/* $OpenBSD: cmac.h,v 1.4 2024/03/02 09:30:21 tb Exp $ */
+﻿/* $OpenBSD: cmac.h,v 1.4 2024/03/02 09:30:21 tb Exp $ */
 /* Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.
  */

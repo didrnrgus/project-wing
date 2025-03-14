@@ -1,4 +1,4 @@
-/* $OpenBSD: srtp.h,v 1.7 2021/06/11 15:28:13 landry Exp $ */
+﻿/* $OpenBSD: srtp.h,v 1.7 2021/06/11 15:28:13 landry Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

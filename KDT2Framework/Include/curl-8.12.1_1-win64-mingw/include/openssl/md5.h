@@ -1,4 +1,4 @@
-/* $OpenBSD: md5.h,v 1.23 2024/06/01 07:44:11 tb Exp $ */
+﻿/* $OpenBSD: md5.h,v 1.23 2024/06/01 07:44:11 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

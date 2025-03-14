@@ -1,4 +1,4 @@
-//===- FuzzerMerge.h - merging corpa ----------------------------*- C++ -* ===//
+﻿//===- FuzzerMerge.h - merging corpa ----------------------------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

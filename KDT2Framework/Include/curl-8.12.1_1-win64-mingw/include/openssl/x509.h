@@ -1,4 +1,4 @@
-/* $OpenBSD: x509.h,v 1.119 2024/08/31 10:49:35 tb Exp $ */
+﻿/* $OpenBSD: x509.h,v 1.119 2024/08/31 10:49:35 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

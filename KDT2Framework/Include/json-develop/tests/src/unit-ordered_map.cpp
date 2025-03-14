@@ -1,4 +1,4 @@
-//     __ _____ _____ _____
+﻿//     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++ (supporting code)
 // |  |  |__   |  |  | | | |  version 3.11.3
 // |_____|_____|_____|_|___|  https://github.com/nlohmann/json
@@ -195,7 +195,7 @@ TEST_CASE("ordered_map")
             {
                 // need more elements
                 om["vier"] = "four";
-                om["fünf"] = "five";
+                om["f端nf"] = "five";
 
                 // delete "zwei" and "drei"
                 auto it = om.erase(om.begin() + 1, om.begin() + 3);
@@ -207,7 +207,7 @@ TEST_CASE("ordered_map")
             {
                 // need more elements
                 om["vier"] = "four";
-                om["fünf"] = "five";
+                om["f端nf"] = "five";
 
                 // delete "eins" and "zwei"
                 auto it = om.erase(om.begin(), om.begin() + 2);
@@ -219,9 +219,9 @@ TEST_CASE("ordered_map")
             {
                 // need more elements
                 om["vier"] = "four";
-                om["fünf"] = "five";
+                om["f端nf"] = "five";
 
-                // delete "vier" and "fünf"
+                // delete "vier" and "f端nf"
                 auto it = om.erase(om.begin() + 3, om.end());
                 CHECK(it == om.end());
                 CHECK(om.size() == 3);

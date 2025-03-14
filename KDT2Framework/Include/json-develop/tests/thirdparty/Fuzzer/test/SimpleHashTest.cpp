@@ -1,4 +1,4 @@
-// This file is distributed under the University of Illinois Open Source
+﻿// This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 
 // This test computes a checksum of the data (all but the last 4 bytes),

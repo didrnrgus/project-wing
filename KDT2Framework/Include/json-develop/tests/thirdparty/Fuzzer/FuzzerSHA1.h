@@ -1,4 +1,4 @@
-//===- FuzzerSHA1.h - Internal header for the SHA1 utils --------*- C++ -* ===//
+﻿//===- FuzzerSHA1.h - Internal header for the SHA1 utils --------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

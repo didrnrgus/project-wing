@@ -1,4 +1,4 @@
-//===- FuzzerExtFunctions.h - Interface to external functions ---*- C++ -* ===//
+﻿//===- FuzzerExtFunctions.h - Interface to external functions ---*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

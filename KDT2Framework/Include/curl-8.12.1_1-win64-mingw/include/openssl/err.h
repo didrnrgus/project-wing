@@ -1,4 +1,4 @@
-/* $OpenBSD: err.h,v 1.35 2024/08/31 10:09:15 tb Exp $ */
+﻿/* $OpenBSD: err.h,v 1.35 2024/08/31 10:09:15 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

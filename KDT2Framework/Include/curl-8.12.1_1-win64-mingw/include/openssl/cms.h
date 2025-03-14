@@ -1,4 +1,4 @@
-/* $OpenBSD: cms.h,v 1.18 2024/03/30 00:35:15 joshua Exp $ */
+﻿/* $OpenBSD: cms.h,v 1.18 2024/03/30 00:35:15 joshua Exp $ */
 /*
  * Written by Dr Stephen N Henson (steve@openssl.org) for the OpenSSL
  * project.

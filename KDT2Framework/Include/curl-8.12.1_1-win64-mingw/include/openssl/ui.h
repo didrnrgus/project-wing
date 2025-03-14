@@ -1,4 +1,4 @@
-/* $OpenBSD: ui.h,v 1.19 2024/08/31 10:28:03 tb Exp $ */
+﻿/* $OpenBSD: ui.h,v 1.19 2024/08/31 10:28:03 tb Exp $ */
 /* Written by Richard Levitte (richard@levitte.org) for the OpenSSL
  * project 2001.
  */

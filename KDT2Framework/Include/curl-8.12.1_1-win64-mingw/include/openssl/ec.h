@@ -1,4 +1,4 @@
-/* $OpenBSD: ec.h,v 1.48 2024/04/15 15:42:23 tb Exp $ */
+﻿/* $OpenBSD: ec.h,v 1.48 2024/04/15 15:42:23 tb Exp $ */
 /*
  * Originally written by Bodo Moeller for the OpenSSL project.
  */

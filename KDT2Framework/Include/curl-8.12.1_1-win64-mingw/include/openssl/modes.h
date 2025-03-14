@@ -1,4 +1,4 @@
-/* $OpenBSD: modes.h,v 1.6 2023/07/08 14:55:36 beck Exp $ */
+﻿/* $OpenBSD: modes.h,v 1.6 2023/07/08 14:55:36 beck Exp $ */
 /* ====================================================================
  * Copyright (c) 2008 The OpenSSL Project. All rights reserved.
  *

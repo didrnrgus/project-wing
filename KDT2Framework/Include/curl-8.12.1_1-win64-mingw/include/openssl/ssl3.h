@@ -1,4 +1,4 @@
-/* $OpenBSD: ssl3.h,v 1.60 2024/03/02 11:47:41 tb Exp $ */
+﻿/* $OpenBSD: ssl3.h,v 1.60 2024/03/02 11:47:41 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

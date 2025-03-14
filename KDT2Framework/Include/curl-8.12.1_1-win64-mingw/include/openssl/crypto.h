@@ -1,4 +1,4 @@
-/* $OpenBSD: crypto.h,v 1.75 2024/08/31 12:43:58 jsing Exp $ */
+﻿/* $OpenBSD: crypto.h,v 1.75 2024/08/31 12:43:58 jsing Exp $ */
 /* ====================================================================
  * Copyright (c) 1998-2006 The OpenSSL Project.  All rights reserved.
  *

@@ -1,4 +1,4 @@
-//===- FuzzerDictionary.h - Internal header for the Fuzzer ------*- C++ -* ===//
+﻿//===- FuzzerDictionary.h - Internal header for the Fuzzer ------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

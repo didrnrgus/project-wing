@@ -1,4 +1,4 @@
-//===- FuzzerTracePC.h - Internal header for the Fuzzer ---------*- C++ -* ===//
+﻿//===- FuzzerTracePC.h - Internal header for the Fuzzer ---------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

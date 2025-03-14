@@ -1,4 +1,4 @@
-/*	$OpenBSD: posix_time.h,v 1.1 2024/02/18 16:28:38 tb Exp $ */
+﻿/*	$OpenBSD: posix_time.h,v 1.1 2024/02/18 16:28:38 tb Exp $ */
 /*
  * Copyright (c) 2022, Google Inc.
  *

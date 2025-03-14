@@ -1,4 +1,4 @@
-/* $OpenBSD: ossl_typ.h,v 1.31 2024/05/27 09:12:32 jsg Exp $ */
+﻿/* $OpenBSD: ossl_typ.h,v 1.31 2024/05/27 09:12:32 jsg Exp $ */
 /* ====================================================================
  * Copyright (c) 1998-2001 The OpenSSL Project.  All rights reserved.
  *

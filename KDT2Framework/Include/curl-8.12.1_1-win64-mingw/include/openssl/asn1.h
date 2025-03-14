@@ -1,4 +1,4 @@
-/* $OpenBSD: asn1.h,v 1.92 2024/04/10 14:55:12 beck Exp $ */
+﻿/* $OpenBSD: asn1.h,v 1.92 2024/04/10 14:55:12 beck Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

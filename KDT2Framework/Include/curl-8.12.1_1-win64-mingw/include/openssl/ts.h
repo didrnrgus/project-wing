@@ -1,4 +1,4 @@
-/* $OpenBSD: ts.h,v 1.24 2024/03/26 00:39:22 beck Exp $ */
+﻿/* $OpenBSD: ts.h,v 1.24 2024/03/26 00:39:22 beck Exp $ */
 /* Written by Zoltan Glozik (zglozik@opentsa.org) for the OpenSSL
  * project 2002, 2003, 2004.
  */

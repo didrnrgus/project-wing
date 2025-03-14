@@ -1,4 +1,4 @@
-//===- FuzzerInterface.h - Interface header for the Fuzzer ------*- C++ -* ===//
+﻿//===- FuzzerInterface.h - Interface header for the Fuzzer ------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

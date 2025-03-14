@@ -1,4 +1,4 @@
-/* $OpenBSD: buffer.h,v 1.17 2023/07/28 10:17:21 tb Exp $ */
+﻿/* $OpenBSD: buffer.h,v 1.17 2023/07/28 10:17:21 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

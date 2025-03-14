@@ -1,4 +1,4 @@
-//===- FuzzerExtFunctionsWeak.cpp - Interface to external functions -------===//
+﻿//===- FuzzerExtFunctionsWeak.cpp - Interface to external functions -------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

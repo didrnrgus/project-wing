@@ -1,4 +1,4 @@
-//===- FuzzerTracePC.cpp - PC tracing--------------------------------------===//
+﻿//===- FuzzerTracePC.cpp - PC tracing--------------------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

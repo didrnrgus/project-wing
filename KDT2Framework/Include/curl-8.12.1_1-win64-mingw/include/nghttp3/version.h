@@ -1,4 +1,4 @@
-/*
+﻿/*
  * nghttp3
  *
  * Copyright (c) 2019 nghttp3 contributors

@@ -1,4 +1,4 @@
-/* $OpenBSD: camellia.h,v 1.5 2014/11/13 20:01:58 miod Exp $ */
+﻿/* $OpenBSD: camellia.h,v 1.5 2014/11/13 20:01:58 miod Exp $ */
 /* ====================================================================
  * Copyright (c) 2006 The OpenSSL Project.  All rights reserved.
  *

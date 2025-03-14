@@ -1,4 +1,4 @@
-/* $OpenBSD: hkdf.h,v 1.3 2023/08/11 04:52:08 tb Exp $ */
+﻿/* $OpenBSD: hkdf.h,v 1.3 2023/08/11 04:52:08 tb Exp $ */
 /* Copyright (c) 2014, Google Inc.
  *
  * Permission to use, copy, modify, and/or distribute this software for any

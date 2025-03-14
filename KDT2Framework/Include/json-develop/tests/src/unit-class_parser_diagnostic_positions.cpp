@@ -1,4 +1,4 @@
-//     __ _____ _____ _____
+﻿//     __ _____ _____ _____
 //  __|  |   __|     |   | |  JSON for Modern C++ (supporting code)
 // |  |  |__   |  |  | | | |  version 3.11.3
 // |_____|_____|_____|_|___|  https://github.com/nlohmann/json
@@ -485,20 +485,20 @@ TEST_CASE("parser class")
 
                 CHECK(parser_helper("\"\\u0001\"").get<json::string_t>() == "\x01");
                 CHECK(parser_helper("\"\\u000a\"").get<json::string_t>() == "\n");
-                CHECK(parser_helper("\"\\u00b0\"").get<json::string_t>() == "°");
-                CHECK(parser_helper("\"\\u0c00\"").get<json::string_t>() == "ఀ");
-                CHECK(parser_helper("\"\\ud000\"").get<json::string_t>() == "퀀");
+                CHECK(parser_helper("\"\\u00b0\"").get<json::string_t>() == "Â°");
+                CHECK(parser_helper("\"\\u0c00\"").get<json::string_t>() == "à°€");
+                CHECK(parser_helper("\"\\ud000\"").get<json::string_t>() == "í€€");
                 CHECK(parser_helper("\"\\u000E\"").get<json::string_t>() == "\x0E");
-                CHECK(parser_helper("\"\\u00F0\"").get<json::string_t>() == "ð");
-                CHECK(parser_helper("\"\\u0100\"").get<json::string_t>() == "Ā");
-                CHECK(parser_helper("\"\\u2000\"").get<json::string_t>() == " ");
-                CHECK(parser_helper("\"\\uFFFF\"").get<json::string_t>() == "￿");
-                CHECK(parser_helper("\"\\u20AC\"").get<json::string_t>() == "€");
-                CHECK(parser_helper("\"€\"").get<json::string_t>() == "€");
-                CHECK(parser_helper("\"🎈\"").get<json::string_t>() == "🎈");
+                CHECK(parser_helper("\"\\u00F0\"").get<json::string_t>() == "Ã°");
+                CHECK(parser_helper("\"\\u0100\"").get<json::string_t>() == "Ä€");
+                CHECK(parser_helper("\"\\u2000\"").get<json::string_t>() == "â€€");
+                CHECK(parser_helper("\"\\uFFFF\"").get<json::string_t>() == "ï¿¿");
+                CHECK(parser_helper("\"\\u20AC\"").get<json::string_t>() == "â‚¬");
+                CHECK(parser_helper("\"â‚¬\"").get<json::string_t>() == "â‚¬");
+                CHECK(parser_helper("\"ðŸŽˆ\"").get<json::string_t>() == "ðŸŽˆ");
 
                 CHECK(parser_helper("\"\\ud80c\\udc60\"").get<json::string_t>() == "\xf0\x93\x81\xa0");
-                CHECK(parser_helper("\"\\ud83c\\udf1e\"").get<json::string_t>() == "🌞");
+                CHECK(parser_helper("\"\\ud83c\\udf1e\"").get<json::string_t>() == "ðŸŒž");
             }
         }
 
@@ -805,8 +805,8 @@ TEST_CASE("parser class")
                 CHECK(accept_helper("\"\\u2000\""));
                 CHECK(accept_helper("\"\\uFFFF\""));
                 CHECK(accept_helper("\"\\u20AC\""));
-                CHECK(accept_helper("\"€\""));
-                CHECK(accept_helper("\"🎈\""));
+                CHECK(accept_helper("\"â‚¬\""));
+                CHECK(accept_helper("\"ðŸŽˆ\""));
 
                 CHECK(accept_helper("\"\\ud80c\\udc60\""));
                 CHECK(accept_helper("\"\\ud83c\\udf1e\""));

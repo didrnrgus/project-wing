@@ -1,4 +1,4 @@
-//===- FuzzerDriver.cpp - FuzzerDriver function and flags -----------------===//
+﻿//===- FuzzerDriver.cpp - FuzzerDriver function and flags -----------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

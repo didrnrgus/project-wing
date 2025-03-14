@@ -1,4 +1,4 @@
-/* $OpenBSD: des.h,v 1.22 2024/08/31 10:30:16 tb Exp $ */
+﻿/* $OpenBSD: des.h,v 1.22 2024/08/31 10:30:16 tb Exp $ */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

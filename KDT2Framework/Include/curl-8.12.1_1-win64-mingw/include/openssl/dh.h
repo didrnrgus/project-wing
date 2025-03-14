@@ -1,4 +1,4 @@
-/* $OpenBSD: dh.h,v 1.37 2023/04/18 08:33:43 tb Exp $ */
+﻿/* $OpenBSD: dh.h,v 1.37 2023/04/18 08:33:43 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

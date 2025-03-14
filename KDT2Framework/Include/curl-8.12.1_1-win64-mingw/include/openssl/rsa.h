@@ -1,4 +1,4 @@
-/* $OpenBSD: rsa.h,v 1.66 2024/05/19 07:12:50 jsg Exp $ */
+﻿/* $OpenBSD: rsa.h,v 1.66 2024/05/19 07:12:50 jsg Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

@@ -1,4 +1,4 @@
-/* $OpenBSD: conf.h,v 1.27 2024/08/31 09:54:31 tb Exp $ */
+﻿/* $OpenBSD: conf.h,v 1.27 2024/08/31 09:54:31 tb Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

@@ -1,4 +1,4 @@
-/* $OpenBSD: bn.h,v 1.78 2024/04/10 14:58:06 beck Exp $ */
+﻿/* $OpenBSD: bn.h,v 1.78 2024/04/10 14:58:06 beck Exp $ */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

@@ -1,4 +1,4 @@
-//===- FuzzerUtil.cpp - Misc utils ----------------------------------------===//
+﻿//===- FuzzerUtil.cpp - Misc utils ----------------------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

@@ -1,4 +1,4 @@
-/* $OpenBSD: rc2.h,v 1.12 2023/07/07 08:29:37 beck Exp $ */
+﻿/* $OpenBSD: rc2.h,v 1.12 2023/07/07 08:29:37 beck Exp $ */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

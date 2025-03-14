@@ -1,4 +1,4 @@
-//===- FuzzerUtilDarwin.cpp - Misc utils ----------------------------------===//
+﻿//===- FuzzerUtilDarwin.cpp - Misc utils ----------------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

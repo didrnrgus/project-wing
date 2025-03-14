@@ -1,4 +1,4 @@
-/* $OpenBSD: pem.h,v 1.28 2024/05/11 05:41:28 tb Exp $ */
+﻿/* $OpenBSD: pem.h,v 1.28 2024/05/11 05:41:28 tb Exp $ */
 /* Copyright (C) 1995-1997 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

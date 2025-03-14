@@ -1,4 +1,4 @@
-/* $OpenBSD: poly1305.h,v 1.3 2014/07/25 14:04:51 jsing Exp $ */
+﻿/* $OpenBSD: poly1305.h,v 1.3 2014/07/25 14:04:51 jsing Exp $ */
 /*
  * Copyright (c) 2014 Joel Sing <jsing@openbsd.org>
  *

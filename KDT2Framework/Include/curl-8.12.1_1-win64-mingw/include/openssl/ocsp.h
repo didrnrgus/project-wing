@@ -1,4 +1,4 @@
-/* $OpenBSD: ocsp.h,v 1.20 2022/07/12 14:42:49 kn Exp $ */
+﻿/* $OpenBSD: ocsp.h,v 1.20 2022/07/12 14:42:49 kn Exp $ */
 /* Written by Tom Titchener <Tom_Titchener@groove.net> for the OpenSSL
  * project. */
 

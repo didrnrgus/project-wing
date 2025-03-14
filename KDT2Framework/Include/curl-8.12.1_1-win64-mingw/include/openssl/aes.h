@@ -1,4 +1,4 @@
-/* $OpenBSD: aes.h,v 1.15 2023/07/31 05:04:06 tb Exp $ */
+﻿/* $OpenBSD: aes.h,v 1.15 2023/07/31 05:04:06 tb Exp $ */
 /* ====================================================================
  * Copyright (c) 1998-2002 The OpenSSL Project.  All rights reserved.
  *

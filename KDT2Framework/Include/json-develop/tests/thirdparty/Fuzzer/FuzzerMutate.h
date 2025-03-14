@@ -1,4 +1,4 @@
-//===- FuzzerMutate.h - Internal header for the Fuzzer ----------*- C++ -* ===//
+﻿//===- FuzzerMutate.h - Internal header for the Fuzzer ----------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

@@ -1,4 +1,4 @@
-/* $OpenBSD: cast.h,v 1.13 2023/07/08 07:25:43 jsing Exp $ */
+﻿/* $OpenBSD: cast.h,v 1.13 2023/07/08 07:25:43 jsing Exp $ */
 /* Copyright (C) 1995-1998 Eric Young (eay@cryptsoft.com)
  * All rights reserved.
  *

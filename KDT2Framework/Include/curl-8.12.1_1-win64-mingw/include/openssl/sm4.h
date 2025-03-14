@@ -1,4 +1,4 @@
-/*	$OpenBSD: sm4.h,v 1.1 2019/03/17 17:42:37 tb Exp $	*/
+﻿/*	$OpenBSD: sm4.h,v 1.1 2019/03/17 17:42:37 tb Exp $	*/
 /*
  * Copyright (c) 2017, 2019 Ribose Inc
  *

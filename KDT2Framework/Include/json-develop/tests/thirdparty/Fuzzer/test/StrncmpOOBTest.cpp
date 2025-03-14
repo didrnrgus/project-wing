@@ -1,4 +1,4 @@
-// This file is distributed under the University of Illinois Open Source
+﻿// This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 
 // Test that libFuzzer itself does not read out of bounds.

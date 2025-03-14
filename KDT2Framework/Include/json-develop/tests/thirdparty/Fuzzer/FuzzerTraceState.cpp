@@ -1,4 +1,4 @@
-//===- FuzzerTraceState.cpp - Trace-based fuzzer mutator ------------------===//
+﻿//===- FuzzerTraceState.cpp - Trace-based fuzzer mutator ------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

@@ -1,4 +1,4 @@
-// This file is distributed under the University of Illinois Open Source
+﻿// This file is distributed under the University of Illinois Open Source
 // License. See LICENSE.TXT for details.
 
 // Avoid ODR violations (LibFuzzer is built without ASan and this test is built

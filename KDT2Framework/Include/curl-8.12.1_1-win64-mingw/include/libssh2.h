@@ -1,4 +1,4 @@
-/* Copyright (C) Sara Golemon <sarag@libssh2.org>
+﻿/* Copyright (C) Sara Golemon <sarag@libssh2.org>
  * Copyright (C) Daniel Stenberg
  * Copyright (C) Simon Josefsson <simon@josefsson.org>
  * All rights reserved.

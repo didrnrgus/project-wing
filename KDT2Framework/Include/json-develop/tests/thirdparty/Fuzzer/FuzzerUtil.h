@@ -1,4 +1,4 @@
-//===- FuzzerUtil.h - Internal header for the Fuzzer Utils ------*- C++ -* ===//
+﻿//===- FuzzerUtil.h - Internal header for the Fuzzer Utils ------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

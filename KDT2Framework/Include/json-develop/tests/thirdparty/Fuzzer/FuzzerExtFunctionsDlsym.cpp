@@ -1,4 +1,4 @@
-//===- FuzzerExtFunctionsDlsym.cpp - Interface to external functions ------===//
+﻿//===- FuzzerExtFunctionsDlsym.cpp - Interface to external functions ------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

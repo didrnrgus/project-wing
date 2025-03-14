@@ -1,4 +1,4 @@
-//===- FuzzerMerge.cpp - merging corpora ----------------------------------===//
+﻿//===- FuzzerMerge.cpp - merging corpora ----------------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

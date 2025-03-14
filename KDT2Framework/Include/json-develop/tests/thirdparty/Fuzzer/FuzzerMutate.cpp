@@ -1,4 +1,4 @@
-//===- FuzzerMutate.cpp - Mutate a test input -----------------------------===//
+﻿//===- FuzzerMutate.cpp - Mutate a test input -----------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

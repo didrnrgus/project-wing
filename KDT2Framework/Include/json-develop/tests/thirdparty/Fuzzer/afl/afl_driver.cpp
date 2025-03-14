@@ -1,4 +1,4 @@
-//===- afl_driver.cpp - a glue between AFL and libFuzzer --------*- C++ -* ===//
+﻿//===- afl_driver.cpp - a glue between AFL and libFuzzer --------*- C++ -* ===//
 //
 //                     The LLVM Compiler Infrastructure
 //

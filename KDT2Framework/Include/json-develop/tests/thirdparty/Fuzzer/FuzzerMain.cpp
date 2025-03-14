@@ -1,4 +1,4 @@
-//===- FuzzerMain.cpp - main() function and flags -------------------------===//
+﻿//===- FuzzerMain.cpp - main() function and flags -------------------------===//
 //
 //                     The LLVM Compiler Infrastructure
 //

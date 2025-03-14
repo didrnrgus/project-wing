@@ -1,4 +1,4 @@
-/* $OpenBSD: comp.h,v 1.13 2023/07/28 09:42:44 tb Exp $ */
+﻿/* $OpenBSD: comp.h,v 1.13 2023/07/28 09:42:44 tb Exp $ */
 
 /*
  * Public domain.

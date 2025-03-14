@@ -1,4 +1,4 @@
-/* $OpenBSD: opensslfeatures.h,v 1.44 2024/08/31 10:38:49 tb Exp $ */
+﻿/* $OpenBSD: opensslfeatures.h,v 1.44 2024/08/31 10:38:49 tb Exp $ */
 /*
  * Feature flags for LibreSSL... so you can actually tell when things
  * are enabled, rather than not being able to tell when things are

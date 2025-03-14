@@ -1,4 +1,4 @@
-/* $OpenBSD: opensslv.h,v 1.79 2024/08/31 10:52:43 tb Exp $ */
+﻿/* $OpenBSD: opensslv.h,v 1.79 2024/08/31 10:52:43 tb Exp $ */
 #ifndef HEADER_OPENSSLV_H
 #define HEADER_OPENSSLV_H
 
