@@ -12,19 +12,21 @@ CTaskManager::~CTaskManager()
 
 }
 
-void CTaskManager::AddTask(std::thread&& task)
+int CTaskManager::AddTask(std::thread&& task)
 {
     taskNumber++;
     int taskID = taskNumber;
     CLog::PrintLog("CTaskManager::AddTask taskStart: " + std::to_string(taskID));
 
     mThreadTasks.insert(std::make_pair(taskID, std::move(task)));
+    mThreadTasks[taskID].detach();
 
-    if (mThreadTasks[taskID].joinable())
-        mThreadTasks[taskID].join();
+    return taskID;
+}
 
+void CTaskManager::RemoveTask(int taskID)
+{
+    CLog::PrintLog("CTaskManager::RemoveTask taskEnd: " + std::to_string(taskID));
     mThreadTasks.erase(taskID);
-
-    CLog::PrintLog("CTaskManager::AddTask taskEnd: " + std::to_string(taskID));
 }
 

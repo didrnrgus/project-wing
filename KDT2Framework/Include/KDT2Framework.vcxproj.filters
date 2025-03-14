@@ -203,6 +203,9 @@
     <ClInclude Include="Etc\TaskManager.h">
       <Filter>Etc</Filter>
     </ClInclude>
+    <ClInclude Include="Etc\ZOrderContainer.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="KDT2Framework.rc">

@@ -15,8 +15,6 @@ protected:
 	CSharedPtr<class CSpriteComponent> mRoot;
 	class CAnimation2D* mAnimation = nullptr;
 
-	std::vector<FVector4D> mPlayerColors;
-
 	FVector3D mRootInitPos;
 	float mMapDifficultySinAngle;
 public:

@@ -41,9 +41,39 @@ bool CTitleWidget::Init()
 	SetButtonWithTextBlock(mExitButton, "Exit", exitPos
 		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
 
-	CTaskManager::GetInst()->AddTask(std::move(std::thread(
-		[]()
+	return true;
+}
+
+void CTitleWidget::SetButtonWithTextBlock(CButton* button, std::string name, FVector2D pos
+	, void(CTitleWidget::* Func)(), CTextBlock* textBlock, const wchar_t* textBlockContent)
+{
+	button = mScene->GetUIManager()->CreateWidget<CButton>(name + "Button");
+	AddWidget(button);
+	button->SetPos(pos);
+	button->SetSize(200.f, 100.f);
+	button->SetColor(0, 0, 0, 0);
+	button->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, Func);
+	textBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>(name + "Text");
+	button->SetChild(textBlock);
+	textBlock->SetText(textBlockContent);
+	textBlock->SetTextColor(FVector4D::Green);
+	textBlock->SetAlignH(ETextAlignH::Center);
+	textBlock->SetFontSize(30.f);
+	textBlock->SetShadowEnable(true);
+	textBlock->SetShadowOffset(3.f, 3.f);
+	textBlock->SetTextShadowColor(FVector4D::Gray30);
+}
+
+void CTitleWidget::SinglePlayButtonClick()
+{
+	// 로비로 가야 함.
+	CLog::PrintLog("CTitleWidget::SinglePlayButtonClick()");
+
+	int taskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[taskID, this]()
 		{
+			ShowLoading(true);
+
 			// config load
 			std::string webserverPath = WEBSERVER_PATH;
 			std::string path = webserverPath + CONFIG_PATH;
@@ -66,37 +96,14 @@ bool CTitleWidget::Init()
 				CDataStorageManager::GetInst()->SetMapData(mapResult);
 			}
 
+			CTaskManager::GetInst()->RemoveTask(taskID);
+
+			ShowLoading(false);
+
+			// Move to Lobby
+			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 		})));
 
-
-	return true;
-}
-
-void CTitleWidget::SetButtonWithTextBlock(CButton* button, std::string name, FVector2D pos
-	, void(CTitleWidget::* Func)(), CTextBlock* textBlock, const wchar_t* textBlockContent)
-{
-	button = mScene->GetUIManager()->CreateWidget<CButton>(name + "Button");
-	AddWidget(button);
-	button->SetPos(pos);
-	button->SetSize(200.f, 100.f);
-	button->SetColor(0, 0, 0, 0);
-	button->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, Func);
-	textBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>(name + "Text");
-	button->SetChild(textBlock);
-	textBlock->SetText(textBlockContent);
-	textBlock->SetTextColor(0, 255, 0, 255);
-	textBlock->SetAlignH(ETextAlignH::Center);
-	textBlock->SetFontSize(30.f);
-	textBlock->SetShadowEnable(true);
-	textBlock->SetShadowOffset(3.f, 3.f);
-	textBlock->SetTextShadowColor(FVector4D(0.5f, 0.5f, 0.5f, 1.0f));
-}
-
-void CTitleWidget::SinglePlayButtonClick()
-{
-	// 로비로 가야 함.
-	CLog::PrintLog("CTitleWidget::SinglePlayButtonClick()");
-	CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 }
 
 void CTitleWidget::MultiPlayButtonClick()

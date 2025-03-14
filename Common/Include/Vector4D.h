@@ -478,5 +478,15 @@ struct FVector4D
 	static FVector4D	Cyan;
 	static FVector4D	Pink;
 
+	static FVector4D	Gray10;
+	static FVector4D	Gray20;
+	static FVector4D	Gray30;
+	static FVector4D	Gray40;
+	static FVector4D	Gray50;
+	static FVector4D	Gray60;
+	static FVector4D	Gray70;
+	static FVector4D	Gray80;
+	static FVector4D	Gray90;
+
 	static FVector4D GetColorFromString(std::string colorName);
 };

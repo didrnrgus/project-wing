@@ -18,6 +18,16 @@ FVector4D FVector4D::Yellow = { 1.f, 1.f, 0.f, 1.f };
 FVector4D FVector4D::Cyan = { 0.f, 1.f, 1.f, 1.f };
 FVector4D FVector4D::Pink = { 1.f, 0.753f, 0.796f, 1.f };
 
+FVector4D FVector4D::Gray10 = { 0.1f, 0.1f, 0.1f, 1.f };
+FVector4D FVector4D::Gray20 = { 0.2f, 0.2f, 0.2f, 1.f };
+FVector4D FVector4D::Gray30 = { 0.3f, 0.3f, 0.3f, 1.f };
+FVector4D FVector4D::Gray40 = { 0.4f, 0.4f, 0.4f, 1.f };
+FVector4D FVector4D::Gray50 = { 0.5f, 0.5f, 0.5f, 1.f };
+FVector4D FVector4D::Gray60 = { 0.6f, 0.6f, 0.6f, 1.f };
+FVector4D FVector4D::Gray70 = { 0.7f, 0.7f, 0.7f, 1.f };
+FVector4D FVector4D::Gray80 = { 0.8f, 0.8f, 0.8f, 1.f };
+FVector4D FVector4D::Gray90 = { 0.9f, 0.9f, 0.9f, 1.f };
+
 FVector4D FVector4D::GetColorFromString(std::string colorName)
 {
 	if (strcmp(colorName.c_str(), "Black") == 0)

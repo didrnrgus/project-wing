@@ -21,7 +21,7 @@ protected:
 	CSharedPtr<class CTextBlock>	mExitTextBlock;
 
 public:
-	virtual bool Init();
+	virtual bool Init() override;
 
 private:
 	void SetButtonWithTextBlock(class CButton* button, std::string name, FVector2D pos

@@ -3,6 +3,7 @@
 #include "../Share/Object.h"
 #include "../Object/SceneObject.h"
 #include "UIInfo.h"
+#include "Etc/ZOrderContainer.h"
 
 class CWidget abstract	:
 	public CObject

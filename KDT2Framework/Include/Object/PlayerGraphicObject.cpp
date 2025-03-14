@@ -1,6 +1,7 @@
 ﻿#include "PlayerGraphicObject.h"
 #include "Component/SpriteComponent.h"
 #include "Component/CameraComponent.h"
+#include "Etc/DataStorageManager.h"
 
 CPlayerGraphicObject::CPlayerGraphicObject()
 {
@@ -22,12 +23,6 @@ bool CPlayerGraphicObject::Init()
 {
 	CSceneObject::Init();
 
-	mPlayerColors.push_back(FVector4D::White);
-	mPlayerColors.push_back(FVector4D::Pink);
-	mPlayerColors.push_back(FVector4D::Green);
-	mPlayerColors.push_back(FVector4D::Cyan);
-	mPlayerColors.push_back(FVector4D::Yellow);
-
 	mRootInitPos = FVector3D(370.f, 242.f, 0.f);
 	mMapDifficultySinAngle = 0.0f;
 
@@ -36,13 +31,17 @@ bool CPlayerGraphicObject::Init()
 	mRoot->SetWorldPos(mRootInitPos);
 	FVector3D tempRootSize = FVector3D(200.0f, 135.0f, 1.f);
 	mRoot->SetWorldScale(tempRootSize * 1.0f);
-	mRoot->SetColor(mPlayerColors[0]);
 	SetRootComponent(mRoot);
 
-
 	mAnimation = mRoot->CreateAnimation2D<CAnimation2D>();
-	mAnimation->AddSequence("PlayerIdle", 0.3f, 1.f, true, false);
-	mAnimation->ChangeAnimation("PlayerIdle");
+	for (int i = 0; i < CDataStorageManager::GetInst()->GetCharacterCount(); i++)
+	{
+		mAnimation->AddSequence(
+			CDataStorageManager::GetInst()->GetCharacterState(i).ImageSequenceName
+			, 0.3f, 1.f, true, false);
+	}
+	
+	mAnimation->ChangeAnimation(CDataStorageManager::GetInst()->GetCharacterState(0).ImageSequenceName);
 
 	return true;
 }
@@ -67,7 +66,7 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 
 int CPlayerGraphicObject::GetGraphicCount()
 {
-	return (int)mPlayerColors.size();
+	return CDataStorageManager::GetInst()->GetCharacterCount();
 }
 
 bool CPlayerGraphicObject::SetChangeGraphic(int index)
@@ -75,7 +74,8 @@ bool CPlayerGraphicObject::SetChangeGraphic(int index)
 	// 텍스처를 아예 바꾼다면 mAnimation 에서 처리 해야 함.
 
 	// 현재는 컬러로만.
-	mRoot->SetColor(mPlayerColors[index]);
+	auto colorName = CDataStorageManager::GetInst()->GetCharacterState(index).ColorName;
+	mRoot->SetColor(FVector4D::GetColorFromString(colorName));
 
 	return false;
 }

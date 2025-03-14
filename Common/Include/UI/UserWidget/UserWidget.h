@@ -11,8 +11,17 @@ protected:
 	CUserWidget();
 	virtual ~CUserWidget();
 
+private:
+	CSharedPtr<class CImage> mLoadingBackImage;
+	CSharedPtr<class CTextBlock> mLoadingText;
+	std::vector<const wchar_t*> mLoadingTextStrings;
+	bool mIsLoading = false;
+	float loadingUpdateTime = 0.0f;
+	int curLoadingTextIndex = 0;
+
 protected:
 	std::vector<CSharedPtr<CWidget>>	mWidgetList;
+	
 
 public:
 	void AddWidget(CWidget* Widget)
@@ -21,13 +30,16 @@ public:
 		mWidgetList.emplace_back(Widget);
 	}
 
+	void ShowLoading(bool isLoading);
+	void UpdateLoading(float DeltaTime);
+	bool IsLoading() { return mIsLoading; }
+
 public:
 	virtual bool Init();
 	virtual void Update(float DeltaTime);
 	virtual void Render();
 	virtual void Render(const FVector3D& Pos);
 	virtual bool CollisionMouse(CWidget** Result, const FVector2D& MousePos);
-
 
 private:
 	static bool SortCollision(const CSharedPtr<CWidget>& Src,

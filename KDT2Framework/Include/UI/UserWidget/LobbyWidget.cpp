@@ -28,14 +28,15 @@ CLobbyWidget::CLobbyWidget()
 	mSlotButtonNamePrefix = "SlotButton_";
 	mMapDifficultyImageNamePrefix = "MapImage_";
 
+	// 맵 데이터 테이블에 포함시켜야 함.
 	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-happy.png"));
 	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-normal.png"));
 	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-sad.png"));
-
 	mMapDifficultyImageColors.push_back(FVector4D::Cyan);
 	mMapDifficultyImageColors.push_back(FVector4D::Yellow);
 	mMapDifficultyImageColors.push_back(FVector4D::Red);
 
+	// 아이템 테이블로 뺴야 함.
 	mItemImagePaths.push_back(TEXT("Texture/Icon/milk.png"));
 	mItemImagePaths.push_back(TEXT("Texture/Icon/pharagraphspacing.png"));
 	mItemImagePaths.push_back(TEXT("Texture/Icon/ghost.png"));

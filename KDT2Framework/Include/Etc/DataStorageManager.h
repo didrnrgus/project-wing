@@ -16,10 +16,16 @@ public:
 	void SetMapData(std::string strJson);
 
 public:
-	inline const FConfig GetConfig()
-	{
-		return mConfigData;
-	}
+	inline const FConfig GetConfig() 
+	{ return mConfigData; }
+
+	inline const int GetCharacterCount() 
+	{ return mCharacterDatas.size(); }
+
+	inline const FCharacterState GetCharacterState(int index) 
+	{ return mCharacterDatas[index]; }
+
+
 
 private:
 	DECLARE_SINGLE(CDataStorageManager)
