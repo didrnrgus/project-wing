@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 
 #include "GameInfo.h"
  
@@ -7,7 +7,8 @@
 #define HEADER_CONTENT_TYPE "Content-Type: application/json"
 
 #define CACERT_PATH "./pem/cacert.pem"
-#define CONFIG_PATH "https://didrnrgus.github.io/project-wing-webserver/config.json"
+#define WEBSERVER_PATH "https://didrnrgus.github.io/project-wing-webserver/"
+#define CONFIG_PATH "config.json"
 
 #define METHOD_POST "POST"
 #define METHOD_PATCH "PATCH"
@@ -17,7 +18,7 @@
 class CCURL
 {
 public:
-    // GET Àº InJsonData »ý¶ô.
+    // GET Ã€Âº InJsonData Â»Ã½Â¶Ã´.
     std::string SendRequest(const std::string& InURL, const std::string& InMethod, const std::string& InJsonData = "");
 
     DECLARE_SINGLE(CCURL);

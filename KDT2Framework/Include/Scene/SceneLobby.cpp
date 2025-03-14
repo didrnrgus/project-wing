@@ -14,15 +14,15 @@ CSceneLobby::~CSceneLobby()
 
 bool CSceneLobby::InitAsset()
 {
-    CCameraObject* Camera = CreateObj<CCameraObject>("Camera");
-    CPlayerGraphicObject* PlayerGraphic = CreateObj<CPlayerGraphicObject>("PlayerGraphic");
-    players.push_back(PlayerGraphic);
-
     return true;
 }
 
 bool CSceneLobby::InitObject()
 {
+    CCameraObject* Camera = CreateObj<CCameraObject>("Camera");
+    CPlayerGraphicObject* PlayerGraphic = CreateObj<CPlayerGraphicObject>("PlayerGraphic");
+    players.push_back(PlayerGraphic);
+
     return true;
 }
 

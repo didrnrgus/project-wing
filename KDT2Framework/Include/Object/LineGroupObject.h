@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Object/SceneObject.h"
 #include "Etc/JsonContainer.h"
 
@@ -22,10 +22,10 @@ protected:
 	virtual ~CLineGroupObject();
 
 protected:
-	// ¹Ì¸® ¸ù¶¥ µé°íÀÖÀ»±î? -> SetData();
+	// ë¯¸ë¦¬ ëª½ë•… ë“¤ê³ ìˆì„ê¹Œ? -> SetData();
 	std::list<FLine2D> mLine2DInfos;
 
-	// mLines & mColliderLines ´Â ½ÖÀ» ÀÌ·ï¾ß ÇÔ.
+	// mLines & mColliderLines ëŠ” ìŒì„ ì´ë¤„ì•¼ í•¨.
 	std::list<CSharedPtr<class CSpriteComponent>> mLines;
 	std::list<CSharedPtr<class CColliderLine2D>> mColliderLines;
 
@@ -33,7 +33,7 @@ protected:
 	int maxLineCount;
 	int curLineNodeIndex;
 	float difficultyRate;
-	float snapXValue; // µ¥ÀÌÅÍ´Â Y°ª¸¸ ÀÖÀ»°Å¶ó¼­ -> ¶óÀÎÀÇ xÃà Åõ¿µ±æÀÌ.
+	float snapXValue; // ë°ì´í„°ëŠ” Yê°’ë§Œ ìˆì„ê±°ë¼ì„œ -> ë¼ì¸ì˜ xì¶• íˆ¬ì˜ê¸¸ì´.
 	bool isStart;
 
 public:
@@ -41,7 +41,7 @@ public:
 	virtual void Update(float DeltaTime) override;
 
 public:
-	// ¾À¿¡¼­ È£Ãâ -> ·ÎµåµÈ µ¥ÀÌÅÍ¸¦ ¹Ş´Â ¿ëµµ.
+	// ì”¬ì—ì„œ í˜¸ì¶œ -> ë¡œë“œëœ ë°ì´í„°ë¥¼ ë°›ëŠ” ìš©ë„.
 	void InitLines();
 	void AddLine(FLine2D lineInfo);
 	void RemoveLine();

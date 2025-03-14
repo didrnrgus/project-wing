@@ -1,4 +1,4 @@
-#include "PlayerGraphicObject.h"
+ï»¿#include "PlayerGraphicObject.h"
 #include "Component/SpriteComponent.h"
 #include "Component/CameraComponent.h"
 
@@ -51,7 +51,7 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 {
 	CSceneObject::Update(DeltaTime);
 
-	// ¸Ê ¼±ÅÃ ÀÌ¹ÌÁö ¿þÀÌºê.
+	// ë§µ ì„ íƒ ì´ë¯¸ì§€ ì›¨ì´ë¸Œ.
 	{
 		mMapDifficultySinAngle += DeltaTime * 180.0f;
 
@@ -72,9 +72,9 @@ int CPlayerGraphicObject::GetGraphicCount()
 
 bool CPlayerGraphicObject::SetChangeGraphic(int index)
 {
-	// ÅØ½ºÃ³¸¦ ¾Æ¿¹ ¹Ù²Û´Ù¸é mAnimation ¿¡¼­ Ã³¸® ÇØ¾ß ÇÔ.
+	// í…ìŠ¤ì²˜ë¥¼ ì•„ì˜ˆ ë°”ê¾¼ë‹¤ë©´ mAnimation ì—ì„œ ì²˜ë¦¬ í•´ì•¼ í•¨.
 
-	// ÇöÀç´Â ÄÃ·¯·Î¸¸.
+	// í˜„ìž¬ëŠ” ì»¬ëŸ¬ë¡œë§Œ.
 	mRoot->SetColor(mPlayerColors[index]);
 
 	return false;

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Object/SceneObject.h"
 
 class CCameraObject : public CSceneObject

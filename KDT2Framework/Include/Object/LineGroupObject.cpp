@@ -1,4 +1,4 @@
-#include "LineGroupObject.h"
+ï»¿#include "LineGroupObject.h"
 #include "Object/SceneObject.h"
 #include "Component/ColliderLine2D.h"
 #include "Component/SpriteComponent.h"
@@ -57,7 +57,7 @@ void CLineGroupObject::Update(float DeltaTime)
 
 void CLineGroupObject::InitLines()
 {
-	// µ¥ÀÌÅÍ´Â ¸Å´ÏÀú¿¡¼­ ²¨³» ¾²ÀÚ.
+	// ë°ì´í„°ëŠ” ë§¤ë‹ˆì €ì—ì„œ êº¼ë‚´ ì“°ì.
 	for (int i = 0; i < maxLineCount; i++)
 	{
 		FLine2D lineInfo;
@@ -94,17 +94,17 @@ void CLineGroupObject::AddLine(const FLine2D lineInfo)
 
 void CLineGroupObject::RemoveLine()
 {
-	// MoveLines() À¸·ÎºÎÅÍ µé¾î¿Í¾ß ÇÔ.
-	// ÇÏ³ª¸¦ Áö¿ü´Ù¸é, AddLine() ÇØ¼­ ÇÏ³ª Ãß°¡ÇÏÀÚ, 
-	// -> ³¡³µ´Ù¸é, ³­ÀÌµµ ºñÀ² ¿Ã¸®ÀÚ -> Á»´õ Á¼ÇôÁöµµ·Ï.
+	// MoveLines() ìœ¼ë¡œë¶€í„° ë“¤ì–´ì™€ì•¼ í•¨.
+	// í•˜ë‚˜ë¥¼ ì§€ì› ë‹¤ë©´, AddLine() í•´ì„œ í•˜ë‚˜ ì¶”ê°€í•˜ì, 
+	// -> ëë‚¬ë‹¤ë©´, ë‚œì´ë„ ë¹„ìœ¨ ì˜¬ë¦¬ì -> ì¢€ë” ì¢í˜€ì§€ë„ë¡.
 }
 
 void CLineGroupObject::MoveLines(float DeltaTime)
 {
-	// ¶óÀÎÀÌ ÀÌµ¿ÇÏ°í, begin ÀÇ start ¿¡¼­
-	// -> line2DInfo ÀÇ End.x °¡ À½¼ö·Î °¡¸é pop_front
-	// pop_front °¡ ÀÏ¾î³µ´Ù¸é, push_backÀ» ÇØÁØ´Ù
-	// -> µ¥ÀÌÅÍ±â¹İÀ¸·Î pushÇÏµç ¼öÄ¡ ¾Ë°í¸®ÁòÀ¸·Î ÇÏµç ¾Ë¾Æ¼­,
+	// ë¼ì¸ì´ ì´ë™í•˜ê³ , begin ì˜ start ì—ì„œ
+	// -> line2DInfo ì˜ End.x ê°€ ìŒìˆ˜ë¡œ ê°€ë©´ pop_front
+	// pop_front ê°€ ì¼ì–´ë‚¬ë‹¤ë©´, push_backì„ í•´ì¤€ë‹¤
+	// -> ë°ì´í„°ê¸°ë°˜ìœ¼ë¡œ pushí•˜ë“  ìˆ˜ì¹˜ ì•Œê³ ë¦¬ì¦˜ìœ¼ë¡œ í•˜ë“  ì•Œì•„ì„œ,
 }
 
 void CLineGroupObject::PauseMove(float DeltaTime)
@@ -113,7 +113,7 @@ void CLineGroupObject::PauseMove(float DeltaTime)
 	isStart = !isStart;
 }
 
-// ±¸Á¶Ã¼¸¦ JSONÀ¸·Î º¯È¯ (Á÷·ÄÈ­)
+// êµ¬ì¡°ì²´ë¥¼ JSONìœ¼ë¡œ ë³€í™˜ (ì§ë ¬í™”)
 void to_json(nlohmann::json& j, const FLineNode& lineNode)
 {
 	j = nlohmann::json{
@@ -124,7 +124,7 @@ void to_json(nlohmann::json& j, const FLineNode& lineNode)
 	};
 }
 
-// JSONÀ» ±¸Á¶Ã¼·Î º¯È¯ (¿ªÁ÷·ÄÈ­)
+// JSONì„ êµ¬ì¡°ì²´ë¡œ ë³€í™˜ (ì—­ì§ë ¬í™”)
 void from_json(const nlohmann::json& j, FLineNode& lineNode)
 {
 	j.at("topYPos").get_to(lineNode.TopYPos);

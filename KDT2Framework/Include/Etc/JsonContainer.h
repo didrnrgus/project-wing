@@ -1,19 +1,6 @@
-#pragma once
+﻿#pragma once
 
 #include "GameInfo.h"
-
-struct FLineNode
-{
-	float TopYPos = 0.0f;
-	float BottomYPos = 0.0f;
-	int ItemType = 0;
-	int ObstacleType = 0;
-
-	FLineNode() {};
-	FLineNode(float topYPos, float bottomYPos, int itemType, int obstacleType)
-		:TopYPos(topYPos), BottomYPos(bottomYPos)
-		, ItemType(itemType), ObstacleType(obstacleType) {};
-};
 
 struct FUserInfo
 {
@@ -27,6 +14,37 @@ struct FUserInfo
 		: Name(name), Map(map), Distance(dist), Time(time) {};
 };
 
+/*
+    "top_y_pos": 720.0,
+    "bottom_y_pos": 0.0,
+    "item_type": -1,
+    "obstacle_type": -1
+*/
+struct FLineNode
+{
+    float TopYPos = 0.0f;
+    float BottomYPos = 0.0f;
+    int ItemType = 0;
+    int ObstacleType = 0;
+
+    FLineNode() {};
+    FLineNode(float topYPos, float bottomYPos, int itemType, int obstacleType)
+        :TopYPos(topYPos), BottomYPos(bottomYPos)
+        , ItemType(itemType), ObstacleType(obstacleType) {};
+};
+
+/*
+    "index": 0,
+    "name": "Easy",
+    "difficulty_rate": 0.1,
+    "line_node_list": [
+        {
+            "top_y_pos": 720.0,
+            "bottom_y_pos": 0.0,
+            "item_type": -1,
+            "obstacle_type": -1
+        },
+*/
 struct FMapInfo
 {
 	int Index;
@@ -35,7 +53,7 @@ struct FMapInfo
 };
 
 /*
-   "character_list": [
+    "character_list": [
         {
             "index": 0,
             "name": "Yang",
@@ -49,7 +67,7 @@ struct FMapInfo
         },
         ...
 */
-struct FCharacterStat
+struct FCharacterState
 {
 	int Index;
     std::string Name;

@@ -4,42 +4,72 @@
 
 DEFINITION_SINGLE(CJsonController);
 
-CJsonController::CJsonController()
-{
+CJsonController::CJsonController() {}
 
-}
-
-CJsonController::~CJsonController()
-{
-
-}
+CJsonController::~CJsonController() {}
 
 template<typename T>
-nlohmann::json ConvertToJson(const T& info) {}
+nlohmann::json CJsonController::ConvertToJson(const T& data) { return nlohmann::json(); }
 
 template<typename T>
-bool CJsonController::ParseJson(const nlohmann::json& json, T& data)
+bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string, T>& datas) { return false; }
+
+
+template<typename T>
+bool CJsonController::ParseJson(const nlohmann::json& json, std::map<int, T>& datas) { return false; }
+
+template<>
+bool CJsonController::ParseJson(const nlohmann::json& json, std::map<int, FCharacterState>& datas)
 {
-	return false;
+	if (json.contains("character_list") && json["character_list"].is_array())
+	{
+		for (auto character : json["character_list"])
+		{
+			FCharacterState characterState;
+
+			if (character.contains("index"))
+				characterState.Index = character["index"].get<int>();
+			if (character.contains("name"))
+				characterState.Name = character["name"].get<std::string>();
+			if (character.contains("color_name"))
+				characterState.ColorName = character["color_name"].get<std::string>();
+
+			if (character.contains("speed"))
+				characterState.Speed = character["speed"].get<float>();
+			if (character.contains("hp"))
+				characterState.HP = character["hp"].get<float>();
+			if (character.contains("dex"))
+				characterState.Dex = character["dex"].get<float>();
+
+			if (character.contains("image_sequence_name"))
+				characterState.ImageSequenceName = character["image_sequence_name"].get<std::string>();
+			if (character.contains("size_x"))
+				characterState.SizeX = character["size_x"].get<float>();
+			if (character.contains("size_y"))
+				characterState.SizeY = character["size_y"].get<float>();
+
+			datas.insert(std::make_pair(characterState.Index, characterState));
+		}
+	}
+
+	return true;
 }
+
+
+template<typename T>
+bool CJsonController::ParseJson(const nlohmann::json& json, T& data) { return false; }
 
 template<>
 bool CJsonController::ParseJson(const nlohmann::json& json, FConfig& data)
 {
 	if (json.contains("db_id"))
-	{
 		data.DatabaseID = json["db_id"].get<std::string>();
-	}
 
 	if (json.contains("db_url"))
-	{
 		data.DatabaseURL = json["db_url"].get<std::string>();
-	}
 
 	if (json.contains("api_key"))
-	{
 		data.APIKey = json["api_key"].get<std::string>();
-	}
 
 	if (json.contains("map_file_list") && json["map_file_list"].is_array())
 	{
@@ -50,12 +80,54 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FConfig& data)
 	}
 
 	if (json.contains("character_file"))
-	{
 		data.CharacterFileName = json["character_file"].get<std::string>();
+
+	return true;
+}
+
+template<>
+bool CJsonController::ParseJson(const nlohmann::json& json, FMapInfo& data)
+{
+	if (json.contains("index"))
+		data.Index = json["index"].get<int>();
+	if (json.contains("name"))
+		data.Name = json["name"].get<std::string>();
+
+	if (json.contains("line_node_list") && json["line_node_list"].is_array())
+	{
+		for (auto jsonLineNode : json["line_node_list"])
+		{
+			FLineNode lineNodeInfo = ParseJsonFLineNode(jsonLineNode);
+			data.lineNodes.push_back(lineNodeInfo);
+		}
 	}
 
 	return true;
 }
+
+template<>
+bool CJsonController::ParseJson(const nlohmann::json& json, FLineNode& data)
+{
+	data = ParseJsonFLineNode(json);
+	return true;
+}
+
+FLineNode CJsonController::ParseJsonFLineNode(const nlohmann::json& json)
+{
+	FLineNode lineNode;
+
+	if (json.contains("top_y_pos"))
+		lineNode.TopYPos = json["top_y_pos"].get<float>();
+	if (json.contains("bottom_y_pos"))
+		lineNode.BottomYPos = json["bottom_y_pos"].get<float>();
+	if (json.contains("item_type"))
+		lineNode.ItemType = json["item_type"].get<int>();
+	if (json.contains("obstacle_type"))
+		lineNode.ObstacleType = json["obstacle_type"].get<int>();
+
+	return lineNode;
+}
+
 
 /*
 nlohmann::json CJsonController::ConvertToJson(const FUserInfo& userInfo)
@@ -181,3 +253,4 @@ bool CJsonController::ParseUserInfo(const nlohmann::json& jsonData, std::map<std
 }
 
 */
+

@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 
 #include "GameInfo.h"
 #include "Etc/ConstString.h"
@@ -62,10 +62,13 @@ public:
 	template<typename T>
 	bool ParseJson(const nlohmann::json& json, T& data);
 
-	//bool ParseLineNodeInfo(const nlohmann::json& jsonData, std::map<std::string, FLineNode>& nodes);
+	template<typename T>
+	bool ParseJson(const nlohmann::json& json, std::map<int,T>& datas);
 
-	//nlohmann::json ConvertToJson(const FUserInfo& userInfo);
-	//bool ParseUserInfo(const nlohmann::json& jsonData, std::map<std::string, FUserInfo>& users);
+	template<typename T>
+	bool ParseJson(const nlohmann::json& json, std::map<std::string, T>& datas);
+
+	FLineNode ParseJsonFLineNode(const nlohmann::json& json);
 
 private:
 	DECLARE_SINGLE(CJsonController);

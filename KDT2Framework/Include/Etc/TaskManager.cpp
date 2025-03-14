@@ -1,4 +1,4 @@
-#include "TaskManager.h"
+﻿#include "TaskManager.h"
 
 DEFINITION_SINGLE(CTaskManager);
 

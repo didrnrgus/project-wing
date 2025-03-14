@@ -42,14 +42,29 @@ bool CTitleWidget::Init()
 		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
 
 	CTaskManager::GetInst()->AddTask(std::move(std::thread(
-		[]() 
-		{ 
-			//config load
-			std::string configResult = CCURL::GetInst()->SendRequest(CONFIG_PATH, METHOD_GET);
+		[]()
+		{
+			// config load
+			std::string webserverPath = WEBSERVER_PATH;
+			std::string path = webserverPath + CONFIG_PATH;
+			std::string configResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
 			CLog::PrintLog("configResult: " + configResult);
-
 			CDataStorageManager::GetInst()->SetConfigData(configResult);
 
+			// characters load
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
+			std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("charactersResult: " + charactersResult);
+			CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
+
+			// maps load
+			for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
+			{
+				path = webserverPath + mapFileName;
+				std::string mapResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+				CLog::PrintLog("mapResult: " + mapResult);
+				CDataStorageManager::GetInst()->SetMapData(mapResult);
+			}
 
 		})));
 
