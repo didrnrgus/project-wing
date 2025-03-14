@@ -90,8 +90,15 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FMapInfo& data)
 {
 	if (json.contains("index"))
 		data.Index = json["index"].get<int>();
+
 	if (json.contains("name"))
 		data.Name = json["name"].get<std::string>();
+
+	if (json.contains("difficulty_color_name"))
+		data.DifficultyColorName = json["difficulty_color_name"].get<std::string>();
+
+	if (json.contains("difficulty_rate"))
+		data.DifficultyRate = json["difficulty_rate"].get<float>();
 
 	if (json.contains("line_node_list") && json["line_node_list"].is_array())
 	{
@@ -118,10 +125,13 @@ FLineNode CJsonController::ParseJsonFLineNode(const nlohmann::json& json)
 
 	if (json.contains("top_y_pos"))
 		lineNode.TopYPos = json["top_y_pos"].get<float>();
+
 	if (json.contains("bottom_y_pos"))
 		lineNode.BottomYPos = json["bottom_y_pos"].get<float>();
+
 	if (json.contains("item_type"))
 		lineNode.ItemType = json["item_type"].get<int>();
+
 	if (json.contains("obstacle_type"))
 		lineNode.ObstacleType = json["obstacle_type"].get<int>();
 

@@ -23,3 +23,6 @@
 #define PROP_ITEM_TYPE "itemType"
 #define PROP_OBSTACLE_TYPE "obstacleType"
 
+#define MAP_0_ICON_PATH TEXT("Texture/Icon/emoji-happy.png")
+#define MAP_1_ICON_PATH TEXT("Texture/Icon/emoji-normal.png")
+#define MAP_2_ICON_PATH TEXT("Texture/Icon/emoji-sad.png")

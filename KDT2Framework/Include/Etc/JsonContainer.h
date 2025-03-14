@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "GameInfo.h"
+#include "Etc/ConstString.h"
 
 struct FUserInfo
 {
@@ -34,8 +35,10 @@ struct FLineNode
 };
 
 /*
+{
     "index": 0,
     "name": "Easy",
+    "difficulty_color_name": "Cyan",
     "difficulty_rate": 0.1,
     "line_node_list": [
         {
@@ -49,7 +52,25 @@ struct FMapInfo
 {
 	int Index;
 	std::string Name;
+    std::string DifficultyColorName;
+    float DifficultyRate;
 	std::vector<FLineNode> lineNodes;
+
+    const wchar_t* GetIconPath(int idx) 
+    {
+        switch (idx)
+        {
+        case 0:
+            return MAP_0_ICON_PATH;
+            break;
+        case 1:
+            return MAP_1_ICON_PATH;
+            break;
+        case 2:
+            return MAP_2_ICON_PATH;
+            break;
+        }
+    }
 };
 
 /*

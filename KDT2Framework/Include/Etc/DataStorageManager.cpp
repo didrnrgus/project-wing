@@ -31,5 +31,5 @@ void CDataStorageManager::SetMapData(std::string strJson)
 	FMapInfo info;
 	nlohmann::json json = nlohmann::json::parse(strJson);
 	CJsonController::GetInst()->ParseJson(json, info);
-	mMapStorageDatas.insert(std::make_pair(info.Index, info));
+	mMapInfoDatas.insert(std::make_pair(info.Index, info));
 }

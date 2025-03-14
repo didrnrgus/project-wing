@@ -18,7 +18,6 @@
 class CCURL
 {
 public:
-    // GET Àº InJsonData »ý¶ô.
     std::string SendRequest(const std::string& InURL, const std::string& InMethod, const std::string& InJsonData = "");
 
     DECLARE_SINGLE(CCURL);

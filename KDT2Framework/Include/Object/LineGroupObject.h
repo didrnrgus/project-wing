@@ -47,8 +47,6 @@ public:
 	void RemoveLine();
 	void MoveLines(float DeltaTime);
 	void PauseMove(float DeltaTime);
-	
-	void MakeJson();
 
 public:
 	void SetStart(bool isStart);

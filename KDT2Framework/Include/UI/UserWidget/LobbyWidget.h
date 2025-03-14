@@ -51,12 +51,12 @@ protected:
 	bool mIsMultiPlay;
 
 	int itemTypeCount;
-	int itemSlotCount;
+	const int itemSlotCount = 3;
 
 	int curSelectedSlot;
-	int curPlayerGraphicIndex;
-	int curDifficulty;
-	int maxDifficulty;
+	int curPlayerGraphicIndex = 0;
+	int curDifficulty = 0;
+	int maxDifficulty = 0;
 
 	std::string mSlotTextureNamePrefix;
 	std::string mItemTextureNamePrefix;

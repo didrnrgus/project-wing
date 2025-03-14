@@ -10,36 +10,38 @@
 #include <Interface/IPlayerController.h>
 #include <Scene/SceneInGame.h>
 #include <Scene/SceneTitle.h>
+#include "Etc/DataStorageManager.h"
 
 CLobbyWidget::CLobbyWidget()
 {
 	mIsHost = false;
 	mIsMultiPlay = false;
-
-	itemSlotCount = 3;
-	itemTypeCount = 3;
-	curSelectedSlot = -1;
-	curPlayerGraphicIndex = 0;
-	curDifficulty = 0;
-	maxDifficulty = 2;
-
 	mSlotTextureNamePrefix = "ButtonBackImage_";
 	mItemTextureNamePrefix = "ButtonImage_";
 	mSlotButtonNamePrefix = "SlotButton_";
 	mMapDifficultyImageNamePrefix = "MapImage_";
+	curSelectedSlot = -1;
 
-	// 맵 데이터 테이블에 포함시켜야 함.
-	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-happy.png"));
-	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-normal.png"));
-	mMapDifficultyImagePaths.push_back(TEXT("Texture/Icon/emoji-sad.png"));
-	mMapDifficultyImageColors.push_back(FVector4D::Cyan);
-	mMapDifficultyImageColors.push_back(FVector4D::Yellow);
-	mMapDifficultyImageColors.push_back(FVector4D::Red);
+	curPlayerGraphicIndex = 0;
+	curDifficulty = 0;
+	maxDifficulty = CDataStorageManager::GetInst()->GetMapInfoCount();
+
+
+	for (int i = 0; i < maxDifficulty; i++)
+	{
+		auto mapInfo = CDataStorageManager::GetInst()->GetMapInfo(i);
+		mMapDifficultyImagePaths.push_back(mapInfo.GetIconPath(i));
+		mMapDifficultyImageColors.push_back(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
+	}
 
 	// 아이템 테이블로 뺴야 함.
-	mItemImagePaths.push_back(TEXT("Texture/Icon/milk.png"));
-	mItemImagePaths.push_back(TEXT("Texture/Icon/pharagraphspacing.png"));
-	mItemImagePaths.push_back(TEXT("Texture/Icon/ghost.png"));
+	{
+		mItemImagePaths.push_back(TEXT("Texture/Icon/milk.png"));
+		mItemImagePaths.push_back(TEXT("Texture/Icon/pharagraphspacing.png"));
+		mItemImagePaths.push_back(TEXT("Texture/Icon/ghost.png"));
+
+		itemTypeCount = 3;
+	}
 
 	mSlotImagePaths.push_back(TEXT("Texture/Icon/add-square.png"));
 	mSlotImagePaths.push_back(TEXT("Texture/Icon/empty-square.png"));
@@ -343,7 +345,7 @@ void CLobbyWidget::OnMapLeftButtonClick()
 	curDifficulty--;
 
 	if (curDifficulty < 0)
-		curDifficulty = maxDifficulty;
+		curDifficulty = maxDifficulty - 1;
 
 	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficulty)
 		, mMapDifficultyImagePaths[curDifficulty]);
@@ -356,7 +358,7 @@ void CLobbyWidget::OnMapRightButtonClick()
 
 	curDifficulty++;
 
-	if (curDifficulty > maxDifficulty)
+	if (curDifficulty == maxDifficulty)
 		curDifficulty = 0;
 
 	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficulty)

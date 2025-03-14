@@ -25,8 +25,8 @@ CLineGroupObject::~CLineGroupObject()
 bool CLineGroupObject::Init()
 {
 	CSceneObject::Init();
-	FResolution rs = CDevice::GetInst()->GetResolution();
-	mToAddPos = FVector2D(rs.Width * 0.5f, rs.Height * 0.5f);
+	FResolution RS = CDevice::GetInst()->GetResolution();
+	mToAddPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.5f);
 	maxLineCount = 6;
 	curLineNodeIndex = 0;
 	difficultyRate = 1.0f;
@@ -37,10 +37,9 @@ bool CLineGroupObject::Init()
 	mScene->GetInput()->AddBindKey("PauseMove", 'P');
 	mScene->GetInput()->AddBindFunction<CLineGroupObject>("PauseMove",
 		EInputType::Down, this, &CLineGroupObject::PauseMove);
-	MakeJson(); // test
 #endif // _DEBUG
 	
-	
+	InitLines();
 
 	return true;
 }
@@ -111,44 +110,6 @@ void CLineGroupObject::PauseMove(float DeltaTime)
 {
 	CLog::PrintLog("CLineGroupObject::PauseMove");
 	isStart = !isStart;
-}
-
-// 구조체를 JSON으로 변환 (직렬화)
-void to_json(nlohmann::json& j, const FLineNode& lineNode)
-{
-	j = nlohmann::json{
-		{"topYPos", lineNode.TopYPos}
-		, {"bottomYPos", lineNode.BottomYPos}
-		, {"itemType", lineNode.ItemType}
-		, {"obstacleType", lineNode.ObstacleType}
-	};
-}
-
-// JSON을 구조체로 변환 (역직렬화)
-void from_json(const nlohmann::json& j, FLineNode& lineNode)
-{
-	j.at("topYPos").get_to(lineNode.TopYPos);
-	j.at("bottomYPos").get_to(lineNode.BottomYPos);
-	j.at("itemType").get_to(lineNode.ItemType);
-	j.at("obstacleType").get_to(lineNode.ObstacleType);
-}
-
-void CLineGroupObject::MakeJson()
-{
-    nlohmann::json jsonData;
-    std::vector<FLineNode> nodes;
-    
-    nodes.push_back(FLineNode(720.0f, 0.0f, -1, -1));
-    nodes.push_back(FLineNode(700.0f, 20.0f, -1, -1));
-    nodes.push_back(FLineNode(690.0f, 20.0f, -1, -1));
-    nodes.push_back(FLineNode(700.0f, 50.0f, -1, -1));
-    nodes.push_back(FLineNode(630.0f, 130.0f, -1, -1));
-
-    jsonData["stageNum"] = 1;
-    jsonData["lineNodeList"] = nodes;
-
-    std::string strJson = jsonData.dump(4);
-    
 }
 
 void CLineGroupObject::SetStart(bool isStart)
