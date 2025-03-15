@@ -43,11 +43,6 @@ CSceneObject* CSceneInGame::GetPlayer(int index)
     return nullptr;
 }
 
-int CSceneInGame::GetGraphicCount()
-{
-    return 0;
-}
-
 bool CSceneInGame::SetChangeGraphic(int playerIndex, int graphicIndex)
 {
     return false;

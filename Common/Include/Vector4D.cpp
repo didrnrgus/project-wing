@@ -4,9 +4,9 @@
 
 
 #ifdef _DEBUG
-	FVector4D FVector4D::Transparent = { 1.f, 1.f, 1.f, 0.1f };
+FVector4D FVector4D::Transparent = { 1.f, 1.f, 1.f, 0.1f };
 #else
-	FVector4D FVector4D::Transparent = { 1.f, 1.f, 1.f, 0.0f };
+FVector4D FVector4D::Transparent = { 1.f, 1.f, 1.f, 0.0f };
 #endif // !_DEBUG
 
 FVector4D FVector4D::Black = { 0.f, 0.f, 0.f, 1.f };
@@ -16,7 +16,7 @@ FVector4D FVector4D::Blue = { 0.f, 0.f, 1.f, 1.f };
 FVector4D FVector4D::Green = { 0.f, 1.f, 0.f, 1.f };
 FVector4D FVector4D::Yellow = { 1.f, 1.f, 0.f, 1.f };
 FVector4D FVector4D::Cyan = { 0.f, 1.f, 1.f, 1.f };
-FVector4D FVector4D::Pink = { 1.f, 0.753f, 0.796f, 1.f };
+FVector4D FVector4D::Pink = { 0.82f, 0.55f, 1.f, 1.f };
 
 FVector4D FVector4D::Gray10 = { 0.1f, 0.1f, 0.1f, 1.f };
 FVector4D FVector4D::Gray20 = { 0.2f, 0.2f, 0.2f, 1.f };

@@ -23,11 +23,10 @@ CLobbyWidget::CLobbyWidget()
 	curSelectedSlot = -1;
 
 	curPlayerGraphicIndex = 0;
-	curDifficulty = 0;
-	maxDifficulty = CDataStorageManager::GetInst()->GetMapInfoCount();
+	curDifficultyIndex = 0;
 
 
-	for (int i = 0; i < maxDifficulty; i++)
+	for (int i = 0; i < CDataStorageManager::GetInst()->GetMapInfoCount(); i++)
 	{
 		auto mapInfo = CDataStorageManager::GetInst()->GetMapInfo(i);
 		mMapDifficultyImagePaths.push_back(mapInfo.GetIconPath(i));
@@ -73,7 +72,7 @@ bool CLobbyWidget::Init()
 	mMapDifficultyImage->SetPivot(FVector2D::One * 0.5f);
 	mMapDifficultyImage->SetSize(FVector2D::One * 128 * 1.0f);
 	mMapDifficultyImage->SetPos(mMapDifficultyImagePos);
-	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficulty]);
+	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficultyIndex]);
 
 	// next button
 	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>("NextButton");
@@ -83,9 +82,12 @@ bool CLobbyWidget::Init()
 	mNextButton->SetSize(FVector2D::One * 128 * 1.0f);
 	mNextButton->SetPos(FVector2D(1150, 100));
 	mNextButton->SetEventCallback(EButtonEventState::Click
-		, []()
+		, [this]()
 		{
-			CLog::PrintLog("mNextButton Click");
+			CLog::PrintLog("mNextButton Click curPlayerGraphicIndex: " + std::to_string(curPlayerGraphicIndex));
+			CLog::PrintLog("mNextButton Click curDifficultyIndex: " + std::to_string(curDifficultyIndex));
+			CDataStorageManager::GetInst()->SetSelectedCharacterIndex(curPlayerGraphicIndex);
+			CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
 			CSceneManager::GetInst()->CreateLoadScene<CSceneInGame>();
 		});
 
@@ -315,7 +317,7 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 	{
 		curPlayerGraphicIndex++;
 
-		if (curPlayerGraphicIndex == playerController->GetGraphicCount())
+		if (curPlayerGraphicIndex == CDataStorageManager::GetInst()->GetCharacterCount())
 			curPlayerGraphicIndex = 0;
 
 		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
@@ -332,7 +334,7 @@ void CLobbyWidget::OnCharacterRightButtonClick()
 		if (curPlayerGraphicIndex > 0)
 			curPlayerGraphicIndex--;
 		else
-			curPlayerGraphicIndex = playerController->GetGraphicCount() - 1;
+			curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
 
 		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
 	}
@@ -342,27 +344,27 @@ void CLobbyWidget::OnMapLeftButtonClick()
 {
 	CLog::PrintLog("MapLeftButtonClick()");
 
-	curDifficulty--;
+	curDifficultyIndex--;
 
-	if (curDifficulty < 0)
-		curDifficulty = maxDifficulty - 1;
+	if (curDifficultyIndex < 0)
+		curDifficultyIndex = CDataStorageManager::GetInst()->GetMapInfoCount() - 1;
 
-	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficulty)
-		, mMapDifficultyImagePaths[curDifficulty]);
-	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficulty]);
+	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficultyIndex)
+		, mMapDifficultyImagePaths[curDifficultyIndex]);
+	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficultyIndex]);
 }
 
 void CLobbyWidget::OnMapRightButtonClick()
 {
 	CLog::PrintLog("MapRightButtonClick()");
 
-	curDifficulty++;
+	curDifficultyIndex++;
 
-	if (curDifficulty == maxDifficulty)
-		curDifficulty = 0;
+	if (curDifficultyIndex == CDataStorageManager::GetInst()->GetMapInfoCount())
+		curDifficultyIndex = 0;
 
-	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficulty)
-		, mMapDifficultyImagePaths[curDifficulty]);
-	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficulty]);
+	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficultyIndex)
+		, mMapDifficultyImagePaths[curDifficultyIndex]);
+	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficultyIndex]);
 }
 

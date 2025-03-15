@@ -17,7 +17,6 @@ protected:
 
 public:
 	virtual CSceneObject* GetPlayer(int index) override;
-	virtual int GetGraphicCount() override;
 	virtual bool SetChangeGraphic(int playerIndex, int graphicIndex) override;
 };
 

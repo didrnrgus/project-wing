@@ -613,21 +613,23 @@ void CSceneComponent::SetWorldPos(const FVector3D& Pos)
 
     if (mParent)
     {
-        FVector3D   ParentRot = mParent->GetWorldRotation();
+        // 부모의 회전값 가져오기
+        FVector3D ParentRot = mParent->GetWorldRotation();
 
+        // 부모의 회전 행렬 생성
         FMatrix matRot;
         matRot.Rotation(ParentRot);
 
-        // 행렬의 41, 42, 43 에 부모의 위치를 넣어 부모의 위치를 중심으로
-        // 회전하는 행렬을 만들어준다.
-        memcpy(&matRot._41, &mParent->mWorldPos, sizeof(FVector3D));
+        // 부모의 위치를 고려하여 상대 위치를 정확하게 설정
+        // 해당 계산을 먼저 한 이유는 
+        // mRelativePos 이 0,0,0 인 상태에서 
+        // mRelativePos.TransformCoord(matRot) 를 진행한다면,
+        // mWorldPos 는 적용되는데 mRelativePos 는 0,0,0 그대로 남음.
+        mRelativePos = mWorldPos - mParent->mWorldPos;
 
-        mWorldPos = mRelativePos.TransformCoord(matRot);
-
-        /*FVector3D RelativePos = mWorldPos - mParent->mWorldPos;
-        mRelativePos = RelativePos.GetRotation(mParent->mWorldRot * -1.f);*/
+        // 부모의 회전 적용
+        mRelativePos = mRelativePos.TransformCoord(matRot);
     }
-
     else
     {
         mRelativePos = mWorldPos;

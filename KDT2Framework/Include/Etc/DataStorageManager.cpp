@@ -33,3 +33,12 @@ void CDataStorageManager::SetMapData(std::string strJson)
 	CJsonController::GetInst()->ParseJson(json, info);
 	mMapInfoDatas.insert(std::make_pair(info.Index, info));
 }
+
+const FLineNode CDataStorageManager::GetLineNodeInSelectedMap(int lineNodeIndex)
+{
+	int lineCount = GetLineNodeCountInSelectedMap();
+	int useIndex = lineNodeIndex % lineCount;
+	return mMapInfoDatas[curSelectedMapIndex].lineNodes[useIndex];
+}
+
+

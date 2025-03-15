@@ -22,7 +22,5 @@ public:
 	virtual void Update(float DeltaTime) override;
 
 public:
-	int GetGraphicCount();
-
 	bool SetChangeGraphic(int index);
 };

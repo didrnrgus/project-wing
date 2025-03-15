@@ -40,19 +40,6 @@ CSceneObject* CSceneLobby::GetPlayer(int index)
     return players[index];
 }
 
-int CSceneLobby::GetGraphicCount()
-{
-    auto tempPlayer = dynamic_cast<CPlayerGraphicObject*>(players[0].Get());
-
-    if (tempPlayer == nullptr)
-    {
-        return -1;
-    }
-
-    auto result = tempPlayer->GetGraphicCount();
-    return result;
-}
-
 bool CSceneLobby::SetChangeGraphic(int playerIndex, int graphicIndex)
 {
     auto tempPlayer = dynamic_cast<CPlayerGraphicObject*>(players[playerIndex].Get());

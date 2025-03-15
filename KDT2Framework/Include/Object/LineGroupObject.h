@@ -2,14 +2,14 @@
 #include "Object/SceneObject.h"
 #include "Etc/JsonContainer.h"
 
-//namespace EPositionType
-//{
-//	enum Type
-//	{
-//		Top = 0,
-//		Bottom
-//	};
-//}
+namespace ELinePosType
+{
+	enum Type
+	{
+		Top = 0,
+		Bottom
+	};
+}
 
 class CLineGroupObject : public CSceneObject
 {
@@ -22,19 +22,23 @@ protected:
 	virtual ~CLineGroupObject();
 
 protected:
-	// 미리 몽땅 들고있을까? -> SetData();
-	std::list<FLine2D> mLine2DInfos;
+	CSharedPtr<class CSceneComponent> mRoot;
 
 	// mLines & mColliderLines 는 쌍을 이뤄야 함.
-	std::list<CSharedPtr<class CSpriteComponent>> mLines;
-	std::list<CSharedPtr<class CColliderLine2D>> mColliderLines;
+	std::list<FLine2D> mTopLine2DInfos;
+	std::list<CSharedPtr<class CSpriteComponent>> mTopLines;
+	std::list<CSharedPtr<class CColliderLine2D>> mTopColliderLines;
+	std::list<FLine2D> mBottomLine2DInfos;
+	std::list<CSharedPtr<class CSpriteComponent>> mBottomLines;
+	std::list<CSharedPtr<class CColliderLine2D>> mBottomColliderLines;
 
 	FVector2D mToAddPos;
-	int maxLineCount;
-	int curLineNodeIndex;
-	float difficultyRate;
-	float snapXValue; // 데이터는 Y값만 있을거라서 -> 라인의 x축 투영길이.
-	bool isStart;
+	const int maxLineCount = 7; // 보여질 라인
+	const float mSnapXValue = 300.0f; // 데이터는 Y값만 있을거라서 -> 라인의 x축 투영길이.
+	float mDifficultyRate;
+	int mCurLineNodeIndex;
+	int mLineNodesCycleCount;
+	bool mIsStart;
 
 public:
 	virtual bool Init() override;
@@ -43,9 +47,10 @@ public:
 public:
 	// 씬에서 호출 -> 로드된 데이터를 받는 용도.
 	void InitLines();
-	void AddLine(FLine2D lineInfo);
+	void AddLine(ELinePosType::Type type, int lineNodeIndex);
 	void RemoveLine();
 	void MoveLines(float DeltaTime);
+	void ArrangeLines();
 	void PauseMove(float DeltaTime);
 
 public:

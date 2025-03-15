@@ -50,13 +50,12 @@ protected:
 	bool mIsHost;
 	bool mIsMultiPlay;
 
-	int itemTypeCount;
+	int itemTypeCount; // 나중에 하자
 	const int itemSlotCount = 3;
 
 	int curSelectedSlot;
 	int curPlayerGraphicIndex = 0;
-	int curDifficulty = 0;
-	int maxDifficulty = 0;
+	int curDifficultyIndex = 0;
 
 	std::string mSlotTextureNamePrefix;
 	std::string mItemTextureNamePrefix;

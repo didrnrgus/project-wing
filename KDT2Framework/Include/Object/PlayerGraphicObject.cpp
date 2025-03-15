@@ -64,11 +64,6 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 	}
 }
 
-int CPlayerGraphicObject::GetGraphicCount()
-{
-	return CDataStorageManager::GetInst()->GetCharacterCount();
-}
-
 bool CPlayerGraphicObject::SetChangeGraphic(int index)
 {
 	// 텍스처를 아예 바꾼다면 mAnimation 에서 처리 해야 함.
