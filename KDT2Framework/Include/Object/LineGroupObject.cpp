@@ -31,6 +31,7 @@ bool CLineGroupObject::Init()
 	mCurLineNodeIndex = 0;
 	mDifficultyRate = CDataStorageManager::GetInst()->GetSelectedMapInfo().DifficultyRate;
 	mIsStart = false;
+	mMovedValue = 0.0f;
 
 	mRoot = CreateComponent<CSceneComponent>("Root");
 	SetRootComponent(mRoot);
@@ -58,7 +59,7 @@ void CLineGroupObject::Update(float DeltaTime)
 
 void CLineGroupObject::InitLines()
 {
-	for (int i = 0; i < maxLineCount; i++, mCurLineNodeIndex++)
+	for (int i = 0; i < mMaxLineCount; i++, mCurLineNodeIndex++)
 	{
 		AddLine(ELinePosType::Top, mCurLineNodeIndex);
 		AddLine(ELinePosType::Bottom, mCurLineNodeIndex);
@@ -67,32 +68,11 @@ void CLineGroupObject::InitLines()
 
 void CLineGroupObject::AddLine(ELinePosType::Type type, int lineNodeIndex)
 {
-	auto lineNode = CDataStorageManager::GetInst()->GetLineNodeInSelectedMap(lineNodeIndex);
-	auto lineNodeNext = CDataStorageManager::GetInst()->GetLineNodeInSelectedMap(lineNodeIndex + 1);
-
-	FLine2D lineInfo;
-	if (type == ELinePosType::Top)
-	{
-		// top
-		lineInfo.Start = FVector2D(mSnapXValue * lineNodeIndex, lineNode.TopYPos) - mToAddPos;
-		lineInfo.End = FVector2D(mSnapXValue * (lineNodeIndex + 1), lineNodeNext.TopYPos) - mToAddPos;
-		mTopLine2DInfos.push_back(lineInfo);
-	}
-	else
-	{
-		// bottom
-		lineInfo.Start = FVector2D(mSnapXValue * lineNodeIndex, lineNode.BottomYPos) - mToAddPos;
-		lineInfo.End = FVector2D(mSnapXValue * (lineNodeIndex + 1), lineNodeNext.BottomYPos) - mToAddPos;
-		mBottomLine2DInfos.push_back(lineInfo);
-	}
-
 	CSharedPtr<CSpriteComponent> tempSpriteComp = CreateComponent<CSpriteComponent>();
 	mRoot->AddChild(tempSpriteComp);
 	tempSpriteComp->SetTexture("basic", TEXT("Texture/basic.png"));
 	tempSpriteComp->SetPivot(FVector2D::Axis[EAxis::X] * 0.5f);
-	tempSpriteComp->SetWorldPos(lineInfo.Start);
-	tempSpriteComp->SetWorldRotationZ(lineInfo.GetRotationAngle());
-	tempSpriteComp->SetWorldScale(FVector2D(20.0f, lineInfo.GetLength()));
+
 	tempSpriteComp->SetColor(FVector4D::Green);
 #ifdef _DEBUG
 	tempSpriteComp->SetOpacity(0.5f);
@@ -102,26 +82,63 @@ void CLineGroupObject::AddLine(ELinePosType::Type type, int lineNodeIndex)
 	tempSpriteComp->AddChild(tempLine2DComp);
 	tempLine2DComp->SetCollisionProfile("Map");
 	tempLine2DComp->SetRelativePos(FVector2D::Zero);
-	tempLine2DComp->SetWorldRotationZ(lineInfo.GetRotationAngle());
-	tempLine2DComp->SetLineDistance(lineInfo.GetLength());
 
+	AddLineSetting(type, lineNodeIndex, tempSpriteComp, tempLine2DComp);
+}
+
+void CLineGroupObject::AddLineSetting(ELinePosType::Type type, int lineNodeIndex
+	, CSpriteComponent* spriteComponent, CColliderLine2D* colliderLine3D)
+{
+	auto lineNode = CDataStorageManager::GetInst()->GetLineNodeInSelectedMap(lineNodeIndex);
+	auto lineNodeNext = CDataStorageManager::GetInst()->GetLineNodeInSelectedMap(lineNodeIndex + 1);
+
+
+	lineNodeIndex = lineNodeIndex >= mMaxLineCount - 1 ? mMaxLineCount-1 : lineNodeIndex;
+	float startX = mSnapXValue * lineNodeIndex;
+	float endX = mSnapXValue * (lineNodeIndex + 1);
+
+	FLine2D lineInfo;
 	if (type == ELinePosType::Top)
 	{
-		mTopLines.push_back(tempSpriteComp);
-		mTopColliderLines.push_back(tempLine2DComp);
+		// top
+		lineInfo.Start = FVector2D(startX, lineNode.TopYPos) - mToAddPos;
+		lineInfo.End = FVector2D(endX, lineNodeNext.TopYPos) - mToAddPos;
+		mTopLine2DInfos.push_back(lineInfo);
 	}
 	else
 	{
-		mBottomLines.push_back(tempSpriteComp);
-		mBottomColliderLines.push_back(tempLine2DComp);
+		// bottom
+		lineInfo.Start = FVector2D(startX, lineNode.BottomYPos) - mToAddPos;
+		lineInfo.End = FVector2D(endX, lineNodeNext.BottomYPos) - mToAddPos;
+		mBottomLine2DInfos.push_back(lineInfo);
+	}
+
+	spriteComponent->SetWorldPos(lineInfo.Start);
+	spriteComponent->SetWorldRotationZ(lineInfo.GetRotationAngle());
+	spriteComponent->SetWorldScale(FVector2D(20.0f, lineInfo.GetLength()));
+	colliderLine3D->SetWorldRotationZ(lineInfo.GetRotationAngle());
+	colliderLine3D->SetLineDistance(lineInfo.GetLength());
+
+	if (type == ELinePosType::Top)
+	{
+		mTopLines.push_back(spriteComponent);
+		mTopColliderLines.push_back(colliderLine3D);
+	}
+	else
+	{
+		mBottomLines.push_back(spriteComponent);
+		mBottomColliderLines.push_back(colliderLine3D);
 	}
 }
 
-void CLineGroupObject::RemoveLine()
+void CLineGroupObject::ArrangeLines()
 {
-	// MoveLines() 으로부터 들어와야 함.
-	// 하나를 지웠다면, AddLine() 해서 하나 추가하자, 
-	// -> 끝났다면, 난이도 비율 올리자 -> 좀더 좁혀지도록.
+	CLog::PrintLog("CLineGroupObject::ArrangeLines");
+
+	(*mTopLines.begin()).Get()->Destroy();
+	(*mTopColliderLines.begin()).Get()->Destroy();
+	(*mBottomLines.begin()).Get()->Destroy();
+	(*mBottomColliderLines.begin()).Get()->Destroy();
 
 	mTopLine2DInfos.pop_front();
 	mTopLines.pop_front();
@@ -129,7 +146,7 @@ void CLineGroupObject::RemoveLine()
 	mBottomLine2DInfos.pop_front();
 	mBottomLines.pop_front();
 	mBottomColliderLines.pop_front();
-
+	
 	mCurLineNodeIndex++;
 	AddLine(ELinePosType::Top, mCurLineNodeIndex);
 	AddLine(ELinePosType::Bottom, mCurLineNodeIndex);
@@ -137,29 +154,61 @@ void CLineGroupObject::RemoveLine()
 
 void CLineGroupObject::MoveLines(float DeltaTime)
 {
-	// 라인이 이동하고, begin 의 start 에서
-	// -> line2DInfo 의 End.x 가 음수로 가면 pop_front
-	// pop_front 가 일어났다면, push_back을 해준다
-	// -> 데이터기반으로 push하든 수치 알고리즘으로 하든 알아서,
-	FVector3D tempPos = mRoot->GetWorldPosition();
-	tempPos += FVector3D::Axis[EAxis::X] * -300 * DeltaTime;
+	float moveValue = -300 * DeltaTime;
+	mMovedValue += moveValue;
 
-	if (tempPos.x < -mSnapXValue)
+	if (mMovedValue < -mSnapXValue)
 	{
-		tempPos = FVector3D::Zero;
-		CLog::PrintLog("CLineGroupObject::MoveLines if (tempPos.x < -mSnapXValue)");
-		CLog::PrintLog("CLineGroupObject::MoveLines tempPos.x: " + std::to_string(tempPos.x));
+		CLog::PrintLog("CLineGroupObject::MoveLines if (mMovedValue < -mSnapXValue)");
+		CLog::PrintLog("CLineGroupObject::MoveLines mMovedValue: " + std::to_string(mMovedValue));
 
-		// 앞에꺼 하나씩 빼.
-		RemoveLine();
+		// 앞에꺼 하나씩 빼서 뒤에 붙인다.
+		ArrangeLines();
+		mMovedValue = 0.0f;
+
+		// mMovedValue + mSnalXvalue -> 틱 발생? 
+	}
+	else
+	{
+		FVector3D moveValVector = FVector3D::Axis[EAxis::X] * moveValue;
+
+		MoveLine(mTopLines, moveValVector);
+		MoveLine(mTopColliderLines, moveValVector);
+		MoveLine(mBottomLines, moveValVector);
+		MoveLine(mBottomColliderLines, moveValVector);
 	}
 
-	mRoot->SetWorldPos(tempPos);
 }
 
-void CLineGroupObject::ArrangeLines()
+template<typename T>
+void CLineGroupObject::MoveLine(std::list<CSharedPtr<T>>& list
+	, FVector3D moveVal)
 {
-	// mRoot가 움직였으니 자식 라인들도 움직여야 함.
+	auto it = list.begin();
+	auto check = (*it).Get();
+
+	if (!check)
+	{
+		CLog::PrintLog("CLineGroupObject::MoveLine check error");
+		return;
+	}
+
+	CSceneComponent* result = dynamic_cast<CSceneComponent*>(check);
+
+	if (!result)
+	{
+		CLog::PrintLog("CLineGroupObject::MoveLine result error");
+		return;
+	}
+
+	auto end = list.end();
+
+	for (; it != end; ++it)
+	{
+		CSceneComponent* comp = dynamic_cast<CSceneComponent*>((*it).Get());
+		auto pos = comp->GetWorldPosition();
+		comp->SetWorldPos(pos + moveVal);
+	}
 }
 
 void CLineGroupObject::PauseMove(float DeltaTime)

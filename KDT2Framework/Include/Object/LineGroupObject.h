@@ -33,12 +33,14 @@ protected:
 	std::list<CSharedPtr<class CColliderLine2D>> mBottomColliderLines;
 
 	FVector2D mToAddPos;
-	const int maxLineCount = 7; // 보여질 라인
+	const int mMaxLineCount = 7; // 보여질 라인
 	const float mSnapXValue = 300.0f; // 데이터는 Y값만 있을거라서 -> 라인의 x축 투영길이.
 	float mDifficultyRate;
 	int mCurLineNodeIndex;
 	int mLineNodesCycleCount;
 	bool mIsStart;
+
+	float mMovedValue;
 
 public:
 	virtual bool Init() override;
@@ -48,9 +50,12 @@ public:
 	// 씬에서 호출 -> 로드된 데이터를 받는 용도.
 	void InitLines();
 	void AddLine(ELinePosType::Type type, int lineNodeIndex);
-	void RemoveLine();
-	void MoveLines(float DeltaTime);
+	void AddLineSetting(ELinePosType::Type type, int lineNodeIndex
+		, class CSpriteComponent* spriteComponent, class CColliderLine2D* colliderLine3D);
 	void ArrangeLines();
+	void MoveLines(float DeltaTime);
+	template<typename T>
+	void MoveLine(std::list<CSharedPtr<T>>& list, FVector3D moveVal);
 	void PauseMove(float DeltaTime);
 
 public:
