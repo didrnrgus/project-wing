@@ -1,8 +1,6 @@
 ﻿#pragma once
 #include "Object/SceneObject.h"
 
-
-
 class CPlayerGraphicObject : public CSceneObject
 {
 	friend class CScene;

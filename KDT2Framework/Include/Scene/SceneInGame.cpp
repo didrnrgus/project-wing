@@ -2,6 +2,7 @@
 #include "UI/UserWidget/InGameWidget.h"
 #include "Scene/SceneUIManager.h"
 #include "Object/PlayerGraphicObject.h"
+#include "Object/PlayerInGameObject.h"
 #include "Object/LineGroupObject.h"
 #include "Object/CameraObject.h"
 
@@ -21,7 +22,7 @@ bool CSceneInGame::InitAsset()
 bool CSceneInGame::InitObject()
 {
     CCameraObject* Camera = CreateObj<CCameraObject>("Camera");
-    CPlayerGraphicObject* playerGraphic = CreateObj<CPlayerGraphicObject>("PlayerGraphic");
+    CPlayerInGameObject* playerGraphic = CreateObj<CPlayerInGameObject>("PlayerInGame");
     CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
 
     //lineGroup->InitLines();

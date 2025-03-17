@@ -123,6 +123,9 @@
     <ClCompile Include="Etc\TaskManager.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
+    <ClCompile Include="Object\PlayerInGameObject.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -205,6 +208,9 @@
     </ClInclude>
     <ClInclude Include="Etc\ZOrderContainer.h">
       <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerInGameObject.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
