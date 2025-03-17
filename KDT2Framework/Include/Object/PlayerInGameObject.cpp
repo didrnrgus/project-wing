@@ -3,6 +3,7 @@
 #include "Scene/Input.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderOBB2D.h"
+#include "Etc/ConstString.h"
 
 CPlayerInGameObject::CPlayerInGameObject()
 {
@@ -27,6 +28,7 @@ bool CPlayerInGameObject::Init()
 	mBody = CreateComponent<CColliderOBB2D>("ColliderOBB2D");
 	mRoot->AddChild(mBody);
 	auto scale = mRoot->GetWorldScale();
+	mBody->SetCollisionProfile(PROFILE_PLAYER_MINE);
 	mBody->SetBoxSize(FVector2D(scale.x, scale.y) * 0.4f);
 
 
@@ -44,7 +46,7 @@ void CPlayerInGameObject::Update(float DeltaTime)
 {
 	CPlayerGraphicObject::Update(DeltaTime);
 
-	if (!mIsMovingUp)
+	if (!mIsMovingUp && mIsMine)
 	{
 		//CLog::PrintLog("CPlayerInGameObject::Update mIsMovingUp: " + std::to_string(mIsMovingUp));
 		MoveDown(DeltaTime);
@@ -76,4 +78,10 @@ void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
 {
 	mIsMovingUp = false;
 	CLog::PrintLog("CPlayerInGameObject::MoveUpRelease mIsMovingUp: " + std::to_string(mIsMovingUp));
+}
+
+bool CPlayerInGameObject::SetMovePlayer(FVector3D moveValVector)
+{
+	// 외부 -> 서버데이터로 포지션 컨트롤 
+	return false;
 }

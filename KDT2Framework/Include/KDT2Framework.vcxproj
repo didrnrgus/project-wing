@@ -196,7 +196,9 @@
     <ClInclude Include="Etc\NotionDBController.h" />
     <ClInclude Include="Etc\TaskManager.h" />
     <ClInclude Include="Etc\ZOrderContainer.h" />
-    <ClInclude Include="Interface\IPlayerController.h" />
+    <ClInclude Include="Interface\IPlayerGraphicController.h" />
+    <ClInclude Include="Interface\IPlayerInGameController.h" />
+    <ClInclude Include="Interface\IPlayerStatController.h" />
     <ClInclude Include="Object\CameraObject.h" />
     <ClInclude Include="Object\LineGroupObject.h" />
     <ClInclude Include="Object\PlayerGraphicObject.h" />

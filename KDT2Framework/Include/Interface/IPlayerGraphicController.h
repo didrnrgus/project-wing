@@ -2,7 +2,7 @@
 
 #include "GameInfo.h"
 
-class IPlayerController abstract
+class IPlayerGraphicController abstract
 {
 protected:
 	std::vector<CSharedPtr<class CSceneObject>> players;

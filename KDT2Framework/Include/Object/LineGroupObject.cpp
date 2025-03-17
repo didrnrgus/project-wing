@@ -6,6 +6,7 @@
 #include "Scene/Input.h"
 #include "Scene/Scene.h"
 #include "Etc/DataStorageManager.h"
+#include "Etc/ConstString.h"
 
 CLineGroupObject::CLineGroupObject()
 {
@@ -90,7 +91,7 @@ void CLineGroupObject::AddLine(ELinePosType::Type type, int lineNodeIndex)
 
 	CSharedPtr<CColliderLine2D> tempLine2DComp = CreateComponent<CColliderLine2D>();
 	tempSpriteComp->AddChild(tempLine2DComp);
-	tempLine2DComp->SetCollisionProfile("Map");
+	tempLine2DComp->SetCollisionProfile(PROFILE_MAP);
 	tempLine2DComp->SetRelativePos(FVector2D::Zero);
 
 	AddLineSetting(type, lineNodeIndex, tempSpriteComp, tempLine2DComp);

@@ -227,7 +227,8 @@ namespace ECollisionChannel
 	enum Type : unsigned char
 	{
 		Default,
-		Player,
+		PlayerMine,
+		PlayerOther,
 		Map,
 		End
 	};

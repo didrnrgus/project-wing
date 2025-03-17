@@ -23,11 +23,12 @@ bool CSceneInGame::InitAsset()
 bool CSceneInGame::InitObject()
 {
     CCameraObject* camera = CreateObj<CCameraObject>("Camera");
-    CPlayerInGameObject* playerInGame = CreateObj<CPlayerInGameObject>("PlayerInGame");
-    players.push_back(playerInGame);
-    SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
-
     CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
+    CPlayerInGameObject* playerInGame = CreateObj<CPlayerInGameObject>("PlayerInGame");
+    players.resize(5, nullptr); // 미리 칸 만들어놓기.
+    players[0] = playerInGame;
+    playerInGame->SetIsMine(true);
+    SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
 
     return true;
 }
@@ -56,6 +57,19 @@ bool CSceneInGame::SetChangeGraphic(int playerIndex, int graphicIndex)
     }
 
     auto result = tempPlayer->SetChangeGraphic(graphicIndex);
+    return result;
+}
+
+bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValVector)
+{
+    auto tempPlayer = dynamic_cast<CPlayerInGameObject*>(players[playerIndex].Get());
+
+    if (tempPlayer == nullptr)
+    {
+        return false;
+    }
+
+    auto result = tempPlayer->SetMovePlayer(moveValVector);
     return result;
 }
 

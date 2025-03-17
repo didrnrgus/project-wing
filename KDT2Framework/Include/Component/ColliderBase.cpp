@@ -8,6 +8,7 @@
 #include "Shader/ShaderManager.h"
 #include "Scene/CameraManager.h"
 #include "Asset/Mesh/Mesh.h"
+#include "Etc/ConstString.h"
 
 CColliderBase::CColliderBase()
 {
@@ -117,7 +118,7 @@ bool CColliderBase::Init()
     if (!CSceneComponent::Init())
         return false;
 
-    SetCollisionProfile("Default");
+    SetCollisionProfile(PROFILE_DEFAULT);
 
 #ifdef _DEBUG
 
@@ -140,7 +141,7 @@ bool CColliderBase::Init(const char* FileName)
     if (!CSceneComponent::Init(FileName))
         return false;
 
-    SetCollisionProfile("Default");
+    SetCollisionProfile(PROFILE_DEFAULT);
 
 #ifdef _DEBUG
 

@@ -1,4 +1,5 @@
 ﻿#include "ProfileManager.h"
+#include "Etc/ConstString.h"
 
 DEFINITION_SINGLE(CProfileManager)
 
@@ -19,32 +20,57 @@ CProfileManager::~CProfileManager()
 
 bool CProfileManager::Init()
 {
-	CreateProfile("Default", ECollisionChannel::Default, true,
+	// create
+	CreateProfile(PROFILE_DEFAULT, ECollisionChannel::Default, true,
 		ECollisionInteraction::Collision);
 
-	CreateProfile("Player", ECollisionChannel::Player, true,
+	CreateProfile(PROFILE_PLAYER_MINE, ECollisionChannel::PlayerMine, true,
 		ECollisionInteraction::Collision);
 
-	CreateProfile("Map", ECollisionChannel::Map, true,
+	CreateProfile(PROFILE_PLAYER_OTHER, ECollisionChannel::PlayerOther, true,
 		ECollisionInteraction::Collision);
 
-	SetInteraction("Player", ECollisionChannel::Player,
+	CreateProfile(PROFILE_MAP, ECollisionChannel::Map, true,
+		ECollisionInteraction::Collision);
+
+	// interraction playerMine
+	SetInteraction(PROFILE_PLAYER_MINE, ECollisionChannel::Default,
 		ECollisionInteraction::Ignore);
 
-	SetInteraction("Player", ECollisionChannel::Default,
-		ECollisionInteraction::Collision);
-
-	SetInteraction("Player", ECollisionChannel::Map,
-		ECollisionInteraction::Collision);
-
-	SetInteraction("Map", ECollisionChannel::Map,
+	SetInteraction(PROFILE_PLAYER_MINE, ECollisionChannel::PlayerMine,
 		ECollisionInteraction::Ignore);
 
-	SetInteraction("Map", ECollisionChannel::Default,
+	SetInteraction(PROFILE_PLAYER_MINE, ECollisionChannel::PlayerOther,
+		ECollisionInteraction::Ignore);
+
+	SetInteraction(PROFILE_PLAYER_MINE, ECollisionChannel::Map,
 		ECollisionInteraction::Collision);
 
-	SetInteraction("Map", ECollisionChannel::Player,
+	// interraction playerOther
+	SetInteraction(PROFILE_PLAYER_OTHER, ECollisionChannel::Default,
+		ECollisionInteraction::Ignore);
+
+	SetInteraction(PROFILE_PLAYER_OTHER, ECollisionChannel::PlayerMine,
+		ECollisionInteraction::Ignore);
+
+	SetInteraction(PROFILE_PLAYER_OTHER, ECollisionChannel::PlayerOther,
+		ECollisionInteraction::Ignore);
+
+	SetInteraction(PROFILE_PLAYER_OTHER, ECollisionChannel::Map,
+		ECollisionInteraction::Ignore);
+
+	// interaction map
+	SetInteraction(PROFILE_MAP, ECollisionChannel::Default,
+		ECollisionInteraction::Ignore);
+
+	SetInteraction(PROFILE_MAP, ECollisionChannel::PlayerMine,
 		ECollisionInteraction::Collision);
+
+	SetInteraction(PROFILE_MAP, ECollisionChannel::PlayerOther,
+		ECollisionInteraction::Ignore);
+
+	SetInteraction(PROFILE_MAP, ECollisionChannel::Map,
+		ECollisionInteraction::Ignore);
 
 	return true;
 }

@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "Scene\Scene.h"
-#include "Interface/IPlayerController.h"
+#include "Interface/IPlayerInGameController.h"
 
-class CSceneInGame : public CScene, public IPlayerController
+class CSceneInGame : public CScene, public IPlayerInGameController
 {
 	friend class CSceneManager;
 
@@ -18,6 +18,7 @@ protected:
 public:
 	virtual CSceneObject* GetPlayer(int index) override;
 	virtual bool SetChangeGraphic(int playerIndex, int graphicIndex) override;
+	virtual bool SetMovePlayer(int playerIndex, FVector3D moveValVector) override;
 };
 
 

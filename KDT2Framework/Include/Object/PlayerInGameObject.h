@@ -1,7 +1,8 @@
 #pragma once
 #include "PlayerGraphicObject.h"
+#include "Interface/IPlayerStatController.h"
 
-class CPlayerInGameObject : public CPlayerGraphicObject
+class CPlayerInGameObject : public CPlayerGraphicObject, public IPlayerStatController
 {
 	friend class CScene;
 
@@ -16,6 +17,7 @@ protected:
 
 private:
 	bool mIsMovingUp = false;
+	bool mIsMine = false;
 
 public:
 	virtual bool Init() override;
@@ -26,5 +28,11 @@ private:
 	void MoveUpStart(float DeltaTime);
 	void MoveUpHold(float DeltaTime);
 	void MoveUpRelease(float DeltaTime);
+
+public:
+	inline void SetIsMine(bool isMine) { mIsMine = isMine; }
+	bool SetMovePlayer(FVector3D moveValVector);
+
+	inline bool GetIsMine() { return mIsMine; }
 };
 

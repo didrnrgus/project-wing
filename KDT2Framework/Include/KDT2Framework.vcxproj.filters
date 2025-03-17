@@ -167,7 +167,7 @@
     <ClInclude Include="Object\PlayerGraphicObject.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\IPlayerController.h">
+    <ClInclude Include="Interface\IPlayerGraphicController.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneInGame.h">
@@ -211,6 +211,12 @@
     </ClInclude>
     <ClInclude Include="Object\PlayerInGameObject.h">
       <Filter>헤더 파일</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IPlayerInGameController.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IPlayerStatController.h">
+      <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

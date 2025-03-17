@@ -1,8 +1,8 @@
 ﻿#pragma once
 #include "Scene\Scene.h"
-#include "Interface/IPlayerController.h"
+#include "Interface/IPlayerGraphicController.h"
 
-class CSceneLobby : public CScene, public IPlayerController
+class CSceneLobby : public CScene, public IPlayerGraphicController
 {
 	friend class CSceneManager;
 
