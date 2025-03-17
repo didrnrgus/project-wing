@@ -11,6 +11,9 @@ protected:
 	CPlayerInGameObject(CPlayerInGameObject&& Obj);
 	virtual ~CPlayerInGameObject();
 
+protected:
+	CSharedPtr<class CColliderOBB2D> mBody;
+
 private:
 	bool mIsMovingUp = false;
 

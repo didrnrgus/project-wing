@@ -5,6 +5,7 @@
 #include "Object/PlayerInGameObject.h"
 #include "Object/LineGroupObject.h"
 #include "Object/CameraObject.h"
+#include <Etc/DataStorageManager.h>
 
 CSceneInGame::CSceneInGame()
 {
@@ -21,11 +22,12 @@ bool CSceneInGame::InitAsset()
 
 bool CSceneInGame::InitObject()
 {
-    CCameraObject* Camera = CreateObj<CCameraObject>("Camera");
-    CPlayerInGameObject* playerGraphic = CreateObj<CPlayerInGameObject>("PlayerInGame");
-    CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
+    CCameraObject* camera = CreateObj<CCameraObject>("Camera");
+    CPlayerInGameObject* playerInGame = CreateObj<CPlayerInGameObject>("PlayerInGame");
+    players.push_back(playerInGame);
+    SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
 
-    //lineGroup->InitLines();
+    CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
 
     return true;
 }
@@ -41,12 +43,20 @@ bool CSceneInGame::InitWidget()
 
 CSceneObject* CSceneInGame::GetPlayer(int index)
 {
-    return nullptr;
+    return players[index];
 }
 
 bool CSceneInGame::SetChangeGraphic(int playerIndex, int graphicIndex)
 {
-    return false;
+    auto tempPlayer = dynamic_cast<CPlayerGraphicObject*>(players[playerIndex].Get());
+
+    if (tempPlayer == nullptr)
+    {
+        return false;
+    }
+
+    auto result = tempPlayer->SetChangeGraphic(graphicIndex);
+    return result;
 }
 
 #pragma endregion

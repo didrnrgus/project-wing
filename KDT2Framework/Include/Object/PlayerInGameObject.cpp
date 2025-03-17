@@ -2,6 +2,7 @@
 #include "Scene/Scene.h"
 #include "Scene/Input.h"
 #include "Component/SpriteComponent.h"
+#include "Component/ColliderOBB2D.h"
 
 CPlayerInGameObject::CPlayerInGameObject()
 {
@@ -22,6 +23,12 @@ CPlayerInGameObject::~CPlayerInGameObject()
 bool CPlayerInGameObject::Init()
 {
 	CPlayerGraphicObject::Init();
+
+	mBody = CreateComponent<CColliderOBB2D>("ColliderOBB2D");
+	mRoot->AddChild(mBody);
+	auto scale = mRoot->GetWorldScale();
+	mBody->SetBoxSize(FVector2D(scale.x, scale.y) * 0.4f);
+
 
 	mScene->GetInput()->AddBindKey("MoveUp", VK_LBUTTON);
 	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("MoveUp",

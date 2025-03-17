@@ -37,7 +37,7 @@ bool CPlayerGraphicObject::Init()
 	}
 	mMapDifficultySinAngle = 0.0f;
 
-	mRoot = CreateComponent<CSpriteComponent>("Player");
+	mRoot = CreateComponent<CSpriteComponent>("PlayerRoot");
 	mRoot->SetPivot(0.5f, 0.5f);
 	mRoot->SetWorldPos(mRootInitPos);
 	FVector3D tempRootSize = FVector3D(200.0f, 135.0f, 1.f);
@@ -84,6 +84,15 @@ bool CPlayerGraphicObject::SetChangeGraphic(int index)
 	// 현재는 컬러로만.
 	auto colorName = CDataStorageManager::GetInst()->GetCharacterState(index).ColorName;
 	mRoot->SetColor(FVector4D::GetColorFromString(colorName));
+	
+#ifdef _DEBUG
+	auto sceneType = CSceneManager::GetInst()->GetCurrentSceneType();
+	if (sceneType == EGameScene::InGameSingle
+		|| sceneType == EGameScene::InGameMulti)
+	{
+		mRoot->SetOpacity(0.5f);
+	}
+#endif // _DEBUG
 
 	return false;
 }
