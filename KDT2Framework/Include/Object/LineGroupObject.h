@@ -40,7 +40,6 @@ protected:
 	int mCurLineNodeIndex;
 	int mLineNodesCount;
 	int mLineNodesCycleCount;
-	bool mIsStart;
 
 	float mMovedValue;
 
@@ -58,10 +57,8 @@ public:
 	void MoveLines(float DeltaTime);
 	template<typename T>
 	void MoveLine(std::list<CSharedPtr<T>>& list, FVector3D moveVal);
-	void PauseMove(float DeltaTime);
 
 public:
-	void SetStart(bool isStart) { mIsStart = isStart; }
 	void SetTargetStat(class IPlayerStatController* targetPlayerStat) { mTargetPlayerStat = targetPlayerStat; }
 };
 

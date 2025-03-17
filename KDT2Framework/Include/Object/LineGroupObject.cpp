@@ -34,17 +34,16 @@ bool CLineGroupObject::Init()
 	mLineNodesCount = CDataStorageManager::GetInst()->GetLineNodeCountInSelectedMap();
 	mLineNodesCycleCount = 0;
 	mDifficultyRate = CDataStorageManager::GetInst()->GetSelectedMapInfo().DifficultyRate;
-	mIsStart = false;
 	mMovedValue = 0.0f;
 
 	mRoot = CreateComponent<CSceneComponent>("Root");
 	SetRootComponent(mRoot);
 
-#ifdef _DEBUG
-	mScene->GetInput()->AddBindKey("PauseMove", 'P');
-	mScene->GetInput()->AddBindFunction<CLineGroupObject>("PauseMove",
-		EInputType::Down, this, &CLineGroupObject::PauseMove);
-#endif // _DEBUG
+//#ifdef _DEBUG
+//	mScene->GetInput()->AddBindKey("PauseMove", 'P');
+//	mScene->GetInput()->AddBindFunction<CLineGroupObject>("PauseMove",
+//		EInputType::Down, this, &CLineGroupObject::PauseMove);
+//#endif // _DEBUG
 
 	InitLines();
 
@@ -55,8 +54,8 @@ void CLineGroupObject::PreUpdate(float DeltaTime)
 {
 	CSceneObject::PreUpdate(DeltaTime);
 
-	if (!mIsStart)
-		return;
+	//if (!mIsStart)
+	//	return;
 
 	MoveLines(DeltaTime);
 }
@@ -231,10 +230,4 @@ void CLineGroupObject::MoveLine(std::list<CSharedPtr<T>>& list
 		auto pos = comp->GetWorldPosition();
 		comp->SetWorldPos(pos + moveVal);
 	}
-}
-
-void CLineGroupObject::PauseMove(float DeltaTime)
-{
-	CLog::PrintLog("CLineGroupObject::PauseMove");
-	mIsStart = !mIsStart;
 }

@@ -1,10 +1,10 @@
-#pragma once
+ï»¿#pragma once
 
 #include "GameInfo.h"
 #include "Etc/JsonContainer.h"
 
-// ÀÎ°ÔÀÓ ÇÃ·¹ÀÌ¾î ¿ÀºêÁ§Æ®¿¡ ºÙÀ½.
-// ÀÎ°ÔÀÓ ÇÃ·¹ÀÌ Áß º¯µ¿µÇ´Â µ¿Àû½ºÅÈ ¿ä¼Ò.
+// ì¸ê²Œì„ í”Œë ˆì´ì–´ ì˜¤ë¸Œì íŠ¸ì— ë¶™ìŒ.
+// ì¸ê²Œì„ í”Œë ˆì´ ì¤‘ ë³€ë™ë˜ëŠ” ë™ì ìŠ¤íƒ¯ ìš”ì†Œ.
 class IPlayerStatController abstract
 {
 private:
@@ -13,6 +13,7 @@ private:
 	float curHp;
 	float speed;
 	float dex;
+	bool isPlay;
 
 public:
 	bool Init(FCharacterState stat)
@@ -39,10 +40,12 @@ public:
 	void Damaged(int _damageVal) { curHp -= _damageVal; }
 	void AddSpeed(int _addSpeedVal) { speed += _addSpeedVal; }
 	void AddDex(int _addDexVal) { dex += _addDexVal; }
+	void SetIsPlay(bool _isPlay) { isPlay = _isPlay; }
 
 	int GetIndex() { return index; }
 	float GetMaxHP() { return maxHp; }
 	float GetCurHP() { return curHp; }
 	float GetSpeed() { return speed; }
 	float GetDex() { return dex; }
+	bool GetIsPlay() { return isPlay; }
 };

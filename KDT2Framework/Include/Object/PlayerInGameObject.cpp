@@ -1,4 +1,4 @@
-#include "PlayerInGameObject.h"
+О╩©#include "PlayerInGameObject.h"
 #include "Scene/Scene.h"
 #include "Scene/Input.h"
 #include "Component/SpriteComponent.h"
@@ -82,6 +82,6 @@ void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
 
 bool CPlayerInGameObject::SetMovePlayer(FVector3D moveValVector)
 {
-	// ©э╨н -> ╪╜╧Ж╣╔юлем╥н фВаЖ╪г даф╝╥я 
+	// Л≥╦К╤─ -> Л└°К╡└К█╟Л²╢М└╟К║° М▐╛Л╖─Л┘≤ Л╩╗М┼╦К║╓ 
 	return false;
 }
