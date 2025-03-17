@@ -14,6 +14,8 @@ private:
 
 	float		mClearColor[4] = {};
 
+	EGameScene::Type mGameState;
+
 public:
 	HINSTANCE GetWindowInstance()	const
 	{

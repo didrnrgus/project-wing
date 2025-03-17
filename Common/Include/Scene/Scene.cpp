@@ -7,6 +7,7 @@
 #include "SceneAssetManager.h"
 #include "../Render/RenderManager.h"
 #include "SceneUIManager.h"
+#include "Scene/SceneManager.h"
 
 CScene::CScene()
 {
@@ -33,6 +34,8 @@ CScene::~CScene()
 
 bool CScene::Init()
 {
+	CSceneManager::GetInst()->SetCurrentSceneType(this);
+
 	mInput = new CInput;
 
 	mInput->mScene = this;
@@ -70,46 +73,6 @@ bool CScene::Init()
 	InitWidget();
 	InitObject();
 
-	return true;
-}
-
-bool CScene::Init(const char* FileName)
-{
-	mInput = new CInput;
-
-	if (!mInput->Init())
-		return false;
-
-	mCameraManager = new CCameraManager;
-
-	if (!mCameraManager->Init())
-		return false;
-
-	mCollision = new CSceneCollision;
-
-	mCollision->mScene = this;
-
-	if (!mCollision->Init())
-		return false;
-
-	mAssetManager = new CSceneAssetManager;
-
-	mAssetManager->mScene = this;
-
-	if (!mAssetManager->Init())
-		return false;
-
-	mUIManager = new CSceneUIManager;
-
-	mUIManager->mScene = this;
-
-	if (!mUIManager->Init())
-		return false;
-
-	InitAsset();
-	InitWidget();
-	InitObject();
-	
 	return true;
 }
 

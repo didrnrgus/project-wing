@@ -1,5 +1,7 @@
 ﻿#include "SceneManager.h"
 #include "Scene/SceneTitle.h"
+#include "Scene/SceneLobby.h"
+#include "Scene/SceneInGame.h"
 
 DEFINITION_SINGLE(CSceneManager)
 
@@ -10,6 +12,20 @@ CSceneManager::CSceneManager()
 CSceneManager::~CSceneManager()
 {
 	SAFE_DELETE(mCurrentScene);
+}
+
+EGameScene::Type CSceneManager::SetCurrentSceneType(CScene* scene)
+{
+	if (dynamic_cast<CSceneTitle*>(scene))
+		mSceneType = EGameScene::Title;
+	else if (dynamic_cast<CSceneLobby*>(scene))
+		mSceneType = EGameScene::LobbySingle;
+	else if (dynamic_cast<CSceneInGame*>(scene))
+		mSceneType = EGameScene::InGameSingle;
+	else
+		mSceneType = EGameScene::End;
+
+	return mSceneType;
 }
 
 bool CSceneManager::Init()

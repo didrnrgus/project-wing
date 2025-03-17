@@ -48,7 +48,6 @@ public:
 
 public:
 	virtual bool Init();
-	virtual bool Init(const char* FileName);
 	virtual void Input(float DeltaTime);
 	virtual void PreUpdate(float DeltaTime);
 	virtual void Update(float DeltaTime);

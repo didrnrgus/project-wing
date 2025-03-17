@@ -7,12 +7,20 @@ class CSceneManager
 private:
 	class CScene* mCurrentScene = nullptr;
 	class CScene* mLoadScene = nullptr;
+	EGameScene::Type mSceneType = EGameScene::End;
 
 public:
 	class CScene* GetCurrentScene()	const
 	{
 		return mCurrentScene;
 	}
+
+	EGameScene::Type GetCurrentSceneType() const
+	{
+		return mSceneType;
+	}
+
+	EGameScene::Type SetCurrentSceneType(class CScene* scene);
 
 public:
 	bool Init();
@@ -37,7 +45,7 @@ public:
 
 		return Scene;
 	}
-
+	
 	template <typename T>
 	T* CreateLoadScene()
 	{
@@ -56,4 +64,5 @@ public:
 
 	DECLARE_SINGLE(CSceneManager)
 };
+
 

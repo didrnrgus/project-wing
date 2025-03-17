@@ -1,7 +1,9 @@
 ﻿#include "PlayerGraphicObject.h"
+#include "Device.h"
 #include "Component/SpriteComponent.h"
 #include "Component/CameraComponent.h"
 #include "Etc/DataStorageManager.h"
+#include "Scene/SceneManager.h"
 
 CPlayerGraphicObject::CPlayerGraphicObject()
 {
@@ -22,8 +24,17 @@ CPlayerGraphicObject::~CPlayerGraphicObject()
 bool CPlayerGraphicObject::Init()
 {
 	CSceneObject::Init();
+	FResolution RS = CDevice::GetInst()->GetResolution();
 
-	mRootInitPos = FVector3D(370.f, 242.f, 0.f);
+	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbySingle
+		|| CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbyMulti)
+	{
+		mRootInitPos = FVector3D(370.f, 242.f, 0.f);
+	}
+	else
+	{
+		mRootInitPos = FVector3D(RS.Width * 0.25f * -1.0f, 0.0f, 0.f);
+	}
 	mMapDifficultySinAngle = 0.0f;
 
 	mRoot = CreateComponent<CSpriteComponent>("Player");
@@ -40,7 +51,7 @@ bool CPlayerGraphicObject::Init()
 			CDataStorageManager::GetInst()->GetCharacterState(i).ImageSequenceName
 			, 0.3f, 1.f, true, false);
 	}
-	
+
 	mAnimation->ChangeAnimation(CDataStorageManager::GetInst()->GetCharacterState(0).ImageSequenceName);
 
 	return true;
@@ -51,6 +62,8 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 	CSceneObject::Update(DeltaTime);
 
 	// 맵 선택 이미지 웨이브.
+	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbySingle
+		|| CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbyMulti)
 	{
 		mMapDifficultySinAngle += DeltaTime * 180.0f;
 

@@ -37,6 +37,7 @@ protected:
 	const float mSnapXValue = 300.0f; // 데이터는 Y값만 있을거라서 -> 라인의 x축 투영길이.
 	float mDifficultyRate;
 	int mCurLineNodeIndex;
+	int mLineNodesCount;
 	int mLineNodesCycleCount;
 	bool mIsStart;
 

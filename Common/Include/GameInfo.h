@@ -357,3 +357,19 @@ enum class EEditorMode
 	TileImage,
 	End
 };
+
+namespace EGameScene
+{
+	enum Type 
+	{
+		Title,
+		LobbySingle,
+		LobbyMulti,
+		InGameSingle,
+		InGameMulti,
+		ResultSingle,
+		ResultMulti,
+		Rank,
+		End
+	};
+}

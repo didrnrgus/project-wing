@@ -29,6 +29,8 @@ bool CLineGroupObject::Init()
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	mToAddPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.5f);
 	mCurLineNodeIndex = 0;
+	mLineNodesCount = CDataStorageManager::GetInst()->GetLineNodeCountInSelectedMap();
+	mLineNodesCycleCount = 0;
 	mDifficultyRate = CDataStorageManager::GetInst()->GetSelectedMapInfo().DifficultyRate;
 	mIsStart = false;
 	mMovedValue = 0.0f;
@@ -61,6 +63,14 @@ void CLineGroupObject::InitLines()
 {
 	for (int i = 0; i < mMaxLineCount; i++, mCurLineNodeIndex++)
 	{
+		if (i > 0)
+		{
+			if (mCurLineNodeIndex % mLineNodesCount == 0)
+			{
+				mLineNodesCycleCount++;
+			}
+		}
+
 		AddLine(ELinePosType::Top, mCurLineNodeIndex);
 		AddLine(ELinePosType::Bottom, mCurLineNodeIndex);
 	}
@@ -93,23 +103,25 @@ void CLineGroupObject::AddLineSetting(ELinePosType::Type type, int lineNodeIndex
 	auto lineNodeNext = CDataStorageManager::GetInst()->GetLineNodeInSelectedMap(lineNodeIndex + 1);
 
 
-	lineNodeIndex = lineNodeIndex >= mMaxLineCount - 1 ? mMaxLineCount-1 : lineNodeIndex;
+	lineNodeIndex = lineNodeIndex >= mMaxLineCount - 1 ? mMaxLineCount - 1 : lineNodeIndex;
 	float startX = mSnapXValue * lineNodeIndex;
 	float endX = mSnapXValue * (lineNodeIndex + 1);
-
+	float startY, endY;
 	FLine2D lineInfo;
 	if (type == ELinePosType::Top)
 	{
-		// top
-		lineInfo.Start = FVector2D(startX, lineNode.TopYPos) - mToAddPos;
-		lineInfo.End = FVector2D(endX, lineNodeNext.TopYPos) - mToAddPos;
+		startY = lineNode.TopYPos - mDifficultyRate * mLineNodesCycleCount;
+		endY = lineNodeNext.TopYPos - mDifficultyRate * mLineNodesCycleCount;
+		lineInfo.Start = FVector2D(startX, startY) - mToAddPos;
+		lineInfo.End = FVector2D(endX, endY) - mToAddPos;
 		mTopLine2DInfos.push_back(lineInfo);
 	}
 	else
 	{
-		// bottom
-		lineInfo.Start = FVector2D(startX, lineNode.BottomYPos) - mToAddPos;
-		lineInfo.End = FVector2D(endX, lineNodeNext.BottomYPos) - mToAddPos;
+		startY = lineNode.BottomYPos + mDifficultyRate * mLineNodesCycleCount;
+		endY = lineNodeNext.BottomYPos + mDifficultyRate * mLineNodesCycleCount;
+		lineInfo.Start = FVector2D(startX, startY) - mToAddPos;
+		lineInfo.End = FVector2D(endX, endY) - mToAddPos;
 		mBottomLine2DInfos.push_back(lineInfo);
 	}
 
@@ -133,7 +145,7 @@ void CLineGroupObject::AddLineSetting(ELinePosType::Type type, int lineNodeIndex
 
 void CLineGroupObject::ArrangeLines()
 {
-	CLog::PrintLog("CLineGroupObject::ArrangeLines");
+	//CLog::PrintLog("CLineGroupObject::ArrangeLines");
 
 	(*mTopLines.begin()).Get()->Destroy();
 	(*mTopColliderLines.begin()).Get()->Destroy();
@@ -146,27 +158,30 @@ void CLineGroupObject::ArrangeLines()
 	mBottomLine2DInfos.pop_front();
 	mBottomLines.pop_front();
 	mBottomColliderLines.pop_front();
-	
+
 	mCurLineNodeIndex++;
+	if (mCurLineNodeIndex % mLineNodesCount == 0)
+	{
+		mLineNodesCycleCount++;
+	}
+
 	AddLine(ELinePosType::Top, mCurLineNodeIndex);
 	AddLine(ELinePosType::Bottom, mCurLineNodeIndex);
 }
 
 void CLineGroupObject::MoveLines(float DeltaTime)
 {
-	float moveValue = -300 * DeltaTime;
+	float moveValue = -1000 * DeltaTime;
 	mMovedValue += moveValue;
 
 	if (mMovedValue < -mSnapXValue)
 	{
-		CLog::PrintLog("CLineGroupObject::MoveLines if (mMovedValue < -mSnapXValue)");
-		CLog::PrintLog("CLineGroupObject::MoveLines mMovedValue: " + std::to_string(mMovedValue));
+		//CLog::PrintLog("CLineGroupObject::MoveLines if (mMovedValue < -mSnapXValue)");
+		//CLog::PrintLog("CLineGroupObject::MoveLines mMovedValue: " + std::to_string(mMovedValue));
 
 		// 앞에꺼 하나씩 빼서 뒤에 붙인다.
 		ArrangeLines();
 		mMovedValue = 0.0f;
-
-		// mMovedValue + mSnalXvalue -> 틱 발생? 
 	}
 	else
 	{
