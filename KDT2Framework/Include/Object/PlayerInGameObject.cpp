@@ -2,8 +2,9 @@
 #include "Scene/Scene.h"
 #include "Scene/Input.h"
 #include "Component/SpriteComponent.h"
-#include "Component/ColliderOBB2D.h"
+#include "Component/ColliderSphere2D.h"
 #include "Etc/ConstString.h"
+#include "Interface/IPlayerStatController.h"
 
 CPlayerInGameObject::CPlayerInGameObject()
 {
@@ -25,12 +26,11 @@ bool CPlayerInGameObject::Init()
 {
 	CPlayerGraphicObject::Init();
 
-	mBody = CreateComponent<CColliderOBB2D>("ColliderOBB2D");
+	mBody = CreateComponent<CColliderSphere2D>("ColliderSphere2D");
 	mRoot->AddChild(mBody);
 	auto scale = mRoot->GetWorldScale();
 	mBody->SetCollisionProfile(PROFILE_PLAYER_MINE);
-	mBody->SetBoxSize(FVector2D(scale.x, scale.y) * 0.4f);
-
+	mBody->SetRadius(scale.y * 0.2f);
 
 	mScene->GetInput()->AddBindKey("MoveUp", VK_LBUTTON);
 	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("MoveUp",
@@ -55,7 +55,7 @@ void CPlayerInGameObject::Update(float DeltaTime)
 
 void CPlayerInGameObject::MoveDown(float DeltaTime)
 {
-	auto downValVector = FVector3D::Axis[EAxis::Y] * 100.0f * DeltaTime * -1.0f;
+	auto downValVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * -1.0f;
 	auto pos = mRoot->GetWorldPosition();
 	mRoot->SetWorldPos(pos + downValVector);
 }
@@ -69,7 +69,7 @@ void CPlayerInGameObject::MoveUpStart(float DeltaTime)
 void CPlayerInGameObject::MoveUpHold(float DeltaTime)
 {
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpHold mIsMovingUp: " + std::to_string(mIsMovingUp));
-	auto downValVector = FVector3D::Axis[EAxis::Y] * 100.0f * DeltaTime * 1.0f;
+	auto downValVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * 1.0f;
 	auto pos = mRoot->GetWorldPosition();
 	mRoot->SetWorldPos(pos + downValVector);
 }

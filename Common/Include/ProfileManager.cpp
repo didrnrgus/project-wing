@@ -21,14 +21,14 @@ CProfileManager::~CProfileManager()
 bool CProfileManager::Init()
 {
 	// create
-	CreateProfile(PROFILE_DEFAULT, ECollisionChannel::Default, true,
-		ECollisionInteraction::Collision);
+	CreateProfile(PROFILE_DEFAULT, ECollisionChannel::Default, false,
+		ECollisionInteraction::Ignore);
 
 	CreateProfile(PROFILE_PLAYER_MINE, ECollisionChannel::PlayerMine, true,
 		ECollisionInteraction::Collision);
 
-	CreateProfile(PROFILE_PLAYER_OTHER, ECollisionChannel::PlayerOther, true,
-		ECollisionInteraction::Collision);
+	CreateProfile(PROFILE_PLAYER_OTHER, ECollisionChannel::PlayerOther, false,
+		ECollisionInteraction::Ignore);
 
 	CreateProfile(PROFILE_MAP, ECollisionChannel::Map, true,
 		ECollisionInteraction::Collision);

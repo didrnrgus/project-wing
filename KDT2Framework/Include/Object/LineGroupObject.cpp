@@ -7,6 +7,7 @@
 #include "Scene/Scene.h"
 #include "Etc/DataStorageManager.h"
 #include "Etc/ConstString.h"
+#include "Interface/IPlayerStatController.h"
 
 CLineGroupObject::CLineGroupObject()
 {
@@ -50,14 +51,19 @@ bool CLineGroupObject::Init()
 	return true;
 }
 
-void CLineGroupObject::Update(float DeltaTime)
+void CLineGroupObject::PreUpdate(float DeltaTime)
 {
-	CSceneObject::Update(DeltaTime);
+	CSceneObject::PreUpdate(DeltaTime);
 
 	if (!mIsStart)
 		return;
 
 	MoveLines(DeltaTime);
+}
+
+void CLineGroupObject::Update(float DeltaTime)
+{
+	CSceneObject::Update(DeltaTime);
 }
 
 void CLineGroupObject::InitLines()
@@ -172,7 +178,7 @@ void CLineGroupObject::ArrangeLines()
 
 void CLineGroupObject::MoveLines(float DeltaTime)
 {
-	float moveValue = -1000 * DeltaTime;
+	float moveValue =  mTargetPlayerStat->GetSpeed() * DeltaTime * -1.0f;
 	mMovedValue += moveValue;
 
 	if (mMovedValue < -mSnapXValue)
@@ -232,10 +238,3 @@ void CLineGroupObject::PauseMove(float DeltaTime)
 	CLog::PrintLog("CLineGroupObject::PauseMove");
 	mIsStart = !mIsStart;
 }
-
-
-void CLineGroupObject::SetStart(bool isStart)
-{
-	this->mIsStart = isStart;
-}
-

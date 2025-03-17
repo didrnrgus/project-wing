@@ -5,7 +5,8 @@
 #include "Object/PlayerInGameObject.h"
 #include "Object/LineGroupObject.h"
 #include "Object/CameraObject.h"
-#include <Etc/DataStorageManager.h>
+#include "Etc/DataStorageManager.h"
+#include "Interface/IPlayerStatController.h"
 
 CSceneInGame::CSceneInGame()
 {
@@ -26,8 +27,18 @@ bool CSceneInGame::InitObject()
     CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
     CPlayerInGameObject* playerInGame = CreateObj<CPlayerInGameObject>("PlayerInGame");
     players.resize(5, nullptr); // 미리 칸 만들어놓기.
+
+    // myPlayer setting
     players[0] = playerInGame;
     playerInGame->SetIsMine(true);
+    auto firstStatData = CDataStorageManager::GetInst()->GetSelectedCharacterState();
+    auto playerInGameStat = dynamic_cast<IPlayerStatController*>(playerInGame);
+    if (playerInGameStat != nullptr)
+    {
+        playerInGameStat->Init(firstStatData);
+    }
+    lineGroup->SetTargetStat(playerInGameStat);
+
     SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
 
     return true;

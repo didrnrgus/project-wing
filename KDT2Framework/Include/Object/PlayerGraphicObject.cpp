@@ -40,8 +40,10 @@ bool CPlayerGraphicObject::Init()
 	mRoot = CreateComponent<CSpriteComponent>("PlayerRoot");
 	mRoot->SetPivot(0.5f, 0.5f);
 	mRoot->SetWorldPos(mRootInitPos);
-	FVector3D tempRootSize = FVector3D(200.0f, 135.0f, 1.f);
-	mRoot->SetWorldScale(tempRootSize * 1.0f);
+	auto defaultPlayerStat = CDataStorageManager::GetInst()->GetCharacterState(0);
+	FVector3D tempRootSize = FVector3D(defaultPlayerStat.SizeX, defaultPlayerStat.SizeY, 1.f);
+	mRoot->SetWorldScale(tempRootSize);
+	mRoot->SetColor(FVector4D::GetColorFromString(defaultPlayerStat.ColorName));
 	SetRootComponent(mRoot);
 
 	mAnimation = mRoot->CreateAnimation2D<CAnimation2D>();
@@ -82,9 +84,13 @@ bool CPlayerGraphicObject::SetChangeGraphic(int index)
 	// 텍스처를 아예 바꾼다면 mAnimation 에서 처리 해야 함.
 
 	// 현재는 컬러로만.
-	auto colorName = CDataStorageManager::GetInst()->GetCharacterState(index).ColorName;
-	mRoot->SetColor(FVector4D::GetColorFromString(colorName));
-	
+	auto playerStat = CDataStorageManager::GetInst()->GetCharacterState(index);
+	mRoot->SetColor(FVector4D::GetColorFromString(playerStat.ColorName));
+
+	FVector3D tempRootSize = FVector3D(playerStat.SizeX, playerStat.SizeY, 1.f);
+	mRoot->SetWorldScale(tempRootSize);
+	mAnimation->ChangeAnimation(playerStat.ImageSequenceName);
+
 #ifdef _DEBUG
 	auto sceneType = CSceneManager::GetInst()->GetCurrentSceneType();
 	if (sceneType == EGameScene::InGameSingle

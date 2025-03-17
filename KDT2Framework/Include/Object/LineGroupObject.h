@@ -23,6 +23,7 @@ protected:
 
 protected:
 	CSharedPtr<class CSceneComponent> mRoot;
+	class IPlayerStatController* mTargetPlayerStat;
 
 	// mLines & mColliderLines 는 쌍을 이뤄야 함.
 	std::list<FLine2D> mTopLine2DInfos;
@@ -45,8 +46,8 @@ protected:
 
 public:
 	virtual bool Init() override;
+	virtual void PreUpdate(float DeltaTime) override;
 	virtual void Update(float DeltaTime) override;
-
 public:
 	// 씬에서 호출 -> 로드된 데이터를 받는 용도.
 	void InitLines();
@@ -60,6 +61,7 @@ public:
 	void PauseMove(float DeltaTime);
 
 public:
-	void SetStart(bool isStart);
+	void SetStart(bool isStart) { mIsStart = isStart; }
+	void SetTargetStat(class IPlayerStatController* targetPlayerStat) { mTargetPlayerStat = targetPlayerStat; }
 };
 

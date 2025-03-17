@@ -13,7 +13,7 @@ protected:
 	virtual ~CPlayerInGameObject();
 
 protected:
-	CSharedPtr<class CColliderOBB2D> mBody;
+	CSharedPtr<class CColliderSphere2D> mBody;
 
 private:
 	bool mIsMovingUp = false;
