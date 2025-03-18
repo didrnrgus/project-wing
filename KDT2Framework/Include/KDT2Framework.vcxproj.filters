@@ -218,6 +218,9 @@
     <ClInclude Include="Interface\IPlayerStatController.h">
       <Filter>Interface</Filter>
     </ClInclude>
+    <ClInclude Include="Interface\IGamePlayController.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="KDT2Framework.rc">

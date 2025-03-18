@@ -7,6 +7,7 @@
 #include "Object/CameraObject.h"
 #include "Etc/DataStorageManager.h"
 #include "Interface/IPlayerStatController.h"
+#include "Interface/IGamePlayController.h"
 #include "Scene/Input.h"
 
 CSceneInGame::CSceneInGame()
@@ -27,6 +28,7 @@ bool CSceneInGame::Init()
         , [this](float DeltaTime)
         {
             CLog::PrintLog("StartAndStop Trigger Lambda");
+            SetGamePlayState(EGamePlayState::Start);
         });
     #endif // _DEBUG
 
@@ -55,9 +57,18 @@ bool CSceneInGame::InitObject()
         playerInGameStat->Init(firstStatData);
     }
     lineGroup->SetTargetStat(playerInGameStat);
-
     SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
 
+    // IGamePlayController 배열 구성.
+    auto lineGroupGamePlayCtlr = dynamic_cast<IGamePlayController*>(lineGroup);
+    if (lineGroupGamePlayCtlr)
+        mArrGamePlayCtlr.push_back(lineGroupGamePlayCtlr);
+
+    auto playerGamePlayCtlr = dynamic_cast<IGamePlayController*>(playerInGame);
+    if (playerGamePlayCtlr)
+        mArrGamePlayCtlr.push_back(playerGamePlayCtlr);
+
+    SetGamePlayState(EGamePlayState::Ready);
     return true;
 }
 
@@ -99,6 +110,14 @@ bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValVector)
 
     auto result = tempPlayer->SetMovePlayer(moveValVector);
     return result;
+}
+
+void CSceneInGame::SetGamePlayState(EGamePlayState::Type type)
+{
+    for (auto e : mArrGamePlayCtlr)
+    {
+        e->SetGamePlayState(type);
+    }
 }
 
 #pragma endregion

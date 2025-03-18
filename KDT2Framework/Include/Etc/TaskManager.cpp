@@ -27,6 +27,12 @@ int CTaskManager::AddTask(std::thread&& task)
 void CTaskManager::RemoveTask(int taskID)
 {
     CLog::PrintLog("CTaskManager::RemoveTask taskEnd: " + std::to_string(taskID));
-    mThreadTasks.erase(taskID);
+    int count = mThreadTasks.count(taskID);
+    CLog::PrintLog("CTaskManager::RemoveTask mThreadTasks.count(taskID): " + std::to_string(count));
+    
+    if (mThreadTasks.count(taskID) > 0)
+    {
+        mThreadTasks.erase(taskID);
+    }
 }
 

@@ -69,8 +69,8 @@ void CTitleWidget::SinglePlayButtonClick()
 	// 로비로 가야 함.
 	CLog::PrintLog("CTitleWidget::SinglePlayButtonClick()");
 
-	int taskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
-		[taskID, this]()
+	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[this]()
 		{
 			ShowLoading(true);
 
@@ -96,7 +96,7 @@ void CTitleWidget::SinglePlayButtonClick()
 				CDataStorageManager::GetInst()->SetMapData(mapResult);
 			}
 
-			CTaskManager::GetInst()->RemoveTask(taskID);
+			CTaskManager::GetInst()->RemoveTask(mTaskID);
 
 			ShowLoading(false);
 

@@ -9,6 +9,9 @@ protected:
 	CTitleWidget();
 	virtual ~CTitleWidget();
 
+private:
+	int mTaskID;
+
 protected:
 	CSharedPtr<class CButton>	mSinglePlayButton;
 	CSharedPtr<class CButton>	mMultiPlayButton;

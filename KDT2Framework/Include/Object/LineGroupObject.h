@@ -1,6 +1,7 @@
 ﻿#pragma once
 #include "Object/SceneObject.h"
 #include "Etc/JsonContainer.h"
+#include "Interface/IGamePlayController.h"
 
 namespace ELinePosType
 {
@@ -11,7 +12,7 @@ namespace ELinePosType
 	};
 }
 
-class CLineGroupObject : public CSceneObject
+class CLineGroupObject : public CSceneObject, public IGamePlayController
 {
 	friend class CScene;
 
@@ -47,6 +48,8 @@ public:
 	virtual bool Init() override;
 	virtual void PreUpdate(float DeltaTime) override;
 	virtual void Update(float DeltaTime) override;
+
+	virtual void SetGamePlayState(EGamePlayState::Type type) override;
 public:
 	// 씬에서 호출 -> 로드된 데이터를 받는 용도.
 	void InitLines();

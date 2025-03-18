@@ -1,8 +1,9 @@
 ﻿#pragma once
 #include "PlayerGraphicObject.h"
 #include "Interface/IPlayerStatController.h"
+#include "Interface/IGamePlayController.h"
 
-class CPlayerInGameObject : public CPlayerGraphicObject, public IPlayerStatController
+class CPlayerInGameObject : public CPlayerGraphicObject, public IPlayerStatController, public IGamePlayController
 {
 	friend class CScene;
 
@@ -23,6 +24,7 @@ public:
 	virtual bool Init() override;
 	virtual void Update(float DeltaTime) override;
 
+	virtual void SetGamePlayState(EGamePlayState::Type type) override;
 private:
 	void MoveDown(float DeltaTime);
 	void MoveUpStart(float DeltaTime);

@@ -5,6 +5,7 @@
 #include "Component/ColliderSphere2D.h"
 #include "Etc/ConstString.h"
 #include "Interface/IPlayerStatController.h"
+#include "Interface/IGamePlayController.h"
 
 CPlayerInGameObject::CPlayerInGameObject()
 {
@@ -46,11 +47,21 @@ void CPlayerInGameObject::Update(float DeltaTime)
 {
 	CPlayerGraphicObject::Update(DeltaTime);
 
+	if (GetGamePlayState() != EGamePlayState::Start)
+		return;
+
 	if (!mIsMovingUp && mIsMine)
 	{
 		//CLog::PrintLog("CPlayerInGameObject::Update mIsMovingUp: " + std::to_string(mIsMovingUp));
 		MoveDown(DeltaTime);
 	}
+}
+
+void CPlayerInGameObject::SetGamePlayState(EGamePlayState::Type type)
+{
+	IGamePlayController::SetGamePlayState(type);
+
+	CLog::PrintLog("CPlayerInGameObject::SetGamePlayState type: " + std::to_string(type));
 }
 
 void CPlayerInGameObject::MoveDown(float DeltaTime)
@@ -69,6 +80,10 @@ void CPlayerInGameObject::MoveUpStart(float DeltaTime)
 void CPlayerInGameObject::MoveUpHold(float DeltaTime)
 {
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpHold mIsMovingUp: " + std::to_string(mIsMovingUp));
+
+	if (GetGamePlayState() != EGamePlayState::Start)
+		return;
+
 	auto downValVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * 1.0f;
 	auto pos = mRoot->GetWorldPosition();
 	mRoot->SetWorldPos(pos + downValVector);
