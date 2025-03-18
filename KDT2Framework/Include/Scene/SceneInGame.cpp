@@ -114,11 +114,11 @@ bool CSceneInGame::SetChangeGraphic(int playerIndex, int graphicIndex)
         return false;
     }
 
-    auto result = tempPlayer->SetChangeGraphic(graphicIndex);
-    return result;
+    tempPlayer->SetChangeGraphic(graphicIndex);
+    return true;
 }
 
-bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValVector)
+bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValueVector)
 {
     auto tempPlayer = dynamic_cast<CPlayerInGameObject*>(players[playerIndex].Get());
 
@@ -127,8 +127,8 @@ bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValVector)
         return false;
     }
 
-    auto result = tempPlayer->SetMovePlayer(moveValVector);
-    return result;
+    tempPlayer->SetMovePlayer(moveValueVector);
+    return true;
 }
 
 void CSceneInGame::SetGamePlayState(EGamePlayState::Type type)

@@ -22,7 +22,7 @@ protected:
 	virtual bool InitWidget() override;
 	virtual CSceneObject* GetPlayer(int index) override;
 	virtual bool SetChangeGraphic(int playerIndex, int graphicIndex) override;
-	virtual bool SetMovePlayer(int playerIndex, FVector3D moveValVector) override;
+	virtual bool SetMovePlayer(int playerIndex, FVector3D moveValueVector) override;
 	
 	void SetGamePlayState(EGamePlayState::Type type);
 	EGamePlayState::Type GetGamePlayState() { return mGamePlayState; }

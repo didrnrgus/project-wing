@@ -33,10 +33,11 @@ private:
 	void MoveUpRelease(float DeltaTime);
 
 	void CollisionMapBegin(const FVector3D& HitPoint, class CColliderBase* Dest);
-	
+	void SetMovePlayer(FVector3D moveValueVector, float DeltaTime);
 
 public:
-	bool SetMovePlayer(FVector3D moveValVector);
+	// WorldPosition
+	void SetMovePlayer(FVector3D moveValueVector);
 	inline void SetIsMine(bool isMine) { mIsMine = isMine; }
 	inline void SetShakeCamera(class IGamePlayShakeController* cameraShake)
 	{

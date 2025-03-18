@@ -58,6 +58,16 @@ void CPlayerInGameObject::Update(float DeltaTime)
 	if (GetGamePlayState() < EGamePlayState::Start)
 		return;
 
+	if (GetIsProtection())
+	{
+		ReleaseProtection(DeltaTime);
+	}
+
+	if (GetIsStun())
+	{
+		ReleaseStun(DeltaTime);
+	}
+
 	if (!mIsMovingUp && mIsMine)
 	{
 		//CLog::PrintLog("CPlayerInGameObject::Update mIsMovingUp: " + std::to_string(mIsMovingUp));
@@ -74,9 +84,8 @@ void CPlayerInGameObject::SetGamePlayState(EGamePlayState::Type type)
 
 void CPlayerInGameObject::MoveDown(float DeltaTime)
 {
-	auto downValVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * -1.0f;
-	auto pos = mRoot->GetWorldPosition();
-	mRoot->SetWorldPos(pos + downValVector);
+	auto moveValueVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * -1.0f;
+	SetMovePlayer(moveValueVector, DeltaTime);
 }
 
 void CPlayerInGameObject::MoveUpStart(float DeltaTime)
@@ -88,24 +97,8 @@ void CPlayerInGameObject::MoveUpStart(float DeltaTime)
 void CPlayerInGameObject::MoveUpHold(float DeltaTime)
 {
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpHold mIsMovingUp: " + std::to_string(mIsMovingUp));
-
-	if (GetGamePlayState() < EGamePlayState::Start)
-		return;
-
-	if (GetIsStun())
-	{
-		ReleaseStun(DeltaTime);
-		return;
-	}
-
-	if (GetIsProtection())
-	{
-		ReleaseProtection(DeltaTime);
-	}
-
-	auto downValVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * 1.0f;
-	auto pos = mRoot->GetWorldPosition();
-	mRoot->SetWorldPos(pos + downValVector);
+	auto moveValueVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * 1.0f;
+	SetMovePlayer(moveValueVector, DeltaTime);
 }
 
 void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
@@ -119,17 +112,33 @@ void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CCollider
 	if (GetGamePlayState() < EGamePlayState::Start)
 		return;
 
+	if (GetIsStun())
+		return;
+
 	if (GetIsProtection())
 		return;
 
-	mCameraShake->SetShakeSceneObject(1.5f, 10.0f);
+	mCameraShake->SetShakeSceneObject(0.5f, 10.0f);
 	SetStun();
 	CLog::PrintLog("CPlayerInGameObject::CollisionMap");
 }
 
-bool CPlayerInGameObject::SetMovePlayer(FVector3D moveValVector)
+void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector, float DeltaTime)
+{
+	// 자기 자신이 호출
+	if (GetGamePlayState() < EGamePlayState::Start)
+		return;
+
+	if (GetIsStun())
+		return;
+
+	auto pos = mRoot->GetWorldPosition();
+	mRoot->SetWorldPos(pos + moveValueVector);
+}
+
+void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector)
 {
 	// 외부 -> 서버데이터로 포지션 컨트롤 
-	// 씬이 호출할꺼다.
-	return false;
+	// 씬에서 호출
+	mRoot->SetWorldPos(moveValueVector);
 }
