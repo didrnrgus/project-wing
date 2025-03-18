@@ -9,7 +9,13 @@ protected:
 	CInGameWidget();
 	virtual ~CInGameWidget();
 
-public:
+private:
+	CSharedPtr<class CImage> mHPFrontImage;
+	FVector2D mHPFrontSize;
+	class IPlayerStatController* mPlayerStat;
 
+public:
+	virtual bool Init() override;
+	virtual void Update(float DeltaTime) override;
 };
 

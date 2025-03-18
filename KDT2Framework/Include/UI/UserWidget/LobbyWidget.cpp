@@ -64,6 +64,14 @@ bool CLobbyWidget::Init()
 	InitScrollSelectButtons();
 	InitItemButtons();
 
+	auto pathLeft = TEXT("Texture/Icon/direct-left.png");
+	auto pathRight = TEXT("Texture/Icon/direct-right.png");
+
+	SetButton(*(mCharacterLeftButton.Get()), "CharacterLeftButton", pathLeft);
+	SetButton(*(mCharacterRightButton.Get()), "CharacterRightButton", pathRight);
+	SetButton(*(mMapLeftButton.Get()), "MapLeftButton", pathLeft);
+	SetButton(*(mMapRightButton.Get()), "MapRightButton", pathRight);
+
 	// difficulty Image
 	mMapDifficultyImage = mScene->GetUIManager()->CreateWidget<CImage>(mMapDifficultyImageNamePrefix);
 	AddWidget(mMapDifficultyImage);
@@ -160,14 +168,6 @@ void CLobbyWidget::InitScrollSelectButtons()
 
 void CLobbyWidget::InitItemButtons()
 {
-	auto pathLeft = TEXT("Texture/Icon/direct-left.png");
-	auto pathRight = TEXT("Texture/Icon/direct-right.png");
-
-	SetButton(*(mCharacterLeftButton.Get()), "CharacterLeftButton", pathLeft);
-	SetButton(*(mCharacterRightButton.Get()), "CharacterRightButton", pathRight);
-	SetButton(*(mMapLeftButton.Get()), "MapLeftButton", pathLeft);
-	SetButton(*(mMapRightButton.Get()), "MapRightButton", pathRight);
-
 	// 슬롯은 이미지로 가자 -> 투명버튼 -> 이미지(CImage) -> 중간에 이미지 바꾸는거 됨.
 	for (int i = 0; i < itemSlotCount; i++)
 	{

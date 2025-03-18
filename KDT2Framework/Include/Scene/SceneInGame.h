@@ -20,12 +20,14 @@ protected:
 	virtual bool InitAsset() override;
 	virtual bool InitObject() override;
 	virtual bool InitWidget() override;
-	virtual CSceneObject* GetPlayer(int index) override;
 	virtual bool SetChangeGraphic(int playerIndex, int graphicIndex) override;
 	virtual bool SetMovePlayer(int playerIndex, FVector3D moveValueVector) override;
 	
 	void SetGamePlayState(EGamePlayState::Type type);
 	EGamePlayState::Type GetGamePlayState() { return mGamePlayState; }
+
+public:
+	virtual CSceneObject* GetPlayer(int index) override;
 };
 
 
