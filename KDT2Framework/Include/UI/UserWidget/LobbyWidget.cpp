@@ -7,9 +7,9 @@
 #include "UI/Common/Button.h"
 #include "UI/Common/Image.h"
 #include "UI/Common/TextBlock.h"
-#include <Interface/IPlayerGraphicController.h>
-#include <Scene/SceneInGame.h>
-#include <Scene/SceneTitle.h>
+#include "Interface/IScenePlayerGraphicController.h"
+#include "Scene/SceneInGame.h"
+#include "Scene/SceneTitle.h"
 #include "Etc/DataStorageManager.h"
 
 CLobbyWidget::CLobbyWidget()
@@ -311,7 +311,7 @@ void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t*
 void CLobbyWidget::OnCharacterLeftButtonClick()
 {
 	CLog::PrintLog("CharacterLeftButtonClick()");
-	auto playerController = dynamic_cast<IPlayerGraphicController*>(mScene);
+	auto playerController = dynamic_cast<IScenePlayerGraphicController*>(mScene);
 
 	if (playerController)
 	{
@@ -327,7 +327,7 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 void CLobbyWidget::OnCharacterRightButtonClick()
 {
 	CLog::PrintLog("CharacterRightButtonClick()");
-	auto playerController = dynamic_cast<IPlayerGraphicController*>(mScene);
+	auto playerController = dynamic_cast<IScenePlayerGraphicController*>(mScene);
 
 	if (playerController)
 	{

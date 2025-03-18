@@ -7,7 +7,8 @@
 #include "Object/CameraObject.h"
 #include "Etc/DataStorageManager.h"
 #include "Interface/IPlayerStatController.h"
-#include "Interface/IGamePlayController.h"
+#include "Interface/IGamePlayStateController.h"
+#include "Interface/IGamePlayShakeController.h"
 #include "Scene/Input.h"
 
 CSceneInGame::CSceneInGame()
@@ -28,7 +29,10 @@ bool CSceneInGame::Init()
         , [this](float DeltaTime)
         {
             CLog::PrintLog("StartAndStop Trigger Lambda");
-            SetGamePlayState(EGamePlayState::Start);
+            if(GetGamePlayState() != EGamePlayState::Start)
+                SetGamePlayState(EGamePlayState::Start);
+            else
+                SetGamePlayState(EGamePlayState::Pause);
         });
     #endif // _DEBUG
 
@@ -45,26 +49,41 @@ bool CSceneInGame::InitObject()
     CCameraObject* camera = CreateObj<CCameraObject>("Camera");
     CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
     CPlayerInGameObject* playerInGame = CreateObj<CPlayerInGameObject>("PlayerInGame");
+
+    // players init
     players.resize(5, nullptr); // 미리 칸 만들어놓기.
 
-    // myPlayer setting
+
+    // my player setting
     players[0] = playerInGame;
     playerInGame->SetIsMine(true);
-    auto firstStatData = CDataStorageManager::GetInst()->GetSelectedCharacterState();
+    
+    // 플레이어 오브젝트에 카메라 쉐이크 인터페이스 등록.
+    auto cameraShake = dynamic_cast<IGamePlayShakeController*>(camera);
+    if (cameraShake)
+    {
+        playerInGame->SetShakeCamera(cameraShake);
+    }
+    
+    // 선택한 캐릭의 초기 스텟 등록.
+    auto initializedStatData = CDataStorageManager::GetInst()->GetSelectedCharacterState();
     auto playerInGameStat = dynamic_cast<IPlayerStatController*>(playerInGame);
     if (playerInGameStat != nullptr)
     {
-        playerInGameStat->Init(firstStatData);
+        playerInGameStat->Init(initializedStatData);
     }
-    lineGroup->SetTargetStat(playerInGameStat);
+
     SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
 
-    // IGamePlayController 배열 구성.
-    auto lineGroupGamePlayCtlr = dynamic_cast<IGamePlayController*>(lineGroup);
+    // lineGroup setting
+    lineGroup->SetTargetStat(playerInGameStat);
+
+    // IGamePlayStateController arr setting
+    auto lineGroupGamePlayCtlr = dynamic_cast<IGamePlayStateController*>(lineGroup);
     if (lineGroupGamePlayCtlr)
         mArrGamePlayCtlr.push_back(lineGroupGamePlayCtlr);
 
-    auto playerGamePlayCtlr = dynamic_cast<IGamePlayController*>(playerInGame);
+    auto playerGamePlayCtlr = dynamic_cast<IGamePlayStateController*>(playerInGame);
     if (playerGamePlayCtlr)
         mArrGamePlayCtlr.push_back(playerGamePlayCtlr);
 
@@ -114,6 +133,8 @@ bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValVector)
 
 void CSceneInGame::SetGamePlayState(EGamePlayState::Type type)
 {
+    mGamePlayState = type;
+
     for (auto e : mArrGamePlayCtlr)
     {
         e->SetGamePlayState(type);

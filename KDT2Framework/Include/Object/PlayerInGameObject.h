@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "PlayerGraphicObject.h"
 #include "Interface/IPlayerStatController.h"
-#include "Interface/IGamePlayController.h"
+#include "Interface/IGamePlayStateController.h"
 
-class CPlayerInGameObject : public CPlayerGraphicObject, public IPlayerStatController, public IGamePlayController
+class CPlayerInGameObject : public CPlayerGraphicObject, public IPlayerStatController, public IGamePlayStateController
 {
 	friend class CScene;
 
@@ -19,6 +19,7 @@ protected:
 private:
 	bool mIsMovingUp = false;
 	bool mIsMine = false;
+	class IGamePlayShakeController* mCameraShake;
 
 public:
 	virtual bool Init() override;
@@ -31,9 +32,16 @@ private:
 	void MoveUpHold(float DeltaTime);
 	void MoveUpRelease(float DeltaTime);
 
+	void CollisionMapBegin(const FVector3D& HitPoint, class CColliderBase* Dest);
+	
+
 public:
-	inline void SetIsMine(bool isMine) { mIsMine = isMine; }
 	bool SetMovePlayer(FVector3D moveValVector);
+	inline void SetIsMine(bool isMine) { mIsMine = isMine; }
+	inline void SetShakeCamera(class IGamePlayShakeController* cameraShake)
+	{
+		mCameraShake = cameraShake;
+	}
 
 	inline bool GetIsMine() { return mIsMine; }
 };

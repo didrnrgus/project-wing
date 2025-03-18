@@ -16,8 +16,12 @@ private:
 	float curHp;
 	float addedSpeed;
 	float addedDex;
+	float addedReleaseStunValue;
+	float addedReleaseProtectionValue;
 
 	bool isStun; // 박았을때 잠시 멈춰야 해서.
+	bool isProtection;
+	// 나중에 스턴회복 능력 시간도 추가하자.
 
 public:
 	bool Init(FCharacterState stat)
@@ -34,6 +38,9 @@ public:
 		curHp = maxHp;
 		addedSpeed = 0.0f;
 		addedDex = 0.0f;
+
+		isStun = false;
+		isProtection = false;
 		return true;
 	}
 
@@ -41,7 +48,26 @@ public:
 	inline void Damaged(int _damageVal) { curHp -= _damageVal; }
 	inline void AddSpeed(int _addSpeedVal) { addedSpeed += _addSpeedVal; }
 	inline void AddDex(int _addDexVal) { addedDex += _addDexVal; }
-	inline void SetStun(bool _isStun) { isStun = _isStun; }
+	inline void SetStun() { isStun = true; }
+	inline void ReleaseStun(float DeltaTime)
+	{
+		addedReleaseStunValue += DeltaTime;
+		if (addedReleaseStunValue > 1.0f)
+		{
+			addedReleaseStunValue = 0.0f;
+			isStun = false;
+			isProtection = true;
+		}
+	}
+	inline void ReleaseProtection(float DeltaTime)
+	{
+		addedReleaseProtectionValue += DeltaTime;
+		if (addedReleaseProtectionValue > 2.0f)
+		{
+			addedReleaseProtectionValue = 0.0f;
+			isProtection = false;
+		}
+	}
 
 	inline int GetIndex() { return index; }
 	inline float GetMaxHP() { return maxHp; }
@@ -50,4 +76,5 @@ public:
 	inline float GetDex() { return baseDex +  addedDex; }
 	inline bool GetIsDeath() { return GetCurHP() > 0.0f; }
 	inline bool GetIsStun() { return isStun; }
+	inline bool GetIsProtection() { return isProtection; }
 };

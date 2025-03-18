@@ -167,7 +167,7 @@
     <ClInclude Include="Object\PlayerGraphicObject.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\IPlayerGraphicController.h">
+    <ClInclude Include="Interface\IScenePlayerGraphicController.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneInGame.h">
@@ -212,13 +212,16 @@
     <ClInclude Include="Object\PlayerInGameObject.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\IPlayerInGameController.h">
+    <ClInclude Include="Interface\IScenePlayerInGameController.h">
       <Filter>Interface</Filter>
     </ClInclude>
     <ClInclude Include="Interface\IPlayerStatController.h">
       <Filter>Interface</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\IGamePlayController.h">
+    <ClInclude Include="Interface\IGamePlayStateController.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IGamePlayShakeController.h">
       <Filter>Interface</Filter>
     </ClInclude>
   </ItemGroup>

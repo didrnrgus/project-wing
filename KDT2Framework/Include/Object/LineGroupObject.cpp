@@ -8,7 +8,7 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/ConstString.h"
 #include "Interface/IPlayerStatController.h"
-#include "Interface/IGamePlayController.h"
+#include "Interface/IGamePlayStateController.h"
 
 CLineGroupObject::CLineGroupObject()
 {
@@ -49,7 +49,10 @@ void CLineGroupObject::PreUpdate(float DeltaTime)
 {
 	CSceneObject::PreUpdate(DeltaTime);
 
-	if (GetGamePlayState() != EGamePlayState::Start)
+	if (GetGamePlayState() < EGamePlayState::Start)
+		return;
+
+	if (mTargetPlayerStat->GetIsStun())
 		return;
 
 	MoveLines(DeltaTime);
@@ -62,7 +65,7 @@ void CLineGroupObject::Update(float DeltaTime)
 
 void CLineGroupObject::SetGamePlayState(EGamePlayState::Type type)
 {
-	IGamePlayController::SetGamePlayState(type);
+	IGamePlayStateController::SetGamePlayState(type);
 
 	CLog::PrintLog("CLineGroupObject::SetGamePlayState type: " + std::to_string(type));
 }

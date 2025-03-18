@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "Scene\Scene.h"
-#include "Interface/IPlayerInGameController.h"
-#include "Interface/IGamePlayController.h"
+#include "Interface/IScenePlayerInGameController.h"
+#include "Interface/IGamePlayStateController.h"
 
-class CSceneInGame : public CScene, public IPlayerInGameController
+class CSceneInGame : public CScene, public IScenePlayerInGameController
 {
 	friend class CSceneManager;
 
@@ -12,7 +12,8 @@ private:
 	virtual ~CSceneInGame();
 
 private:
-	std::vector<IGamePlayController*> mArrGamePlayCtlr;
+	std::vector<IGamePlayStateController*> mArrGamePlayCtlr;
+	EGamePlayState::Type mGamePlayState = EGamePlayState::Ready;
 
 protected:
 	virtual bool Init() override;
@@ -24,6 +25,7 @@ protected:
 	virtual bool SetMovePlayer(int playerIndex, FVector3D moveValVector) override;
 	
 	void SetGamePlayState(EGamePlayState::Type type);
+	EGamePlayState::Type GetGamePlayState() { return mGamePlayState; }
 };
 
 

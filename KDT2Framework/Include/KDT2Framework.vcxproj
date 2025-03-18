@@ -196,9 +196,10 @@
     <ClInclude Include="Etc\NotionDBController.h" />
     <ClInclude Include="Etc\TaskManager.h" />
     <ClInclude Include="Etc\ZOrderContainer.h" />
-    <ClInclude Include="Interface\IGamePlayController.h" />
-    <ClInclude Include="Interface\IPlayerGraphicController.h" />
-    <ClInclude Include="Interface\IPlayerInGameController.h" />
+    <ClInclude Include="Interface\IGamePlayShakeController.h" />
+    <ClInclude Include="Interface\IGamePlayStateController.h" />
+    <ClInclude Include="Interface\IScenePlayerGraphicController.h" />
+    <ClInclude Include="Interface\IScenePlayerInGameController.h" />
     <ClInclude Include="Interface\IPlayerStatController.h" />
     <ClInclude Include="Object\CameraObject.h" />
     <ClInclude Include="Object\LineGroupObject.h" />

@@ -3,7 +3,7 @@
 #include "Component/SceneComponent.h"
 
 class CColliderBase abstract :
-    public CSceneComponent
+	public CSceneComponent
 {
 	friend class CScene;
 	friend class CSceneObject;
@@ -25,9 +25,9 @@ protected:
 	FCollisionProfile* mProfile = nullptr;
 	bool			mCollision = false;
 	std::function<void(const FVector3D&, CColliderBase*)>	mCollisionBeginFunc;
-	class CSceneObject*		mBeginObj;
+	class CSceneObject* mBeginObj;
 	std::function<void(CColliderBase*)>	mCollisionEndFunc;
-	class CSceneObject*		mEndObj;
+	class CSceneObject* mEndObj;
 
 #ifdef _DEBUG
 
@@ -88,15 +88,18 @@ public:
 	virtual void EraseOwner();
 	virtual bool Collision(FVector3D& HitPoint, CColliderBase* Dest) = 0;
 
-
 public:
 	template <typename T>
-	void SetCollisionBeginFunc(T* Obj,
-		void (T::* Func)(const FVector3D&, CColliderBase*))
+	void SetCollisionBeginFunc(T* Obj, void (T::* Func)(const FVector3D&, CColliderBase*))
 	{
 		mBeginObj = Obj;
-		mCollisionBeginFunc = std::bind(Func, Obj,
-			std::placeholders::_1, std::placeholders::_2);
+		mCollisionBeginFunc = std::bind(Func, Obj, std::placeholders::_1, std::placeholders::_2);
+	}
+
+	using T0 = std::function<void(const FVector3D&, CColliderBase*)>;
+	void SetCollisionBeginFunc(T0&& Func)
+	{
+		mCollisionBeginFunc = std::move(Func);
 	}
 
 	void ClearBeginFunction()
@@ -105,12 +108,16 @@ public:
 	}
 
 	template <typename T>
-	void SetCollisionEndFunc(T* Obj,
-		void (T::* Func)(CColliderBase*))
+	void SetCollisionEndFunc(T* Obj, void (T::* Func)(CColliderBase*))
 	{
 		mEndObj = Obj;
-		mCollisionEndFunc = std::bind(Func, Obj,
-			std::placeholders::_1);
+		mCollisionEndFunc = std::bind(Func, Obj, std::placeholders::_1);
+	}
+
+	using T1 = std::function<void(CColliderBase*)>;
+	void SetCollisionEndFunc(T1&& Func)
+	{
+		mCollisionEndFunc = std::move(Func);
 	}
 
 	void ClearEndFunction()

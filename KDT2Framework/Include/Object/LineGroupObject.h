@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include "Object/SceneObject.h"
 #include "Etc/JsonContainer.h"
-#include "Interface/IGamePlayController.h"
+#include "Interface/IGamePlayStateController.h"
 
 namespace ELinePosType
 {
@@ -12,7 +12,7 @@ namespace ELinePosType
 	};
 }
 
-class CLineGroupObject : public CSceneObject, public IGamePlayController
+class CLineGroupObject : public CSceneObject, public IGamePlayStateController
 {
 	friend class CScene;
 

@@ -374,3 +374,17 @@ namespace EGameScene
 		End
 	};
 }
+
+namespace EGamePlayState
+{
+	enum Type
+	{
+		Ready,
+		ReadyCount,
+		Start,
+		//Playing,
+		Pause,	// 로컬에서 자기자신만 가능. -> 인게임중 팝업?
+		Exit,	// 로컬에서 자기자신만 가능. -> 인게임중 나가버림.
+		End		// 정상종료
+	};
+}
