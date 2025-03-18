@@ -23,7 +23,6 @@ bool CSceneInGame::Init()
 {
     CScene::Init();
 
-    #ifdef _DEBUG
 	GetInput()->AddBindKey("StartAndStop", VK_SPACE);
 	GetInput()->AddBindFunction("StartAndStop", EInputType::Down
         , [this](float DeltaTime)
@@ -34,7 +33,6 @@ bool CSceneInGame::Init()
             else
                 SetGamePlayState(EGamePlayState::Pause);
         });
-    #endif // _DEBUG
 
     return true;
 }
@@ -52,7 +50,6 @@ bool CSceneInGame::InitObject()
 
     // players init
     players.resize(5, nullptr); // 미리 칸 만들어놓기.
-
 
     // my player setting
     players[0] = playerInGame;

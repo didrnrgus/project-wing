@@ -185,7 +185,7 @@
     <ClInclude Include="Object\LineGroupObject.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Etc\ConstString.h">
+    <ClInclude Include="Etc\ConstValues.h">
       <Filter>Etc</Filter>
     </ClInclude>
     <ClInclude Include="Etc\CURL.h">

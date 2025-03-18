@@ -3,7 +3,7 @@
 #include "Scene/Input.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderSphere2D.h"
-#include "Etc/ConstString.h"
+#include "Etc/ConstValues.h"
 #include "Interface/IPlayerStatController.h"
 #include "Interface/IGamePlayStateController.h"
 #include "Interface/IGamePlayShakeController.h"
@@ -35,11 +35,11 @@ bool CPlayerInGameObject::Init()
 	mBody->SetRadius(scale.y * 0.2f);
 	
 	mBody->SetCollisionBeginFunc<CPlayerInGameObject>(this, &CPlayerInGameObject::CollisionMapBegin);
-	mBody->SetCollisionEndFunc(
-		[](CColliderBase* Dest)
-		{
-			CLog::PrintLog("mBody->SetCollisionEndFunc");
-		});
+	//mBody->SetCollisionEndFunc(
+	//	[](CColliderBase* Dest)
+	//	{
+	//		CLog::PrintLog("mBody->SetCollisionEndFunc");
+	//	});
 
 	mScene->GetInput()->AddBindKey("MoveUp", VK_LBUTTON);
 	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("MoveUp",
@@ -68,6 +68,8 @@ void CPlayerInGameObject::Update(float DeltaTime)
 		ReleaseStun(DeltaTime);
 	}
 
+	UpdateDecreaseHp(DeltaTime);
+
 	if (!mIsMovingUp && mIsMine)
 	{
 		//CLog::PrintLog("CPlayerInGameObject::Update mIsMovingUp: " + std::to_string(mIsMovingUp));
@@ -79,7 +81,7 @@ void CPlayerInGameObject::SetGamePlayState(EGamePlayState::Type type)
 {
 	IGamePlayStateController::SetGamePlayState(type);
 
-	CLog::PrintLog("CPlayerInGameObject::SetGamePlayState type: " + std::to_string(type));
+	//CLog::PrintLog("CPlayerInGameObject::SetGamePlayState type: " + std::to_string(type));
 }
 
 void CPlayerInGameObject::MoveDown(float DeltaTime)
@@ -91,7 +93,7 @@ void CPlayerInGameObject::MoveDown(float DeltaTime)
 void CPlayerInGameObject::MoveUpStart(float DeltaTime)
 {
 	mIsMovingUp = true;
-	CLog::PrintLog("CPlayerInGameObject::MoveUpStart mIsMovingUp: " + std::to_string(mIsMovingUp));
+	//CLog::PrintLog("CPlayerInGameObject::MoveUpStart mIsMovingUp: " + std::to_string(mIsMovingUp));
 }
 
 void CPlayerInGameObject::MoveUpHold(float DeltaTime)
@@ -104,7 +106,7 @@ void CPlayerInGameObject::MoveUpHold(float DeltaTime)
 void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
 {
 	mIsMovingUp = false;
-	CLog::PrintLog("CPlayerInGameObject::MoveUpRelease mIsMovingUp: " + std::to_string(mIsMovingUp));
+	//CLog::PrintLog("CPlayerInGameObject::MoveUpRelease mIsMovingUp: " + std::to_string(mIsMovingUp));
 }
 
 void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CColliderBase* Dest)
@@ -120,6 +122,7 @@ void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CCollider
 
 	mCameraShake->SetShakeSceneObject(0.5f, 10.0f);
 	SetStun();
+	Damaged(20.0f);
 	CLog::PrintLog("CPlayerInGameObject::CollisionMap");
 }
 
@@ -134,6 +137,28 @@ void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector, float DeltaTi
 
 	auto pos = mRoot->GetWorldPosition();
 	mRoot->SetWorldPos(pos + moveValueVector);
+}
+
+void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
+{
+	if (GetGamePlayState() < EGamePlayState::Start)
+		return;
+
+	if (GetIsStun())
+		return;
+
+	if (GetIsProtection())
+		return;
+
+	//CLog::PrintLog("CPlayerInGameObject::UpdateDecreaseHp()");
+
+#ifdef _DEBUG
+	Damaged(DeltaTime * 10.0f);
+#else
+	Damaged(DeltaTime);
+#endif // _DEBUG
+
+	
 }
 
 void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector)

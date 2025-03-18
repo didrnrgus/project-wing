@@ -16,5 +16,5 @@ public:
 		gamePlayState = type;
 	}
 
-	EGamePlayState::Type GetGamePlayState() { return gamePlayState; };
+	inline EGamePlayState::Type GetGamePlayState() { return gamePlayState; };
 };

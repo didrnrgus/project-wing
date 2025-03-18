@@ -1,5 +1,5 @@
 ﻿#include "ProfileManager.h"
-#include "Etc/ConstString.h"
+#include "Etc/ConstValues.h"
 
 DEFINITION_SINGLE(CProfileManager)
 

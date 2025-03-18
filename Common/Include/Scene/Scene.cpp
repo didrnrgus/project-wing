@@ -70,8 +70,8 @@ bool CScene::Init()
 		return false;
 
 	InitAsset();
-	InitWidget();
 	InitObject();
+	InitWidget();
 
 	return true;
 }

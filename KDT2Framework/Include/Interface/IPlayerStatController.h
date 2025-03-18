@@ -21,7 +21,8 @@ private:
 
 	bool isStun; // 박았을때 잠시 멈춰야 해서.
 	bool isProtection;
-	// 나중에 스턴회복 능력 시간도 추가하자.
+
+	// 스탯에 방어력 추가
 
 public:
 	bool Init(FCharacterState stat)
@@ -45,9 +46,9 @@ public:
 	}
 
 	inline void SetIndex(int _index) { index = _index; }
-	inline void Damaged(int _damageVal) { curHp -= _damageVal; }
-	inline void AddSpeed(int _addSpeedVal) { addedSpeed += _addSpeedVal; }
-	inline void AddDex(int _addDexVal) { addedDex += _addDexVal; }
+	inline void Damaged(float _damageVal) { curHp -= _damageVal; }
+	inline void AddSpeed(float _addSpeedVal) { addedSpeed += _addSpeedVal; }
+	inline void AddDex(float _addDexVal) { addedDex += _addDexVal; }
 	inline void SetStun() { isStun = true; }
 	inline void ReleaseStun(float DeltaTime)
 	{

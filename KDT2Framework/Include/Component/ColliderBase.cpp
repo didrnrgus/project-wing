@@ -8,7 +8,7 @@
 #include "Shader/ShaderManager.h"
 #include "Scene/CameraManager.h"
 #include "Asset/Mesh/Mesh.h"
-#include "Etc/ConstString.h"
+#include "Etc/ConstValues.h"
 
 CColliderBase::CColliderBase()
 {

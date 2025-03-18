@@ -10,12 +10,15 @@ protected:
 	virtual ~CInGameWidget();
 
 private:
-	CSharedPtr<class CImage> mHPFrontImage;
-	FVector2D mHPFrontSize;
+	CSharedPtr<class CImage> mHpFrontImage;
+	FVector2D mHpFrontSize;
 	class IPlayerStatController* mPlayerStat;
 
 public:
 	virtual bool Init() override;
 	virtual void Update(float DeltaTime) override;
+
+protected:
+	void UpdateTargetPlayerStat(float DeltaTime);
 };
 

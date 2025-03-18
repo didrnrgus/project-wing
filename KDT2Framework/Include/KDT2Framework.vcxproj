@@ -188,7 +188,7 @@
     <ClInclude Include="Component\ColliderLine2D.h" />
     <ClInclude Include="Component\ColliderOBB2D.h" />
     <ClInclude Include="Component\ColliderSphere2D.h" />
-    <ClInclude Include="Etc\ConstString.h" />
+    <ClInclude Include="Etc\ConstValues.h" />
     <ClInclude Include="Etc\CURL.h" />
     <ClInclude Include="Etc\DataStorageManager.h" />
     <ClInclude Include="Etc\JsonContainer.h" />

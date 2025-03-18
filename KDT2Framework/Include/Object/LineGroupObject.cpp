@@ -6,7 +6,7 @@
 #include "Scene/Input.h"
 #include "Scene/Scene.h"
 #include "Etc/DataStorageManager.h"
-#include "Etc/ConstString.h"
+#include "Etc/ConstValues.h"
 #include "Interface/IPlayerStatController.h"
 #include "Interface/IGamePlayStateController.h"
 

@@ -27,13 +27,13 @@ bool CInGameWidget::Init()
 	FResolution RS = CDevice::GetInst()->GetResolution();
 
 	CSharedPtr<CImage> hpBackImage = mScene->GetUIManager()->CreateWidget<CImage>("HPBackImage");
-	mHPFrontImage = mScene->GetUIManager()->CreateWidget<CImage>("HPImage");
+	mHpFrontImage = mScene->GetUIManager()->CreateWidget<CImage>("HPImage");
 	AddWidget(hpBackImage);
-	AddWidget(mHPFrontImage);
+	AddWidget(mHpFrontImage);
 
 	FVector2D pivot = FVector2D(0.0f, 1.0f);
 	FVector2D backSize = FVector2D(RS.Width * 0.4f, 30.0f);
-	mHPFrontSize = backSize + FVector2D(-10.0f, -10.0f);
+	mHpFrontSize = backSize + FVector2D(-10.0f, -10.0f);
 	FVector2D backPos = FVector2D(40.0f, RS.Height - 40.0f);
 	FVector2D frontPos = backPos + FVector2D(5.0f, -5.0f);
 
@@ -44,12 +44,12 @@ bool CInGameWidget::Init()
 	hpBackImage->SetOpacity(0.5f);
 	hpBackImage->SetPos(backPos);
 
-	mHPFrontImage->SetTexture("Texture/basic.png");
-	mHPFrontImage->SetPivot(pivot);
-	mHPFrontImage->SetSize(mHPFrontSize);
-	mHPFrontImage->SetColor(FVector4D::Red);
-	mHPFrontImage->SetOpacity(0.5f);
-	mHPFrontImage->SetPos(frontPos);
+	mHpFrontImage->SetTexture("Texture/basic.png");
+	mHpFrontImage->SetPivot(pivot);
+	mHpFrontImage->SetSize(mHpFrontSize);
+	mHpFrontImage->SetColor(FVector4D::Red);
+	mHpFrontImage->SetOpacity(0.5f);
+	mHpFrontImage->SetPos(frontPos);
 
 	auto inGameScene = dynamic_cast<CSceneInGame*>(mScene);
 	int myPlayerIndex = CDataStorageManager::GetInst()->GetSelectedCharacterIndex();
@@ -72,4 +72,19 @@ void CInGameWidget::Update(float DeltaTime)
 {
 	CUserWidget::Update(DeltaTime);
 
+	if (mPlayerStat)
+		UpdateTargetPlayerStat(DeltaTime);
+}
+
+void CInGameWidget::UpdateTargetPlayerStat(float DeltaTime)
+{
+	// HP Gauge
+	float maxHp = mPlayerStat->GetMaxHP();
+	float curHp = mPlayerStat->GetCurHP();
+	float maxHpSizeX = mHpFrontSize.x;
+	float curHpSizeX = maxHpSizeX * (curHp / maxHp);
+
+	//CLog::PrintLog("CInGameWidget::UpdateTargetPlayerStat maxHp: " + std::to_string(maxHp));
+	//CLog::PrintLog("CInGameWidget::UpdateTargetPlayerStat curHp: " + std::to_string(curHp));
+	mHpFrontImage->SetSize(FVector2D(curHpSizeX, mHpFrontSize.y));
 }

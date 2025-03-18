@@ -1,7 +1,7 @@
 ﻿#pragma once
 
 #include "GameInfo.h"
-#include "Etc/ConstString.h"
+#include "Etc/ConstValues.h"
 #include "Etc/JsonContainer.h"
 
 namespace nlohmann {
