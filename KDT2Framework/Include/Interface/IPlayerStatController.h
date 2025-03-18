@@ -10,42 +10,44 @@ class IPlayerStatController abstract
 private:
 	int index;
 	float maxHp;
+	float baseSpeed;
+	float baseDex;
+
 	float curHp;
-	float speed;
-	float dex;
-	bool isPlay;
+	float addedSpeed;
+	float addedDex;
+
+	bool isStun; // 박았을때 잠시 멈춰야 해서.
 
 public:
 	bool Init(FCharacterState stat)
 	{
-		maxHp = stat.HP;
-		curHp = maxHp;
-		speed = stat.Speed;
-		dex = stat.Dex;
-
-		return true;
+		return Init(stat.HP, stat.Speed, stat.Dex);
 	}
 
 	bool Init(float _maxHp, float _speed, float _dex)
 	{
 		maxHp = _maxHp;
-		curHp = maxHp;
-		speed = _speed;
-		dex = _dex;
+		baseSpeed = _speed;
+		baseDex = _dex;
 
+		curHp = maxHp;
+		addedSpeed = 0.0f;
+		addedDex = 0.0f;
 		return true;
 	}
 
-	void SetIndex(int _index) { index = _index; }
-	void Damaged(int _damageVal) { curHp -= _damageVal; }
-	void AddSpeed(int _addSpeedVal) { speed += _addSpeedVal; }
-	void AddDex(int _addDexVal) { dex += _addDexVal; }
-	void SetIsPlay(bool _isPlay) { isPlay = _isPlay; }
+	inline void SetIndex(int _index) { index = _index; }
+	inline void Damaged(int _damageVal) { curHp -= _damageVal; }
+	inline void AddSpeed(int _addSpeedVal) { addedSpeed += _addSpeedVal; }
+	inline void AddDex(int _addDexVal) { addedDex += _addDexVal; }
+	inline void SetStun(bool _isStun) { isStun = _isStun; }
 
-	int GetIndex() { return index; }
-	float GetMaxHP() { return maxHp; }
-	float GetCurHP() { return curHp; }
-	float GetSpeed() { return speed; }
-	float GetDex() { return dex; }
-	bool GetIsPlay() { return isPlay; }
+	inline int GetIndex() { return index; }
+	inline float GetMaxHP() { return maxHp; }
+	inline float GetCurHP() { return curHp; }
+	inline float GetSpeed() { return baseSpeed + addedSpeed; }
+	inline float GetDex() { return baseDex +  addedDex; }
+	inline bool GetIsDeath() { return GetCurHP() > 0.0f; }
+	inline bool GetIsStun() { return isStun; }
 };

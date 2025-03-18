@@ -11,6 +11,7 @@ private:
 	virtual ~CSceneInGame();
 
 protected:
+	virtual bool Init() override;
 	virtual bool InitAsset() override;
 	virtual bool InitObject() override;
 	virtual bool InitWidget() override;

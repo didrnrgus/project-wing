@@ -39,12 +39,6 @@ bool CLineGroupObject::Init()
 	mRoot = CreateComponent<CSceneComponent>("Root");
 	SetRootComponent(mRoot);
 
-//#ifdef _DEBUG
-//	mScene->GetInput()->AddBindKey("PauseMove", 'P');
-//	mScene->GetInput()->AddBindFunction<CLineGroupObject>("PauseMove",
-//		EInputType::Down, this, &CLineGroupObject::PauseMove);
-//#endif // _DEBUG
-
 	InitLines();
 
 	return true;

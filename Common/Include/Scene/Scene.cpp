@@ -231,18 +231,3 @@ void CScene::EndFrame()
 		(*iter)->EndFrame();
 	}
 }
-
-bool CScene::InitAsset()
-{
-	return false;
-}
-
-bool CScene::InitObject()
-{
-	return false;
-}
-
-bool CScene::InitWidget()
-{
-	return false;
-}

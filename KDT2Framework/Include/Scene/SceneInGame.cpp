@@ -7,13 +7,30 @@
 #include "Object/CameraObject.h"
 #include "Etc/DataStorageManager.h"
 #include "Interface/IPlayerStatController.h"
+#include "Scene/Input.h"
 
 CSceneInGame::CSceneInGame()
 {
 }
 
 CSceneInGame::~CSceneInGame()
+{ 
+}
+
+bool CSceneInGame::Init()
 {
+    CScene::Init();
+
+    #ifdef _DEBUG
+	GetInput()->AddBindKey("StartAndStop", VK_SPACE);
+	GetInput()->AddBindFunction("StartAndStop", EInputType::Down
+        , [this](float DeltaTime)
+        {
+            CLog::PrintLog("StartAndStop Trigger Lambda");
+        });
+    #endif // _DEBUG
+
+    return true;
 }
 
 bool CSceneInGame::InitAsset()

@@ -160,8 +160,8 @@ private:
 
 public:
 	template <typename T>
-	void AddBindFunction(const std::string& KeyName, EInputType::Type Type,
-		T* Object, void (T::* Func)(float))
+	void AddBindFunction(const std::string& KeyName, EInputType::Type Type
+		, T* Object, void (T::* Func)(float))
 	{
 		FBindKey* BindKey = FindBindKey(KeyName);
 
@@ -175,6 +175,20 @@ public:
 		// 만들어준다.
 		BindFunc.Func = std::bind(Func, Object, std::placeholders::_1);
 
+		BindKey->FunctionList[Type].emplace_back(BindFunc);
+	}
+
+	// 람다 넣으려고.
+	using T = std::function<void(float)>;
+	void AddBindFunction(const std::string& KeyName, EInputType::Type Type, T&& Func)
+	{
+		FBindKey* BindKey = FindBindKey(KeyName);
+
+		if (!BindKey)
+			return;
+
+		FBindFunction	BindFunc;
+		BindFunc.Func = std::move(Func);
 		BindKey->FunctionList[Type].emplace_back(BindFunc);
 	}
 
