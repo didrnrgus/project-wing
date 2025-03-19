@@ -45,6 +45,12 @@ public:
 	inline const int GetLineNodeCountInSelectedMap() { return mMapInfoDatas[curSelectedMapIndex].lineNodes.size(); }
 	const FLineNode GetLineNodeInSelectedMap(int lineNodeIndex);
 
+	inline const FVector2D GetSpritSheetImageSize(std::string keyFileName)
+	{
+		auto info = mSpriteAtlasInfoByFileName[keyFileName];
+		return FVector2D(info.SizeX, info.SizeY);
+	}
+
 	inline const int GetSpritSheetCount(std::string keyFileName)
 	{
 		return mSpriteAtlasInfoBySpriteName[keyFileName].size();

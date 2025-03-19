@@ -22,10 +22,16 @@ bool CJsonController::ParseJson(const nlohmann::json& json
 	std::map<std::string, FSpriteSheetInfo> spriteSheetInfosByName;
 
 	if (json.contains("fileName"))
-		atlasInfo.FileName = json["fileName"];
+		atlasInfo.FileName = json["fileName"].get<std::string>();
 
 	if (json.contains("prefix"))
-		atlasInfo.Prefix = json["prefix"];
+		atlasInfo.Prefix = json["prefix"].get<std::string>();
+
+	if (json.contains("sizeX"))
+		atlasInfo.SizeX = json["sizeX"].get<float>();
+
+	if (json.contains("sizeY"))
+		atlasInfo.SizeY = json["sizeY"].get<float>();
 
 	if (json.contains("sprites") && json["sprites"].is_array())
 	{
@@ -50,6 +56,12 @@ bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string
 
 	if (json.contains("prefix"))
 		atlasInfo.Prefix = json["prefix"];
+
+	if (json.contains("sizeX"))
+		atlasInfo.SizeX = json["sizeX"].get<float>();
+
+	if (json.contains("sizeY"))
+		atlasInfo.SizeY = json["sizeY"].get<float>();
 
 	if (json.contains("sprites") && json["sprites"].is_array())
 	{
