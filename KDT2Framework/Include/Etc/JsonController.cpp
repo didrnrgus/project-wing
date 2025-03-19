@@ -40,6 +40,8 @@ bool CJsonController::ParseJson(const nlohmann::json& json, std::map<int, FChara
 				characterState.HP = character["hp"].get<float>();
 			if (character.contains("dex"))
 				characterState.Dex = character["dex"].get<float>();
+			if (character.contains("def"))
+				characterState.Def = character["def"].get<float>();
 
 			if (character.contains("image_sequence_name"))
 				characterState.ImageSequenceName = character["image_sequence_name"].get<std::string>();
@@ -99,6 +101,9 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FMapInfo& data)
 
 	if (json.contains("difficulty_rate"))
 		data.DifficultyRate = json["difficulty_rate"].get<float>();
+	
+	if (json.contains("collision_damage"))
+		data.CollisionDamage = json["collision_damage"].get<float>();
 
 	if (json.contains("line_node_list") && json["line_node_list"].is_array())
 	{

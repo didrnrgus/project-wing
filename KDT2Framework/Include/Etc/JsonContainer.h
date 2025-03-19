@@ -39,7 +39,8 @@ struct FLineNode
     "index": 0,
     "name": "Easy",
     "difficulty_color_name": "Cyan",
-    "difficulty_rate": 0.1,
+    "difficulty_rate": 10.0,
+    "collision_damage": 20.0,
     "line_node_list": [
         {
             "top_y_pos": 720.0,
@@ -54,6 +55,7 @@ struct FMapInfo
 	std::string Name;
     std::string DifficultyColorName;
     float DifficultyRate;
+    float CollisionDamage;
 	std::vector<FLineNode> lineNodes;
 
     const wchar_t* GetIconPath(int idx) 
@@ -74,17 +76,19 @@ struct FMapInfo
 };
 
 /*
+{
     "character_list": [
         {
             "index": 0,
             "name": "Yang",
             "color_name": "White",
-            "speed": 110.0,
-            "hp": 120.0,
-            "dex": 130.0,
+            "speed": 700.0,
+            "hp": 100.0,
+            "dex": 100.0,
+            "def": 10.0,
             "image_sequence_name": "PlayerIdle",
-            "size_x": 120.0,
-            "size_y": 110.0
+            "size_x": 200.0,
+            "size_y": 135.0
         },
         ...
 */
@@ -96,6 +100,7 @@ struct FCharacterState
     float Speed;
     float HP;
     float Dex;
+    float Def;
     std::string ImageSequenceName;
     float SizeX;
     float SizeY;

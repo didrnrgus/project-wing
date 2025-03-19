@@ -12,10 +12,13 @@ private:
 	float maxHp;
 	float baseSpeed;
 	float baseDex;
+	float baseDef;
 
 	float curHp;
 	float addedSpeed;
 	float addedDex;
+	float addedDef;
+
 	float addedReleaseStunValue;
 	float addedReleaseProtectionValue;
 
@@ -27,18 +30,20 @@ private:
 public:
 	bool Init(FCharacterState stat)
 	{
-		return Init(stat.HP, stat.Speed, stat.Dex);
+		return Init(stat.HP, stat.Speed, stat.Dex, stat.Def);
 	}
 
-	bool Init(float _maxHp, float _speed, float _dex)
+	bool Init(float _maxHp, float _speed, float _dex, float _def)
 	{
 		maxHp = _maxHp;
 		baseSpeed = _speed;
 		baseDex = _dex;
+		baseDef = _def;
 
 		curHp = maxHp;
 		addedSpeed = 0.0f;
 		addedDex = 0.0f;
+		addedDef = 0.0f;
 
 		isStun = false;
 		isProtection = false;
@@ -46,9 +51,21 @@ public:
 	}
 
 	inline void SetIndex(int _index) { index = _index; }
-	inline void Damaged(float _damageVal) { curHp -= _damageVal; }
+	inline void Damaged(float _damageVal)
+	{
+		float result = _damageVal - GetDef();
+		result = result < 0.0f ? 0.0f : result;
+		curHp -= result;
+	}
+	inline void DamagedPerDistance(float _damageVal)
+	{
+		float result = _damageVal - (_damageVal * (GetDef() * 0.01f));
+		result = result < 0.0f ? 0.0f : result;
+		curHp -= result;
+	}
 	inline void AddSpeed(float _addSpeedVal) { addedSpeed += _addSpeedVal; }
 	inline void AddDex(float _addDexVal) { addedDex += _addDexVal; }
+	inline void AddDef(float _addDefVal) { addedDef += _addDefVal; }
 	inline void SetStun() { isStun = true; }
 	inline void ReleaseStun(float DeltaTime)
 	{
@@ -74,7 +91,8 @@ public:
 	inline float GetMaxHP() { return maxHp; }
 	inline float GetCurHP() { return curHp; }
 	inline float GetSpeed() { return baseSpeed + addedSpeed; }
-	inline float GetDex() { return baseDex +  addedDex; }
+	inline float GetDex() { return baseDex + addedDex; }
+	inline float GetDef() { return baseDef + addedDef; }
 	inline bool GetIsDeath() { return GetCurHP() > 0.0f; }
 	inline bool GetIsStun() { return isStun; }
 	inline bool GetIsProtection() { return isProtection; }

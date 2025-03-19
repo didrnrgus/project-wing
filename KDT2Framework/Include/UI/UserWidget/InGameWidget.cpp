@@ -52,11 +52,10 @@ bool CInGameWidget::Init()
 	mHpFrontImage->SetPos(frontPos);
 
 	auto inGameScene = dynamic_cast<CSceneInGame*>(mScene);
-	int myPlayerIndex = CDataStorageManager::GetInst()->GetSelectedCharacterIndex();
-
 	if (inGameScene)
 	{
-		auto player = inGameScene->GetPlayer(myPlayerIndex);
+		// 내가 조작하는 플레이어를 가져와서 거기에 붙은 스탯을 불러오는것.
+		auto player = inGameScene->GetPlayer(0);
 		mPlayerStat = dynamic_cast<IPlayerStatController*>(player);
 
 		if (mPlayerStat == nullptr)

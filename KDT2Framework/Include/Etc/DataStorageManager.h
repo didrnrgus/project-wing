@@ -24,9 +24,16 @@ public:
 
 	inline const FConfig GetConfig() { return mConfigData; }
 	inline const int GetCharacterCount() { return mCharacterDatas.size(); }
+
+	//인덱스에 따른 캐릭터 가져오기.
 	inline const FCharacterState GetCharacterState(int index) { return mCharacterDatas[index]; }
+
+	// 내가 고른 캐릭의 데이터
 	inline const FCharacterState GetSelectedCharacterState() { return mCharacterDatas[curSelectedCharacterIndex]; }
+
+	// 이건 캐릭 종류의 인덱스
 	inline const int GetSelectedCharacterIndex() { return curSelectedCharacterIndex; }
+
 	inline const int GetMapInfoCount() { return mMapInfoDatas.size(); }
 	inline const FMapInfo GetMapInfo(int index) { return mMapInfoDatas[index]; }
 	inline const FMapInfo GetSelectedMapInfo() { return mMapInfoDatas[curSelectedMapIndex]; }

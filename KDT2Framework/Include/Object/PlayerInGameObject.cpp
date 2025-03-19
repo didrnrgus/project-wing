@@ -7,6 +7,7 @@
 #include "Interface/IPlayerStatController.h"
 #include "Interface/IGamePlayStateController.h"
 #include "Interface/IGamePlayShakeController.h"
+#include "Etc/DataStorageManager.h"
 
 CPlayerInGameObject::CPlayerInGameObject()
 {
@@ -60,7 +61,16 @@ void CPlayerInGameObject::Update(float DeltaTime)
 
 	if (GetIsProtection())
 	{
+		mRoot->SetOpacity(0.5f);
 		ReleaseProtection(DeltaTime);
+	}
+	else
+	{
+#ifdef _DEBUG
+		mRoot->SetOpacity(0.8f);
+#else
+		mRoot->SetOpacity(1.0);
+#endif // _DEBUG
 	}
 
 	if (GetIsStun())
@@ -122,7 +132,7 @@ void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CCollider
 
 	mCameraShake->SetShakeSceneObject(0.5f, 10.0f);
 	SetStun();
-	Damaged(20.0f);
+	Damaged(CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage);
 	CLog::PrintLog("CPlayerInGameObject::CollisionMap");
 }
 
@@ -153,9 +163,9 @@ void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
 	//CLog::PrintLog("CPlayerInGameObject::UpdateDecreaseHp()");
 
 #ifdef _DEBUG
-	Damaged(DeltaTime * 10.0f);
+	DamagedPerDistance(DeltaTime * 10.0f);
 #else
-	Damaged(DeltaTime);
+	DamagedPerDistance(DeltaTime);
 #endif // _DEBUG
 
 	
