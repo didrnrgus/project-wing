@@ -56,6 +56,25 @@ public:
 		return mSpriteAtlasInfoBySpriteName[keyFileName].size();
 	}
 
+	inline std::vector<FSpriteSheetInfo> GetFilteredSpriteSheets(const std::string& keyFileName, const std::string& filterStr)
+	{
+		std::vector<FSpriteSheetInfo> filteredSheets;
+
+		auto it = mSpriteAtlasInfoBySpriteName.find(keyFileName);
+		if (it != mSpriteAtlasInfoBySpriteName.end()) // keyFileName 존재 확인
+		{
+			for (const auto& pair : it->second)
+			{
+				const FSpriteSheetInfo& sheetInfo = pair.second;
+				if (sheetInfo.Name.find(filterStr) != std::string::npos) // 특정 문자열 포함 여부 확인
+				{
+					filteredSheets.push_back(sheetInfo);
+				}
+			}
+		}
+		return filteredSheets;
+	}
+
 	inline const std::string GetSpritSheetPrefix(std::string keyFileName)
 	{
 		return mSpriteAtlasInfoByFileName[keyFileName].Prefix;
