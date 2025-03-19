@@ -34,6 +34,13 @@ void CDataStorageManager::SetMapData(std::string strJson)
 	mMapInfoDatas.insert(std::make_pair(info.Index, info));
 }
 
+void CDataStorageManager::SetSpriteAtlasInfo(std::string strJson)
+{
+	nlohmann::json json = nlohmann::json::parse(strJson);
+	CJsonController::GetInst()->ParseJson(json, mSpriteAtlasInfoBySpriteName);
+	CJsonController::GetInst()->ParseJson(json, mSpriteAtlasInfoByFileName);
+}
+
 const FLineNode CDataStorageManager::GetLineNodeInSelectedMap(int lineNodeIndex)
 {
 	int lineCount = GetLineNodeCountInSelectedMap();

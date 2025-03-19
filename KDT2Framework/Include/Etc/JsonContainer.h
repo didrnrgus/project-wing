@@ -126,3 +126,37 @@ struct FConfig
     std::string CharacterFileName;
 };
 
+
+/*
+{
+{
+    "fileName": "bird_4x1_798x135",
+    "prefix": "bird_",
+    "sprites": [
+        {
+            "name": "bird_0",
+            "x": 2.0,
+            "y": 1.0,
+            "width": 196.0,
+            "height": 134.0,
+            "pivotX": 0.0,
+            "pivotY": 0.0
+        },
+*/
+struct FSpriteSheetInfo
+{
+    std::string Name;
+    float X;
+    float Y;
+    float Width;
+    float Height;
+    float PivotX;
+    float PivotY;
+};
+
+struct FSpriteAtlasInfo
+{
+    std::string FileName;
+    std::string Prefix;
+    std::vector<FSpriteSheetInfo> Sprites;
+};

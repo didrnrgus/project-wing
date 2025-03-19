@@ -10,6 +10,9 @@ private:
 	std::map<int, FCharacterState> mCharacterDatas;
 	std::map<int, FMapInfo> mMapInfoDatas;
 
+	// 아틀라스 내 slace 한스프라이트 시트요소이름.
+	std::map<std::string, std::map<std::string, FSpriteSheetInfo>> mSpriteAtlasInfoBySpriteName;
+	std::map<std::string, FSpriteAtlasInfo> mSpriteAtlasInfoByFileName;
 private:
 	int curSelectedMapIndex;
 	int curSelectedCharacterIndex;
@@ -18,6 +21,7 @@ public:
 	void SetConfigData(std::string strJson);
 	void SetCharacterData(std::string strJson);
 	void SetMapData(std::string strJson);
+	void SetSpriteAtlasInfo(std::string strJson);
 
 	inline void SetSelectedMapIndex(int mapIndex) { curSelectedMapIndex = mapIndex; }
 	inline void SetSelectedCharacterIndex(int characterIndex) { curSelectedCharacterIndex = characterIndex; }
@@ -40,6 +44,21 @@ public:
 	inline const int GetSelectedMapIndex() { return curSelectedMapIndex; }
 	inline const int GetLineNodeCountInSelectedMap() { return mMapInfoDatas[curSelectedMapIndex].lineNodes.size(); }
 	const FLineNode GetLineNodeInSelectedMap(int lineNodeIndex);
+
+	inline const int GetSpritSheetCount(std::string keyFileName)
+	{
+		return mSpriteAtlasInfoBySpriteName[keyFileName].size();
+	}
+
+	inline const std::string GetSpritSheetPrefix(std::string keyFileName)
+	{
+		return mSpriteAtlasInfoByFileName[keyFileName].Prefix;
+	}
+
+	inline const FSpriteSheetInfo GetSpritSheetInfo(std::string keyFileName, std::string keySpriteName)
+	{
+		return mSpriteAtlasInfoBySpriteName[keyFileName][keySpriteName];
+	}
 
 private:
 	DECLARE_SINGLE(CDataStorageManager)

@@ -1,6 +1,8 @@
 ﻿#include "Animation2DManager.h"
 #include "Animation2DData.h"
 #include "Animation/Animation2D.h"
+#include "Etc/JsonController.h"
+#include "Etc/DataStorageManager.h"
 
 CAnimation2DManager::CAnimation2DManager()
 {
@@ -15,20 +17,43 @@ bool CAnimation2DManager::Init()
 {
 	CAnimation2D::CreateCBuffer();
 
-	// 새 이미지
+	//// 새 이미지
+	//{
+	//	CreateAnimation("PlayerIdle");
+	//	SetAnimationTextureType("PlayerIdle", EAnimationTextureType::SpriteSheet);
+	//	SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture/bird_4x1_798x135.png")); // 798 * 135
+
+	//	float sizeX = 798 / 4;
+	//	float sizeY = 135;
+
+	//	for (int i = 0; i < 2; ++i)
+	//	{
+	//		AddFrame("PlayerIdle", sizeX * i, sizeY, sizeX, sizeY);
+	//	}
+	//}
+
+	// 유니티에서 뽑아온거 테스트
 	{
+		std::string path = "..\\Bin\\Asset\\Texture\\SpriteSheet\\";
+		std::string fileName = "bird_4x1_798x135";
+		std::string strJson = CJsonController::GetInst()->ReadJsonFile(path + fileName + ".json");
+
 		CreateAnimation("PlayerIdle");
 		SetAnimationTextureType("PlayerIdle", EAnimationTextureType::SpriteSheet);
-		SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture/bird_4x1_798x135.png")); // 798 * 135
+		SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture/SpriteSheet/bird_4x1_798x135.png"));
 
-		float sizeX = 798 / 4;
-		float sizeY = 135;
+		// 넣기.
+		CDataStorageManager::GetInst()->SetSpriteAtlasInfo(strJson);
+		int count = CDataStorageManager::GetInst()->GetSpritSheetCount(fileName);
+		std::string prefix = CDataStorageManager::GetInst()->GetSpritSheetPrefix(fileName);
 
-		for (int i = 0; i < 2; ++i)
+		for (int i = 0; i < count; i++)
 		{
-			AddFrame("PlayerIdle", sizeX * i, sizeY, sizeX, sizeY);
+			auto info = CDataStorageManager::GetInst()->GetSpritSheetInfo(fileName, prefix + std::to_string(i));
+			AddFrame("PlayerIdle", info.X, info.Y, info.Width, info.Height);
 		}
-	}
+
+	}// "C:\dev\kdt2D_ykh\KDT2Framework\Bin\Asset\Texture\SpriteSheet\bird_4x1_798x135.json"
 
 
 	return true;
