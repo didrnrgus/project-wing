@@ -15,11 +15,12 @@ protected:
 
 protected:
 	CSharedPtr<class CColliderSphere2D> mBody;
-
+	CSharedPtr<class CSpriteComponent> mDeadSign;
 private:
 	bool mIsMovingUp = false;
 	bool mIsMine = false;
 	class IGamePlayShakeController* mCameraShake;
+	int mTaskID;
 
 public:
 	virtual bool Init() override;
@@ -35,6 +36,8 @@ private:
 	void CollisionMapBegin(const FVector3D& HitPoint, class CColliderBase* Dest);
 	void SetMovePlayer(FVector3D moveValueVector, float DeltaTime);
 	void UpdateDecreaseHp(float DeltaTime);
+	void OnDeadCallback();
+
 public:
 	// WorldPosition
 	void SetMovePlayer(FVector3D moveValueVector);

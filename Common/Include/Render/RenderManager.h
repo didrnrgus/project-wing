@@ -14,7 +14,7 @@ private:
 	class CRenderStateManager* mStateManager = nullptr;
 	std::map<int, FRenderLayer*>			mLayerList;
 	std::unordered_map<std::string, int>	mLayerNameList;
-	ERenderSortType	mRenderSortType = ERenderSortType::Y;
+	ERenderSortType	mRenderSortType = ERenderSortType::Z;
 	ID3D11SamplerState* mSampler = nullptr;
 	class CRenderState* mAlphaBlend = nullptr;
 	class CRenderState* mDepthDisable = nullptr;
@@ -51,9 +51,11 @@ private:
 	static bool SortY(const CSharedPtr<class CSceneComponent>& Src,
 		const CSharedPtr<class CSceneComponent>& Dest);
 
+	static bool SortZ(const CSharedPtr<class CSceneComponent>& Src,
+		const CSharedPtr<class CSceneComponent>& Dest);
+
 	static bool SortAlpha(const CSharedPtr<class CSceneComponent>& Src,
 		const CSharedPtr<class CSceneComponent>& Dest);
 
 	DECLARE_SINGLE(CRenderManager)
 };
-

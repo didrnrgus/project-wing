@@ -25,7 +25,7 @@ private:
 	bool isStun; // 박았을때 잠시 멈춰야 해서.
 	bool isProtection;
 
-	// 스탯에 방어력 추가
+	std::function<void()> playerDeadCallback;
 
 public:
 	bool Init(FCharacterState stat)
@@ -47,6 +47,7 @@ public:
 
 		isStun = false;
 		isProtection = false;
+
 		return true;
 	}
 
@@ -56,12 +57,24 @@ public:
 		float result = _damageVal - GetDef();
 		result = result < 0.0f ? 0.0f : result;
 		curHp -= result;
+
+		if (curHp <= 0.0f && playerDeadCallback != nullptr)
+		{
+			playerDeadCallback();
+			playerDeadCallback = nullptr;
+		}
 	}
 	inline void DamagedPerDistance(float _damageVal)
 	{
 		float result = _damageVal - (_damageVal * (GetDef() * 0.01f));
 		result = result < 0.0f ? 0.0f : result;
 		curHp -= result;
+
+		if (curHp <= 0.0f && playerDeadCallback != nullptr)
+		{
+			playerDeadCallback();
+			playerDeadCallback = nullptr;
+		}
 	}
 	inline void AddSpeed(float _addSpeedVal) { addedSpeed += _addSpeedVal; }
 	inline void AddDex(float _addDexVal) { addedDex += _addDexVal; }
@@ -96,4 +109,19 @@ public:
 	inline bool GetIsDeath() { return GetCurHP() > 0.0f; }
 	inline bool GetIsStun() { return isStun; }
 	inline bool GetIsProtection() { return isProtection; }
+
+public:
+	// 콜백 함수들 등록
+	template <typename T>
+	void SetPlayerDeadCallback(T* Obj, void(T::* Func)())
+	{
+		playerDeadCallback = std::bind(Func, Obj);
+	}
+
+	// 람다 넣으려고.
+	using T = std::function<void()>;
+	void SetPlayerDeadCallback(T&& Func)
+	{
+		playerDeadCallback = std::move(Func);
+	}
 };

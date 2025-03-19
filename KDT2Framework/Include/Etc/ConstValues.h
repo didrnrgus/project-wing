@@ -31,3 +31,6 @@
 #define PROFILE_PLAYER_MINE "PlayerMine"
 #define PROFILE_PLAYER_OTHER "PlayerOther"
 #define PROFILE_MAP "Map"
+
+#define TEXTURE_NAME_DEAD_SIGN "DeadSign"
+#define TEXTURE_PATH_DEAD_SIGN TEXT("Texture/death-infinity.png")

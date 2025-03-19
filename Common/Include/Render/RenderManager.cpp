@@ -125,6 +125,10 @@ void CRenderManager::Render()
 			if (Layer->RenderList.size() > 1)
 				Layer->RenderList.sort(CRenderManager::SortY);
 			break;
+		case ERenderSortType::Z:
+			if (Layer->RenderList.size() > 1)
+				Layer->RenderList.sort(CRenderManager::SortZ);
+			break;
 		case ERenderSortType::Alpha:
 			if (Layer->RenderList.size() > 1)
 				Layer->RenderList.sort(CRenderManager::SortAlpha);
@@ -172,7 +176,7 @@ void CRenderManager::Render()
 	mAlphaBlend->ResetState();
 }
 
-bool CRenderManager::CreateRenderLayer(const std::string& Name, 
+bool CRenderManager::CreateRenderLayer(const std::string& Name,
 	int ZOrder)
 {
 	FRenderLayer* Layer = FindLayer(Name);
@@ -205,7 +209,7 @@ FRenderLayer* CRenderManager::FindLayer(const std::string& Name)
 }
 
 bool CRenderManager::SortY(
-	const CSharedPtr<class CSceneComponent>& Src, 
+	const CSharedPtr<class CSceneComponent>& Src,
 	const CSharedPtr<class CSceneComponent>& Dest)
 {
 	float SrcY = Src->GetWorldPosition().y -
@@ -217,8 +221,17 @@ bool CRenderManager::SortY(
 	return SrcY > DestY;
 }
 
+bool CRenderManager::SortZ(
+	const CSharedPtr<class CSceneComponent>& Src,
+	const CSharedPtr<class CSceneComponent>& Dest)
+{
+	float SrcZ = Src->GetWorldPosition().z;
+	float DestZ = Dest->GetWorldPosition().z;
+	return SrcZ > DestZ;
+}
+
 bool CRenderManager::SortAlpha(
-	const CSharedPtr<class CSceneComponent>& Src, 
+	const CSharedPtr<class CSceneComponent>& Src,
 	const CSharedPtr<class CSceneComponent>& Dest)
 {
 	return false;

@@ -76,13 +76,15 @@ bool CSceneInGame::InitObject()
     lineGroup->SetTargetStat(playerInGameStat);
 
     // IGamePlayStateController arr setting
-    auto lineGroupGamePlayCtlr = dynamic_cast<IGamePlayStateController*>(lineGroup);
-    if (lineGroupGamePlayCtlr)
-        mArrGamePlayCtlr.push_back(lineGroupGamePlayCtlr);
+    // 맵도 포함시키고.
+    auto lineGroupGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(lineGroup);
+    if (lineGroupGamePlayStateCtlr)
+        mArrGamePlayStateCtlr.push_back(lineGroupGamePlayStateCtlr);
 
-    auto playerGamePlayCtlr = dynamic_cast<IGamePlayStateController*>(playerInGame);
-    if (playerGamePlayCtlr)
-        mArrGamePlayCtlr.push_back(playerGamePlayCtlr);
+    // 이거 내가 조작하는 플레이어만 포함시키자.
+    auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(playerInGame);
+    if (playerGamePlayStateCtlr)
+        mArrGamePlayStateCtlr.push_back(playerGamePlayStateCtlr);
 
     SetGamePlayState(EGamePlayState::Ready);
     return true;
@@ -130,9 +132,11 @@ bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValueVector)
 
 void CSceneInGame::SetGamePlayState(EGamePlayState::Type type)
 {
+    // 씬 상태 바꾸고.
     mGamePlayState = type;
 
-    for (auto e : mArrGamePlayCtlr)
+    // 다른애들한테 알려주고.  map, myPlayer
+    for (auto e : mArrGamePlayStateCtlr)
     {
         e->SetGamePlayState(type);
     }

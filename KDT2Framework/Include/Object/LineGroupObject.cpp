@@ -49,7 +49,7 @@ void CLineGroupObject::PreUpdate(float DeltaTime)
 {
 	CSceneObject::PreUpdate(DeltaTime);
 
-	if (GetGamePlayState() < EGamePlayState::Start)
+	if (GetGamePlayState() != EGamePlayState::Start)
 		return;
 
 	if (mTargetPlayerStat->GetIsStun())

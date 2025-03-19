@@ -25,7 +25,7 @@ bool CCameraObject::Init()
 
 	mCamera = CreateComponent<CCameraComponent>();
 	mCamera->SetProjectionType(ECameraProjectionType::Ortho);
-	mCamera->SetWorldPos(FVector3D::Zero);
+	mCamera->SetWorldPos(FVector3D(0.0f, 0.0f, -10.0f));
 	SetRootComponent(mCamera);
 
 	mScene->GetInput()->AddBindKey("TestShake", 'S');
@@ -36,7 +36,7 @@ bool CCameraObject::Init()
 			SetShakeSceneObject(2.0f, 10.0f);
 		});
 
-    return true;
+	return true;
 }
 
 void CCameraObject::Update(float DeltaTime)
