@@ -25,11 +25,13 @@ bool CPlayerGraphicObject::Init()
 {
 	CSceneObject::Init();
 	FResolution RS = CDevice::GetInst()->GetResolution();
+	mResolution = FVector2D(RS.Width, RS.Height);
 
 	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbySingle
 		|| CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbyMulti)
 	{
-		mRootInitPos = FVector3D(370.f, 242.f, 0.f);
+		FVector2D tempPos = FVector2D(mResolution.x * 0.8f, mResolution.y * 0.75f) - mResolution * 0.5f;
+		mRootInitPos = FVector3D(tempPos.x, tempPos.y, 0.0f);
 	}
 	else
 	{

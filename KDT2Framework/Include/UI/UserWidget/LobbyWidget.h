@@ -1,6 +1,10 @@
 ﻿#pragma once
 #include "UI\UserWidget\UserWidget.h"
 
+
+
+
+
 class CLobbyWidget : public CUserWidget
 {
 	friend class CSceneUIManager;
@@ -21,6 +25,12 @@ protected:
 	CSharedPtr<class CButton> mNextButton;
 	CSharedPtr<class CButton> mPrevButton;
 
+	std::vector<CSharedPtr<class CTextBlock>> mPlayerStatNameText;
+	std::vector<CSharedPtr<class CTextBlock>> mPlayerStatValueText;
+
+	std::vector<CSharedPtr<class CTextBlock>> mMapInfoNameText;
+	std::vector<CSharedPtr<class CTextBlock>> mMapInfoValueText;
+
 	// 투명버튼
 	std::vector<CSharedPtr<class CButton>> mItemSlots;
 	// 아이템 슬롯 이미지 + / empty
@@ -39,6 +49,7 @@ protected:
 
 	std::vector<FVector4D> mMapDifficultyImageColors;
 
+	FVector2D mResolution;
 	FVector2D mSlotPosBase;
 	FVector2D mSlotPosAdd;
 	FVector2D mSlotSize;
@@ -68,6 +79,10 @@ public:
 private:
 	void InitScrollSelectButtons();
 	void InitItemButtons();
+	void InitDifficultiImage();
+	void InitNextPrevButton();
+	void InitPlayerStatText();
+	void InitMapStatText();
 
 	void OnCharacterLeftButtonClick();
 	void OnCharacterRightButtonClick();

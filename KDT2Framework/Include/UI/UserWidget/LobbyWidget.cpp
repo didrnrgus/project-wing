@@ -11,6 +11,7 @@
 #include "Scene/SceneInGame.h"
 #include "Scene/SceneTitle.h"
 #include "Etc/DataStorageManager.h"
+#include "Etc/ConstValues.h"
 
 CLobbyWidget::CLobbyWidget()
 {
@@ -25,6 +26,8 @@ CLobbyWidget::CLobbyWidget()
 	curPlayerGraphicIndex = 0;
 	curDifficultyIndex = 0;
 
+	FResolution RS = CDevice::GetInst()->GetResolution();
+	mResolution = FVector2D(RS.Width, RS.Height);
 
 	for (int i = 0; i < CDataStorageManager::GetInst()->GetMapInfoCount(); i++)
 	{
@@ -35,11 +38,12 @@ CLobbyWidget::CLobbyWidget()
 
 	// 아이템 테이블로 뺴야 함.
 	{
-		mItemImagePaths.push_back(TEXT("Texture/Icon/milk.png"));
-		mItemImagePaths.push_back(TEXT("Texture/Icon/pharagraphspacing.png"));
-		mItemImagePaths.push_back(TEXT("Texture/Icon/ghost.png"));
+		mItemImagePaths.push_back(ITEM_HP_ICON_PATH);
+		mItemImagePaths.push_back(ITEM_SPEED_ICON_PATH);
+		mItemImagePaths.push_back(ITEM_DEX_ICON_PATH);
+		mItemImagePaths.push_back(ITEM_DEF_ICON_PATH);
 
-		itemTypeCount = 3;
+		itemTypeCount = mItemImagePaths.size();
 	}
 
 	mSlotImagePaths.push_back(TEXT("Texture/Icon/add-square.png"));
@@ -48,9 +52,10 @@ CLobbyWidget::CLobbyWidget()
 	mSlotPosBase = FVector2D(100, 100);
 	mSlotPosAdd = FVector2D(120, 0);
 	mSlotSize = FVector2D(100.0f, 100.0f);
-	mMapDifficultyImagePos = FVector2D(1010, 410);
+	mMapDifficultyImagePos = FVector2D(mResolution.x * 0.8f, mResolution.y * 0.4f);
 	mSlotInnerItemSizeRate = 0.8f;
 	mMapDifficultySinAngle = 0.0f;
+
 }
 
 CLobbyWidget::~CLobbyWidget()
@@ -63,6 +68,10 @@ bool CLobbyWidget::Init()
 
 	InitScrollSelectButtons();
 	InitItemButtons();
+	InitDifficultiImage();
+	InitNextPrevButton();
+	InitPlayerStatText();
+	InitMapStatText();
 
 	auto pathLeft = TEXT("Texture/Icon/direct-left.png");
 	auto pathRight = TEXT("Texture/Icon/direct-right.png");
@@ -72,6 +81,151 @@ bool CLobbyWidget::Init()
 	SetButton(*(mMapLeftButton.Get()), "MapLeftButton", pathLeft);
 	SetButton(*(mMapRightButton.Get()), "MapRightButton", pathRight);
 
+	return true;
+}
+
+void CLobbyWidget::Update(float DeltaTime)
+{
+	CUserWidget::Update(DeltaTime);
+
+	// 맵 선택 이미지 웨이브.
+	{
+		mMapDifficultySinAngle += DeltaTime * 180.0f;
+
+		if (mMapDifficultySinAngle >= 360.0f)
+		{
+			mMapDifficultySinAngle = 0.0f;
+		}
+
+		float tempVal = sin(DirectX::XMConvertToRadians(mMapDifficultySinAngle));
+		mMapDifficultyImage->SetPos(mMapDifficultyImagePos + FVector2D(0.0f, tempVal * 10));
+	}
+}
+
+void CLobbyWidget::InitScrollSelectButtons()
+{
+	mCharacterLeftButton = mScene->GetUIManager()->CreateWidget<CButton>("CharacterLeftButton");
+	mCharacterRightButton = mScene->GetUIManager()->CreateWidget<CButton>("CharacterRightButton");
+
+	mMapLeftButton = mScene->GetUIManager()->CreateWidget<CButton>("MapLeftButton");
+	mMapRightButton = mScene->GetUIManager()->CreateWidget<CButton>("MapRightButton");
+
+	AddWidget(mCharacterLeftButton);
+	AddWidget(mCharacterRightButton);
+	AddWidget(mMapLeftButton);
+	AddWidget(mMapRightButton);
+
+	mCharacterLeftButton->SetPos(mResolution.x * 0.7f, mResolution.y * 0.75f);
+	mCharacterRightButton->SetPos(mResolution.x * 0.9f, mResolution.y * 0.75f);
+	mMapLeftButton->SetPos(mResolution.x * 0.7f, mResolution.y * 0.4f);
+	mMapRightButton->SetPos(mResolution.x * 0.9f, mResolution.y * 0.4f);
+
+	FVector2D sizeArrow = FVector2D(100.0f, 100.0f);
+	mCharacterLeftButton->SetSize(sizeArrow);
+	mCharacterRightButton->SetSize(sizeArrow);
+	mMapLeftButton->SetSize(sizeArrow);
+	mMapRightButton->SetSize(sizeArrow);
+
+	mCharacterLeftButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnCharacterLeftButtonClick);
+	mCharacterRightButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnCharacterRightButtonClick);
+	mMapLeftButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnMapLeftButtonClick);
+	mMapRightButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnMapRightButtonClick);
+}
+
+void CLobbyWidget::InitPlayerStatText()
+{
+	int count = (int)ECharacterStatText::End;
+	mPlayerStatNameText.resize(count);
+	mPlayerStatValueText.resize(count);
+	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.8f);
+	FVector2D valueBasePos = FVector2D(640.0f, mResolution.y * 0.8f);
+	FVector2D textSize = FVector2D(200.0f, 100.0f);
+	float fontSize = 30.0f;
+	FCharacterState stat = CDataStorageManager::GetInst()->GetSelectedCharacterState();
+
+	for (int i = 0; i < count; i++)
+	{
+		auto nameText = std::wstring(ECharacterStatText::gArrCharacterStatText[i]) + L" :";
+		auto valueText = stat.GetStatToWString(static_cast<ECharacterStatText::Type>(i));
+		auto textBlockName = mScene->GetUIManager()->CreateWidget<CTextBlock>("playerStatName_" + std::to_string(i));
+		auto textBlockValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("playerStatValue_" + std::to_string(i));
+
+		AddWidget(textBlockName);
+		textBlockName->SetPivot(0.0f, 1.0f);
+		textBlockName->SetSize(textSize);
+		textBlockName->SetPos(nameBasePos - FVector2D::Axis[EAxis::Y] * (fontSize +10.0f)* i);
+		textBlockName->SetText(nameText.c_str());
+		textBlockName->SetTextColor(FVector4D::Green);
+		textBlockName->SetAlignH(ETextAlignH::Left);
+		textBlockName->SetFontSize(fontSize);
+		textBlockName->SetShadowEnable(true);
+		textBlockName->SetShadowOffset(3.f, 3.f);
+		textBlockName->SetTextShadowColor(FVector4D::Gray30);
+		mPlayerStatNameText[i] = textBlockName;
+
+		AddWidget(textBlockValue);
+		textBlockValue->SetPivot(0.0f, 1.0f);
+		textBlockValue->SetSize(textSize);
+		textBlockValue->SetPos(valueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 10.0f) * i);
+		textBlockValue->SetText(valueText.c_str());
+		textBlockValue->SetTextColor(FVector4D::Green);
+		textBlockValue->SetAlignH(ETextAlignH::Left);
+		textBlockValue->SetFontSize(fontSize);
+		textBlockValue->SetShadowEnable(true);
+		textBlockValue->SetShadowOffset(3.f, 3.f);
+		textBlockValue->SetTextShadowColor(FVector4D::Gray30);
+		mPlayerStatValueText[i] = textBlockValue;
+	}
+}
+
+void CLobbyWidget::InitMapStatText()
+{
+	int count = (int)EMapStatText::End;
+	mMapInfoNameText.resize(count);
+	mMapInfoValueText.resize(count);
+	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.4f);
+	FVector2D valueBasePos = FVector2D(670.0f, mResolution.y * 0.4f);
+	FVector2D textSize = FVector2D(200.0f, 100.0f);
+	float fontSize = 30.0f;
+	FMapInfo info = CDataStorageManager::GetInst()->GetSelectedMapInfo();
+
+	for (int i = 0; i < count; i++)
+	{
+		auto nameText = std::wstring(EMapStatText::gArrMapStatText[i]) + L" :";
+		auto valueText = info.GetInfoToWString(static_cast<EMapStatText::Type>(i));
+		auto textBlockName = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoName_" + std::to_string(i));
+		auto textBlockValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoValue_" + std::to_string(i));
+
+		AddWidget(textBlockName);
+		textBlockName->SetPivot(0.0f, 1.0f);
+		textBlockName->SetSize(textSize);
+		textBlockName->SetPos(nameBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 15.0f) * i);
+		textBlockName->SetText(nameText.c_str());
+		textBlockName->SetTextColor(FVector4D::Green);
+		textBlockName->SetAlignH(ETextAlignH::Left);
+		textBlockName->SetFontSize(fontSize);
+		textBlockName->SetShadowEnable(true);
+		textBlockName->SetShadowOffset(3.f, 3.f);
+		textBlockName->SetTextShadowColor(FVector4D::Gray30);
+		mMapInfoNameText[i] = textBlockName;
+
+		AddWidget(textBlockValue);
+		textBlockValue->SetPivot(0.0f, 1.0f);
+		textBlockValue->SetSize(textSize);
+		textBlockValue->SetPos(valueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 15.0f) * i);
+		textBlockValue->SetText(valueText.c_str());
+		textBlockValue->SetTextColor(FVector4D::Green);
+		textBlockValue->SetAlignH(ETextAlignH::Left);
+		textBlockValue->SetFontSize(fontSize);
+		textBlockValue->SetShadowEnable(true);
+		textBlockValue->SetShadowOffset(3.f, 3.f);
+		textBlockValue->SetTextShadowColor(FVector4D::Gray30);
+		mMapInfoValueText[i] = textBlockValue;
+	}
+}
+
+void CLobbyWidget::InitDifficultiImage()
+{
 	// difficulty Image
 	mMapDifficultyImage = mScene->GetUIManager()->CreateWidget<CImage>(mMapDifficultyImageNamePrefix);
 	AddWidget(mMapDifficultyImage);
@@ -81,7 +235,10 @@ bool CLobbyWidget::Init()
 	mMapDifficultyImage->SetSize(FVector2D::One * 128 * 1.0f);
 	mMapDifficultyImage->SetPos(mMapDifficultyImagePos);
 	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficultyIndex]);
+}
 
+void CLobbyWidget::InitNextPrevButton()
+{
 	// next button
 	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>("NextButton");
 	AddWidget(mNextButton);
@@ -112,58 +269,6 @@ bool CLobbyWidget::Init()
 			CLog::PrintLog("mPrevButton Click");
 			CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
 		});
-
-	return true;
-}
-
-void CLobbyWidget::Update(float DeltaTime)
-{
-	CUserWidget::Update(DeltaTime);
-
-	// 맵 선택 이미지 웨이브.
-	{
-		mMapDifficultySinAngle += DeltaTime * 180.0f;
-
-		if (mMapDifficultySinAngle >= 360.0f)
-		{
-			mMapDifficultySinAngle = 0.0f;
-		}
-
-		float tempVal = sin(DirectX::XMConvertToRadians(mMapDifficultySinAngle));
-		mMapDifficultyImage->SetPos(mMapDifficultyImagePos + FVector2D(0.0f, tempVal * 10));
-	}
-}
-
-void CLobbyWidget::InitScrollSelectButtons()
-{
-	FResolution RS = CDevice::GetInst()->GetResolution();
-
-	mCharacterLeftButton = mScene->GetUIManager()->CreateWidget<CButton>("CharacterLeftButton");
-	mCharacterRightButton = mScene->GetUIManager()->CreateWidget<CButton>("CharacterRightButton");
-
-	mMapLeftButton = mScene->GetUIManager()->CreateWidget<CButton>("MapLeftButton");
-	mMapRightButton = mScene->GetUIManager()->CreateWidget<CButton>("MapRightButton");
-
-	AddWidget(mCharacterLeftButton);
-	AddWidget(mCharacterRightButton);
-	AddWidget(mMapLeftButton);
-	AddWidget(mMapRightButton);
-
-	mCharacterLeftButton->SetPos(RS.Width * 0.625f, RS.Height * 0.75f);
-	mCharacterRightButton->SetPos(RS.Width * 0.875f, RS.Height * 0.75f);
-	mMapLeftButton->SetPos(RS.Width * 0.625f, RS.Height * 0.5f);
-	mMapRightButton->SetPos(RS.Width * 0.875f, RS.Height * 0.5f);
-
-	FVector2D sizeArrow = FVector2D(100.0f, 100.0f);
-	mCharacterLeftButton->SetSize(sizeArrow);
-	mCharacterRightButton->SetSize(sizeArrow);
-	mMapLeftButton->SetSize(sizeArrow);
-	mMapRightButton->SetSize(sizeArrow);
-
-	mCharacterLeftButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnCharacterLeftButtonClick);
-	mCharacterRightButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnCharacterRightButtonClick);
-	mMapLeftButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnMapLeftButtonClick);
-	mMapRightButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnMapRightButtonClick);
 }
 
 void CLobbyWidget::InitItemButtons()
@@ -302,6 +407,7 @@ void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t*
 	_button.SetTexture(EButtonState::Normal, _name, _path);
 	_button.SetTexture(EButtonState::Hovered, _name, _path);
 	_button.SetTexture(EButtonState::Click, _name, _path);
+	_button.SetPivot(FVector2D::One * 0.5f);
 	_button.SetTint(EButtonState::Normal, TintNormal);
 	_button.SetTint(EButtonState::Hovered, TintHovered);
 	_button.SetTint(EButtonState::Click, TintClick);

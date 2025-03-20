@@ -15,7 +15,7 @@ protected:
 	CSharedPtr<class CSpriteComponent> mRoot;
 	class CAnimation2D* mAnimation = nullptr;
 	FVector3D mRootInitPos;
-
+	FVector2D mResolution;
 private:
 	float mMapDifficultySinAngle;
 

@@ -49,6 +49,27 @@ struct FLineNode
             "obstacle_type": -1
         },
 */
+
+namespace EMapStatText
+{
+    enum Type
+    {
+        Name = 0,
+        Color,
+        DiffRate,
+        ColDmg,
+        End
+    };
+
+    static std::vector<const wchar_t*> gArrMapStatText =
+    {
+        TEXT("Name")
+        ,TEXT("Color")
+        ,TEXT("DiffRate")
+        ,TEXT("ColDmg")
+    };
+}
+
 struct FMapInfo
 {
 	int Index;
@@ -73,7 +94,24 @@ struct FMapInfo
             break;
         }
     }
+
+    const std::wstring GetInfoToWString(EMapStatText::Type type)
+    {
+        switch (type)
+        {
+        case EMapStatText::Name:
+            return std::wstring(Name.begin(), Name.end());
+        case EMapStatText::Color:
+            return std::wstring(DifficultyColorName.begin(), DifficultyColorName.end());
+        case EMapStatText::DiffRate:
+            return std::to_wstring((int)DifficultyRate);
+        case EMapStatText::ColDmg:
+            return std::to_wstring((int)CollisionDamage);
+        }
+    }
 };
+
+
 
 /*
 {
@@ -92,6 +130,31 @@ struct FMapInfo
         },
         ...
 */
+
+namespace ECharacterStatText
+{
+    enum Type
+    {
+        Name = 0,
+        HP,
+        Speed,
+        Dex,
+        Def,
+        Size,
+        End
+    };
+
+    static std::vector<const wchar_t*> gArrCharacterStatText =
+    {
+        TEXT("Name")
+        ,TEXT("HP")
+        ,TEXT("Speed")
+        ,TEXT("Dex")
+        ,TEXT("Def")
+        ,TEXT("Size")
+    };
+}
+
 struct FCharacterState
 {
 	int Index;
@@ -104,7 +167,28 @@ struct FCharacterState
     std::string ImageSequenceName;
     float SizeX;
     float SizeY;
+
+    const std::wstring GetStatToWString(ECharacterStatText::Type type)
+    {
+        switch (type)
+        {
+        case ECharacterStatText::Name:
+            return std::wstring(Name.begin(), Name.end());
+        case ECharacterStatText::HP:
+            return std::to_wstring((int)HP);
+        case ECharacterStatText::Speed:
+            return std::to_wstring((int)Speed);
+        case ECharacterStatText::Dex:
+            return std::to_wstring((int)Dex);
+        case ECharacterStatText::Def:
+            return std::to_wstring((int)Def);
+        case ECharacterStatText::Size:
+            return (std::to_wstring((int)SizeX) + L" * " + std::to_wstring((int)SizeY));
+        }
+    }
 };
+
+
 
 /*{
     "db_id": "19e45759635e8028adb0d83e3cf969ff",

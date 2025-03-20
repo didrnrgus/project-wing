@@ -1,4 +1,6 @@
-﻿#include "SceneLobby.h"
+﻿#pragma once
+
+#include "SceneLobby.h"
 #include "UI/UserWidget/LobbyWidget.h"
 #include "Scene/SceneUIManager.h"
 #include "Object/PlayerGraphicObject.h"

@@ -17,6 +17,7 @@ FVector4D FVector4D::Green = { 0.f, 1.f, 0.f, 1.f };
 FVector4D FVector4D::Yellow = { 1.f, 1.f, 0.f, 1.f };
 FVector4D FVector4D::Cyan = { 0.f, 1.f, 1.f, 1.f };
 FVector4D FVector4D::Pink = { 0.82f, 0.55f, 1.f, 1.f };
+FVector4D FVector4D::Orange = { 1.f, 0.53f, 0.27f, 1.f };
 
 FVector4D FVector4D::Gray10 = { 0.1f, 0.1f, 0.1f, 1.f };
 FVector4D FVector4D::Gray20 = { 0.2f, 0.2f, 0.2f, 1.f };
@@ -61,6 +62,10 @@ FVector4D FVector4D::GetColorFromString(std::string colorName)
 	else if (strcmp(colorName.c_str(), "Pink") == 0)
 	{
 		return FVector4D::Pink;
+	}
+	else if (strcmp(colorName.c_str(), "Orange") == 0)
+	{
+		return FVector4D::Orange;
 	}
 
 	return FVector4D::White;

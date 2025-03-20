@@ -27,6 +27,11 @@
 #define MAP_1_ICON_PATH TEXT("Texture/Icon/emoji-normal.png")
 #define MAP_2_ICON_PATH TEXT("Texture/Icon/emoji-sad.png")
 
+#define ITEM_HP_ICON_PATH TEXT("Texture/Icon/milk.png")
+#define ITEM_SPEED_ICON_PATH TEXT("Texture/Icon/forward.png")
+#define ITEM_DEX_ICON_PATH TEXT("Texture/Icon/pharagraphspacing.png")
+#define ITEM_DEF_ICON_PATH TEXT("Texture/Icon/safety.png")
+
 #define PROFILE_DEFAULT "Default"
 #define PROFILE_PLAYER_MINE "PlayerMine"
 #define PROFILE_PLAYER_OTHER "PlayerOther"
