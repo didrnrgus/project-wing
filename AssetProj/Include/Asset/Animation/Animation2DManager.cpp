@@ -17,33 +17,21 @@ bool CAnimation2DManager::Init()
 {
 	CAnimation2D::CreateCBuffer();
 
-	//// 새 이미지
-	//{
-	//	CreateAnimation("PlayerIdle");
-	//	SetAnimationTextureType("PlayerIdle", EAnimationTextureType::SpriteSheet);
-	//	SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture/bird_4x1_798x135.png")); // 798 * 135
-
-	//	float sizeX = 798 / 4;
-	//	float sizeY = 135;
-
-	//	for (int i = 0; i < 2; ++i)
-	//	{
-	//		AddFrame("PlayerIdle", sizeX * i, sizeY, sizeX, sizeY);
-	//	}
-	//}
-
 	// 유니티에서 뽑아온거 테스트
 	{
 		CreateAnimation("PlayerIdle");
 		SetAnimationTextureType("PlayerIdle", EAnimationTextureType::SpriteSheet);
 		SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture/SpriteSheet/bird_4x1_798x135.png"));
 		
+		// json 파일 찾아 읽기.
 		std::string path = "..\\Bin\\Asset\\Texture\\SpriteSheet\\";
 		std::string fileName = "bird_4x1_798x135";
 		std::string strJson = CJsonController::GetInst()->ReadJsonFile(path + fileName + ".json");
 
-		// 넣기.
+		// json string 등록 -> 안에서 파싱해서 컨테이너에 넣음.
 		CDataStorageManager::GetInst()->SetSpriteAtlasInfo(strJson);
+
+		// 프레임 정보 가져올 준비.
 		std::string prefix = CDataStorageManager::GetInst()->GetSpritSheetPrefix(fileName);
 		int count = CDataStorageManager::GetInst()->GetSpritSheetCount(fileName);
 		int filteredCount = CDataStorageManager::GetInst()->GetFilteredSpriteSheets(fileName, prefix).size();
@@ -58,36 +46,7 @@ bool CAnimation2DManager::Init()
 				, info.Width, info.Height);
 		}
 
-	}// "C:\dev\kdt2D_ykh\KDT2Framework\Bin\Asset\Texture\SpriteSheet\bird_4x1_798x135.json"
-
-	//// 유니티에서 뽑아온거 테스트
-	//{
-	//	CreateAnimation("PlayerIdle");
-	//	SetAnimationTextureType("PlayerIdle", EAnimationTextureType::SpriteSheet);
-	//	SetTexture("PlayerIdle", "PlayerSprite", TEXT("Texture/SpriteSheet/sprite_sheet_character.png"));
-
-	//	std::string path = "..\\Bin\\Asset\\Texture\\SpriteSheet\\";
-	//	std::string fileName = "sprite_sheet_character";
-	//	std::string strJson = CJsonController::GetInst()->ReadJsonFile(path + fileName + ".json");
-
-	//	// 넣기.
-	//	CDataStorageManager::GetInst()->SetSpriteAtlasInfo(strJson);
-	//	std::string prefix = CDataStorageManager::GetInst()->GetSpritSheetPrefix(fileName);
-	//	int count = CDataStorageManager::GetInst()->GetSpritSheetCount(fileName);
-	//	int filteredCount = CDataStorageManager::GetInst()->GetFilteredSpriteSheets(fileName, prefix).size();
-	//	FVector2D imageSize = CDataStorageManager::GetInst()->GetSpritSheetImageSize(fileName);
-
-	//	for (int i = 0; i < filteredCount; i++)
-	//	{
-	//		auto info = CDataStorageManager::GetInst()->GetSpritSheetInfo(fileName, prefix + std::to_string(i));
-	//		AddFrame("PlayerIdle"
-	//			, info.X
-	//			, imageSize.y - (info.Y + info.Height) // Unity sprite editor 는 Y 가 반전임.
-	//			, info.Width, info.Height);
-	//	}
-
-	//}// "C:\dev\kdt2D_ykh\KDT2Framework\Bin\Asset\Texture\SpriteSheet\sprite_sheet_character.json"
-
+	}
 
 	return true;
 }
