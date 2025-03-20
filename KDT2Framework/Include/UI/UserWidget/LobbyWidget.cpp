@@ -42,6 +42,7 @@ CLobbyWidget::CLobbyWidget()
 		mItemImagePaths.push_back(ITEM_SPEED_ICON_PATH);
 		mItemImagePaths.push_back(ITEM_DEX_ICON_PATH);
 		mItemImagePaths.push_back(ITEM_DEF_ICON_PATH);
+		CDataStorageManager::GetInst()->getitem
 
 		itemTypeCount = mItemImagePaths.size();
 	}
