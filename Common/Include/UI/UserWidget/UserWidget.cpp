@@ -19,6 +19,12 @@ void CUserWidget::ShowLoading(bool isLoading)
 
     mLoadingBackImage->SetEnable(isLoading);
     mLoadingText->SetEnable(isLoading);
+    mLoadingDescText->SetEnable(isLoading);
+}
+
+void CUserWidget::SetLoadingDescText(const std::wstring wstrDesc)
+{
+    mLoadingDescText->SetText(wstrDesc.c_str());
 }
 
 void CUserWidget::UpdateLoading(float DeltaTime)
@@ -60,6 +66,7 @@ bool CUserWidget::Init()
     mLoadingBackImage->SetZOrder(ZORDER_LOADING);
     mLoadingBackImage->SetEnable(false);
 
+    FVector2D commentSize = FVector2D(1000.0f, 100.0f);
     mLoadingText = mScene->GetUIManager()->CreateWidget<CTextBlock>("LoadingText");
     AddWidget(mLoadingText);
     mLoadingText->SetText(mLoadingTextStrings[curLoadingTextIndex]);
@@ -69,13 +76,26 @@ bool CUserWidget::Init()
     mLoadingText->SetShadowEnable(true);
     mLoadingText->SetShadowOffset(3.f, 3.f);
     mLoadingText->SetTextShadowColor(FVector4D::Gray30);
-    FVector2D commentSize = FVector2D(500.0f, 100.0f);
     mLoadingText->SetSize(commentSize);
     mLoadingText->SetPos(FVector2D(RS.Width, RS.Height) * 0.5f - commentSize * 0.5f);
     mLoadingText->SetZOrder(ZORDER_LOADING);
     mLoadingText->SetEnable(false);
 
-    //ShowLoading(true);
+    mLoadingDescText = mScene->GetUIManager()->CreateWidget<CTextBlock>("LoadingDescText");
+    AddWidget(mLoadingDescText);
+	mLoadingDescText->SetText(L"조금만 기다리세요.");
+	mLoadingDescText->SetTextColor(FVector4D::Yellow);
+	mLoadingDescText->SetAlignH(ETextAlignH::Center);
+	mLoadingDescText->SetFontSize(30.f);
+	mLoadingDescText->SetShadowEnable(true);
+	mLoadingDescText->SetShadowOffset(3.f, 3.f);
+	mLoadingDescText->SetTextShadowColor(FVector4D::Gray30);
+	mLoadingDescText->SetSize(commentSize);
+	mLoadingDescText->SetPos(FVector2D(RS.Width, RS.Height) * 0.5f - commentSize * 0.5f + FVector2D::Axis[EAxis::Y] * 40);
+	mLoadingDescText->SetZOrder(ZORDER_LOADING);
+	mLoadingDescText->SetEnable(false);
+
+	//ShowLoading(true);
 
     return true;
 }

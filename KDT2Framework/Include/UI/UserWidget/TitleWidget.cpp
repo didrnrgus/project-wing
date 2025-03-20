@@ -75,6 +75,8 @@ void CTitleWidget::SinglePlayButtonClick()
 			ShowLoading(true);
 
 			// config load
+			SetLoadingDescText(L"Config data 로딩중이에요. 🐎");
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));
 			std::string webserverPath = WEBSERVER_PATH;
 			std::string path = webserverPath + CONFIG_PATH;
 			std::string configResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -82,12 +84,16 @@ void CTitleWidget::SinglePlayButtonClick()
 			CDataStorageManager::GetInst()->SetConfigData(configResult);
 
 			// characters load
+			SetLoadingDescText(L"Character data 로딩중이에요. 👨🏻👩🏻👧🏻👩🏻‍🦰👵🏻🧓🏻👴🏻👨🏻‍🦲👩🏻‍🦲🧑🏻‍🦰");
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));
 			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
 			std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
 			CLog::PrintLog("charactersResult: " + charactersResult);
 			CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
 
 			// maps load
+			SetLoadingDescText(L"Map data 로딩중이에요. 🌍🌎🌏🗺️🏜️🛤️🛣️🏞️");
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));
 			for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
 			{
 				path = webserverPath + mapFileName;
@@ -95,6 +101,22 @@ void CTitleWidget::SinglePlayButtonClick()
 				CLog::PrintLog("mapResult: " + mapResult);
 				CDataStorageManager::GetInst()->SetMapData(mapResult);
 			}
+
+			// stat load
+			SetLoadingDescText(L"Stat data 로딩중이에요. HP->SPEED->Dex->DEF 끝!!");
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
+			std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("statsResult: " + statsResult);
+			CDataStorageManager::GetInst()->SetStatInfoData(charactersResult);
+
+			// item load
+			SetLoadingDescText(L"아직 Item data 로딩이 남았어용");
+			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
+			std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("itemResult: " + itemResult);
+			CDataStorageManager::GetInst()->SetItemInfoData(itemResult);
 
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
 

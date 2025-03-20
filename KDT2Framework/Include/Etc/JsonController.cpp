@@ -76,6 +76,31 @@ bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string
 	return true;
 }
 
+template<>
+bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string, FStatInfo>& datas)
+{
+	if (json.contains("stat_type_list") && json["stat_type_list"].is_array())
+	{
+		for (auto character : json["stat_type_list"])
+		{
+			FStatInfo statInfo;
+
+			if (character.contains("index"))
+				statInfo.Index = character["index"].get<int>();
+
+			if (character.contains("type"))
+				statInfo.Type = character["type"].get<int>();
+
+			if (character.contains("name"))
+				statInfo.Name = character["name"].get<std::string>();
+
+			datas.insert(std::make_pair(statInfo.Name, statInfo));
+		}
+	}
+
+	return true;
+}
+
 template<typename T>
 bool CJsonController::ParseJson(const nlohmann::json& json, std::map<int, T>& datas) { return false; }
 
@@ -118,6 +143,37 @@ bool CJsonController::ParseJson(const nlohmann::json& json, std::map<int, FChara
 	return true;
 }
 
+template<>
+bool CJsonController::ParseJson(const nlohmann::json& json, std::map<int, FItemInfo>& datas)
+{
+	if (json.contains("item_list") && json["item_list"].is_array())
+	{
+		for (auto character : json["item_list"])
+		{
+			FItemInfo itmeInfo;
+
+			if (character.contains("index"))
+				itmeInfo.Index = character["index"].get<int>();
+
+			if (character.contains("name"))
+				itmeInfo.Name = character["name"].get<std::string>();
+
+			if (character.contains("stat_type"))
+				itmeInfo.StatType = character["stat_type"].get<int>();
+
+			if (character.contains("add_value"))
+				itmeInfo.AddValue = character["add_value"].get<float>();
+
+			if (character.contains("desc"))
+				itmeInfo.Desc = character["desc"].get<std::string>();
+
+			datas.insert(std::make_pair(itmeInfo.Index, itmeInfo));
+		}
+	}
+
+	return true;
+}
+
 
 template<typename T>
 bool CJsonController::ParseJson(const nlohmann::json& json, T& data) { return false; }
@@ -144,6 +200,12 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FConfig& data)
 
 	if (json.contains("character_file"))
 		data.CharacterFileName = json["character_file"].get<std::string>();
+
+	if (json.contains("item_file"))
+		data.ItemFileName = json["item_file"].get<std::string>();
+
+	if (json.contains("stat_file"))
+		data.StatFileName = json["stat_file"].get<std::string>();
 
 	return true;
 }

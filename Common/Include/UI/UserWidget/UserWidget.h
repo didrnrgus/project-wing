@@ -14,6 +14,7 @@ protected:
 private:
 	CSharedPtr<class CImage> mLoadingBackImage;
 	CSharedPtr<class CTextBlock> mLoadingText;
+	CSharedPtr<class CTextBlock> mLoadingDescText;
 	std::vector<const wchar_t*> mLoadingTextStrings;
 	bool mIsLoading = false;
 	float loadingUpdateTime = 0.0f;
@@ -31,6 +32,7 @@ public:
 	}
 
 	void ShowLoading(bool isLoading);
+	void SetLoadingDescText(const std::wstring wstrDesc);
 	void UpdateLoading(float DeltaTime);
 	bool IsLoading() { return mIsLoading; }
 

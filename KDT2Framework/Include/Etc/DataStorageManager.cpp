@@ -22,7 +22,19 @@ void CDataStorageManager::SetConfigData(std::string strJson)
 void CDataStorageManager::SetCharacterData(std::string strJson)
 {
 	nlohmann::json json = nlohmann::json::parse(strJson);
-	CJsonController::GetInst()->ParseJson(json, mCharacterDatas);
+	CJsonController::GetInst()->ParseJson(json, mCharacterInfoDatas);
+}
+
+void CDataStorageManager::SetStatInfoData(std::string strJson)
+{
+	nlohmann::json json = nlohmann::json::parse(strJson);
+	CJsonController::GetInst()->ParseJson(json, mStatInfoDatasByName);
+}
+
+void CDataStorageManager::SetItemInfoData(std::string strJson)
+{
+	nlohmann::json json = nlohmann::json::parse(strJson);
+	CJsonController::GetInst()->ParseJson(json, mItemInfoDatasByIndex);
 }
 
 void CDataStorageManager::SetMapData(std::string strJson)
@@ -31,7 +43,7 @@ void CDataStorageManager::SetMapData(std::string strJson)
 	FMapInfo info;
 	nlohmann::json json = nlohmann::json::parse(strJson);
 	CJsonController::GetInst()->ParseJson(json, info);
-	mMapInfoDatas.insert(std::make_pair(info.Index, info));
+	mMapInfoDatasByIndex.insert(std::make_pair(info.Index, info));
 }
 
 void CDataStorageManager::SetSpriteAtlasInfo(std::string strJson)
@@ -45,7 +57,7 @@ const FLineNode CDataStorageManager::GetLineNodeInSelectedMap(int lineNodeIndex)
 {
 	int lineCount = GetLineNodeCountInSelectedMap();
 	int useIndex = lineNodeIndex % lineCount;
-	return mMapInfoDatas[curSelectedMapIndex].lineNodes[useIndex];
+	return mMapInfoDatasByIndex[curSelectedMapIndex].lineNodes[useIndex];
 }
 
 

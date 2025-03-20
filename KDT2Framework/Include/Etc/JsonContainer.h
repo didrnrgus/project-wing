@@ -189,8 +189,8 @@ struct FCharacterState
 };
 
 
-
-/*{
+/*
+{
     "db_id": "19e45759635e8028adb0d83e3cf969ff",
     "db_url": "https://api.notion.com/v1/databases/19e45759635e8028adb0d83e3cf969ff",
     "api_key": "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",
@@ -199,8 +199,11 @@ struct FCharacterState
         "map_1.json",
         "map_2.json"
     ],
-    "character_file": "character.json"
-}*/
+    "character_file": "character_list.json",
+    "item_file": "item_list.json",
+    "stat_file": "stat_type_list.json"
+}
+*/
 struct FConfig
 {
     std::string DatabaseID;
@@ -208,6 +211,8 @@ struct FConfig
     std::string APIKey;
     std::vector<std::string> mapFileNameList;
     std::string CharacterFileName;
+    std::string ItemFileName;
+    std::string StatFileName;
 };
 
 
@@ -246,4 +251,42 @@ struct FSpriteAtlasInfo
     float SizeX;
     float SizeY;
     std::vector<FSpriteSheetInfo> Sprites;
+};
+
+
+/*
+{
+    "stat_type_list": [
+        {
+            "index": 0,
+            "type": 0,
+            "name": "Hp"
+        },
+*/
+struct FStatInfo
+{
+    int Index;
+    int Type;
+    std::string Name;
+};
+
+
+/*
+{
+    "item_list": [
+        {
+            "index": 0,
+            "name": "Potion",
+            "stat_type": 0,
+            "add_value": 50.0,
+            "desc": "When held, maximum stamina increases."
+        },
+*/
+struct FItemInfo
+{
+    int Index;
+    std::string Name;
+    int StatType;
+    float AddValue;
+    std::string Desc;
 };
