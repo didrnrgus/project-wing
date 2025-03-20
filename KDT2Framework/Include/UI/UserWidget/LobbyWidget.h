@@ -82,12 +82,15 @@ private:
 	void InitDifficultiImage();
 	void InitNextPrevButton();
 	void InitPlayerStatText();
-	void InitMapStatText();
+	void InitMapInfoText();
 
 	void OnCharacterLeftButtonClick();
 	void OnCharacterRightButtonClick();
+	void UpdatePlayerStatText();
+
 	void OnMapLeftButtonClick();
 	void OnMapRightButtonClick();
+	void UpdateMapInfoText();
 
 	void SelectItemForSlot(int _slotIndex, int _itemIndex);
 	void TriggerItemButtons(int _index);

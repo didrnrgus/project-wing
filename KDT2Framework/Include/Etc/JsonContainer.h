@@ -50,7 +50,7 @@ struct FLineNode
         },
 */
 
-namespace EMapStatText
+namespace EMapInfoText
 {
     enum Type
     {
@@ -61,7 +61,7 @@ namespace EMapStatText
         End
     };
 
-    static std::vector<const wchar_t*> gArrMapStatText =
+    static std::vector<const wchar_t*> gArrMapInfoText =
     {
         TEXT("Name")
         ,TEXT("Color")
@@ -95,17 +95,17 @@ struct FMapInfo
         }
     }
 
-    const std::wstring GetInfoToWString(EMapStatText::Type type)
+    const std::wstring GetInfoToWString(EMapInfoText::Type type)
     {
         switch (type)
         {
-        case EMapStatText::Name:
+        case EMapInfoText::Name:
             return std::wstring(Name.begin(), Name.end());
-        case EMapStatText::Color:
+        case EMapInfoText::Color:
             return std::wstring(DifficultyColorName.begin(), DifficultyColorName.end());
-        case EMapStatText::DiffRate:
+        case EMapInfoText::DiffRate:
             return std::to_wstring((int)DifficultyRate);
-        case EMapStatText::ColDmg:
+        case EMapInfoText::ColDmg:
             return std::to_wstring((int)CollisionDamage);
         }
     }

@@ -71,7 +71,7 @@ bool CLobbyWidget::Init()
 	InitDifficultiImage();
 	InitNextPrevButton();
 	InitPlayerStatText();
-	InitMapStatText();
+	InitMapInfoText();
 
 	auto pathLeft = TEXT("Texture/Icon/direct-left.png");
 	auto pathRight = TEXT("Texture/Icon/direct-right.png");
@@ -138,10 +138,10 @@ void CLobbyWidget::InitPlayerStatText()
 	mPlayerStatNameText.resize(count);
 	mPlayerStatValueText.resize(count);
 	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.8f);
-	FVector2D valueBasePos = FVector2D(640.0f, mResolution.y * 0.8f);
+	FVector2D valueBasePos = FVector2D(670.0f, mResolution.y * 0.8f);
 	FVector2D textSize = FVector2D(200.0f, 100.0f);
 	float fontSize = 30.0f;
-	FCharacterState stat = CDataStorageManager::GetInst()->GetSelectedCharacterState();
+	FCharacterState stat = CDataStorageManager::GetInst()->GetCharacterState(curPlayerGraphicIndex);
 
 	for (int i = 0; i < count; i++)
 	{
@@ -178,21 +178,21 @@ void CLobbyWidget::InitPlayerStatText()
 	}
 }
 
-void CLobbyWidget::InitMapStatText()
+void CLobbyWidget::InitMapInfoText()
 {
-	int count = (int)EMapStatText::End;
+	int count = (int)EMapInfoText::End;
 	mMapInfoNameText.resize(count);
 	mMapInfoValueText.resize(count);
 	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.4f);
 	FVector2D valueBasePos = FVector2D(670.0f, mResolution.y * 0.4f);
 	FVector2D textSize = FVector2D(200.0f, 100.0f);
 	float fontSize = 30.0f;
-	FMapInfo info = CDataStorageManager::GetInst()->GetSelectedMapInfo();
+	FMapInfo info = CDataStorageManager::GetInst()->GetMapInfo(curDifficultyIndex);
 
 	for (int i = 0; i < count; i++)
 	{
-		auto nameText = std::wstring(EMapStatText::gArrMapStatText[i]) + L" :";
-		auto valueText = info.GetInfoToWString(static_cast<EMapStatText::Type>(i));
+		auto nameText = std::wstring(EMapInfoText::gArrMapInfoText[i]) + L" :";
+		auto valueText = info.GetInfoToWString(static_cast<EMapInfoText::Type>(i));
 		auto textBlockName = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoName_" + std::to_string(i));
 		auto textBlockValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoValue_" + std::to_string(i));
 
@@ -427,6 +427,7 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 			curPlayerGraphicIndex = 0;
 
 		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
+		UpdatePlayerStatText();
 	}
 }
 
@@ -443,6 +444,22 @@ void CLobbyWidget::OnCharacterRightButtonClick()
 			curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
 
 		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
+		UpdatePlayerStatText();
+	}
+}
+
+void CLobbyWidget::UpdatePlayerStatText()
+{
+	int count = (int)ECharacterStatText::End;
+	FCharacterState stat = CDataStorageManager::GetInst()->GetCharacterState(curPlayerGraphicIndex);
+
+	for (int i = 0; i < count; i++)
+	{
+		auto nameText = std::wstring(ECharacterStatText::gArrCharacterStatText[i]) + L" :";
+		auto valueText = stat.GetStatToWString(static_cast<ECharacterStatText::Type>(i));
+
+		mPlayerStatNameText[i]->SetText(nameText.c_str());
+		mPlayerStatValueText[i]->SetText(valueText.c_str());
 	}
 }
 
@@ -458,6 +475,8 @@ void CLobbyWidget::OnMapLeftButtonClick()
 	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficultyIndex)
 		, mMapDifficultyImagePaths[curDifficultyIndex]);
 	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficultyIndex]);
+
+	UpdateMapInfoText();
 }
 
 void CLobbyWidget::OnMapRightButtonClick()
@@ -472,5 +491,21 @@ void CLobbyWidget::OnMapRightButtonClick()
 	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficultyIndex)
 		, mMapDifficultyImagePaths[curDifficultyIndex]);
 	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficultyIndex]);
+
+	UpdateMapInfoText();
 }
 
+void CLobbyWidget::UpdateMapInfoText()
+{
+	int count = (int)EMapInfoText::End;
+	FMapInfo info = CDataStorageManager::GetInst()->GetMapInfo(curDifficultyIndex);
+
+	for (int i = 0; i < count; i++)
+	{
+		auto nameText = std::wstring(EMapInfoText::gArrMapInfoText[i]) + L" :";
+		auto valueText = info.GetInfoToWString(static_cast<EMapInfoText::Type>(i));
+
+		mMapInfoNameText[i]->SetText(nameText.c_str());
+		mMapInfoValueText[i]->SetText(valueText.c_str());
+	}
+}
