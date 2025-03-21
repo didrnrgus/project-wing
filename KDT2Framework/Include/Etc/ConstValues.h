@@ -48,3 +48,6 @@
 
 #define ARROW_SQUARE_LEFT TEXT("Texture/Icon/arrow-square-left.png")
 #define ARROW_SQUARE_RIGHT TEXT("Texture/Icon/arrow-square-right.png")
+
+#define TEXTURE_NAME_BASIC "Basic"
+#define TEXTURE_PATH_BASIC TEXT("Texture/basic.png")

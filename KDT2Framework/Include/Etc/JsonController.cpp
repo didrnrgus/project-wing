@@ -207,6 +207,9 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FConfig& data)
 	if (json.contains("stat_file"))
 		data.StatFileName = json["stat_file"].get<std::string>();
 
+	if (json.contains("selectable_item_count"))
+		data.SelectableItemCount = json["selectable_item_count"].get<int>();
+
 	return true;
 }
 

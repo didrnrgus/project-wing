@@ -263,48 +263,62 @@ void CTextBlock::Render()
 {
     CWidget::Render();
 
-    mTarget->BeginDraw();
+    if (mTarget == nullptr)
+        return;
 
-    FResolution RS = CDevice::GetInst()->GetResolution();
+    if (mTextColor == nullptr)
+        return;
 
-    D2D1_POINT_2F   Point;
-
-    Point.x = mRenderPos.x;
-    Point.y = RS.Height - mRenderPos.y - mSize.y;
-
-    if (mShadow)
+    try 
     {
-        D2D1_POINT_2F   ShadowPoint = Point;
+        mTarget->BeginDraw();
 
-        ShadowPoint.x += mShadowOffset.x;
-        ShadowPoint.y += mShadowOffset.y;
+        FResolution RS = CDevice::GetInst()->GetResolution();
 
-        if (mShadowTransparency)
-            mTextColor->SetOpacity(mShadowOpacity);
+        D2D1_POINT_2F   Point;
+
+        Point.x = mRenderPos.x - mSize.x * mPivot.x;
+        Point.y = RS.Height - mRenderPos.y - mSize.y + mSize.y * mPivot.y;
+
+        if (mShadow)
+        {
+            D2D1_POINT_2F   ShadowPoint = Point;
+
+            ShadowPoint.x += mShadowOffset.x;
+            ShadowPoint.y += mShadowOffset.y;
+
+            if (mShadowTransparency)
+                mTextColor->SetOpacity(mShadowOpacity);
+
+            else
+                mTextColor->SetOpacity(1.f);
+
+            mTarget->DrawTextLayout(ShadowPoint, mLayout, mTextShadowColor,
+                D2D1_DRAW_TEXT_OPTIONS_CLIP);
+        }
+
+        if (mTransparency)
+            mTextColor->SetOpacity(mOpacity);
 
         else
             mTextColor->SetOpacity(1.f);
 
-        mTarget->DrawTextLayout(ShadowPoint, mLayout, mTextShadowColor,
+        mTarget->DrawTextLayout(Point, mLayout, mTextColor,
             D2D1_DRAW_TEXT_OPTIONS_CLIP);
+
+        mTarget->EndDraw();
     }
-
-    if (mTransparency)
-        mTextColor->SetOpacity(mOpacity);
-
-    else
-        mTextColor->SetOpacity(1.f);
-
-    mTarget->DrawTextLayout(Point, mLayout, mTextColor,
-        D2D1_DRAW_TEXT_OPTIONS_CLIP);
-
-    mTarget->EndDraw();
+    catch(const std::runtime_error& e)
+    {
+        CLog::PrintLog("CTextBlock::Render() ERROR!!!");
+        CLog::PrintLog(e.what());
+    }
 }
 
 void CTextBlock::Render(const FVector3D& Pos)
 {
     CWidget::Render(Pos);
-
+    
     mTarget->BeginDraw();
 
     FVector2D   RenderPos = mRenderPos;

@@ -18,7 +18,7 @@ private:
 private:
 	int curSelectedMapIndex;
 	int curSelectedCharacterIndex;
-
+	std::unordered_map<int, int> curSelectedItemIndex;
 public:
 	void SetConfigData(std::string strJson);
 	void SetCharacterData(std::string strJson);
@@ -29,6 +29,7 @@ public:
 
 	inline void SetSelectedMapIndex(int mapIndex) { curSelectedMapIndex = mapIndex; }
 	inline void SetSelectedCharacterIndex(int characterIndex) { curSelectedCharacterIndex = characterIndex; }
+	inline void SetSelectedItemTypeInSlotIndex(int slotIndex, int itemTypeIndex) { curSelectedItemIndex[slotIndex] = itemTypeIndex; }
 
 	inline const FConfig GetConfig() { return mConfigData; }
 	inline const int GetCharacterCount() { return mCharacterInfoDatas.size(); }
@@ -89,7 +90,8 @@ public:
 		return mSpriteAtlasInfoBySpriteName[keyFileName][keySpriteName];
 	}
 
-	inline const std::map<int, FItemInfo> GetItemInfoData() { return mItemInfoDatasByIndex; }
+	inline const std::map<int, FItemInfo> GetItemInfoDatas() { return mItemInfoDatasByIndex; }
+	inline const FItemInfo GetItemInfoDataByIndex(int index) { return mItemInfoDatasByIndex[index]; }
 
 private:
 	DECLARE_SINGLE(CDataStorageManager)

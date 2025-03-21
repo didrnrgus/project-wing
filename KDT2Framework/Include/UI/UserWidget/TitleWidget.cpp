@@ -44,8 +44,8 @@ bool CTitleWidget::Init()
 	return true;
 }
 
-void CTitleWidget::SetButtonWithTextBlock(CButton* button, std::string name, FVector2D pos
-	, void(CTitleWidget::* Func)(), CTextBlock* textBlock, const wchar_t* textBlockContent)
+void CTitleWidget::SetButtonWithTextBlock(CSharedPtr<CButton>& button, std::string name, FVector2D pos
+	, void(CTitleWidget::* Func)(), CSharedPtr<CTextBlock>& textBlock, const wchar_t* textBlockContent)
 {
 	button = mScene->GetUIManager()->CreateWidget<CButton>(name + "Button");
 	AddWidget(button);
@@ -68,6 +68,9 @@ void CTitleWidget::SinglePlayButtonClick()
 {
 	// 로비로 가야 함.
 	CLog::PrintLog("CTitleWidget::SinglePlayButtonClick()");
+
+	if (IsLoading())
+		return;
 
 	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
 		[this]()
@@ -120,8 +123,6 @@ void CTitleWidget::SinglePlayButtonClick()
 
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
 
-			ShowLoading(false);
-
 			// Move to Lobby
 			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 		})));
@@ -132,16 +133,26 @@ void CTitleWidget::MultiPlayButtonClick()
 {
 	// 로비로 가야 함.
 	CLog::PrintLog("CTitleWidget::MultiPlayButtonClick()");
+
+	if (IsLoading())
+		return;
 }
 
 void CTitleWidget::RankButtonClick()
 {
 	// Move Rank Scene 
 	CLog::PrintLog("CTitleWidget::RankButtonClick()");
+
+	if (IsLoading())
+		return;
 }
 
 void CTitleWidget::ExitButtonClick()
 {
 	CLog::PrintLog("CTitleWidget::ExitButtonClick()");
+
+	if (IsLoading())
+		return;
+
 	CGameManager::GetInst()->ExitGame();
 }

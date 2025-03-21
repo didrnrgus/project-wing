@@ -282,6 +282,13 @@ void CButton::MouseHovered()
 
 void CButton::MouseUnHovered()
 {
+    if (mState == EButtonState::Hovered)
+    {
+        if (mEventCallback[EButtonEventState::Unhoverd])
+            mEventCallback[EButtonEventState::Unhoverd]();
+    }
+
     if (mState != EButtonState::Disable)
         mState = EButtonState::Normal;
+
 }

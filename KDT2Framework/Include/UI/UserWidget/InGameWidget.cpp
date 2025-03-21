@@ -37,14 +37,14 @@ bool CInGameWidget::Init()
 	FVector2D backPos = FVector2D(40.0f, RS.Height - 40.0f);
 	FVector2D frontPos = backPos + FVector2D(5.0f, -5.0f);
 
-	hpBackImage->SetTexture("Texture/basic.png");
+	hpBackImage->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
 	hpBackImage->SetPivot(pivot);
 	hpBackImage->SetSize(backSize);
 	hpBackImage->SetColor(FVector4D::Gray70);
 	hpBackImage->SetOpacity(0.5f);
 	hpBackImage->SetPos(backPos);
 
-	mHpFrontImage->SetTexture("Texture/basic.png");
+	mHpFrontImage->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
 	mHpFrontImage->SetPivot(pivot);
 	mHpFrontImage->SetSize(mHpFrontSize);
 	mHpFrontImage->SetColor(FVector4D::Red);

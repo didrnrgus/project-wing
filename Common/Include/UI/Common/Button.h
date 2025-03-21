@@ -20,6 +20,7 @@ namespace EButtonEventState
 	{
 		Hovered,
 		Click,
+		Unhoverd,
 		End
 	};
 }
@@ -45,6 +46,11 @@ public:
 	void ButtonEnable(bool Enable)
 	{
 		mState = Enable ? EButtonState::Normal : EButtonState::Disable;
+	}
+
+	bool GetIsButtonEnable()
+	{
+		return mState != EButtonState::Disable;
 	}
 
 	void SetChild(CWidget* Child)

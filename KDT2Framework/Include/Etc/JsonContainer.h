@@ -34,22 +34,7 @@ struct FLineNode
 		, ItemType(itemType), ObstacleType(obstacleType) {};
 };
 
-/*
-{
-	"index": 0,
-	"name": "Easy",
-	"difficulty_color_name": "Cyan",
-	"difficulty_rate": 10.0,
-	"collision_damage": 20.0,
-	"line_node_list": [
-		{
-			"top_y_pos": 720.0,
-			"bottom_y_pos": 0.0,
-			"item_type": -1,
-			"obstacle_type": -1
-		},
-*/
-
+#pragma region MapInfo
 namespace EMapInfoText
 {
 	enum Type
@@ -70,6 +55,21 @@ namespace EMapInfoText
 	};
 }
 
+/*
+{
+	"index": 0,
+	"name": "Easy",
+	"difficulty_color_name": "Cyan",
+	"difficulty_rate": 10.0,
+	"collision_damage": 20.0,
+	"line_node_list": [
+		{
+			"top_y_pos": 720.0,
+			"bottom_y_pos": 0.0,
+			"item_type": -1,
+			"obstacle_type": -1
+		},
+*/
 struct FMapInfo
 {
 	int Index;
@@ -110,27 +110,10 @@ struct FMapInfo
 		}
 	}
 };
+#pragma endregion
 
 
-
-/*
-{
-	"character_list": [
-		{
-			"index": 0,
-			"name": "Yang",
-			"color_name": "White",
-			"speed": 700.0,
-			"hp": 100.0,
-			"dex": 100.0,
-			"def": 10.0,
-			"image_sequence_name": "PlayerIdle",
-			"size_x": 200.0,
-			"size_y": 135.0
-		},
-		...
-*/
-
+#pragma region Character
 namespace ECharacterStatText
 {
 	enum Type
@@ -155,6 +138,24 @@ namespace ECharacterStatText
 	};
 }
 
+
+/*
+{
+	"character_list": [
+		{
+			"index": 0,
+			"name": "Yang",
+			"color_name": "White",
+			"speed": 700.0,
+			"hp": 100.0,
+			"dex": 100.0,
+			"def": 10.0,
+			"image_sequence_name": "PlayerIdle",
+			"size_x": 200.0,
+			"size_y": 135.0
+		},
+		...
+*/
 struct FCharacterState
 {
 	int Index;
@@ -187,6 +188,7 @@ struct FCharacterState
 		}
 	}
 };
+#pragma endregion
 
 
 /*
@@ -201,7 +203,8 @@ struct FCharacterState
 	],
 	"character_file": "character_list.json",
 	"item_file": "item_list.json",
-	"stat_file": "stat_type_list.json"
+	"stat_file": "stat_type_list.json",
+	"selectable_item_count": 3
 }
 */
 struct FConfig
@@ -213,6 +216,7 @@ struct FConfig
 	std::string CharacterFileName;
 	std::string ItemFileName;
 	std::string StatFileName;
+	int SelectableItemCount;
 };
 
 
@@ -253,6 +257,26 @@ struct FSpriteAtlasInfo
 	std::vector<FSpriteSheetInfo> Sprites;
 };
 
+#pragma region StatInfo
+namespace EStatInfoText
+{
+	enum Type
+	{
+		HP = 0,
+		Speed,
+		Dex,
+		Def,
+		End
+	};
+
+	static std::vector<const wchar_t*> gArrFStatInfoText =
+	{
+		TEXT("HP")
+		,TEXT("Speed")
+		,TEXT("Dex")
+		,TEXT("Def")
+	};
+}
 
 /*
 {
@@ -269,7 +293,28 @@ struct FStatInfo
 	int Type;
 	std::string Name;
 };
+#pragma endregion
 
+#pragma region Item
+namespace EItemInfoText
+{
+	enum Type
+	{
+		Name = 0,
+		Desc,
+		StatType,
+		AddVal,
+		End
+	};
+
+	static std::vector<const wchar_t*> gArrItemInfoText =
+	{
+		TEXT("Name")
+		,TEXT("Desc")
+		,TEXT("StatType")
+		,TEXT("AddVal")
+	};
+}
 
 /*
 {
@@ -306,4 +351,23 @@ struct FItemInfo
 			return L"";
 		}
 	}
+
+	const std::wstring GetItemInfoWString(EItemInfoText::Type type)
+	{
+		switch (type)
+		{
+		case EItemInfoText::Name:
+			return std::wstring(Name.begin(), Name.end());
+
+		case EItemInfoText::StatType:
+			return EStatInfoText::gArrFStatInfoText[StatType];
+
+		case EItemInfoText::AddVal:
+			return std::to_wstring((int)AddValue);
+
+		case EItemInfoText::Desc:
+			return std::wstring(Desc.begin(), Desc.end());
+		}
+	}
 };
+#pragma endregion

@@ -14,20 +14,31 @@ protected:
 	virtual ~CLobbyWidget();
 
 protected:
+	// character select
 	CSharedPtr<class CButton> mCharacterLeftButton;
 	CSharedPtr<class CButton> mCharacterRightButton;
 
+	// map select
 	CSharedPtr<class CButton> mMapLeftButton;
 	CSharedPtr<class CButton> mMapRightButton;
-
 	CSharedPtr<class CImage> mMapDifficultyImage;
 
+	// move scene
 	CSharedPtr<class CButton> mNextButton;
 	CSharedPtr<class CButton> mPrevButton;
 
+	// tooltip
+	CSharedPtr<class CImage> mToolTipShasdowImage;
+	CSharedPtr<class CImage> mToolTipBack2Image;
+	CSharedPtr<class CImage> mToolTipBackImage;
+	std::vector<CSharedPtr<class CTextBlock>> mItemInfoNameText;
+	std::vector<CSharedPtr<class CTextBlock>> mItemInfoValueText;
+
+	// playerInfo
 	std::vector<CSharedPtr<class CTextBlock>> mPlayerStatNameText;
 	std::vector<CSharedPtr<class CTextBlock>> mPlayerStatValueText;
 
+	// mapInfo
 	std::vector<CSharedPtr<class CTextBlock>> mMapInfoNameText;
 	std::vector<CSharedPtr<class CTextBlock>> mMapInfoValueText;
 
@@ -83,6 +94,7 @@ private:
 	void InitNextPrevButton();
 	void InitPlayerStatText();
 	void InitMapInfoText();
+	void InitItemInfoTooltip();
 
 	void OnCharacterLeftButtonClick();
 	void OnCharacterRightButtonClick();
@@ -92,8 +104,9 @@ private:
 	void OnMapRightButtonClick();
 	void UpdateMapInfoText();
 
-	void SelectItemForSlot(int _slotIndex, int _itemIndex);
+	void SelectItemForSlot(int _slotIndex, int _itemTypeIndex);
 	void TriggerItemButtons(int _index);
+	void TriggerItemTooltip(int _itemTypeIndex, FVector2D _pos = FVector2D::Zero); // 아이템타입의 인덱스.
 	void SetButton(class CButton& _button, const char* _name, const wchar_t* _path);
 };
 

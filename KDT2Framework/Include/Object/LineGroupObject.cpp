@@ -91,7 +91,7 @@ void CLineGroupObject::AddLine(ELinePosType::Type type, int lineNodeIndex)
 {
 	CSharedPtr<CSpriteComponent> tempSpriteComp = CreateComponent<CSpriteComponent>();
 	mRoot->AddChild(tempSpriteComp);
-	tempSpriteComp->SetTexture("basic", TEXT("Texture/basic.png"));
+	tempSpriteComp->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
 	tempSpriteComp->SetPivot(FVector2D::Axis[EAxis::X] * 0.5f);
 
 	tempSpriteComp->SetColor(FVector4D::Green);

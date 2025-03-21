@@ -20,7 +20,6 @@ int CTaskManager::AddTask(std::thread&& task)
 
     mThreadTasks.insert(std::make_pair(taskID, std::move(task)));
     mThreadTasks[taskID].detach();
-
     return taskID;
 }
 
