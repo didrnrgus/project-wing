@@ -12,7 +12,7 @@ private:
 	virtual ~CSceneInGame();
 
 private:
-	std::vector<IGamePlayStateController*> mArrGamePlayStateCtlr;
+std::vector<IGamePlayStateController*> mArrGamePlayStateCtlr;
 	EGamePlayState::Type mGamePlayState = EGamePlayState::Ready;
 
 protected:

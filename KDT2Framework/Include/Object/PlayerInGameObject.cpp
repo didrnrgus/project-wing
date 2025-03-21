@@ -45,7 +45,8 @@ bool CPlayerInGameObject::Init()
 	mRoot->AddChild(mDeadSign);
 	mDeadSign->SetTexture(TEXTURE_NAME_DEAD_SIGN, TEXTURE_PATH_DEAD_SIGN);
 	mDeadSign->SetPivot(FVector2D::One * 0.5f);
-	mDeadSign->SetWorldScale(FVector2D::One * 128.0f * 0.7f);
+	mDeadSign->SetColor(FVector4D::Red * 0.8f);
+	mDeadSign->SetWorldScale(FVector2D::One * 128.0f * 1.5f);
 	//CRenderManager::GetInst()->MoveRenderElement(mDeadSign, true);
 	mDeadSign->SetEnable(false);
 

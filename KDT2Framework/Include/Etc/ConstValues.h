@@ -29,7 +29,7 @@
 
 #define ITEM_HP_ICON_PATH TEXT("Texture/Icon/milk.png")
 #define ITEM_SPEED_ICON_PATH TEXT("Texture/Icon/forward.png")
-#define ITEM_DEX_ICON_PATH TEXT("Texture/Icon/pharagraphspacing.png")
+#define ITEM_DEX_ICON_PATH TEXT("Texture/Icon/power-wing.png")
 #define ITEM_DEF_ICON_PATH TEXT("Texture/Icon/safety.png")
 
 #define PROFILE_DEFAULT "Default"
@@ -38,4 +38,13 @@
 #define PROFILE_MAP "Map"
 
 #define TEXTURE_NAME_DEAD_SIGN "DeadSign"
-#define TEXTURE_PATH_DEAD_SIGN TEXT("Texture/death-infinity.png")
+#define TEXTURE_PATH_DEAD_SIGN TEXT("Texture/Icon/death.png")
+
+#define ITEM_ADD_SQUARE_PATH TEXT("Texture/Icon/add-square.png")
+#define ITEM_EMPTY_SQUARE_PATH TEXT("Texture/Icon/empty-square.png")
+
+#define DIRECT_LEFT_PATH TEXT("Texture/Icon/direct-left.png")
+#define DIRECT_RIGHT_PATH TEXT("Texture/Icon/direct-right.png")
+
+#define ARROW_SQUARE_LEFT TEXT("Texture/Icon/arrow-square-left.png")
+#define ARROW_SQUARE_RIGHT TEXT("Texture/Icon/arrow-square-right.png")

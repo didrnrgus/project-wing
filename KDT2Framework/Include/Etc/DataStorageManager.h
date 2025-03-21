@@ -89,6 +89,8 @@ public:
 		return mSpriteAtlasInfoBySpriteName[keyFileName][keySpriteName];
 	}
 
+	inline const std::map<int, FItemInfo> GetItemInfoData() { return mItemInfoDatasByIndex; }
+
 private:
 	DECLARE_SINGLE(CDataStorageManager)
 };

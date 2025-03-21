@@ -36,19 +36,20 @@ CLobbyWidget::CLobbyWidget()
 		mMapDifficultyImageColors.push_back(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 	}
 
-	// 아이템 테이블로 뺴야 함.
-	{
-		mItemImagePaths.push_back(ITEM_HP_ICON_PATH);
-		mItemImagePaths.push_back(ITEM_SPEED_ICON_PATH);
-		mItemImagePaths.push_back(ITEM_DEX_ICON_PATH);
-		mItemImagePaths.push_back(ITEM_DEF_ICON_PATH);
-		CDataStorageManager::GetInst()->getitem
+	{ // 아이템 정보 세팅.
+		auto items = CDataStorageManager::GetInst()->GetItemInfoData();
+		int index = 0;
+		for (auto item : items)
+		{
+			mItemImagePaths.push_back(item.second.GetItmeImagePath(index));
+				index++;
+		}
 
 		itemTypeCount = mItemImagePaths.size();
 	}
 
-	mSlotImagePaths.push_back(TEXT("Texture/Icon/add-square.png"));
-	mSlotImagePaths.push_back(TEXT("Texture/Icon/empty-square.png"));
+	mSlotImagePaths.push_back(ITEM_ADD_SQUARE_PATH);
+	mSlotImagePaths.push_back(ITEM_EMPTY_SQUARE_PATH);
 
 	mSlotPosBase = FVector2D(100, 100);
 	mSlotPosAdd = FVector2D(120, 0);
@@ -74,8 +75,8 @@ bool CLobbyWidget::Init()
 	InitPlayerStatText();
 	InitMapInfoText();
 
-	auto pathLeft = TEXT("Texture/Icon/direct-left.png");
-	auto pathRight = TEXT("Texture/Icon/direct-right.png");
+	auto pathLeft = DIRECT_LEFT_PATH;
+	auto pathRight = DIRECT_RIGHT_PATH;
 
 	SetButton(*(mCharacterLeftButton.Get()), "CharacterLeftButton", pathLeft);
 	SetButton(*(mCharacterRightButton.Get()), "CharacterRightButton", pathRight);
@@ -243,7 +244,7 @@ void CLobbyWidget::InitNextPrevButton()
 	// next button
 	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>("NextButton");
 	AddWidget(mNextButton);
-	SetButton(*mNextButton.Get(), "NextButton", TEXT("Texture/Icon/arrow-square-right.png"));
+	SetButton(*mNextButton.Get(), "NextButton", ARROW_SQUARE_RIGHT);
 	mNextButton->SetPivot(FVector2D::One * 0.5f);
 	mNextButton->SetSize(FVector2D::One * 128 * 1.0f);
 	mNextButton->SetPos(FVector2D(1150, 100));
@@ -260,7 +261,7 @@ void CLobbyWidget::InitNextPrevButton()
 	// previous button
 	mPrevButton = mScene->GetUIManager()->CreateWidget<CButton>("PrevButton");
 	AddWidget(mPrevButton);
-	SetButton(*mPrevButton.Get(), "PrevButton", TEXT("Texture/Icon/arrow-square-left.png"));
+	SetButton(*mPrevButton.Get(), "PrevButton", ARROW_SQUARE_LEFT);
 	mPrevButton->SetPivot(FVector2D::One * 0.5f);
 	mPrevButton->SetSize(FVector2D::One * 96.0f * 1.0f);
 	mPrevButton->SetPos(FVector2D(100, 650));
