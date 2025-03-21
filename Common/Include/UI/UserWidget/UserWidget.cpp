@@ -59,7 +59,7 @@ bool CUserWidget::Init()
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	mLoadingBackImage = mScene->GetUIManager()->CreateWidget<CImage>("LoadingBackImage");
 	AddWidget(mLoadingBackImage);
-	mLoadingBackImage->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
+	mLoadingBackImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mLoadingBackImage->SetPivot(FVector2D::Zero);
 	mLoadingBackImage->SetSize(FVector2D(RS.Width, RS.Height));
 	mLoadingBackImage->SetColor(FVector4D::Black);

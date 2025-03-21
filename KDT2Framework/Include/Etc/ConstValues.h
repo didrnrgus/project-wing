@@ -23,10 +23,17 @@
 #define PROP_ITEM_TYPE "itemType"
 #define PROP_OBSTACLE_TYPE "obstacleType"
 
+#define MAP_0_ICON_NAME "EmojyHappy"
+#define MAP_1_ICON_NAME "EmojyNormal"
+#define MAP_2_ICON_NAME "EmojySad"
 #define MAP_0_ICON_PATH TEXT("Texture/Icon/emoji-happy.png")
 #define MAP_1_ICON_PATH TEXT("Texture/Icon/emoji-normal.png")
 #define MAP_2_ICON_PATH TEXT("Texture/Icon/emoji-sad.png")
 
+#define ITEM_HP_ICON_NAME "HpIcon"
+#define ITEM_SPEED_ICON_NAME "SpeedIcon"
+#define ITEM_DEX_ICON_NAME "DexIcon"
+#define ITEM_DEF_ICON_NAME "DefIcon"
 #define ITEM_HP_ICON_PATH TEXT("Texture/Icon/milk.png")
 #define ITEM_SPEED_ICON_PATH TEXT("Texture/Icon/forward.png")
 #define ITEM_DEX_ICON_PATH TEXT("Texture/Icon/power-wing.png")
@@ -40,14 +47,19 @@
 #define TEXTURE_NAME_DEAD_SIGN "DeadSign"
 #define TEXTURE_PATH_DEAD_SIGN TEXT("Texture/Icon/death.png")
 
+#define ITEM_ADD_SQUARE_NAME "AddSquare"
+#define ITEM_EMPTY_SQUARE_NAME "EmtpeySquare"
 #define ITEM_ADD_SQUARE_PATH TEXT("Texture/Icon/add-square.png")
 #define ITEM_EMPTY_SQUARE_PATH TEXT("Texture/Icon/empty-square.png")
 
+#define DIRECT_LEFT_NAME "DirectLeft"
+#define DIRECT_RIGHT_NAME "DirectRight"
+#define ARROW_SQUARE_LEFT_NAME "ArrowSquareLeft"
+#define ARROW_SQUARE_RIGHT_NAME "ArrowSquareRight"
 #define DIRECT_LEFT_PATH TEXT("Texture/Icon/direct-left.png")
 #define DIRECT_RIGHT_PATH TEXT("Texture/Icon/direct-right.png")
+#define ARROW_SQUARE_LEFT_PATH TEXT("Texture/Icon/arrow-square-left.png")
+#define ARROW_SQUARE_RIGHT_PATH TEXT("Texture/Icon/arrow-square-right.png")
 
-#define ARROW_SQUARE_LEFT TEXT("Texture/Icon/arrow-square-left.png")
-#define ARROW_SQUARE_RIGHT TEXT("Texture/Icon/arrow-square-right.png")
-
-#define TEXTURE_NAME_BASIC "Basic"
-#define TEXTURE_PATH_BASIC TEXT("Texture/basic.png")
+#define TEXTURE_BASIC_NAME "Basic"
+#define TEXTURE_BASIC_PATH TEXT("Texture/basic.png")

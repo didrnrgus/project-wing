@@ -33,6 +33,7 @@ public:
 
 	inline const FConfig GetConfig() { return mConfigData; }
 	inline const int GetCharacterCount() { return mCharacterInfoDatas.size(); }
+	inline const int GetSelectableItemCount() { return mConfigData.SelectableItemCount; }
 
 	//인덱스에 따른 캐릭터 가져오기.
 	inline const FCharacterState GetCharacterState(int index) { return mCharacterInfoDatas[index]; }

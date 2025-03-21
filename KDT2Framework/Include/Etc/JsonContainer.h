@@ -95,6 +95,22 @@ struct FMapInfo
 		}
 	}
 
+	const char* GetIconName(int idx)
+	{
+		switch (idx)
+		{
+		case 0:
+			return MAP_0_ICON_NAME;
+			break;
+		case 1:
+			return MAP_1_ICON_NAME;
+			break;
+		case 2:
+			return MAP_2_ICON_NAME;
+			break;
+		}
+	}
+
 	const std::wstring GetInfoToWString(EMapInfoText::Type type)
 	{
 		switch (type)
@@ -349,6 +365,23 @@ struct FItemInfo
 			return ITEM_DEF_ICON_PATH;
 		default:
 			return L"";
+		}
+	}
+
+	const char* GetItmeImageName(int _index)
+	{
+		switch (_index)
+		{
+		case 0:
+			return ITEM_HP_ICON_NAME;
+		case 1:
+			return ITEM_SPEED_ICON_NAME;
+		case 2:
+			return ITEM_DEX_ICON_NAME;
+		case 3:
+			return ITEM_DEF_ICON_NAME;
+		default:
+			return "";
 		}
 	}
 

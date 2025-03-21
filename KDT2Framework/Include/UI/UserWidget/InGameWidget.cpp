@@ -37,14 +37,14 @@ bool CInGameWidget::Init()
 	FVector2D backPos = FVector2D(40.0f, RS.Height - 40.0f);
 	FVector2D frontPos = backPos + FVector2D(5.0f, -5.0f);
 
-	hpBackImage->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
+	hpBackImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	hpBackImage->SetPivot(pivot);
 	hpBackImage->SetSize(backSize);
 	hpBackImage->SetColor(FVector4D::Gray70);
 	hpBackImage->SetOpacity(0.5f);
 	hpBackImage->SetPos(backPos);
 
-	mHpFrontImage->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
+	mHpFrontImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mHpFrontImage->SetPivot(pivot);
 	mHpFrontImage->SetSize(mHpFrontSize);
 	mHpFrontImage->SetColor(FVector4D::Red);
@@ -64,6 +64,27 @@ bool CInGameWidget::Init()
 		}
 	}
 
+	{ // 아이템 정보 세팅.
+		auto items = CDataStorageManager::GetInst()->GetItemInfoDatas();
+		int index = 0;
+		for (auto item : items)
+		{
+			mItemImagePaths.push_back(item.second.GetItmeImagePath(index));
+			mItemImageNames.push_back(item.second.GetItmeImageName(index));
+			index++;
+		}
+
+		itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
+		itemTypeCount = mItemImagePaths.size();
+
+		mSlotImagePaths.push_back(ITEM_ADD_SQUARE_PATH);
+		mSlotImagePaths.push_back(ITEM_EMPTY_SQUARE_PATH);
+		mSlotImageNames.push_back(ITEM_ADD_SQUARE_NAME);
+		mSlotImageNames.push_back(ITEM_EMPTY_SQUARE_NAME);
+
+		InitSelectedItemSlot();
+	}
+
 	return true;
 }
 
@@ -73,6 +94,35 @@ void CInGameWidget::Update(float DeltaTime)
 
 	if (mPlayerStat)
 		UpdateTargetPlayerStat(DeltaTime);
+}
+
+void CInGameWidget::InitSelectedItemSlot()
+{
+	for (int i = 0; i < itemSlotCount; i++)
+	{
+		// 슬롯 이미지.
+		FVector2D tempPos = mSlotPosBase + mSlotPosAdd * i;
+		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>("ItemSlotBack");
+		AddWidget(buttonBackImage);
+		mItemSlotImages.push_back(buttonBackImage);
+		buttonBackImage->SetTexture(mSlotImageNames[(int)SlotType::ToAdd]
+			, mSlotImagePaths[(int)SlotType::ToAdd]);
+		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
+		buttonBackImage->SetSize(mSlotSize);
+		buttonBackImage->SetColor(FVector4D::Green);
+		buttonBackImage->SetPos(tempPos);
+
+		// 슬롯 내부 아이템 이미지.
+		CSharedPtr<CImage> buttonImage = mScene->GetUIManager()->CreateWidget<CImage>("ItmeImage_" + std::to_string(i));
+		AddWidget(buttonImage);
+		mItemImages.push_back(buttonImage);
+		buttonImage->SetTexture(mItemImageNames[i], mItemImagePaths[i]);
+		buttonImage->SetPivot(FVector2D::One * 0.5f);
+		buttonImage->SetSize(mSlotSize * mSlotInnerItemSizeRate * mSlotInnerItemSizeRate);
+		buttonImage->SetColor(FVector4D::Green);
+		buttonImage->SetPos(tempPos);
+		buttonImage->SetEnable(false);
+	}
 }
 
 void CInGameWidget::UpdateTargetPlayerStat(float DeltaTime)

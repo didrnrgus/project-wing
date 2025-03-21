@@ -18,10 +18,10 @@ CLobbyWidget::CLobbyWidget()
 {
 	mIsHost = false;
 	mIsMultiPlay = false;
-	mSlotTextureNamePrefix = "ButtonBackImage_";
+	/*mSlotTextureNamePrefix = "ButtonBackImage_";
 	mItemTextureNamePrefix = "ButtonImage_";
 	mSlotButtonNamePrefix = "SlotButton_";
-	mMapDifficultyImageNamePrefix = "MapImage_";
+	mMapDifficultyImageNamePrefix = "MapImage_";*/
 	curSelectedSlot = -1;
 
 	curPlayerGraphicIndex = 0;
@@ -34,6 +34,7 @@ CLobbyWidget::CLobbyWidget()
 	{
 		auto mapInfo = CDataStorageManager::GetInst()->GetMapInfo(i);
 		mMapDifficultyImagePaths.push_back(mapInfo.GetIconPath(i));
+		mMapDifficultyImageNames.push_back(mapInfo.GetIconName(i));
 		mMapDifficultyImageColors.push_back(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 	}
 
@@ -43,14 +44,18 @@ CLobbyWidget::CLobbyWidget()
 		for (auto item : items)
 		{
 			mItemImagePaths.push_back(item.second.GetItmeImagePath(index));
+			mItemImageNames.push_back(item.second.GetItmeImageName(index));
 			index++;
 		}
 
+		itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
 		itemTypeCount = mItemImagePaths.size();
 	}
 
 	mSlotImagePaths.push_back(ITEM_ADD_SQUARE_PATH);
 	mSlotImagePaths.push_back(ITEM_EMPTY_SQUARE_PATH);
+	mSlotImageNames.push_back(ITEM_ADD_SQUARE_NAME);
+	mSlotImageNames.push_back(ITEM_EMPTY_SQUARE_NAME);
 
 	mSlotPosBase = FVector2D(100, 100);
 	mSlotPosAdd = FVector2D(120, 0);
@@ -247,7 +252,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 
 	mToolTipShasdowImage = mScene->GetUIManager()->CreateWidget<CImage>("mToolTipShasdowImage");
 	AddWidget(mToolTipShasdowImage);
-	mToolTipShasdowImage->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
+	mToolTipShasdowImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mToolTipShasdowImage->SetPivot(backImagePivot);
 	mToolTipShasdowImage->SetSize(backShadowImageSize);
 	mToolTipShasdowImage->SetColor(FVector4D::Gray30);
@@ -256,7 +261,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 
 	mToolTipBack2Image = mScene->GetUIManager()->CreateWidget<CImage>("mToolTipBack2Image");
 	AddWidget(mToolTipBack2Image);
-	mToolTipBack2Image->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
+	mToolTipBack2Image->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mToolTipBack2Image->SetPivot(backImagePivot);
 	mToolTipBack2Image->SetSize(back2ImageSize);
 	mToolTipBack2Image->SetColor(FVector4D::Green);
@@ -265,7 +270,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 
 	mToolTipBackImage = mScene->GetUIManager()->CreateWidget<CImage>("mToolTipBackImage");
 	AddWidget(mToolTipBackImage);
-	mToolTipBackImage->SetTexture(TEXTURE_NAME_BASIC, TEXTURE_PATH_BASIC);
+	mToolTipBackImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mToolTipBackImage->SetPivot(backImagePivot);
 	mToolTipBackImage->SetSize(backImageSize);
 	mToolTipBackImage->SetColor(FVector4D::Black * 0.9f);
@@ -335,9 +340,9 @@ void CLobbyWidget::InitItemInfoTooltip()
 void CLobbyWidget::InitDifficultiImage()
 {
 	// difficulty Image
-	mMapDifficultyImage = mScene->GetUIManager()->CreateWidget<CImage>(mMapDifficultyImageNamePrefix);
+	mMapDifficultyImage = mScene->GetUIManager()->CreateWidget<CImage>(mMapDifficultyImageNames[0]);
 	AddWidget(mMapDifficultyImage);
-	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(0)
+	mMapDifficultyImage->SetTexture(mMapDifficultyImageNames[0]
 		, mMapDifficultyImagePaths[0]);
 	mMapDifficultyImage->SetPivot(FVector2D::One * 0.5f);
 	mMapDifficultyImage->SetSize(FVector2D::One * 128 * 1.0f);
@@ -350,7 +355,7 @@ void CLobbyWidget::InitNextPrevButton()
 	// next button
 	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>("NextButton");
 	AddWidget(mNextButton);
-	SetButton(*mNextButton.Get(), "NextButton", ARROW_SQUARE_RIGHT);
+	SetButton(*mNextButton.Get(), "NextButton", ARROW_SQUARE_RIGHT_PATH);
 	mNextButton->SetPivot(FVector2D::One * 0.5f);
 	mNextButton->SetSize(FVector2D::One * 128 * 1.0f);
 	mNextButton->SetPos(FVector2D(1150, 100));
@@ -367,7 +372,7 @@ void CLobbyWidget::InitNextPrevButton()
 	// previous button
 	mPrevButton = mScene->GetUIManager()->CreateWidget<CButton>("PrevButton");
 	AddWidget(mPrevButton);
-	SetButton(*mPrevButton.Get(), "PrevButton", ARROW_SQUARE_LEFT);
+	SetButton(*mPrevButton.Get(), "PrevButton", ARROW_SQUARE_LEFT_PATH);
 	mPrevButton->SetPivot(FVector2D::One * 0.5f);
 	mPrevButton->SetSize(FVector2D::One * 96.0f * 1.0f);
 	mPrevButton->SetPos(FVector2D(100, 650));
@@ -386,10 +391,10 @@ void CLobbyWidget::InitItemButtons()
 	{
 		FVector2D tempPos = mSlotPosBase + mSlotPosAdd * i;
 		// 슬롯에 '+' 있는것과 아무것도 없는 슬롯 스위칭 할것임.
-		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mSlotTextureNamePrefix);
+		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mSlotImageNames[(int)SlotType::ToAdd]);
 		AddWidget(buttonBackImage);
 		mItemSlotImages.push_back(buttonBackImage);
-		buttonBackImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::ToAdd)
+		buttonBackImage->SetTexture(mSlotImageNames[(int)SlotType::ToAdd]
 			, mSlotImagePaths[(int)SlotType::ToAdd]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize);
@@ -397,10 +402,10 @@ void CLobbyWidget::InitItemButtons()
 		buttonBackImage->SetPos(tempPos);
 
 		// 슬롯 내부 아이템 이미지.
-		CSharedPtr<CImage> buttonImage = mScene->GetUIManager()->CreateWidget<CImage>(mItemTextureNamePrefix);
+		CSharedPtr<CImage> buttonImage = mScene->GetUIManager()->CreateWidget<CImage>(mItemImageNames[i]);
 		AddWidget(buttonImage);
 		mItemImages.push_back(buttonImage);
-		buttonImage->SetTexture(mItemTextureNamePrefix + std::to_string(i), mItemImagePaths[i]);
+		buttonImage->SetTexture(mItemImageNames[i], mItemImagePaths[i]);
 		buttonImage->SetPivot(FVector2D::One * 0.5f);
 		buttonImage->SetSize(mSlotSize * mSlotInnerItemSizeRate * mSlotInnerItemSizeRate);
 		buttonImage->SetColor(FVector4D::Green);
@@ -408,7 +413,7 @@ void CLobbyWidget::InitItemButtons()
 		buttonImage->SetEnable(false);
 
 		// 버튼이 인풋 이벤트에 입력되어야 하므로.
-		CSharedPtr<CButton> slotButton = mScene->GetUIManager()->CreateWidget<CButton>(mSlotButtonNamePrefix + std::to_string(i));
+		CSharedPtr<CButton> slotButton = mScene->GetUIManager()->CreateWidget<CButton>("SlotButton");
 		AddWidget(slotButton);
 		mItemSlots.push_back(slotButton);
 		slotButton->SetSize(mSlotSize);
@@ -427,10 +432,10 @@ void CLobbyWidget::InitItemButtons()
 	// 하이라키 세팅은 하지말자.
 	for (int i = 0; i < itemTypeCount; i++)
 	{
-		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mSlotTextureNamePrefix);
+		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mSlotImageNames[(int)SlotType::Added]);
 		AddWidget(buttonBackImage);
 		mItemSlotImages.push_back(buttonBackImage);
-		buttonBackImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::Added)
+		buttonBackImage->SetTexture(mSlotImageNames[(int)SlotType::Added]
 			, mSlotImagePaths[(int)SlotType::Added]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 1));
@@ -483,11 +488,11 @@ void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemTypeIndex)
 	CDataStorageManager::GetInst()->SetSelectedItemTypeInSlotIndex(_slotIndex, _itemTypeIndex);
 
 	auto slotImage = mItemSlotImages[_slotIndex];
-	slotImage->SetTexture(mSlotTextureNamePrefix + std::to_string((int)SlotType::Added)
+	slotImage->SetTexture(mSlotImageNames[(int)SlotType::Added]
 		, mSlotImagePaths[(int)SlotType::Added]);
 
 	auto itemImage = mItemImages[_slotIndex];
-	itemImage->SetTexture(mItemTextureNamePrefix + std::to_string(_itemTypeIndex)
+	itemImage->SetTexture(mItemImageNames[_itemTypeIndex]
 		, mItemImagePaths[_itemTypeIndex]);
 	itemImage->SetEnable(true);
 }
@@ -662,7 +667,7 @@ void CLobbyWidget::OnMapLeftButtonClick()
 	if (curDifficultyIndex < 0)
 		curDifficultyIndex = CDataStorageManager::GetInst()->GetMapInfoCount() - 1;
 
-	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficultyIndex)
+	mMapDifficultyImage->SetTexture(mMapDifficultyImageNames[curDifficultyIndex]
 		, mMapDifficultyImagePaths[curDifficultyIndex]);
 	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficultyIndex]);
 
@@ -678,7 +683,7 @@ void CLobbyWidget::OnMapRightButtonClick()
 	if (curDifficultyIndex == CDataStorageManager::GetInst()->GetMapInfoCount())
 		curDifficultyIndex = 0;
 
-	mMapDifficultyImage->SetTexture(mMapDifficultyImageNamePrefix + std::to_string(curDifficultyIndex)
+	mMapDifficultyImage->SetTexture(mMapDifficultyImageNames[curDifficultyIndex]
 		, mMapDifficultyImagePaths[curDifficultyIndex]);
 	mMapDifficultyImage->SetColor(mMapDifficultyImageColors[curDifficultyIndex]);
 

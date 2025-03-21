@@ -57,6 +57,9 @@ protected:
 	std::vector<const wchar_t*> mItemImagePaths;
 	std::vector<const wchar_t*> mSlotImagePaths;
 	std::vector<const wchar_t*> mMapDifficultyImagePaths;
+	std::vector<const char*> mItemImageNames;
+	std::vector<const char*> mSlotImageNames;
+	std::vector<const char*> mMapDifficultyImageNames;
 
 	std::vector<FVector4D> mMapDifficultyImageColors;
 
@@ -72,17 +75,17 @@ protected:
 	bool mIsHost;
 	bool mIsMultiPlay;
 
-	int itemTypeCount; // 나중에 하자
-	const int itemSlotCount = 3;
+	int itemTypeCount;
+	int itemSlotCount;
 
 	int curSelectedSlot;
 	int curPlayerGraphicIndex = 0;
 	int curDifficultyIndex = 0;
 
-	std::string mSlotTextureNamePrefix;
+	/*std::string mSlotTextureNamePrefix;
 	std::string mItemTextureNamePrefix;
 	std::string mSlotButtonNamePrefix;
-	std::string mMapDifficultyImageNamePrefix;
+	std::string mMapDifficultyImageNamePrefix;*/
 
 public:
 	virtual bool Init() override;
