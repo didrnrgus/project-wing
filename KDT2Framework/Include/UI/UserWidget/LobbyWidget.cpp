@@ -60,8 +60,8 @@ CLobbyWidget::CLobbyWidget()
 	mSlotPosBase = FVector2D(100, 100);
 	mSlotPosAdd = FVector2D(120, 0);
 	mSlotSize = FVector2D(100.0f, 100.0f);
-	mMapDifficultyImagePos = FVector2D(mResolution.x * 0.8f, mResolution.y * 0.4f);
 	mSlotInnerItemSizeRate = 0.8f;
+	mMapDifficultyImagePos = FVector2D(mResolution.x * 0.8f, mResolution.y * 0.4f);
 	mMapDifficultySinAngle = 0.0f;
 
 }

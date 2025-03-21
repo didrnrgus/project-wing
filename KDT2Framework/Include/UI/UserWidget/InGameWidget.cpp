@@ -82,6 +82,11 @@ bool CInGameWidget::Init()
 		mSlotImageNames.push_back(ITEM_ADD_SQUARE_NAME);
 		mSlotImageNames.push_back(ITEM_EMPTY_SQUARE_NAME);
 
+		mSlotPosBase = FVector2D(100, 100);
+		mSlotPosAdd = FVector2D(120, 0);
+		mSlotSize = FVector2D(100.0f, 100.0f);
+		mSlotInnerItemSizeRate = 0.8f;
+
 		InitSelectedItemSlot();
 	}
 
@@ -105,8 +110,8 @@ void CInGameWidget::InitSelectedItemSlot()
 		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>("ItemSlotBack");
 		AddWidget(buttonBackImage);
 		mItemSlotImages.push_back(buttonBackImage);
-		buttonBackImage->SetTexture(mSlotImageNames[(int)SlotType::ToAdd]
-			, mSlotImagePaths[(int)SlotType::ToAdd]);
+		buttonBackImage->SetTexture(mSlotImageNames[(int)SlotType::Added]
+			, mSlotImagePaths[(int)SlotType::Added]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize);
 		buttonBackImage->SetColor(FVector4D::Green);
@@ -116,12 +121,11 @@ void CInGameWidget::InitSelectedItemSlot()
 		CSharedPtr<CImage> buttonImage = mScene->GetUIManager()->CreateWidget<CImage>("ItmeImage_" + std::to_string(i));
 		AddWidget(buttonImage);
 		mItemImages.push_back(buttonImage);
-		buttonImage->SetTexture(mItemImageNames[i], mItemImagePaths[i]);
+		//buttonImage->SetTexture(mItemImageNames[i], mItemImagePaths[i]);
 		buttonImage->SetPivot(FVector2D::One * 0.5f);
 		buttonImage->SetSize(mSlotSize * mSlotInnerItemSizeRate * mSlotInnerItemSizeRate);
 		buttonImage->SetColor(FVector4D::Green);
 		buttonImage->SetPos(tempPos);
-		buttonImage->SetEnable(false);
 	}
 }
 
