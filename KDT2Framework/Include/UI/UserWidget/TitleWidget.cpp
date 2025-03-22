@@ -77,9 +77,15 @@ void CTitleWidget::SinglePlayButtonClick()
 		{
 			ShowLoading(true);
 
+#ifdef _DEBUG
+			int waitTime = 500;
+#else
+			int waitTime = 2000;
+#endif // _DEBUG
+
 			// config load
-			SetLoadingDescText(L"Config data 로딩중이에요. 🐎");
-			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+			AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻");
+			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 			std::string webserverPath = WEBSERVER_PATH;
 			std::string path = webserverPath + CONFIG_PATH;
 			std::string configResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -87,16 +93,16 @@ void CTitleWidget::SinglePlayButtonClick()
 			CDataStorageManager::GetInst()->SetConfigData(configResult);
 
 			// characters load
-			SetLoadingDescText(L"Character data 로딩중이에요. 👨🏻👩🏻👧🏻👩🏻‍🦰👵🏻🧓🏻👴🏻👨🏻‍🦲👩🏻‍🦲🧑🏻‍🦰");
-			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+			AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽");
+			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
 			std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
 			CLog::PrintLog("charactersResult: " + charactersResult);
 			CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
 
 			// maps load
-			SetLoadingDescText(L"Map data 로딩중이에요. 🌍🌎🌏🗺️🏜️🛤️🛣️🏞️");
-			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+			AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️");
+			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 			for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
 			{
 				path = webserverPath + mapFileName;
@@ -106,16 +112,16 @@ void CTitleWidget::SinglePlayButtonClick()
 			}
 
 			// stat load
-			SetLoadingDescText(L"Stat data 로딩중이에요. HP->SPEED->Dex->DEF 끝!!");
-			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+			AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력/스피드/민첩/디펜스 4가지가 있어요.");
+			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
 			std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
 			CLog::PrintLog("statsResult: " + statsResult);
 			CDataStorageManager::GetInst()->SetStatInfoData(charactersResult);
 
 			// item load
-			SetLoadingDescText(L"아직 Item data 로딩이 남았어용");
-			std::this_thread::sleep_for(std::chrono::milliseconds(300));
+			AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 시간이 없어서 패시브 효과만 냈어요.ㅠㅠ\n나중엔 소비, 쿨타임 등 넣고싶네요 ㅎ");
+			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
 			std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
 			CLog::PrintLog("itemResult: " + itemResult);
