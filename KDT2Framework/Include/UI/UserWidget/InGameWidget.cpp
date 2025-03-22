@@ -65,9 +65,10 @@ bool CInGameWidget::Init()
 	}
 
 	{ // 아이템 정보 세팅.
-		auto items = CDataStorageManager::GetInst()->GetItemInfoDatas();
+		// 아이템 아이콘 path setting
+		auto itemDatas = CDataStorageManager::GetInst()->GetItemInfoDatas();
 		int index = 0;
-		for (auto item : items)
+		for (auto item : itemDatas)
 		{
 			mItemImagePaths.push_back(item.second.GetItmeImagePath(index));
 			mItemImageNames.push_back(item.second.GetItmeImageName(index));
@@ -77,6 +78,20 @@ bool CInGameWidget::Init()
 		itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
 		itemTypeCount = mItemImagePaths.size();
 
+		// 아이템 착용한것 플레이어에 스텟 적용.
+		for (int i = 0; i < itemSlotCount; i++)
+		{
+			int itemIndexInSlot = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(i);
+			if (itemIndexInSlot >= 0)
+			{
+				// 어떤 스탯에 얼마를 적용할것인지.
+				mPlayerStat->SetValueByStatIndex(
+					static_cast<EStatInfoText::Type>(itemDatas[itemIndexInSlot].StatType)
+					, itemDatas[itemIndexInSlot].AddValue);
+			}
+		}
+
+		// slot image path
 		mSlotImagePaths.push_back(ITEM_ADD_SQUARE_PATH);
 		mSlotImagePaths.push_back(ITEM_EMPTY_SQUARE_PATH);
 		mSlotImageNames.push_back(ITEM_ADD_SQUARE_NAME);
@@ -122,7 +137,7 @@ void CInGameWidget::InitSelectedItemSlot()
 		CSharedPtr<CImage> buttonImage = mScene->GetUIManager()->CreateWidget<CImage>("ItmeImage_" + std::to_string(i));
 		AddWidget(buttonImage);
 		mItemImages.push_back(buttonImage);
-		if (selectedItemIndex > -1)
+		if (selectedItemIndex >= 0)
 		{
 			buttonImage->SetTexture(mItemImageNames[selectedItemIndex], mItemImagePaths[selectedItemIndex]);
 			buttonImage->SetEnable(true);

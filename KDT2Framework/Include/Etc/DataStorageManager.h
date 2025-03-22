@@ -20,6 +20,7 @@ private:
 	int curSelectedCharacterIndex;
 	std::map<int, int> curSelectedItemIndex;
 public:
+	void InitCurSelectedData();
 	void SetConfigData(std::string strJson);
 	void SetCharacterData(std::string strJson);
 	void SetStatInfoData(std::string strJson);

@@ -52,6 +52,26 @@ public:
 	}
 
 	inline void SetIndex(int _index) { index = _index; }
+	inline void SetValueByStatIndex(EStatInfoText::Type _statIndex, int _value)
+	{
+		switch (_statIndex)
+		{
+		case EStatInfoText::HP:
+			AddHp(_value);
+			break;
+		case EStatInfoText::Speed:
+			AddSpeed(_value);
+			break;
+		case EStatInfoText::Dex:
+			AddDex(_value);
+			break;
+		case EStatInfoText::Def:
+			AddDef(_value);
+			break;
+		default:
+			break;
+		}
+	}
 	inline void Damaged(float _damageVal)
 	{
 		float result = _damageVal - GetDef();
@@ -75,6 +95,13 @@ public:
 			playerDeadCallback();
 			playerDeadCallback = nullptr;
 		}
+	}
+	inline void AddHp(float _addHp) 
+	{ 
+		curHp += _addHp; 
+
+		if (curHp > maxHp)
+			maxHp = curHp;
 	}
 	inline void AddSpeed(float _addSpeedVal) { addedSpeed += _addSpeedVal; }
 	inline void AddDex(float _addDexVal) { addedDex += _addDexVal; }

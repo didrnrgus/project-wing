@@ -73,7 +73,7 @@ CLobbyWidget::~CLobbyWidget()
 bool CLobbyWidget::Init()
 {
 	CUserWidget::Init();
-
+	CDataStorageManager::GetInst()->InitCurSelectedData();
 	InitScrollSelectButtons();
 	InitItemButtons();
 	InitDifficultiImage();

@@ -13,6 +13,17 @@ CDataStorageManager::~CDataStorageManager()
 
 }
 
+void CDataStorageManager::InitCurSelectedData()
+{
+	curSelectedCharacterIndex = 0;
+	curSelectedMapIndex = 0;
+
+	for (auto e : curSelectedItemIndex)
+	{
+		e.second = -1;
+	}
+}
+
 void CDataStorageManager::SetConfigData(std::string strJson)
 {
 	nlohmann::json json = nlohmann::json::parse(strJson);
