@@ -93,9 +93,6 @@
     <ClCompile Include="UI\UserWidget\HeadInfo.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="UI\UserWidget\Inventory.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="UI\UserWidget\WindowWidget.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -142,9 +139,6 @@
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\Component.cpp">
-      <Filter>Component</Filter>
-    </ClCompile>
-    <ClCompile Include="Component\InventoryComponent.cpp">
       <Filter>Component</Filter>
     </ClCompile>
     <ClCompile Include="Component\MeshComponent.cpp">
@@ -275,9 +269,6 @@
     <ClInclude Include="UI\UserWidget\HeadInfo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="UI\UserWidget\Inventory.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="Shader\Shader.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
@@ -315,9 +306,6 @@
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\Component.h">
-      <Filter>Component</Filter>
-    </ClInclude>
-    <ClInclude Include="Component\InventoryComponent.h">
       <Filter>Component</Filter>
     </ClInclude>
     <ClInclude Include="Component\MeshComponent.h">

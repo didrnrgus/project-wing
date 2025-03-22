@@ -82,8 +82,8 @@ bool CInGameWidget::Init()
 		mSlotImageNames.push_back(ITEM_ADD_SQUARE_NAME);
 		mSlotImageNames.push_back(ITEM_EMPTY_SQUARE_NAME);
 
-		mSlotPosBase = FVector2D(100, 100);
-		mSlotPosAdd = FVector2D(120, 0);
+		mSlotPosBase = FVector2D(100.0f, 100.0f);
+		mSlotPosAdd = FVector2D(105.0f, 0.0f);
 		mSlotSize = FVector2D(100.0f, 100.0f);
 		mSlotInnerItemSizeRate = 0.8f;
 
@@ -118,14 +118,25 @@ void CInGameWidget::InitSelectedItemSlot()
 		buttonBackImage->SetPos(tempPos);
 
 		// 슬롯 내부 아이템 이미지.
+		int selectedItemIndex = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(i);
 		CSharedPtr<CImage> buttonImage = mScene->GetUIManager()->CreateWidget<CImage>("ItmeImage_" + std::to_string(i));
 		AddWidget(buttonImage);
 		mItemImages.push_back(buttonImage);
-		//buttonImage->SetTexture(mItemImageNames[i], mItemImagePaths[i]);
+		if (selectedItemIndex > -1)
+		{
+			buttonImage->SetTexture(mItemImageNames[selectedItemIndex], mItemImagePaths[selectedItemIndex]);
+			buttonImage->SetEnable(true);
+		}
+		else 
+		{
+			buttonImage->SetEnable(false);
+			continue;
+		}
 		buttonImage->SetPivot(FVector2D::One * 0.5f);
 		buttonImage->SetSize(mSlotSize * mSlotInnerItemSizeRate * mSlotInnerItemSizeRate);
 		buttonImage->SetColor(FVector4D::Green);
 		buttonImage->SetPos(tempPos);
+
 	}
 }
 

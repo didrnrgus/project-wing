@@ -18,7 +18,7 @@ private:
 private:
 	int curSelectedMapIndex;
 	int curSelectedCharacterIndex;
-	std::unordered_map<int, int> curSelectedItemIndex;
+	std::map<int, int> curSelectedItemIndex;
 public:
 	void SetConfigData(std::string strJson);
 	void SetCharacterData(std::string strJson);
@@ -93,7 +93,7 @@ public:
 
 	inline const std::map<int, FItemInfo> GetItemInfoDatas() { return mItemInfoDatasByIndex; }
 	inline const FItemInfo GetItemInfoDataByIndex(int index) { return mItemInfoDatasByIndex[index]; }
-
+	inline const int GetCurSelectedItemIDBySlotIndex(int index) { return curSelectedItemIndex[index]; }
 private:
 	DECLARE_SINGLE(CDataStorageManager)
 };

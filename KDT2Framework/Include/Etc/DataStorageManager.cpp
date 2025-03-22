@@ -17,7 +17,11 @@ void CDataStorageManager::SetConfigData(std::string strJson)
 {
 	nlohmann::json json = nlohmann::json::parse(strJson);
 	CJsonController::GetInst()->ParseJson(json, mConfigData);
-	curSelectedItemIndex.reserve(mConfigData.SelectableItemCount);
+
+	for (int i = 0; i < mConfigData.SelectableItemCount; i++)
+	{
+		curSelectedItemIndex.insert(std::make_pair(i, -1));
+	}
 }
 
 void CDataStorageManager::SetCharacterData(std::string strJson)

@@ -35,7 +35,7 @@ bool CPlayerGraphicObject::Init()
 	}
 	else
 	{
-		mRootInitPos = FVector3D(RS.Width * 0.25f * -1.0f, 0.0f, 0.f);
+		mRootInitPos = FVector3D(RS.Width * 0.15f * -1.0f, 0.0f, 0.f);
 	}
 	mMapDifficultySinAngle = 0.0f;
 

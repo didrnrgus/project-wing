@@ -58,7 +58,7 @@ CLobbyWidget::CLobbyWidget()
 	mSlotImageNames.push_back(ITEM_EMPTY_SQUARE_NAME);
 
 	mSlotPosBase = FVector2D(100, 100);
-	mSlotPosAdd = FVector2D(120, 0);
+	mSlotPosAdd = FVector2D(105, 0);
 	mSlotSize = FVector2D(100.0f, 100.0f);
 	mSlotInnerItemSizeRate = 0.8f;
 	mMapDifficultyImagePos = FVector2D(mResolution.x * 0.8f, mResolution.y * 0.4f);
@@ -149,7 +149,7 @@ void CLobbyWidget::InitPlayerStatText()
 	mPlayerStatValueText.resize(count);
 	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.8f);
 	FVector2D valueBasePos = FVector2D(670.0f, mResolution.y * 0.8f);
-	FVector2D textSize = FVector2D(200.0f, 100.0f);
+	FVector2D textSize = FVector2D(200.0f, 40.0f);
 	FVector2D nameBasePivot = FVector2D(0.0f, 0.0f);
 	FVector2D valueBasePivot = FVector2D(0.0f, 0.0f);
 	float fontSize = 30.0f;
@@ -180,7 +180,7 @@ void CLobbyWidget::InitPlayerStatText()
 		textBlockValue->SetSize(textSize);
 		textBlockValue->SetPos(valueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 10.0f) * i);
 		textBlockValue->SetText(valueText.c_str());
-		textBlockValue->SetTextColor(FVector4D::Green);
+		textBlockValue->SetTextColor(FVector4D::GetColorFromString(stat.ColorName));
 		textBlockValue->SetAlignH(ETextAlignH::Left);
 		textBlockValue->SetFontSize(fontSize);
 		textBlockValue->SetShadowEnable(true);
@@ -228,7 +228,7 @@ void CLobbyWidget::InitMapInfoText()
 		textBlockValue->SetSize(textSize);
 		textBlockValue->SetPos(valueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 15.0f) * i);
 		textBlockValue->SetText(valueText.c_str());
-		textBlockValue->SetTextColor(FVector4D::Green);
+		textBlockValue->SetTextColor(FVector4D::GetColorFromString(info.DifficultyColorName));
 		textBlockValue->SetAlignH(ETextAlignH::Left);
 		textBlockValue->SetFontSize(fontSize);
 		textBlockValue->SetShadowEnable(true);
@@ -302,7 +302,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 		mItemInfoNameText[dataIndex]->SetSize(nameSize);
 		mItemInfoNameText[dataIndex]->SetPos(namePos - FVector2D::Axis[EAxis::Y] * nameSize.y * posIndex);
 		mItemInfoNameText[dataIndex]->SetText(nameText.c_str());
-		mItemInfoNameText[dataIndex]->SetTextColor(FVector4D::Green);
+		mItemInfoNameText[dataIndex]->SetTextColor(FVector4D::White);
 		mItemInfoNameText[dataIndex]->SetFontSize(nameSize.y - 10.0f);
 		mItemInfoNameText[dataIndex]->SetAlignH(ETextAlignH::Left);
 		mItemInfoNameText[dataIndex]->SetShadowEnable(false);
@@ -654,6 +654,7 @@ void CLobbyWidget::UpdatePlayerStatText()
 		auto valueText = stat.GetStatToWString(static_cast<ECharacterStatText::Type>(i));
 
 		mPlayerStatNameText[i]->SetText(nameText.c_str());
+		mPlayerStatValueText[i]->SetTextColor(FVector4D::GetColorFromString(stat.ColorName));
 		mPlayerStatValueText[i]->SetText(valueText.c_str());
 	}
 }
@@ -701,6 +702,7 @@ void CLobbyWidget::UpdateMapInfoText()
 		auto valueText = info.GetInfoToWString(static_cast<EMapInfoText::Type>(i));
 
 		mMapInfoNameText[i]->SetText(nameText.c_str());
+		mMapInfoValueText[i]->SetTextColor(FVector4D::GetColorFromString(info.DifficultyColorName));
 		mMapInfoValueText[i]->SetText(valueText.c_str());
 	}
 }

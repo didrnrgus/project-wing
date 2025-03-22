@@ -158,7 +158,6 @@
     <ClCompile Include="Component\AudioComponent.cpp" />
     <ClCompile Include="Component\CameraComponent.cpp" />
     <ClCompile Include="Component\Component.cpp" />
-    <ClCompile Include="Component\InventoryComponent.cpp" />
     <ClCompile Include="Component\MeshComponent.cpp" />
     <ClCompile Include="Component\MovementComponent.cpp" />
     <ClCompile Include="Component\RotationComponent.cpp" />
@@ -196,7 +195,6 @@
     <ClCompile Include="UI\Common\TextBlock.cpp" />
     <ClCompile Include="UI\Common\TitleBar.cpp" />
     <ClCompile Include="UI\UserWidget\HeadInfo.cpp" />
-    <ClCompile Include="UI\UserWidget\Inventory.cpp" />
     <ClCompile Include="UI\UserWidget\MouseWidget.cpp" />
     <ClCompile Include="UI\UserWidget\Slot.cpp" />
     <ClCompile Include="UI\UserWidget\UserWidget.cpp" />
@@ -212,7 +210,6 @@
     <ClInclude Include="Component\AudioComponent.h" />
     <ClInclude Include="Component\CameraComponent.h" />
     <ClInclude Include="Component\Component.h" />
-    <ClInclude Include="Component\InventoryComponent.h" />
     <ClInclude Include="Component\MeshComponent.h" />
     <ClInclude Include="Component\MovementComponent.h" />
     <ClInclude Include="Component\RotationComponent.h" />
@@ -256,7 +253,6 @@
     <ClInclude Include="UI\Common\TitleBar.h" />
     <ClInclude Include="UI\UIInfo.h" />
     <ClInclude Include="UI\UserWidget\HeadInfo.h" />
-    <ClInclude Include="UI\UserWidget\Inventory.h" />
     <ClInclude Include="UI\UserWidget\MouseWidget.h" />
     <ClInclude Include="UI\UserWidget\Slot.h" />
     <ClInclude Include="UI\UserWidget\UserWidget.h" />
