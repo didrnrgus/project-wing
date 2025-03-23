@@ -78,7 +78,7 @@ void CTitleWidget::SinglePlayButtonClick()
 			ShowLoading(true);
 
 #ifdef _DEBUG
-			int waitTime = 500;
+			int waitTime = 1;
 #else
 			int waitTime = 2000;
 #endif // _DEBUG

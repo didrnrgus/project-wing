@@ -31,7 +31,7 @@ void CUserWidget::AddQueueLoadingDescText(const std::wstring wstrDesc)
 		auto str = wstrDesc.substr(0, i);
 		mLoadingTextQueue.push_back(str);
 #ifdef _DEBUG
-		std::this_thread::sleep_for(std::chrono::milliseconds(10));
+		std::this_thread::sleep_for(std::chrono::milliseconds(1));
 #else
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 #endif // _DEBUG
