@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "ProcessManager.h"
 
 DEFINITION_SINGLE(CProcessManager);
@@ -23,7 +23,7 @@ bool CProcessManager::LaunchProcess(const std::wstring& exePath)
 	STARTUPINFO si{};
 	si.cb = sizeof(si);
 
-	// CreateProcess´Â ¹®ÀÚ¿­À» ¼öÁ¤ÇÒ ¼ö ÀÖ¾î¾ß ÇÏ¹Ç·Î º¹»ç ÇÊ¿ä
+	// CreateProcessëŠ” ë¬¸ìì—´ì„ ìˆ˜ì •í•  ìˆ˜ ìˆì–´ì•¼ í•˜ë¯€ë¡œ ë³µì‚¬ í•„ìš”
 	wchar_t cmdLine[MAX_PATH];
 	wcscpy_s(cmdLine, exePath.c_str());
 
@@ -78,7 +78,7 @@ void CProcessManager::WaitForExit()
 
 void CProcessManager::Terminate()
 {
-	// ¾ÈÀüÇÑ Á¾·á
+	// ì•ˆì „í•œ ì¢…ë£Œ
 	if (running)
 	{
 		TerminateProcess(pi.hProcess, 0);
