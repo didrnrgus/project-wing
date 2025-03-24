@@ -36,6 +36,7 @@ private:
 	void CollisionMapBegin(const FVector3D& HitPoint, class CColliderBase* Dest);
 	void SetMovePlayer(FVector3D moveValueVector, float DeltaTime);
 	void UpdateDecreaseHp(float DeltaTime);
+	void UpdateDistance(float DeltaTime);
 	void OnDeadCallback();
 
 public:

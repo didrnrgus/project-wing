@@ -26,6 +26,9 @@ private:
 	CSharedPtr<class CTextBlock> mStartCountText;
 	std::vector<const wchar_t*> mStartCountTextArr;
 
+	CSharedPtr<class CTextBlock> mPlayDistanceText;
+	//int mPlayDistance;
+
 	int itemSlotCount;
 
 	FVector2D mSlotPosBase;

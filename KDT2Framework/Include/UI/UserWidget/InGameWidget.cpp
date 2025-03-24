@@ -113,7 +113,28 @@ bool CInGameWidget::Init()
 		mStartCountText->SetAlignH(ETextAlignH::Center);
 		mStartCountText->SetShadowEnable(false);
 		mStartCountText->SetTextShadowColor(FVector4D::Gray30);
-		mStartCountText->SetZOrder(ZORDER_LOBBY_TOOLTIP_TEXT);
+		mStartCountText->SetZOrder(ZORDER_INGAME_START_COUNT_TEXT);
+	}
+
+	{ // play distance text setting
+		// mPlayDistanceText
+		FVector2D pivot = FVector2D(1.0f, 0.0f);
+		FVector2D size = FVector2D(500.0f, 100.0f);
+		FVector2D pos = FVector2D(RS.Width - 100.0f, RS.Height * 0.5f);
+
+		mPlayDistanceText = mScene->GetUIManager()->CreateWidget<CTextBlock>("mPlayDistanceText");
+		AddWidget(mPlayDistanceText);
+		mPlayDistanceText->SetPivot(pivot);
+		mPlayDistanceText->SetSize(size);
+		mPlayDistanceText->SetPos(pos);
+		mPlayDistanceText->SetText((std::to_wstring(0) + L"m").c_str());
+		mPlayDistanceText->SetTextColor(FVector4D::Green);
+		mPlayDistanceText->SetFontSize(100.0f);
+		mPlayDistanceText->SetAlignH(ETextAlignH::Right);
+		mPlayDistanceText->SetShadowEnable(false);
+		mPlayDistanceText->SetTextShadowColor(FVector4D::Gray30);
+		mPlayDistanceText->SetZOrder(ZORDER_INGAME_START_COUNT_TEXT);
+		mPlayDistanceText->SetEnable(false);
 	}
 
 	return true;
@@ -171,6 +192,7 @@ void CInGameWidget::SetStartCount(int count)
 	if (count < 0)
 	{
 		mStartCountText->SetEnable(false);
+		mPlayDistanceText->SetEnable(true);
 		return;
 	}
 
@@ -188,4 +210,8 @@ void CInGameWidget::UpdateTargetPlayerStat(float DeltaTime)
 	//CLog::PrintLog("CInGameWidget::UpdateTargetPlayerStat maxHp: " + std::to_string(maxHp));
 	//CLog::PrintLog("CInGameWidget::UpdateTargetPlayerStat curHp: " + std::to_string(curHp));
 	mHpFrontImage->SetSize(FVector2D(curHpSizeX, mHpFrontSize.y));
+
+	// play distance.
+	auto playDistanceStr = std::to_wstring((int)mPlayerStat->GetPlayDistance()) + L"m";
+	mPlayDistanceText->SetText(playDistanceStr.c_str());
 }

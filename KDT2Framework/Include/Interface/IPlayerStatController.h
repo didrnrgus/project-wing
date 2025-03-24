@@ -24,6 +24,7 @@ private:
 
 	bool isStun; // 박았을때 잠시 멈춰야 해서.
 	bool isProtection;
+	float playDistance;
 
 	std::function<void()> playerDeadCallback;
 
@@ -42,6 +43,7 @@ private:
 
 		isStun = false;
 		isProtection = false;
+		playDistance = 0.0f;
 
 		return true;
 	}
@@ -107,6 +109,7 @@ public:
 	inline void AddSpeed(float _addSpeedVal) { addedSpeed += _addSpeedVal; }
 	inline void AddDex(float _addDexVal) { addedDex += _addDexVal; }
 	inline void AddDef(float _addDefVal) { addedDef += _addDefVal; }
+	inline void AddPlayDistance(float _addDist) { playDistance += _addDist; }
 	inline void SetStun() { isStun = true; }
 	inline void ReleaseStun(float DeltaTime)
 	{
@@ -137,6 +140,7 @@ public:
 	inline bool GetIsDeath() { return GetCurHP() > 0.0f; }
 	inline bool GetIsStun() { return isStun; }
 	inline bool GetIsProtection() { return isProtection; }
+	inline float GetPlayDistance() { return playDistance; }
 
 public:
 	// 콜백 함수들 등록

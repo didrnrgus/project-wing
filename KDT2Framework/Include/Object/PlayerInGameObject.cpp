@@ -203,11 +203,20 @@ void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
 
 	//CLog::PrintLog("CPlayerInGameObject::UpdateDecreaseHp()");
 
+	UpdateDistance(DeltaTime);
+
 #ifdef _DEBUG
 	DamagedPerDistance(DeltaTime * 10.0f);
 #else
 	DamagedPerDistance(DeltaTime);
 #endif // _DEBUG
+}
+
+void CPlayerInGameObject::UpdateDistance(float DeltaTime)
+{
+	float speed = GetSpeed();
+	float speedPerFrame = speed * DeltaTime * 0.01f;
+	AddPlayDistance(speedPerFrame);
 }
 
 void CPlayerInGameObject::OnDeadCallback()
