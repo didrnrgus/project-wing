@@ -1,12 +1,3 @@
-KDT2Framework/Bin/Log/
-KDT2Framework/BinObj/
-
-Common/Bin/Log/
-Common/BinObj/
-
-AssetProj/Bin/Log/
-AssetProj/BinObj/
-
 .svn
 .vs
 .vscode
@@ -14,6 +5,16 @@ AssetProj/BinObj/
 
 **/*.exe
 **/*.pdb
+
+KDT2Framework/Bin/Log/
+KDT2Framework/BinObj/
+!KDT2Framework/Bin/Server/server.exe
+
+Common/Bin/Log/
+Common/BinObj/
+
+AssetProj/Bin/Log/
+AssetProj/BinObj/
 
 AssetProj/**/*.lib
 AssetProj/**/*.pdb

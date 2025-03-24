@@ -20,7 +20,8 @@
 #include "Etc/JsonController.h"
 #include "Etc/NotionDBController.h"
 #include "Etc/TaskManager.h"
-#include <Scene/SceneTitle.h>
+#include "Etc/ProcessManager.h"
+#include "Scene/SceneTitle.h"
 
 #define ID_MENU_OPTION1  1000  // 옵션1 메뉴 ID
 #define ID_MENU_CHECKBOX 1001  // 체크박스 ID
@@ -67,7 +68,7 @@ CGameManager::~CGameManager()
     CJsonController::DestroyInst();
     CNotionDBController::DestroyInst();
     CTaskManager::DestroyInst();
-
+    CProcessManager::DestroyInst();
     CLog::Destroy();
 }
 

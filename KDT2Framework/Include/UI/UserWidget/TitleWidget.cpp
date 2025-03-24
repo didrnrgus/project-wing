@@ -11,6 +11,7 @@
 #include "Etc/CURL.h"
 #include "Etc/TaskManager.h"
 #include "Etc/DataStorageManager.h"
+#include "Etc/ProcessManager.h"
 
 CTitleWidget::CTitleWidget()
 {
@@ -64,6 +65,72 @@ void CTitleWidget::SetButtonWithTextBlock(CSharedPtr<CButton>& button, std::stri
 	textBlock->SetTextShadowColor(FVector4D::Gray30);
 }
 
+void CTitleWidget::LoadGameData(bool _isMulti)
+{
+	ShowLoading(true);
+
+	if (_isMulti)
+	{
+		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
+	}
+
+#ifdef _DEBUG
+	int waitTime = 1;
+#else
+	int waitTime = 2000;
+#endif // _DEBUG
+
+	// config load
+	AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻");
+	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
+	std::string webserverPath = WEBSERVER_PATH;
+	std::string path = webserverPath + CONFIG_PATH;
+	std::string configResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+	CLog::PrintLog("configResult: " + configResult);
+	CDataStorageManager::GetInst()->SetConfigData(configResult);
+
+	// characters load
+	AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽");
+	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
+	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
+	std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+	CLog::PrintLog("charactersResult: " + charactersResult);
+	CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
+
+	// maps load
+	AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️");
+	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
+	for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
+	{
+		path = webserverPath + mapFileName;
+		std::string mapResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+		CLog::PrintLog("mapResult: " + mapResult);
+		CDataStorageManager::GetInst()->SetMapData(mapResult);
+	}
+
+	// stat load
+	AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력/스피드/민첩/디펜스 4가지가 있어요.");
+	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
+	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
+	std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+	CLog::PrintLog("statsResult: " + statsResult);
+	CDataStorageManager::GetInst()->SetStatInfoData(charactersResult);
+
+	// item load
+	AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 시간이 없어서 패시브 효과만 냈어요.ㅠㅠ\n나중엔 소비, 쿨타임 등 넣고싶네요 ㅎ");
+	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
+	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
+	std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+	CLog::PrintLog("itemResult: " + itemResult);
+	CDataStorageManager::GetInst()->SetItemInfoData(itemResult);
+
+	CTaskManager::GetInst()->RemoveTask(mTaskID);
+
+	// Move to Lobby
+	CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+
+}
+
 void CTitleWidget::SinglePlayButtonClick()
 {
 	// 로비로 가야 함.
@@ -75,62 +142,7 @@ void CTitleWidget::SinglePlayButtonClick()
 	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
 		[this]()
 		{
-			ShowLoading(true);
-
-#ifdef _DEBUG
-			int waitTime = 1;
-#else
-			int waitTime = 2000;
-#endif // _DEBUG
-
-			// config load
-			AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻");
-			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-			std::string webserverPath = WEBSERVER_PATH;
-			std::string path = webserverPath + CONFIG_PATH;
-			std::string configResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-			CLog::PrintLog("configResult: " + configResult);
-			CDataStorageManager::GetInst()->SetConfigData(configResult);
-
-			// characters load
-			AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽");
-			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
-			std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-			CLog::PrintLog("charactersResult: " + charactersResult);
-			CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
-
-			// maps load
-			AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️");
-			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-			for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
-			{
-				path = webserverPath + mapFileName;
-				std::string mapResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-				CLog::PrintLog("mapResult: " + mapResult);
-				CDataStorageManager::GetInst()->SetMapData(mapResult);
-			}
-
-			// stat load
-			AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력/스피드/민첩/디펜스 4가지가 있어요.");
-			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
-			std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-			CLog::PrintLog("statsResult: " + statsResult);
-			CDataStorageManager::GetInst()->SetStatInfoData(charactersResult);
-
-			// item load
-			AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 시간이 없어서 패시브 효과만 냈어요.ㅠㅠ\n나중엔 소비, 쿨타임 등 넣고싶네요 ㅎ");
-			std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
-			std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-			CLog::PrintLog("itemResult: " + itemResult);
-			CDataStorageManager::GetInst()->SetItemInfoData(itemResult);
-
-			CTaskManager::GetInst()->RemoveTask(mTaskID);
-
-			// Move to Lobby
-			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+			LoadGameData(false);
 		})));
 
 }
@@ -142,6 +154,13 @@ void CTitleWidget::MultiPlayButtonClick()
 
 	if (IsLoading())
 		return;
+
+	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[this]()
+		{
+			LoadGameData(true);
+		})));
+
 }
 
 void CTitleWidget::RankButtonClick()
