@@ -20,13 +20,22 @@ bool CProcessManager::LaunchProcess(const std::wstring& exePath)
 		Terminate();
 	}
 
-	STARTUPINFO si{};
+	// 1. Job Object 생성
+	HANDLE hJob = CreateJobObject(NULL, NULL);
+
+	// 2. 종료 시 자식도 죽도록 설정
+	JOBOBJECT_EXTENDED_LIMIT_INFORMATION jobInfo = { 0 };
+	jobInfo.BasicLimitInformation.LimitFlags = JOB_OBJECT_LIMIT_KILL_ON_JOB_CLOSE;
+	SetInformationJobObject(hJob, JobObjectExtendedLimitInformation, &jobInfo, sizeof(jobInfo));
+
+	STARTUPINFO si = {};
 	si.cb = sizeof(si);
 
 	// CreateProcess는 문자열을 수정할 수 있어야 하므로 복사 필요
 	wchar_t cmdLine[MAX_PATH];
 	wcscpy_s(cmdLine, exePath.c_str());
 
+	// 3. 자식 프로세스 생성
 	/*
 	CreateProcessW(
     _In_opt_ LPCWSTR lpApplicationName,
@@ -41,16 +50,22 @@ bool CProcessManager::LaunchProcess(const std::wstring& exePath)
     _Out_ LPPROCESS_INFORMATION lpProcessInformation
     );
 	*/
-	auto createResult = CreateProcess(NULL
-		, cmdLine
-		, NULL
-		, NULL
-		, TRUE
-		, 0
-		, NULL
-		, NULL
-		, &si
-		, &pi);
+	auto createResult = CreateProcess(
+		NULL,       // 실행할 파일 이름 (명령어 포함이면 NULL)
+		cmdLine,    // 커맨드라인 문자열
+		NULL,       // 프로세스 보안 속성
+		NULL,       // 스레드 보안 속성
+		TRUE,       // 핸들 상속 여부 (필요하다면 TRUE)
+#ifdef _DEBUG
+		CREATE_NEW_CONSOLE, // 새로운 콘솔 창 열기
+#else
+		CREATE_NO_WINDOW, // 콘솔 없이 실행
+#endif // _DEBUG
+		NULL,       // 환경 변수
+		NULL,       // 현재 디렉토리
+		&si,        // STARTUPINFO
+		&pi         // PROCESS_INFORMATION
+	);
 
 	if (createResult)
 	{
@@ -64,6 +79,10 @@ bool CProcessManager::LaunchProcess(const std::wstring& exePath)
 		CLog::PrintLog(std::to_string(GetLastError()));
 		return false;
 	}
+
+	// 4. 자식 프로세스를 Job Object에 연결
+	AssignProcessToJobObject(hJob, pi.hProcess);
+	
 }
 
 void CProcessManager::WaitForExit()
@@ -84,7 +103,7 @@ void CProcessManager::Terminate()
 		TerminateProcess(pi.hProcess, 0);
 		CLog::PrintLog("CProcessManager::Terminate Process terminated manually.");
 		running = false;
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
 	}
-	CloseHandle(pi.hProcess);
-	CloseHandle(pi.hThread);
 }

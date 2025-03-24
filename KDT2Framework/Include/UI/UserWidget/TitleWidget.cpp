@@ -13,6 +13,8 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/ProcessManager.h"
 
+extern BOOL option2Visible;
+
 CTitleWidget::CTitleWidget()
 {
 }
@@ -70,7 +72,7 @@ void CTitleWidget::LoadGameData(bool _isMulti)
 	ShowLoading(true);
 
 #ifdef _DEBUG
-	int waitTime = 1000;
+	int waitTime = 1;
 #else
 	int waitTime = 2000;
 #endif // _DEBUG
@@ -158,7 +160,7 @@ void CTitleWidget::MultiPlayButtonClick()
 	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
 		[this]()
 		{
-			LoadGameData(true);
+			LoadGameData(!option2Visible);
 		})));
 
 }
