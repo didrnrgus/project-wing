@@ -4,7 +4,7 @@
 #include "UI/UserWidget/LobbyWidget.h"
 #include "Scene/SceneUIManager.h"
 #include "Object/PlayerGraphicObject.h"
-#include <Object/CameraObject.h>
+#include "Object/CameraObject.h"
 
 CSceneLobby::CSceneLobby()
 {

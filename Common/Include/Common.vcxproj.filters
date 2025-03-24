@@ -21,9 +21,6 @@
     <ClCompile Include="Component\Tile.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="UI\UserWidget\MouseWidget.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="Render\RenderManager.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
@@ -90,16 +87,10 @@
     <ClCompile Include="UI\Widget.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
-    <ClCompile Include="UI\UserWidget\HeadInfo.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
     <ClCompile Include="UI\UserWidget\WindowWidget.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="UI\UserWidget\UserWidget.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="UI\UserWidget\Slot.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ProfileManager.cpp">
@@ -124,9 +115,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Animation\Animation2DSequence.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="Object\MousePointer.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="Vector2D.cpp">
@@ -170,16 +158,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Object\MousePointer.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
     <ClInclude Include="GameInfo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Component\Tile.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UserWidget\MouseWidget.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Scene\SceneUIManager.h">
@@ -261,12 +243,6 @@
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="UI\UserWidget\UserWidget.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UserWidget\Slot.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
-    <ClInclude Include="UI\UserWidget\HeadInfo.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
     <ClInclude Include="Shader\Shader.h">

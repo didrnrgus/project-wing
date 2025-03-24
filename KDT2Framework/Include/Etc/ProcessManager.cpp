@@ -71,7 +71,6 @@ bool CProcessManager::LaunchProcess(const std::wstring& exePath)
 	{
 		running = true;
 		CLog::PrintLog("CProcessManager::LaunchProcess Process started!");
-		return true;
 	}
 	else
 	{
@@ -82,7 +81,8 @@ bool CProcessManager::LaunchProcess(const std::wstring& exePath)
 
 	// 4. 자식 프로세스를 Job Object에 연결
 	AssignProcessToJobObject(hJob, pi.hProcess);
-	
+
+	return true;
 }
 
 void CProcessManager::WaitForExit()

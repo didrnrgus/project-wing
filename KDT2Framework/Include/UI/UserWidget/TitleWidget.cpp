@@ -12,6 +12,7 @@
 #include "Etc/TaskManager.h"
 #include "Etc/DataStorageManager.h"
 #include "Etc/ProcessManager.h"
+#include "Etc/MultiplayManager.h"
 
 extern BOOL option2Visible;
 
@@ -67,7 +68,7 @@ void CTitleWidget::SetButtonWithTextBlock(CSharedPtr<CButton>& button, std::stri
 	textBlock->SetTextShadowColor(FVector4D::Gray30);
 }
 
-void CTitleWidget::LoadGameData(bool _isMulti)
+void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 {
 	ShowLoading(true);
 
@@ -106,7 +107,7 @@ void CTitleWidget::LoadGameData(bool _isMulti)
 	}
 
 	// stat load
-	AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력/스피드/민첩/디펜스 4가지가 있어요.");
+	AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력.스피드.민첩.디펜스 4가지가 있어요.");
 	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
 	std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -114,7 +115,7 @@ void CTitleWidget::LoadGameData(bool _isMulti)
 	CDataStorageManager::GetInst()->SetStatInfoData(charactersResult);
 
 	// item load
-	AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 시간이 없어서 패시브 효과만 냈어요.ㅠㅠ\n나중엔 소비, 쿨타임 등 넣고싶네요 ㅎ");
+	AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 소유한 아이템의 스텟 패시브 효과만 있어요.");
 	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
 	std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -123,9 +124,14 @@ void CTitleWidget::LoadGameData(bool _isMulti)
 
 	CTaskManager::GetInst()->RemoveTask(mTaskID);
 
-	if (_isMulti)
+	if (_isActiveServerProcess)
 	{
 		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
+	}
+
+	if (_isMultiPlay)
+	{
+		CMultiplayManager::GetInst()->ConnetServer();
 	}
 
 	// Move to Lobby
@@ -160,7 +166,7 @@ void CTitleWidget::MultiPlayButtonClick()
 	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
 		[this]()
 		{
-			LoadGameData(!option2Visible);
+			LoadGameData(!option2Visible, true);
 		})));
 
 }

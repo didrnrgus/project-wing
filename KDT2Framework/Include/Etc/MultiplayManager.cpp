@@ -93,6 +93,7 @@ std::this_thread::sleep_for(std::chrono::milliseconds(10));
 
 CMultiplayManager::CMultiplayManager()
 {
+	mIsConnected = false;
 }
 
 CMultiplayManager::~CMultiplayManager()
@@ -115,7 +116,8 @@ bool CMultiplayManager::ConnetServer()
 
 	if (connect(mSock, (sockaddr*)&mServerAddr, sizeof(mServerAddr)) == SOCKET_ERROR) return false;
 
-	CLog::PrintLog("Connected to server.");
+	CLog::PrintLog("CMultiplayManager::ConnetServer()");
+	mIsConnected = true;
 
 	mRecvThread = std::make_unique<std::thread>(&CMultiplayManager::ReceiveThread, this, mSock);
 	mHbThread = std::make_unique<std::thread>(&CMultiplayManager::HeartbeatThread, this, mSock);
@@ -139,9 +141,20 @@ bool CMultiplayManager::PollMessage(RecvMessage& out)
 	return true;
 }
 
+void CMultiplayManager::Clear(std::function<void()>&& Func)
+{
+	Clear();
+
+	if (Func != nullptr)
+	{
+		Func();
+	}
+}
+
 void CMultiplayManager::Clear()
 {
 	CLog::PrintLog("CMultiplayManager::Clear()");
+	mIsConnected = false;
 
 	if (mSock == INVALID_SOCKET)
 		return;
@@ -159,6 +172,9 @@ void CMultiplayManager::ReceiveThread(SOCKET sock)
 {
 	while (true)
 	{
+		if (mIsConnected)
+			break;
+
 		MessageHeader header;
 		std::vector<char> bodyBuffer;
 		if (!ReceiveMsg(sock, header, bodyBuffer))
@@ -175,6 +191,9 @@ void CMultiplayManager::HeartbeatThread(SOCKET sock)
 {
 	while (true)
 	{
+		if (mIsConnected)
+			break;
+
 		std::this_thread::sleep_for(std::chrono::seconds(1));
 		SendMsg(0, (int)ClientMessage::Type::MSG_HEARTBEAT, nullptr, 0);
 	}

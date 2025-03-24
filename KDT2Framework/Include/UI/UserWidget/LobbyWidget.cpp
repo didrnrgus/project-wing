@@ -387,8 +387,11 @@ void CLobbyWidget::InitNextPrevButton()
 		, []()
 		{
 			CLog::PrintLog("mPrevButton Click");
-			CMultiplayManager::GetInst()->Clear();
-			CProcessManager::GetInst()->Terminate();
+			CMultiplayManager::GetInst()->Clear(
+				[]() 
+				{
+					CProcessManager::GetInst()->Terminate();
+				});
 			CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
 		});
 }

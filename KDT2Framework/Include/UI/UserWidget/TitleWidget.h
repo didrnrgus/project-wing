@@ -30,7 +30,7 @@ private:
 	void SetButtonWithTextBlock(CSharedPtr<class CButton>& button, std::string name, FVector2D pos
 		, void(CTitleWidget::* Func)(), CSharedPtr<class CTextBlock>& textBlock, const wchar_t* textBlockContent);
 	
-	void LoadGameData(bool _isMulti);
+	void LoadGameData(bool _isMulti, bool _isMultiPlay = false);
 	
 	void SinglePlayButtonClick();
 	void MultiPlayButtonClick();

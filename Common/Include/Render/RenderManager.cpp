@@ -6,7 +6,6 @@
 #include "../Scene/Scene.h"
 #include "../Scene/SceneManager.h"
 #include "../Scene/SceneUIManager.h"
-#include "../UI/UserWidget/MouseWidget.h"
 
 DEFINITION_SINGLE(CRenderManager)
 

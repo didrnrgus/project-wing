@@ -171,7 +171,6 @@
     <ClCompile Include="Device.cpp" />
     <ClCompile Include="GameInfo.cpp" />
     <ClCompile Include="GameManager.cpp" />
-    <ClCompile Include="Object\MousePointer.cpp" />
     <ClCompile Include="Object\SceneObject.cpp" />
     <ClCompile Include="Object\SpriteEffect.cpp" />
     <ClCompile Include="ProfileManager.cpp" />
@@ -194,9 +193,6 @@
     <ClCompile Include="UI\Common\ProgressBar.cpp" />
     <ClCompile Include="UI\Common\TextBlock.cpp" />
     <ClCompile Include="UI\Common\TitleBar.cpp" />
-    <ClCompile Include="UI\UserWidget\HeadInfo.cpp" />
-    <ClCompile Include="UI\UserWidget\MouseWidget.cpp" />
-    <ClCompile Include="UI\UserWidget\Slot.cpp" />
     <ClCompile Include="UI\UserWidget\UserWidget.cpp" />
     <ClCompile Include="UI\UserWidget\WindowWidget.cpp" />
     <ClCompile Include="UI\Widget.cpp" />
@@ -225,7 +221,6 @@
     <ClInclude Include="GameInfo.h" />
     <ClInclude Include="GameManager.h" />
     <ClInclude Include="Matrix.h" />
-    <ClInclude Include="Object\MousePointer.h" />
     <ClInclude Include="Object\SceneObject.h" />
     <ClInclude Include="Object\SpriteEffect.h" />
     <ClInclude Include="ProfileManager.h" />
@@ -252,9 +247,6 @@
     <ClInclude Include="UI\Common\TextBlock.h" />
     <ClInclude Include="UI\Common\TitleBar.h" />
     <ClInclude Include="UI\UIInfo.h" />
-    <ClInclude Include="UI\UserWidget\HeadInfo.h" />
-    <ClInclude Include="UI\UserWidget\MouseWidget.h" />
-    <ClInclude Include="UI\UserWidget\Slot.h" />
     <ClInclude Include="UI\UserWidget\UserWidget.h" />
     <ClInclude Include="UI\UserWidget\WindowWidget.h" />
     <ClInclude Include="UI\Widget.h" />

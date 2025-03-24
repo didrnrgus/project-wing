@@ -70,12 +70,14 @@ private:
 
 	std::mutex mQueueMutex;
 	std::queue<RecvMessage> mMessageQueue;
+	bool mIsConnected;
 
 public:
 	bool ConnetServer();
 	void SendMsg(int senderId, int msgType, const void* body, int bodyLen);
 	bool PollMessage(RecvMessage& out);
-	void Clear();
+	void Clear(std::function<void()>&& Func);
+	bool IsConnected() { return mIsConnected; }
 
 private:
 	void ReceiveThread(SOCKET sock);
@@ -83,6 +85,7 @@ private:
 	bool SendAll(SOCKET sock, const char* data, int len);
 	bool ReceiveMsg(SOCKET sock, MessageHeader& header, std::vector<char>& bodyBuffer);
 	bool RecvAll(SOCKET sock, char* buffer, int len);
+	void Clear();
 	
 	DECLARE_SINGLE(CMultiplayManager);
 };
