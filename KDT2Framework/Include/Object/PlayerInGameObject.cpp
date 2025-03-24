@@ -184,17 +184,17 @@ void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CCollider
 		return;
 
 	mCameraShake->SetShakeSceneObject(0.5f, 10.0f);
-	
+
 	if (GetCurHP() <= 0.0f)
 	{
 		OnPlayerDead();
 	}
-	else 
+	else
 	{
 		SetStun();
 		Damaged(CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage);
 	}
-	
+
 	CLog::PrintLog("CPlayerInGameObject::CollisionMap");
 }
 
@@ -208,7 +208,9 @@ void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector, float DeltaTi
 		return;
 
 	auto pos = mRoot->GetWorldPosition();
-	mRoot->SetWorldPos(pos + moveValueVector);
+	auto resultPos = pos + moveValueVector;
+	resultPos.y = Clamp(resultPos.y, mResolution.y * -0.5f, mResolution.y * 0.5f);
+	mRoot->SetWorldPos(resultPos);
 }
 
 void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
