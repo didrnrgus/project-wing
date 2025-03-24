@@ -1,5 +1,7 @@
 ﻿#pragma once
 
+#define IP_ADDRESS_DEFAULT "127.0.0.1"
+
 #define RESULT "results"
 #define PROPERTIES "properties"
 #define ID "id"

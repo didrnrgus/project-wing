@@ -69,13 +69,8 @@ void CTitleWidget::LoadGameData(bool _isMulti)
 {
 	ShowLoading(true);
 
-	if (_isMulti)
-	{
-		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
-	}
-
 #ifdef _DEBUG
-	int waitTime = 1;
+	int waitTime = 1000;
 #else
 	int waitTime = 2000;
 #endif // _DEBUG
@@ -125,6 +120,11 @@ void CTitleWidget::LoadGameData(bool _isMulti)
 	CDataStorageManager::GetInst()->SetItemInfoData(itemResult);
 
 	CTaskManager::GetInst()->RemoveTask(mTaskID);
+
+	if (_isMulti)
+	{
+		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
+	}
 
 	// Move to Lobby
 	CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();

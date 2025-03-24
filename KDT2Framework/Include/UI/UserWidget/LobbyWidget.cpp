@@ -13,6 +13,8 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/ConstValues.h"
 #include "Etc/ZOrderContainer.h"
+#include "Etc/MultiplayManager.h"
+#include "Etc/ProcessManager.h"
 
 CLobbyWidget::CLobbyWidget()
 {
@@ -385,6 +387,8 @@ void CLobbyWidget::InitNextPrevButton()
 		, []()
 		{
 			CLog::PrintLog("mPrevButton Click");
+			CMultiplayManager::GetInst()->Clear();
+			CProcessManager::GetInst()->Terminate();
 			CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
 		});
 }

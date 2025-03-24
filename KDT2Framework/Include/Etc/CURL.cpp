@@ -6,7 +6,7 @@ DEFINITION_SINGLE(CCURL);
 
 CCURL::CCURL()
 {
-
+	curl_global_init(CURL_GLOBAL_ALL);
 }
 
 CCURL::~CCURL()
@@ -42,7 +42,7 @@ std::string CCURL::SendRequest(const std::string& InURL
 
 	struct curl_slist* headers = NULL;
 
-	if (InMethod == METHOD_GET)
+	if (InMethod != METHOD_GET)
 	{
 		// 헤더 추가
 		headers = curl_slist_append(headers, auth.c_str());
@@ -73,6 +73,11 @@ std::string CCURL::SendRequest(const std::string& InURL
 	{
 		std::cerr << "cURL request failed: " << curl_easy_strerror(res) << "\n";
 	}
+
+	long response_code = 0;
+	curl_easy_getinfo(curl, CURLINFO_RESPONSE_CODE, &response_code);
+	std::cout << "HTTP Response Code: " << response_code << std::endl;
+	std::cout << "Response Body: " << response << std::endl;
 
 	// 리소스 해제
 	curl_slist_free_all(headers);

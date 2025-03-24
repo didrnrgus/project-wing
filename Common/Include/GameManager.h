@@ -47,7 +47,6 @@ private:
 	void RegisterWindowClass();
 	bool Create();
 
-
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	static void OpenPopup(HWND hWnd);
 	static LRESULT CALLBACK PopupProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
