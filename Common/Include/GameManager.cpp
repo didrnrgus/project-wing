@@ -21,6 +21,7 @@
 #include "Etc/NotionDBController.h"
 #include "Etc/TaskManager.h"
 #include "Etc/ProcessManager.h"
+#include "Etc/MultiplayManager.h"
 #include "Scene/SceneTitle.h"
 
 #define ID_MENU_OPTION1  1000  // 옵션1 메뉴 ID
@@ -69,6 +70,7 @@ CGameManager::~CGameManager()
     CNotionDBController::DestroyInst();
     CTaskManager::DestroyInst();
     CProcessManager::DestroyInst();
+    CMultiplayManager::DestroyInst();
     CLog::Destroy();
 }
 

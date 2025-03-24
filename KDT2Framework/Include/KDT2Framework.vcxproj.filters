@@ -129,6 +129,9 @@
     <ClCompile Include="Object\PlayerInGameObject.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="Etc\MultiplayManager.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -229,6 +232,9 @@
     </ClInclude>
     <ClInclude Include="Object\PlayerInGameObject.h">
       <Filter>Object</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\MultiplayManager.h">
+      <Filter>Etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

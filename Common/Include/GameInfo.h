@@ -1,16 +1,24 @@
 ﻿#pragma once
 
+#include <iostream>
+#include <string>
+#include <thread>
+#include <chrono>
+#include <vector>
+#include <queue>
+#include <mutex>
+#include <memory>
+#include <winsock2.h>
+#include <ws2tcpip.h>
+#pragma comment(lib, "ws2_32.lib")
+
 #include <Windows.h>
 #include <list>
-#include <vector>
 #include <unordered_map>
 #include <map>
 #include <crtdbg.h>
-#include <string>
 #include <functional>
-#include <iostream>
 #include <algorithm>
-#include <thread>
 #include <fstream>
 #include <sstream>
 #include <stdexcept>
