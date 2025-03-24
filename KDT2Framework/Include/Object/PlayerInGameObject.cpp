@@ -58,7 +58,7 @@ bool CPlayerInGameObject::Init()
 	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("MoveUp",
 		EInputType::Up, this, &CPlayerInGameObject::MoveUpRelease);
 
-	SetPlayerDeadCallback(this, &CPlayerInGameObject::OnDeadCallback);
+	SetPlayerFrezeCallback(this, &CPlayerInGameObject::OnFrezeCallback);
 
 #ifdef _DEBUG
 	mScene->GetInput()->AddBindKey("DecreaseHP", 'Z');
@@ -97,7 +97,7 @@ void CPlayerInGameObject::Update(float DeltaTime)
 {
 	CPlayerGraphicObject::Update(DeltaTime);
 
-	if (GetGamePlayState() != EGamePlayState::Start)
+	if (!IsGamePlayEnableByState())
 		return;
 
 	if (GetIsProtection())
@@ -143,12 +143,24 @@ void CPlayerInGameObject::MoveDown(float DeltaTime)
 
 void CPlayerInGameObject::MoveUpStart(float DeltaTime)
 {
+	if (!IsPlayerControlEnableByState())
+	{
+		mIsMovingUp = false;
+		return;
+	}
+
 	mIsMovingUp = true;
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpStart mIsMovingUp: " + std::to_string(mIsMovingUp));
 }
 
 void CPlayerInGameObject::MoveUpHold(float DeltaTime)
 {
+	if (!IsPlayerControlEnableByState())
+	{
+		mIsMovingUp = false;
+		return;
+	}
+
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpHold mIsMovingUp: " + std::to_string(mIsMovingUp));
 	auto moveValueVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * 1.0f;
 	SetMovePlayer(moveValueVector, DeltaTime);
@@ -162,7 +174,7 @@ void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
 
 void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CColliderBase* Dest)
 {
-	if (GetGamePlayState() != EGamePlayState::Start)
+	if (!IsGamePlayEnableByState())
 		return;
 
 	if (GetIsStun())
@@ -172,15 +184,24 @@ void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CCollider
 		return;
 
 	mCameraShake->SetShakeSceneObject(0.5f, 10.0f);
-	SetStun();
-	Damaged(CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage);
+	
+	if (GetCurHP() <= 0.0f)
+	{
+		OnPlayerDead();
+	}
+	else 
+	{
+		SetStun();
+		Damaged(CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage);
+	}
+	
 	CLog::PrintLog("CPlayerInGameObject::CollisionMap");
 }
 
 void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector, float DeltaTime)
 {
 	// 자기 자신이 호출
-	if (GetGamePlayState() != EGamePlayState::Start)
+	if (!IsGamePlayEnableByState())
 		return;
 
 	if (GetIsStun())
@@ -192,7 +213,7 @@ void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector, float DeltaTi
 
 void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
 {
-	if (GetGamePlayState() != EGamePlayState::Start)
+	if (!IsGamePlayEnableByState())
 		return;
 
 	if (GetIsStun())
@@ -219,9 +240,24 @@ void CPlayerInGameObject::UpdateDistance(float DeltaTime)
 	AddPlayDistance(speedPerFrame);
 }
 
-void CPlayerInGameObject::OnDeadCallback()
+void CPlayerInGameObject::OnFrezeCallback()
 {
-	CLog::PrintLog("CPlayerInGameObject::OnDeadCallback()");
+	CLog::PrintLog("CPlayerInGameObject::OnFrezeCallback()");
+	auto curColor = mRoot->GetColor();
+	curColor.x *= 0.7f;
+	curColor.y *= 0.7f;
+	curColor.z *= 0.7f;
+	mRoot->SetColor(curColor);
+
+	auto sceneInGame = dynamic_cast<CSceneInGame*>(mScene);
+	if (sceneInGame)
+	{
+		sceneInGame->SetGamePlayState(EGamePlayState::Freze);
+	}
+}
+
+void CPlayerInGameObject::OnPlayerDead()
+{
 	// 죽은표시 하기 -> 몇초뒤에 Result씬으로 이동
 	mDeadSign->SetRelativePos(FVector3D(0.0f, 0.0f, -0.1f));
 	mDeadSign->SetEnable(true);

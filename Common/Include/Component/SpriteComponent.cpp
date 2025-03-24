@@ -120,6 +120,11 @@ void CSpriteComponent::SetTextureIndex(int Index)
     mTextureIndex = Index;
 }
 
+FVector4D CSpriteComponent::GetColor()
+{
+    return mTint;
+}
+
 bool CSpriteComponent::Init()
 {
     CSceneComponent::Init();

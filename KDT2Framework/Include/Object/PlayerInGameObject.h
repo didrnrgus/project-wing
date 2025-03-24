@@ -37,7 +37,8 @@ private:
 	void SetMovePlayer(FVector3D moveValueVector, float DeltaTime);
 	void UpdateDecreaseHp(float DeltaTime);
 	void UpdateDistance(float DeltaTime);
-	void OnDeadCallback();
+	void OnFrezeCallback();
+	void OnPlayerDead();
 
 public:
 	// WorldPosition

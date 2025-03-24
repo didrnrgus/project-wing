@@ -371,6 +371,7 @@ namespace EGamePlayState
 		Ready,
 		ReadyCount,
 		Start,
+		Freze,	// 죽기 전 HP는 없는 상태.
 		Dead,
 		Pause,	// 로컬에서 자기자신만 가능. -> 인게임중 팝업?
 		Exit,	// 로컬에서 자기자신만 가능. -> 인게임중 나가버림.

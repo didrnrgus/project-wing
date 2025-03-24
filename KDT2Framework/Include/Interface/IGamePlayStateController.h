@@ -16,4 +16,22 @@ public:
 	}
 
 	inline EGamePlayState::Type GetGamePlayState() { return gamePlayState; };
+	inline bool IsGamePlayEnableByState()
+	{
+		if (GetGamePlayState() == EGamePlayState::Start
+			|| GetGamePlayState() == EGamePlayState::Freze)
+		{
+			return true;
+		}
+		return false;
+	}
+	inline bool IsPlayerControlEnableByState()
+	{
+		if (GetGamePlayState() == EGamePlayState::Start)
+		{
+			return true;
+		}
+		return false;
+	}
+
 };

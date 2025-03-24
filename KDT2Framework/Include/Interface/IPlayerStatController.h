@@ -26,7 +26,7 @@ private:
 	bool isProtection;
 	float playDistance;
 
-	std::function<void()> playerDeadCallback;
+	std::function<void()> playerFrezeCallback;
 
 private:
 	bool InitStat(float _maxHp, float _speed, float _dex, float _def)
@@ -81,10 +81,10 @@ public:
 		result = result < 0.0f ? 0.0f : result;
 		curHp -= result;
 
-		if (curHp <= 0.0f && playerDeadCallback != nullptr)
+		if (curHp <= 0.0f && playerFrezeCallback != nullptr)
 		{
-			playerDeadCallback();
-			playerDeadCallback = nullptr;
+			playerFrezeCallback();
+			playerFrezeCallback = nullptr;
 		}
 	}
 	inline void DamagedPerDistance(float _damageVal)
@@ -93,10 +93,10 @@ public:
 		result = result < 0.0f ? 0.0f : result;
 		curHp -= result;
 
-		if (curHp <= 0.0f && playerDeadCallback != nullptr)
+		if (curHp <= 0.0f && playerFrezeCallback != nullptr)
 		{
-			playerDeadCallback();
-			playerDeadCallback = nullptr;
+			playerFrezeCallback();
+			playerFrezeCallback = nullptr;
 		}
 	}
 	inline void AddHp(float _addHp) 
@@ -145,15 +145,15 @@ public:
 public:
 	// 콜백 함수들 등록
 	template <typename T>
-	void SetPlayerDeadCallback(T* Obj, void(T::* Func)())
+	void SetPlayerFrezeCallback(T* Obj, void(T::* Func)())
 	{
-		playerDeadCallback = std::bind(Func, Obj);
+		playerFrezeCallback = std::bind(Func, Obj);
 	}
 
 	// 람다 넣으려고.
 	using T = std::function<void()>;
-	void SetPlayerDeadCallback(T&& Func)
+	void SetPlayerFrezeCallback(T&& Func)
 	{
-		playerDeadCallback = std::move(Func);
+		playerFrezeCallback = std::move(Func);
 	}
 };
