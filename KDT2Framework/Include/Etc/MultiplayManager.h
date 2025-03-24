@@ -1,4 +1,5 @@
 #pragma once
+
 #include "GameInfo.h"
 
 extern std::string gIPAddress;
@@ -71,7 +72,7 @@ private:
 	std::queue<RecvMessage> mMessageQueue;
 
 public:
-	bool Init();
+	bool ConnetServer();
 	void SendMsg(int senderId, int msgType, const void* body, int bodyLen);
 	bool PollMessage(RecvMessage& out);
 	void Clear();

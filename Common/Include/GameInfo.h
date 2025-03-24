@@ -1,10 +1,5 @@
 ﻿#pragma once
-
-#include <iostream>
-#include <string>
-#include <thread>
 #include <chrono>
-#include <vector>
 #include <queue>
 #include <mutex>
 #include <memory>
@@ -12,16 +7,23 @@
 #include <ws2tcpip.h>
 #pragma comment(lib, "ws2_32.lib")
 
-#include <Windows.h>
-#include <list>
-#include <unordered_map>
-#include <map>
-#include <crtdbg.h>
-#include <functional>
 #include <algorithm>
+#include <exception>
 #include <fstream>
+#include <functional>
+#include <iostream>
+#include <list>
+#include <map>
 #include <sstream>
 #include <stdexcept>
+#include <string>
+#include <thread>
+#include <unordered_map>
+#include <vector>
+
+#include <crtdbg.h>
+
+#include <Windows.h> 
 #include <d3d11.h>
 #include <d3dcompiler.h>
 
@@ -30,9 +32,6 @@
 //#include <dwrite_2.h> // 위의 기능에 Window8.1 기능 추가
 #include <dwrite_3.h>	// 위의 기능에 Window10 기능 추가
 #include <d2d1.h>
-
-#include <nlohmann/json.hpp>
-#include <curl/curl.h>
 
 #include "Vector2D.h"
 #include "Vector3D.h"
@@ -53,6 +52,9 @@ extern char   gRootPathMultibyte[MAX_PATH];
 #pragma comment(lib, "dxguid.lib")
 #pragma comment(lib, "dwrite.lib")
 #pragma comment(lib, "d2d1.lib")
+
+#include <nlohmann/json.hpp>
+#include <curl/curl.h>
 #pragma comment(lib, "libcurl-x64.lib")
 
 #define	SAFE_DELETE(p)	if(p)	{ delete p; p = nullptr; }

@@ -1,3 +1,4 @@
+#pragma once
 #include "MultiplayManager.h"
 #include "GameManager.h"
 
@@ -97,9 +98,10 @@ CMultiplayManager::CMultiplayManager()
 CMultiplayManager::~CMultiplayManager()
 {
 	Clear();
+	WSACleanup();
 }
 
-bool CMultiplayManager::Init()
+bool CMultiplayManager::ConnetServer()
 {
 	if (WSAStartup(MAKEWORD(2, 2), &mWsaData) != 0) return false;
 
@@ -139,13 +141,18 @@ bool CMultiplayManager::PollMessage(RecvMessage& out)
 
 void CMultiplayManager::Clear()
 {
-	CLog::PrintLog("CMultiplayManager::~CMultiplayManager()");
+	CLog::PrintLog("CMultiplayManager::Clear()");
 
-	if (mRecvThread && mRecvThread->joinable()) mRecvThread->join();
-	if (mHbThread && mHbThread->joinable()) mHbThread->join();
+	if (mSock == INVALID_SOCKET)
+		return;
+
+	if (mRecvThread && mRecvThread->joinable())
+		mRecvThread->join();
+	if (mHbThread && mHbThread->joinable())
+		mHbThread->join();
 
 	closesocket(mSock);
-	WSACleanup();
+	
 }
 
 void CMultiplayManager::ReceiveThread(SOCKET sock)

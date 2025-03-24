@@ -1,3 +1,4 @@
+#pragma once
 #include "ProcessManager.h"
 
 DEFINITION_SINGLE(CProcessManager);
