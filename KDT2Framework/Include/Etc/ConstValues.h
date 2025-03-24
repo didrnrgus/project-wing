@@ -13,6 +13,13 @@
 #define ATT_DATABASE_ID "database_id"
 #define ATT_ARCHIVED "archived"
 
+#define SCENE_TITLE "SceneTitle"
+#define SCENE_TITLE_WIDGET "SceneTitleWidget"
+#define SCENE_LOBBY "SceneLobby"
+#define SCENE_LOBBY_WIDGET "SceneLobbyWidget"
+#define SCENE_INGAME "SceneInGame"
+#define SCENE_INGAME_WIDGET "SceneInGameWidget"
+
 #define PROP_NAME "name"
 #define PROP_MAP "map"
 #define PROP_DISTANCE "distance"

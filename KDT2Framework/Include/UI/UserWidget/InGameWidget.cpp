@@ -76,20 +76,6 @@ bool CInGameWidget::Init()
 		}
 
 		itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
-		itemTypeCount = mItemImagePaths.size();
-
-		// 아이템 착용한것 플레이어에 스텟 적용.
-		for (int i = 0; i < itemSlotCount; i++)
-		{
-			int itemIndexInSlot = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(i);
-			if (itemIndexInSlot >= 0)
-			{
-				// 어떤 스탯에 얼마를 적용할것인지.
-				mPlayerStat->SetValueByStatIndex(
-					static_cast<EStatInfoText::Type>(itemDatas[itemIndexInSlot].StatType)
-					, itemDatas[itemIndexInSlot].AddValue);
-			}
-		}
 
 		// slot image path
 		mSlotImagePaths.push_back(ITEM_ADD_SQUARE_PATH);
@@ -103,6 +89,31 @@ bool CInGameWidget::Init()
 		mSlotInnerItemSizeRate = 0.8f;
 
 		InitSelectedItemSlot();
+	}
+
+	{ // start count setting
+		mStartCountTextArr.push_back(L"START!!");
+		mStartCountTextArr.push_back(L"1");
+		mStartCountTextArr.push_back(L"2");
+		mStartCountTextArr.push_back(L"3");
+		mStartCountTextArr.push_back(L"READY~");
+
+		FVector2D pivot = FVector2D(0.5f, 0.5f);
+		FVector2D size = FVector2D(1000.0f, 200.5f);
+		FVector2D pos = FVector2D(RS.Width, RS.Height) * 0.5f;
+
+		mStartCountText = mScene->GetUIManager()->CreateWidget<CTextBlock>("mStartCountText");
+		AddWidget(mStartCountText);
+		mStartCountText->SetPivot(pivot);
+		mStartCountText->SetSize(size);
+		mStartCountText->SetPos(pos);
+		mStartCountText->SetText(mStartCountTextArr[mStartCountTextArr.size() - 1]);
+		mStartCountText->SetTextColor(FVector4D::Green);
+		mStartCountText->SetFontSize(200.0f);
+		mStartCountText->SetAlignH(ETextAlignH::Center);
+		mStartCountText->SetShadowEnable(false);
+		mStartCountText->SetTextShadowColor(FVector4D::Gray30);
+		mStartCountText->SetZOrder(ZORDER_LOBBY_TOOLTIP_TEXT);
 	}
 
 	return true;
@@ -142,7 +153,7 @@ void CInGameWidget::InitSelectedItemSlot()
 			buttonImage->SetTexture(mItemImageNames[selectedItemIndex], mItemImagePaths[selectedItemIndex]);
 			buttonImage->SetEnable(true);
 		}
-		else 
+		else
 		{
 			buttonImage->SetEnable(false);
 			continue;
@@ -153,6 +164,17 @@ void CInGameWidget::InitSelectedItemSlot()
 		buttonImage->SetPos(tempPos);
 
 	}
+}
+
+void CInGameWidget::SetStartCount(int count)
+{
+	if (count < 0)
+	{
+		mStartCountText->SetEnable(false);
+		return;
+	}
+
+	mStartCountText->SetText(mStartCountTextArr[count]);
 }
 
 void CInGameWidget::UpdateTargetPlayerStat(float DeltaTime)

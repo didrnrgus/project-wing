@@ -70,6 +70,25 @@ bool CPlayerInGameObject::Init()
 		});
 #endif // _DEBUG
 
+	int itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
+	auto itemDatas = CDataStorageManager::GetInst()->GetItemInfoDatas();
+
+	// 선택한 캐릭의 초기 스텟 등록.
+	auto initializedStatData = CDataStorageManager::GetInst()->GetSelectedCharacterState();
+	InitStat(initializedStatData);
+
+	// 아이템 착용한것 플레이어에 스텟 적용. 베이스 스탯에 Add 하는 형식임 이전에 Init되어 있어야 함.
+	for (int i = 0; i < itemSlotCount; i++)
+	{
+		int itemIndexInSlot = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(i);
+		if (itemIndexInSlot >= 0)
+		{
+			// 어떤 스탯에 얼마를 적용할것인지.
+			AddValueByStatIndex(
+				static_cast<EStatInfoText::Type>(itemDatas[itemIndexInSlot].StatType)
+				, itemDatas[itemIndexInSlot].AddValue);
+		}
+	}
 
 	return true;
 }

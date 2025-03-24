@@ -39,9 +39,9 @@ CLobbyWidget::CLobbyWidget()
 	}
 
 	{ // 아이템 정보 세팅.
-		auto items = CDataStorageManager::GetInst()->GetItemInfoDatas();
+		auto itemInfos = CDataStorageManager::GetInst()->GetItemInfoDatas();
 		int index = 0;
-		for (auto item : items)
+		for (auto item : itemInfos)
 		{
 			mItemImagePaths.push_back(item.second.GetItmeImagePath(index));
 			mItemImageNames.push_back(item.second.GetItmeImageName(index));
@@ -49,7 +49,12 @@ CLobbyWidget::CLobbyWidget()
 		}
 
 		itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
-		itemTypeCount = mItemImagePaths.size();
+		itemTypeCount = itemInfos.size();
+
+		for (int i = 0; i < itemSlotCount; i++)
+		{
+			CDataStorageManager::GetInst()->SetSelectedItemTypeInSlotIndex(i, -1);
+		}
 	}
 
 	mSlotImagePaths.push_back(ITEM_ADD_SQUARE_PATH);

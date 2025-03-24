@@ -27,13 +27,8 @@ private:
 
 	std::function<void()> playerDeadCallback;
 
-public:
-	bool Init(FCharacterState stat)
-	{
-		return Init(stat.HP, stat.Speed, stat.Dex, stat.Def);
-	}
-
-	bool Init(float _maxHp, float _speed, float _dex, float _def)
+private:
+	bool InitStat(float _maxHp, float _speed, float _dex, float _def)
 	{
 		maxHp = _maxHp;
 		baseSpeed = _speed;
@@ -51,8 +46,14 @@ public:
 		return true;
 	}
 
+public:
+	bool InitStat(FCharacterState stat)
+	{
+		return InitStat(stat.HP, stat.Speed, stat.Dex, stat.Def);
+	}
+
 	inline void SetIndex(int _index) { index = _index; }
-	inline void SetValueByStatIndex(EStatInfoText::Type _statIndex, int _value)
+	inline void AddValueByStatIndex(EStatInfoText::Type _statIndex, int _value)
 	{
 		switch (_statIndex)
 		{

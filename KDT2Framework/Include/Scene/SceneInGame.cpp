@@ -6,6 +6,7 @@
 #include "Object/LineGroupObject.h"
 #include "Object/CameraObject.h"
 #include "Etc/DataStorageManager.h"
+#include "Etc/ConstValues.h"
 #include "Interface/IPlayerStatController.h"
 #include "Interface/IGamePlayStateController.h"
 #include "Interface/IGamePlayShakeController.h"
@@ -34,7 +35,30 @@ bool CSceneInGame::Init()
                 SetGamePlayState(EGamePlayState::Pause);
         });
 
+    SetGamePlayState(EGamePlayState::ReadyCount);
+    mCurReadyCount = mInGameWidget->GetStartCountArrCount();
+    mReadyCountTime = 0.0f;
     return true;
+}
+
+void CSceneInGame::Update(float DeltaTime)
+{
+    CScene::Update(DeltaTime);
+
+    if (mGamePlayState == EGamePlayState::ReadyCount)
+    {
+        mReadyCountTime += DeltaTime;
+        if (mReadyCountTime >= 1.0f)
+        {
+            mReadyCountTime = 0.0f;
+            mCurReadyCount -= 1;
+
+            mInGameWidget->SetStartCount(mCurReadyCount);
+
+            if(mCurReadyCount < 0)
+                SetGamePlayState(EGamePlayState::Start);
+        }
+	}
 }
 
 bool CSceneInGame::InitAsset()
@@ -62,18 +86,15 @@ bool CSceneInGame::InitObject()
         playerInGame->SetShakeCamera(cameraShake);
     }
     
-    // 선택한 캐릭의 초기 스텟 등록.
-    auto initializedStatData = CDataStorageManager::GetInst()->GetSelectedCharacterState();
+    // 선택한 캐릭의 스탯 인터페이스 가져오기.
     auto playerInGameStat = dynamic_cast<IPlayerStatController*>(playerInGame);
     if (playerInGameStat != nullptr)
     {
-        playerInGameStat->Init(initializedStatData);
+        // lineGroup setting
+        lineGroup->SetTargetStat(playerInGameStat);
     }
 
     SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
-
-    // lineGroup setting
-    lineGroup->SetTargetStat(playerInGameStat);
 
     // IGamePlayStateController arr setting
     // 맵도 포함시키고.
@@ -92,8 +113,8 @@ bool CSceneInGame::InitObject()
 
 bool CSceneInGame::InitWidget()
 {
-    CInGameWidget* Widget = mUIManager->CreateWidget<CInGameWidget>("InGame");
-    mUIManager->AddToViewport(Widget);
+    mInGameWidget = mUIManager->CreateWidget<CInGameWidget>(SCENE_INGAME_WIDGET);
+    mUIManager->AddToViewport(mInGameWidget);
     return true;
 }
 

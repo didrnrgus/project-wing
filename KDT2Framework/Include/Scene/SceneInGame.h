@@ -12,11 +12,15 @@ private:
 	virtual ~CSceneInGame();
 
 private:
-std::vector<IGamePlayStateController*> mArrGamePlayStateCtlr;
+	std::vector<IGamePlayStateController*> mArrGamePlayStateCtlr;
 	EGamePlayState::Type mGamePlayState = EGamePlayState::Ready;
+	int mCurReadyCount;
+	float mReadyCountTime;
+	class CInGameWidget* mInGameWidget = nullptr;
 
 protected:
 	virtual bool Init() override;
+	virtual void Update(float DeltaTime) override;
 	virtual bool InitAsset() override;
 	virtual bool InitObject() override;
 	virtual bool InitWidget() override;

@@ -11,6 +11,7 @@ protected:
 
 private:
 	CSharedPtr<class CImage> mHpFrontImage;
+
 	FVector2D mHpFrontSize;
 	class IPlayerStatController* mPlayerStat;
 
@@ -22,8 +23,10 @@ private:
 	std::vector<const char*> mItemImageNames;
 	std::vector<const char*> mSlotImageNames;
 
+	CSharedPtr<class CTextBlock> mStartCountText;
+	std::vector<const wchar_t*> mStartCountTextArr;
+
 	int itemSlotCount;
-	int itemTypeCount;
 
 	FVector2D mSlotPosBase;
 	FVector2D mSlotPosAdd;
@@ -34,9 +37,10 @@ public:
 	virtual bool Init() override;
 	virtual void Update(float DeltaTime) override;
 
+	void SetStartCount(int count);
+	int GetStartCountArrCount() { return mStartCountTextArr.size() - 1; }
 protected:
 	void InitSelectedItemSlot();
-
 	void UpdateTargetPlayerStat(float DeltaTime);
 };
 
