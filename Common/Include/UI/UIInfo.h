@@ -21,6 +21,7 @@ namespace SlotType
 	{
 		ToAdd = 0, // +모양
 		Added = 1, // 빈칸 -> 내부에 다른 이미지 나올것임.
+		Fully = 2 // 꽉찬거 뒷배경 섞이는거 방지용.
 	};
 }
 

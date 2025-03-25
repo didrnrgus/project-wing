@@ -363,12 +363,9 @@ namespace EGameScene
 	enum Type 
 	{
 		Title,
-		LobbySingle,
-		LobbyMulti,
-		InGameSingle,
-		InGameMulti,
-		ResultSingle,
-		ResultMulti,
+		Lobby,
+		InGame,
+		Result,
 		Rank,
 		End
 	};

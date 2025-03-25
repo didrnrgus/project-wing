@@ -1,10 +1,6 @@
 ﻿#pragma once
 #include "UI\UserWidget\UserWidget.h"
 
-
-
-
-
 class CLobbyWidget : public CUserWidget
 {
 	friend class CSceneUIManager;
@@ -31,37 +27,50 @@ protected:
 	CSharedPtr<class CImage> mToolTipShasdowImage;
 	CSharedPtr<class CImage> mToolTipBack2Image;
 	CSharedPtr<class CImage> mToolTipBackImage;
-	std::vector<CSharedPtr<class CTextBlock>> mItemInfoNameText;
-	std::vector<CSharedPtr<class CTextBlock>> mItemInfoValueText;
+	std::vector<CSharedPtr<class CTextBlock>> mArrItemInfoNameText;
+	std::vector<CSharedPtr<class CTextBlock>> mArrItemInfoValueText;
 
 	// playerInfo
-	std::vector<CSharedPtr<class CTextBlock>> mPlayerStatNameText;
-	std::vector<CSharedPtr<class CTextBlock>> mPlayerStatValueText;
+	std::vector<CSharedPtr<class CTextBlock>> mArrPlayerStatNameText;
+	std::vector<CSharedPtr<class CTextBlock>> mArrPlayerStatValueText;
 
 	// mapInfo
-	std::vector<CSharedPtr<class CTextBlock>> mMapInfoNameText;
-	std::vector<CSharedPtr<class CTextBlock>> mMapInfoValueText;
+	std::vector<CSharedPtr<class CTextBlock>> mArrMapInfoNameText;
+	std::vector<CSharedPtr<class CTextBlock>> mArrMapInfoValueText;
 
 	// 투명버튼
-	std::vector<CSharedPtr<class CButton>> mItemSlots;
+	std::vector<CSharedPtr<class CButton>> mArrItemSlotButton;
 	// 아이템 슬롯 이미지 + / empty
-	std::vector<CSharedPtr<class CImage>> mItemSlotImages;
+	std::vector<CSharedPtr<class CImage>> mArrItemSlotImage;
 	// 아이템 클릭 하고, 바뀔 이미지
-	std::vector<CSharedPtr<class CImage>> mItemImages;
+	std::vector<CSharedPtr<class CImage>> mArrItemImageInSlot;
+
+	// player list -> 깔끔하게 구조체로
+	struct PlayerWidgetGroup
+	{
+		CSharedPtr<class CImage> mPlayerHostImage;
+		CSharedPtr<class CTextBlock> mPlayerText;
+		std::vector<CSharedPtr<class CImage>> mArrPlayerSlotImage;
+		std::vector<CSharedPtr<class CImage>> mArrPlayerItemImage;
+	};
+	std::vector<PlayerWidgetGroup> mArrPlayerWidgetGroup;
 
 	// 슬롯을 누르면 아이템이 윗쪽 방향 세로로 쭉 나온다
 	// 아이템 버튼들이 나왔을때 하나 선택(클릭) 하면 사라짐 3개
 	// 사라지면 슬롯 안에 선택한 아이템이 나오게 된다
-	std::vector<CSharedPtr<class CButton>> mItemButtons; 
-	std::vector<CSharedPtr<class CImage>> mItemButtonSlotImages;
-	std::vector<const wchar_t*> mItemImagePaths;
-	std::vector<const wchar_t*> mSlotImagePaths;
-	std::vector<const wchar_t*> mMapDifficultyImagePaths;
-	std::vector<const char*> mItemImageNames;
-	std::vector<const char*> mSlotImageNames;
-	std::vector<const char*> mMapDifficultyImageNames;
+	std::vector<CSharedPtr<class CButton>> mArrItemButtonInList; 
+	std::vector<CSharedPtr<class CImage>> mArrSlotImageInList;
 
-	std::vector<FVector4D> mMapDifficultyImageColors;
+	std::vector<const char*> mArrItemImageName;
+	std::vector<const wchar_t*> mArrItemImagePath;
+
+	std::vector<const char*> mArrSlotImageName;
+	std::vector<const wchar_t*> mArrSlotImagePath;
+
+	std::vector<const char*> mArrMapDifficultyImageName;
+	std::vector<const wchar_t*> mArrMapDifficultyImagePath;
+
+	std::vector<FVector4D> mArrMapDifficultyImageColor;
 
 	FVector2D mResolution;
 	FVector2D mSlotPosBase;
@@ -82,11 +91,6 @@ protected:
 	int curPlayerGraphicIndex = 0;
 	int curDifficultyIndex = 0;
 
-	/*std::string mSlotTextureNamePrefix;
-	std::string mItemTextureNamePrefix;
-	std::string mSlotButtonNamePrefix;
-	std::string mMapDifficultyImageNamePrefix;*/
-
 public:
 	virtual bool Init() override;
 	virtual void Update(float DeltaTime) override;
@@ -98,6 +102,7 @@ private:
 	void InitPlayerStatText();
 	void InitMapInfoText();
 	void InitItemInfoTooltip();
+	void InitOtherPlayersInfo();
 
 	void OnCharacterLeftButtonClick();
 	void OnCharacterRightButtonClick();

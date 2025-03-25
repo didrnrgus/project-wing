@@ -1,6 +1,10 @@
 ﻿#pragma once
 
 #define IP_ADDRESS_DEFAULT "127.0.0.1"
+#define PLAYER_COUNT_MAX 5
+#define PLAYER_EMPTY_TEXT L"Player_Empty"
+#define PLAYER_NUMBER_PREFIX_TEXT L"Player_Num_"
+#define PLAYER_TITLE_TEXT L"PLAYER TITLE"
 
 #define RESULT "results"
 #define PROPERTIES "properties"
@@ -57,9 +61,11 @@
 #define TEXTURE_PATH_DEAD_SIGN TEXT("Texture/Icon/death.png")
 
 #define ITEM_ADD_SQUARE_NAME "AddSquare"
-#define ITEM_EMPTY_SQUARE_NAME "EmtpeySquare"
+#define ITEM_EMPTY_SQUARE_NAME "EmptySquare"
+#define ITEM_FULLY_SQUARE_NAME "FullySquare"
 #define ITEM_ADD_SQUARE_PATH TEXT("Texture/Icon/add-square.png")
 #define ITEM_EMPTY_SQUARE_PATH TEXT("Texture/Icon/empty-square.png")
+#define ITEM_FULLY_SQUARE_PATH TEXT("Texture/Icon/fully-square.png")
 
 #define DIRECT_LEFT_NAME "DirectLeft"
 #define DIRECT_RIGHT_NAME "DirectRight"
@@ -72,3 +78,6 @@
 
 #define TEXTURE_BASIC_NAME "Basic"
 #define TEXTURE_BASIC_PATH TEXT("Texture/basic.png")
+
+#define TEXTURE_HOST_ICON_NAME "Crown"
+#define TEXTURE_HOST_ICON_PATH TEXT("Texture/Icon/crown.png")

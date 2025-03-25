@@ -27,8 +27,7 @@ bool CPlayerGraphicObject::Init()
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	mResolution = FVector2D(RS.Width, RS.Height);
 
-	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbySingle
-		|| CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbyMulti)
+	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::Lobby)
 	{
 		FVector2D tempPos = FVector2D(mResolution.x * 0.8f, mResolution.y * 0.75f) - mResolution * 0.5f;
 		mRootInitPos = FVector3D(tempPos.x, tempPos.y, 0.0f);
@@ -66,8 +65,7 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 	CSceneObject::Update(DeltaTime);
 
 	// 맵 선택 이미지 웨이브.
-	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbySingle
-		|| CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::LobbyMulti)
+	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::Lobby)
 	{
 		mMapDifficultySinAngle += DeltaTime * 180.0f;
 
@@ -95,8 +93,7 @@ bool CPlayerGraphicObject::SetChangeGraphic(int index)
 
 #ifdef _DEBUG
 	auto sceneType = CSceneManager::GetInst()->GetCurrentSceneType();
-	if (sceneType == EGameScene::InGameSingle
-		|| sceneType == EGameScene::InGameMulti)
+	if (sceneType == EGameScene::InGame)
 	{
 		mRoot->SetOpacity(0.5f);
 	}

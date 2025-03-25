@@ -71,6 +71,7 @@ private:
 	std::mutex mQueueMutex;
 	std::queue<RecvMessage> mMessageQueue;
 	bool mIsConnected;
+	bool mIsMultiplay;	// title scene 에서 결정 됨.
 
 public:
 	bool ConnetServer();
@@ -78,6 +79,9 @@ public:
 	bool PollMessage(RecvMessage& out);
 	void Clear(std::function<void()>&& Func);
 	bool IsConnected() { return mIsConnected; }
+
+	void SetIsMultiplay(bool _isMulti) { mIsMultiplay = _isMulti; }
+	bool IsMultiplay() { return mIsMultiplay; }
 
 private:
 	void ReceiveThread(SOCKET sock);

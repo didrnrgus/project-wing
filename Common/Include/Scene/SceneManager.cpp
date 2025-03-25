@@ -19,9 +19,9 @@ EGameScene::Type CSceneManager::SetCurrentSceneType(CScene* scene)
 	if (dynamic_cast<CSceneTitle*>(scene))
 		mSceneType = EGameScene::Title;
 	else if (dynamic_cast<CSceneLobby*>(scene))
-		mSceneType = EGameScene::LobbySingle;
+		mSceneType = EGameScene::Lobby;
 	else if (dynamic_cast<CSceneInGame*>(scene))
-		mSceneType = EGameScene::InGameSingle;
+		mSceneType = EGameScene::InGame;
 	else
 		mSceneType = EGameScene::End;
 

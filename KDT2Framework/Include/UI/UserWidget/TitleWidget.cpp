@@ -131,6 +131,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 
 	if (_isMultiPlay)
 	{
+		CMultiplayManager::GetInst()->SetIsMultiplay(true);
 		CMultiplayManager::GetInst()->ConnetServer();
 	}
 

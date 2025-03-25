@@ -14,23 +14,10 @@ private:
 
 	float		mClearColor[4] = {};
 
-	EGameScene::Type mGameState;
-
 public:
-	HINSTANCE GetWindowInstance()	const
-	{
-		return mhInst;
-	}
-
-	HWND GetWindowHandle()	const
-	{
-		return mhWnd;
-	}
-
-	void ExitGame()
-	{
-		DestroyWindow(mhWnd);
-	}
+	HINSTANCE GetWindowInstance() const { return mhInst; }
+	HWND GetWindowHandle() const { return mhWnd; }
+	void ExitGame() { DestroyWindow(mhWnd); }
 
 public:
 	bool Init(HINSTANCE hInst);
