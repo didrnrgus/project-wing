@@ -236,6 +236,12 @@
     <ClInclude Include="Etc\MultiplayManager.h">
       <Filter>Etc</Filter>
     </ClInclude>
+    <ClInclude Include="Interface\ISceneNetworkController.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IObjectNetworkController.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="KDT2Framework.rc">

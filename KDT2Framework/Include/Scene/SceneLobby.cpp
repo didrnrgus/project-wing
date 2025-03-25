@@ -5,6 +5,7 @@
 #include "Scene/SceneUIManager.h"
 #include "Object/PlayerGraphicObject.h"
 #include "Object/CameraObject.h"
+#include "Etc/MultiplayManager.h"
 
 CSceneLobby::CSceneLobby()
 {
@@ -30,12 +31,18 @@ bool CSceneLobby::InitObject()
 
 bool CSceneLobby::InitWidget()
 {
-    CLobbyWidget* Widget = mUIManager->CreateWidget<CLobbyWidget>("Lobby");
-    mUIManager->AddToViewport(Widget);
+    mLobbyWidget = mUIManager->CreateWidget<CLobbyWidget>("mLobbyWidget");
+    mUIManager->AddToViewport(mLobbyWidget);
     return true;
 }
 
-#pragma region IPlayerController
+void CSceneLobby::Update(float DeltaTime)
+{
+    CScene::Update(DeltaTime);
+    ProcessMessage();
+}
+
+#pragma region IScenePlayerGraphicController
 
 CSceneObject* CSceneLobby::GetPlayer(int index)
 {
@@ -53,6 +60,22 @@ bool CSceneLobby::SetChangeGraphic(int playerIndex, int graphicIndex)
 
     auto result = tempPlayer->SetChangeGraphic(graphicIndex);
     return result;
+}
+
+#pragma endregion
+
+#pragma region ISceneNetworkController
+
+void CSceneLobby::ProcessMessage()
+{
+    // 메시지 큐에서 메시지 뽑는 역할.
+    
+}
+
+void CSceneLobby::ProcessMessage(RecvMessage& msg)
+{
+    // 메시지 받는역할.
+
 }
 
 #pragma endregion

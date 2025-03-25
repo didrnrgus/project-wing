@@ -121,6 +121,11 @@ void CLobbyWidget::Update(float DeltaTime)
 		float tempVal = sin(DirectX::XMConvertToRadians(mMapDifficultySinAngle));
 		mMapDifficultyImage->SetPos(mMapDifficultyImagePos + FVector2D(0.0f, tempVal * 10));
 	}
+
+	if (CMultiplayManager::GetInst()->IsMultiplay())
+	{
+
+	}
 }
 
 void CLobbyWidget::InitScrollSelectButtons()

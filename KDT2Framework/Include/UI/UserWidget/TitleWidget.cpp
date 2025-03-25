@@ -129,9 +129,10 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
 	}
 
+	CMultiplayManager::GetInst()->SetIsMultiplay(_isMultiPlay);
+	
 	if (_isMultiPlay)
 	{
-		CMultiplayManager::GetInst()->SetIsMultiplay(true);
 		CMultiplayManager::GetInst()->ConnetServer();
 	}
 

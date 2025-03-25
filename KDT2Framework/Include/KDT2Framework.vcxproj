@@ -202,6 +202,8 @@
     <ClInclude Include="Etc\ZOrderContainer.h" />
     <ClInclude Include="Interface\IGamePlayShakeController.h" />
     <ClInclude Include="Interface\IGamePlayStateController.h" />
+    <ClInclude Include="Interface\IObjectNetworkController.h" />
+    <ClInclude Include="Interface\ISceneNetworkController.h" />
     <ClInclude Include="Interface\IScenePlayerGraphicController.h" />
     <ClInclude Include="Interface\IScenePlayerInGameController.h" />
     <ClInclude Include="Interface\IPlayerStatController.h" />

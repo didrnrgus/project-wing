@@ -57,7 +57,6 @@ struct RecvMessage
 	std::vector<char> body;
 };
 
-
 class CMultiplayManager
 {
 private:
