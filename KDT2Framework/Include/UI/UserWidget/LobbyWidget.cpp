@@ -416,6 +416,7 @@ void CLobbyWidget::InitItemButtons()
 		buttonBackImage->SetSize(mSlotSize);
 		buttonBackImage->SetColor(FVector4D::Green);
 		buttonBackImage->SetPos(tempPos);
+		buttonBackImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_SLOT);
 
 		// 슬롯 내부 아이템 이미지.
 		CSharedPtr<CImage> buttonImage = mScene->GetUIManager()->CreateWidget<CImage>(mArrItemImageName[i]);
@@ -426,6 +427,7 @@ void CLobbyWidget::InitItemButtons()
 		buttonImage->SetSize(mSlotSize * mSlotInnerItemSizeRate * mSlotInnerItemSizeRate);
 		buttonImage->SetColor(FVector4D::Green);
 		buttonImage->SetPos(tempPos);
+		buttonImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
 		buttonImage->SetEnable(false);
 
 		// 버튼이 인풋 이벤트에 입력되어야 하므로.
@@ -436,6 +438,7 @@ void CLobbyWidget::InitItemButtons()
 		slotButton->SetPivot(FVector2D::One * 0.5f);
 		slotButton->SetColor(FVector4D::Transparent);
 		slotButton->SetPos(tempPos);
+		slotButton->SetZOrder(ZORDER_LOBBY_MY_ITEM_BUTTON);
 		slotButton->SetEventCallback(EButtonEventState::Click
 			, [this, i]()
 			{
@@ -450,15 +453,25 @@ void CLobbyWidget::InitItemButtons()
 	{
 		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mArrSlotImageName[(int)SlotType::Fully]);
 		AddWidget(buttonBackImage);
-		mArrItemSlotImage.push_back(buttonBackImage);
 		buttonBackImage->SetTexture(mArrSlotImageName[(int)SlotType::Fully]
 			, mArrSlotImagePath[(int)SlotType::Fully]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 1));
-		buttonBackImage->SetColor(FVector4D::Orange * 0.8f);
+		buttonBackImage->SetColor(FVector4D::Red);
 		buttonBackImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_SLOT);
 		buttonBackImage->SetEnable(false);
 		mArrSlotImageInList.push_back(buttonBackImage);
+
+		CSharedPtr<CImage> buttonFrameImage = mScene->GetUIManager()->CreateWidget<CImage>(mArrSlotImageName[(int)SlotType::Added]);
+		AddWidget(buttonFrameImage);
+		buttonFrameImage->SetTexture(mArrSlotImageName[(int)SlotType::Added]
+			, mArrSlotImagePath[(int)SlotType::Added]);
+		buttonFrameImage->SetPivot(FVector2D::One * 0.5f);
+		buttonFrameImage->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 1));
+		buttonFrameImage->SetColor(FVector4D::Green);
+		buttonFrameImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
+		buttonFrameImage->SetEnable(false);
+		mArrSlotFrameImageInList.push_back(buttonFrameImage);
 
 		std::string name = "SelectItemButton_" + std::to_string(i);
 		CSharedPtr<CButton> selectItemButton = mScene->GetUIManager()->CreateWidget<CButton>(name);
@@ -466,7 +479,7 @@ void CLobbyWidget::InitItemButtons()
 		mArrItemButtonInList.push_back(selectItemButton);
 		this->SetButton(*selectItemButton.Get(), name.c_str(), mArrItemImagePath[i]);
 
-		selectItemButton->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
+		selectItemButton->SetZOrder(ZORDER_LOBBY_MY_ITEM_BUTTON);
 		selectItemButton->SetPivot(FVector2D::One * 0.5f);
 		selectItemButton->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 3));
 		selectItemButton->SetEnable(false);
@@ -528,6 +541,7 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 		{
 			mArrItemButtonInList[i]->SetEnable(false);
 			mArrSlotImageInList[i]->SetEnable(false);
+			mArrSlotFrameImageInList[i]->SetEnable(false);
 		}
 		return;
 	}
@@ -542,6 +556,8 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 		mArrItemButtonInList[i]->SetPos(tempPos);
 		mArrSlotImageInList[i]->SetEnable(true);
 		mArrSlotImageInList[i]->SetPos(tempPos);
+		mArrSlotFrameImageInList[i]->SetEnable(true);
+		mArrSlotFrameImageInList[i]->SetPos(tempPos);
 	}
 }
 

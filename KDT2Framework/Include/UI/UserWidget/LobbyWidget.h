@@ -60,6 +60,7 @@ protected:
 	// 사라지면 슬롯 안에 선택한 아이템이 나오게 된다
 	std::vector<CSharedPtr<class CButton>> mArrItemButtonInList; 
 	std::vector<CSharedPtr<class CImage>> mArrSlotImageInList;
+	std::vector<CSharedPtr<class CImage>> mArrSlotFrameImageInList;
 
 	std::vector<const char*> mArrItemImageName;
 	std::vector<const wchar_t*> mArrItemImagePath;
