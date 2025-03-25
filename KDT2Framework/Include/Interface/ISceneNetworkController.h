@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "GameInfo.h"
 #include "Interface/IObjectNetworkController.h"
 
@@ -8,9 +8,9 @@ private:
 	std::list<IObjectNetworkController*> mObjNetworkController;
 
 protected:
-	// CScene::Update() ¾È¿¡¼­ È£ÃâµÇ°í, ÇÔ¼ö³»ºÎ´Â ¸Ş½ÃÁö Å¥¿¡¼­ »Ì¾Æ¼­
-	// ÀÚ±âÇÑÅ× ±¸µ¶ÇÑ ¿ÀºêÁ§Æ®µé¿¡°Ô »Ñ¸°´Ù.
-    // ¾ÀÀÌ ¾²°í½ÍÀ¸¸é, ProcessMessage(struct RecvMessage& msg)
+	// CScene::Update() ì•ˆì—ì„œ í˜¸ì¶œë˜ê³ , í•¨ìˆ˜ë‚´ë¶€ëŠ” ë©”ì‹œì§€ íì—ì„œ ë½‘ì•„ì„œ
+	// ìê¸°í•œí…Œ êµ¬ë…í•œ ì˜¤ë¸Œì íŠ¸ë“¤ì—ê²Œ ë¿Œë¦°ë‹¤.
+    // ì”¬ì´ ì“°ê³ ì‹¶ìœ¼ë©´, ProcessMessage(struct RecvMessage& msg)
 	virtual void ProcessMessage() = 0;
     virtual void ProcessMessage(struct RecvMessage& msg) = 0;
 
@@ -23,13 +23,15 @@ protected:
     }
 public:
 
-    // Object ÀÔÀå¿¡¼± this Æ÷ÀÎÅÍ¸¦ Áàµµ µÇÁö¾Ê³ª?
+    // Object ì…ì¥ì—ì„  this í¬ì¸í„°ë¥¼ ì¤˜ë„ ë˜ì§€ì•Šë‚˜?
+    // -> IObjectNetworkController ìƒì† ë°›ì„êº¼ë‹ˆê¹Œ.
     void AddListener(IObjectNetworkController* obj)
     {
         mObjNetworkController.push_back(obj);
     }
 
-    // Object ÀÔÀå¿¡¼± this Æ÷ÀÎÅÍ¸¦ Áàµµ µÇÁö¾Ê³ª?
+    // Object ì…ì¥ì—ì„  this í¬ì¸í„°ë¥¼ ì¤˜ë„ ë˜ì§€ì•Šë‚˜?
+    // -> IObjectNetworkController ìƒì† ë°›ì„êº¼ë‹ˆê¹Œ.
     void RemoveListener(IObjectNetworkController* obj)
     {
         if (obj)

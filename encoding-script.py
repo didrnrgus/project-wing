@@ -39,17 +39,17 @@ def process_directory():
                 file_path = os.path.join(root, file)
                 convert_to_utf8_bom(file_path)
 
-    for root, dirs, files in os.walk("./Common"):
-        for file in files:
-            if file.endswith(".cpp") or file.endswith(".h"):
-                file_path = os.path.join(root, file)
-                convert_to_utf8_bom(file_path)
+    # for root, dirs, files in os.walk("./Common"):
+    #     for file in files:
+    #         if file.endswith(".cpp") or file.endswith(".h"):
+    #             file_path = os.path.join(root, file)
+    #             convert_to_utf8_bom(file_path)
 
-    for root, dirs, files in os.walk("./AssetProj"):
-        for file in files:
-            if file.endswith(".cpp") or file.endswith(".h"):
-                file_path = os.path.join(root, file)
-                convert_to_utf8_bom(file_path)
+    # for root, dirs, files in os.walk("./AssetProj"):
+    #     for file in files:
+    #         if file.endswith(".cpp") or file.endswith(".h"):
+    #             file_path = os.path.join(root, file)
+    #             convert_to_utf8_bom(file_path)
 
 if __name__ == "__main__":
     process_directory()
