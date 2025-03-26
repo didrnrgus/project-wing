@@ -5,7 +5,7 @@
 #include "Scene/SceneUIManager.h"
 #include "Object/PlayerGraphicObject.h"
 #include "Object/CameraObject.h"
-#include "Etc/MultiplayManager.h"
+#include "Etc/NetworkManager.h"
 
 CSceneLobby::CSceneLobby()
 {
@@ -71,7 +71,7 @@ void CSceneLobby::ProcessMessage()
 	// 메시지 큐에서 메시지 뽑는 역할.
 	RecvMessage msg;
 
-	if (CMultiplayManager::GetInst()->PollMessage(msg))
+	if (CNetworkManager::GetInst()->PollMessage(msg))
 	{
 		switch (msg.msgType)
 		{
@@ -128,12 +128,6 @@ void CSceneLobby::ProcessMessage()
 			break;
 		}
 	}
-}
-
-void CSceneLobby::ProcessMessage(RecvMessage& msg)
-{
-	// 메시지 받는역할.
-
 }
 
 #pragma endregion

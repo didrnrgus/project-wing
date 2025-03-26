@@ -12,7 +12,7 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/ConstValues.h"
 #include "Etc/ZOrderContainer.h"
-#include "Etc/MultiplayManager.h"
+#include "Etc/NetworkManager.h"
 #include "Etc/ProcessManager.h"
 
 CLobbyWidget::CLobbyWidget()
@@ -90,7 +90,7 @@ bool CLobbyWidget::Init()
 	InitMapInfoText();
 	InitItemInfoTooltip();
 
-	if (CMultiplayManager::GetInst()->IsMultiplay())
+	if (CNetworkManager::GetInst()->IsMultiplay())
 		InitOtherPlayersInfo();
 
 	auto pathLeft = DIRECT_LEFT_PATH;
@@ -122,7 +122,7 @@ void CLobbyWidget::Update(float DeltaTime)
 		mMapDifficultyImage->SetPos(mMapDifficultyImagePos + FVector2D(0.0f, tempVal * 10));
 	}
 
-	if (CMultiplayManager::GetInst()->IsMultiplay())
+	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
 
 	}
@@ -396,7 +396,7 @@ void CLobbyWidget::InitNextPrevButton()
 		, []()
 		{
 			CLog::PrintLog("mPrevButton Click");
-			CMultiplayManager::GetInst()->Clear(
+			CNetworkManager::GetInst()->Clear(
 				[]()
 				{
 					CProcessManager::GetInst()->Terminate();

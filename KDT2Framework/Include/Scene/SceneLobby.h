@@ -22,7 +22,6 @@ protected:
 	
 	// ISceneNetworkController을(를) 통해 상속됨
 	virtual void ProcessMessage() override;
-	virtual void ProcessMessage(RecvMessage& msg) override;
 
 public:
 	virtual CSceneObject* GetPlayer(int index) override;

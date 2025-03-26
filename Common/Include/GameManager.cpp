@@ -21,6 +21,7 @@
 #include "Etc/NotionDBController.h"
 #include "Etc/TaskManager.h"
 #include "Etc/ProcessManager.h"
+#include "Etc/NetworkManager.h"
 #include "Etc/MultiplayManager.h"
 #include "Scene/SceneTitle.h"
 #include "Etc/ConstValues.h"
@@ -70,6 +71,7 @@ CGameManager::~CGameManager()
 	CNotionDBController::DestroyInst();
 	CTaskManager::DestroyInst();
 	CProcessManager::DestroyInst();
+	CNetworkManager::DestroyInst();
 	CMultiplayManager::DestroyInst();
 	CLog::Destroy();
 }

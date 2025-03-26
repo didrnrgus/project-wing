@@ -12,7 +12,7 @@
 #include "Etc/TaskManager.h"
 #include "Etc/DataStorageManager.h"
 #include "Etc/ProcessManager.h"
-#include "Etc/MultiplayManager.h"
+#include "Etc/NetworkManager.h"
 
 extern BOOL option2Visible;
 
@@ -129,16 +129,18 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
 	}
 
-	CMultiplayManager::GetInst()->SetIsMultiplay(_isMultiPlay);
+	CNetworkManager::GetInst()->SetIsMultiplay(_isMultiPlay);
 	
 	if (_isMultiPlay)
 	{
-		CMultiplayManager::GetInst()->ConnetServer();
+		CNetworkManager::GetInst()->ConnetServer();
 	}
-
-	// Move to Lobby
-	CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
-
+	else
+	{
+		// Single mode.
+		// 멀티플레이에서는 연결 성공했을때 하자.
+		CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+	}
 }
 
 void CTitleWidget::SinglePlayButtonClick()

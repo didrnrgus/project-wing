@@ -12,7 +12,6 @@ protected:
 	// 자기한테 구독한 오브젝트들에게 뿌린다.
     // 씬이 쓰고싶으면, ProcessMessage(struct RecvMessage& msg)
 	virtual void ProcessMessage() = 0;
-    virtual void ProcessMessage(struct RecvMessage& msg) = 0;
 
     void DistributeMessage(struct RecvMessage& msg)
     {

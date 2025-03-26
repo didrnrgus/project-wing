@@ -129,6 +129,9 @@
     <ClCompile Include="Object\PlayerInGameObject.cpp">
       <Filter>Object</Filter>
     </ClCompile>
+    <ClCompile Include="Etc\NetworkManager.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
     <ClCompile Include="Etc\MultiplayManager.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
@@ -233,7 +236,7 @@
     <ClInclude Include="Object\PlayerInGameObject.h">
       <Filter>Object</Filter>
     </ClInclude>
-    <ClInclude Include="Etc\MultiplayManager.h">
+    <ClInclude Include="Etc\NetworkManager.h">
       <Filter>Etc</Filter>
     </ClInclude>
     <ClInclude Include="Interface\ISceneNetworkController.h">
@@ -241,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="Interface\IObjectNetworkController.h">
       <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\MultiplayManager.h">
+      <Filter>Etc</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

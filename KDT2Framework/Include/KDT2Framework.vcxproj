@@ -166,6 +166,7 @@
     <ClCompile Include="Etc\DataStorageManager.cpp" />
     <ClCompile Include="Etc\JsonController.cpp" />
     <ClCompile Include="Etc\MultiplayManager.cpp" />
+    <ClCompile Include="Etc\NetworkManager.cpp" />
     <ClCompile Include="Etc\NotionDBController.cpp" />
     <ClCompile Include="Etc\ProcessManager.cpp" />
     <ClCompile Include="Etc\TaskManager.cpp" />
@@ -196,6 +197,7 @@
     <ClInclude Include="Etc\JsonContainer.h" />
     <ClInclude Include="Etc\JsonController.h" />
     <ClInclude Include="Etc\MultiplayManager.h" />
+    <ClInclude Include="Etc\NetworkManager.h" />
     <ClInclude Include="Etc\NotionDBController.h" />
     <ClInclude Include="Etc\ProcessManager.h" />
     <ClInclude Include="Etc\TaskManager.h" />
