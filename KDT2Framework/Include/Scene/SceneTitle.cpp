@@ -48,19 +48,14 @@ void CSceneTitle::ProcessMessage()
 		{
 		case (int)ServerMessage::Type::MSG_CONNECTED:
 		{
-			int id;
-			memcpy(&id, msg.body.data(), sizeof(int));
-			CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED MyID: " + std::to_string(id));
-
 			// 멀티모드에서는 커넥트 성공했을때 씬 넘긴다.
 			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 			break;
 		}
 		case (int)ServerMessage::Type::MSG_CONNECTED_REJECT:
 		{
-			std::string reason(msg.body.begin(), msg.body.end());
-			CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED_REJECT Reason: " + reason);
-
+			// 이유 알려주는 UI 필요.
+			CNetworkManager::GetInst()->SetIsMultiplay(false);
 			mTitleWidget->ShowLoading(false);
 			break;
 		}

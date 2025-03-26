@@ -51,6 +51,7 @@ bool CNetworkManager::PollMessage(RecvMessage& out)
 	std::lock_guard<std::mutex> lock(mQueueMutex);
 	if (mMessageQueue.empty()) return false;
 	out = std::move(mMessageQueue.front());
+	ProcessMessage(out);
 	mMessageQueue.pop();
 	return true;
 }
@@ -79,7 +80,143 @@ void CNetworkManager::Clear()
 		mHbThread->join();
 
 	closesocket(mSock);
-	
+
+}
+
+void CNetworkManager::ProcessMessage(RecvMessage& msg)
+{
+	switch (msg.msgType)
+	{
+	case (int)ServerMessage::Type::MSG_CONNECTED:
+	{
+		int id;
+		memcpy(&id, msg.body.data(), sizeof(int));
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED MyID: " + std::to_string(id));
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_NEW_OWNER:
+	{
+		int id;
+		memcpy(&id, msg.body.data(), sizeof(int));
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_NEW_OWNER: " + std::to_string(id));
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_PLAYER_DEAD:
+		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PLAYER_DEAD " + std::to_string(msg.senderId));
+		break;
+
+	case (int)ServerMessage::Type::MSG_READY:
+		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_READY " + std::to_string(msg.senderId));
+		break;
+
+	case (int)ServerMessage::Type::MSG_UNREADY:
+		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_UNREADY " + std::to_string(msg.senderId));
+		break;
+
+	case (int)ServerMessage::Type::MSG_PICK_MAP:
+	{
+		if (msg.body.size() >= sizeof(int))
+		{
+			int mapId;
+			memcpy(&mapId, msg.body.data(), sizeof(int));
+			CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PICK_MAP " + std::to_string(mapId));
+		}
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_PICK_ITEM:
+	{
+		if (msg.body.size() >= sizeof(int) * 2)
+		{
+			int slot, itemId;
+			memcpy(&slot, msg.body.data(), sizeof(int));
+			memcpy(&itemId, msg.body.data() + sizeof(int), sizeof(int));
+			CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " MSG_PICK_ITEM " + std::to_string(itemId) + " in slot " + std::to_string(slot));
+		}
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
+	{
+		if (msg.body.size() >= sizeof(int))
+		{
+			int characterId;
+			memcpy(&characterId, msg.body.data(), sizeof(int));
+			CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " MSG_PICK_CHARACTER " + std::to_string(characterId));
+		}
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_CLIENT_LIST:
+	{
+		std::string log = "[System " + std::to_string(msg.msgType) + "] MSG_CLIENT_LIST received: ";
+		int count = msg.body.size() / sizeof(int);
+
+		for (int i = 0; i < count; ++i)
+		{
+			int id;
+			memcpy(&id, msg.body.data() + i * sizeof(int), sizeof(int));
+			log += id + " ";
+		}
+
+		CLog::PrintLog(log);
+
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_JOIN:
+	{
+		if (msg.body.size() >= sizeof(int))
+		{
+			int newId;
+			memcpy(&newId, msg.body.data(), sizeof(int));
+			CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New client MSG_JOIN: " + std::to_string(newId));
+		}
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_DISCONNECT:
+	{
+		int id;
+		memcpy(&id, msg.body.data(), sizeof(int));
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_DISCONNECT ID: " + std::to_string(id));
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_CONNECTED_REJECT:
+	{
+		std::string reason(msg.body.begin(), msg.body.end());
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED_REJECT Reason: " + reason);
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_GAME_OVER:
+		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_GAME_OVER " + msg.body.data());
+		break;
+
+	case (int)ServerMessage::Type::MSG_MOVE_UP:
+		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_MOVE_UP");
+		break;
+
+	case (int)ServerMessage::Type::MSG_MOVE_DOWN:
+		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_MOVE_DOWN");
+		break;
+
+	case (int)ServerMessage::Type::MSG_INFO:
+		CLog::PrintLog("[Info " + std::to_string(msg.msgType) + "] MSG_INFO " + msg.body.data());
+		break;
+
+	case (int)ServerMessage::Type::MSG_START_ACK:
+		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_START_ACK");
+		break;
+
+	default:
+		if (msg.msgType != (int)ServerMessage::Type::MSG_HEARTBEAT_ACK)
+			CLog::PrintLog("[MSG " + std::to_string(msg.msgType) + "] From " + std::to_string(msg.senderId));
+		break;
+	}
 }
 
 void CNetworkManager::ReceiveThread(SOCKET sock)

@@ -90,6 +90,7 @@ private:
 	bool ReceiveMsg(SOCKET sock, MessageHeader& header, std::vector<char>& bodyBuffer);
 	bool RecvAll(SOCKET sock, char* buffer, int len);
 	void Clear();
+	void ProcessMessage(struct RecvMessage& msg);
 	
 	DECLARE_SINGLE(CNetworkManager);
 };
