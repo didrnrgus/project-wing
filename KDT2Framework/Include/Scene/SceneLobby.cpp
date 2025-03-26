@@ -62,8 +62,20 @@ bool CSceneLobby::SetChangeGraphic(int playerIndex, int graphicIndex)
 	auto result = tempPlayer->SetChangeGraphic(graphicIndex);
 	return result;
 }
+#pragma endregion
 
-void CSceneLobby::DistributeMessage(RecvMessage& msg)
+#pragma region ISceneNetworkController
+void CSceneLobby::ProcessMessage()
+{
+	// 메시지 큐에서 메시지 뽑는 역할.
+	RecvMessage msg;
+	if (CNetworkManager::GetInst()->PollMessage(msg))
+	{
+		DistributeMessage(msg);
+	}
+}
+
+void CSceneLobby::DistributeMessage(const RecvMessage& msg)
 {
 	for (auto it : mObjNetworkController)
 	{
@@ -92,59 +104,4 @@ void CSceneLobby::RemoveListener(IObjectNetworkController* obj)
 		}
 	}
 }
-
-#pragma endregion
-
-#pragma region ISceneNetworkController
-
-void CSceneLobby::ProcessMessage()
-{
-	// 메시지 큐에서 메시지 뽑는 역할.
-	RecvMessage msg;
-
-	if (CNetworkManager::GetInst()->PollMessage(msg))
-	{
-		// 순서: 커넥트 -> 방장누구? -> 기존인원 리스트
-		switch (msg.msgType)
-		{
-		case (int)ServerMessage::Type::MSG_JOIN:
-		{
-			break;
-		}
-		case (int)ServerMessage::Type::MSG_DISCONNECT:
-		{
-			break;
-		}
-		case (int)ServerMessage::Type::MSG_NEW_OWNER:
-		{
-			break;
-		}
-		case (int)ServerMessage::Type::MSG_PICK_MAP:
-		{
-			break;
-		}
-		case (int)ServerMessage::Type::MSG_PICK_ITEM:
-		{
-			break;
-		}
-		case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
-		{
-			break;
-		}
-		case (int)ServerMessage::Type::MSG_READY:
-		{
-			break;
-		}
-		case (int)ServerMessage::Type::MSG_UNREADY:
-		{
-			break;
-		}
-		case (int)ServerMessage::Type::MSG_START_ACK:
-		{
-			break;
-		}
-		}
-	}
-}
-
 #pragma endregion

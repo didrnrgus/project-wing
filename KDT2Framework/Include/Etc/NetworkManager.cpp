@@ -86,7 +86,7 @@ void CNetworkManager::Clear()
 
 }
 
-void CNetworkManager::ProcessMessage(RecvMessage& msg)
+void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 {
 	// 프레임워크 제한받지않고 메시지 받음.
 	// 플레이어 관련 메시지는 여기서 해도 될거같은데,, 
@@ -106,7 +106,6 @@ void CNetworkManager::ProcessMessage(RecvMessage& msg)
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED MyID: " + std::to_string(id));
 		
 		CMultiplayManager::GetInst()->AddPlayer(id);
-
 		break;
 	}
 
@@ -120,9 +119,7 @@ void CNetworkManager::ProcessMessage(RecvMessage& msg)
 
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_DISCONNECT ID: " + std::to_string(id));
 		
-		//auto playerInfo = CMultiplayManager::GetInst()->GetPlayerInfo(id);
 		CMultiplayManager::GetInst()->RemovePlayer(id);
-
 		break;
 	}
 
@@ -141,9 +138,7 @@ void CNetworkManager::ProcessMessage(RecvMessage& msg)
 
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_NEW_OWNER: " + std::to_string(id));
 
-		auto playerInfo = CMultiplayManager::GetInst()->GetPlayerInfo(id);
-		playerInfo.isHost = true;
-
+		CMultiplayManager::GetInst()->SetHostFromId(id);
 		break;
 	}
 
@@ -192,52 +187,68 @@ void CNetworkManager::ProcessMessage(RecvMessage& msg)
 			memcpy(&mapId, msg.body.data(), sizeof(int));
 
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PICK_MAP " + std::to_string(mapId));
+
+		CMultiplayManager::GetInst()->SetCurMapIndex(mapId);
 		break;
 	}
 
 	case (int)ServerMessage::Type::MSG_PICK_ITEM:
 	{
 		// 이건 msg.senderId 도 중요하다.
-		int slot, itemId;
+		int slot, itemId, senderId = msg.senderId;
 		if (msg.body.size() >= sizeof(int) * 2)
 		{
 			memcpy(&slot, msg.body.data(), sizeof(int));
 			memcpy(&itemId, msg.body.data() + sizeof(int), sizeof(int));
 		}
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " MSG_PICK_ITEM " + std::to_string(itemId) + " in slot " + std::to_string(slot));
+
+		CMultiplayManager::GetInst()->SetPlayerItemFromId(senderId, slot, itemId);
 		break;
 	}
 
 	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
 	{
-		int characterId;
+		int characterId, senderId = msg.senderId;
 		if (msg.body.size() >= sizeof(int))
 			memcpy(&characterId, msg.body.data(), sizeof(int));
 
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " MSG_PICK_CHARACTER " + std::to_string(characterId));
+
+		CMultiplayManager::GetInst()->SetPlayerCharacterFromId(senderId, characterId);
 		break;
 	}
 
 		//////////////////////로비 게임 시작관련///////////////////////////////////
 	case (int)ServerMessage::Type::MSG_READY:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_READY " + std::to_string(msg.senderId));
+
+		CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(msg.senderId, true);
 		break;
 
 	case (int)ServerMessage::Type::MSG_UNREADY:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_UNREADY " + std::to_string(msg.senderId));
+
+		CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(msg.senderId, false);
 		break;
 
 	case (int)ServerMessage::Type::MSG_START_ACK:
 		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_START_ACK");
+
+		CMultiplayManager::GetInst()->SetIsGameStart(true);
 		break;
 
 		//////////////////////인게임 게임로직///////////////////////////////////
 	case (int)ServerMessage::Type::MSG_PLAYER_DEAD:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PLAYER_DEAD " + std::to_string(msg.senderId));
+
+		CMultiplayManager::GetInst()->SetPlayerIsDeadInGameFromId(msg.senderId, true);
 		break;
 
 	case (int)ServerMessage::Type::MSG_GAME_OVER:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_GAME_OVER " + msg.body.data());
+
+		CMultiplayManager::GetInst()->SetIsGameStart(false);
 		break;
 
 	case (int)ServerMessage::Type::MSG_MOVE_UP:

@@ -14,6 +14,7 @@
 #include "Etc/ZOrderContainer.h"
 #include "Etc/NetworkManager.h"
 #include "Etc/ProcessManager.h"
+#include "Etc/MultiplayManager.h"
 
 CLobbyWidget::CLobbyWidget()
 {
@@ -23,7 +24,7 @@ CLobbyWidget::CLobbyWidget()
 	mItemTextureNamePrefix = "ButtonImage_";
 	mSlotButtonNamePrefix = "SlotButton_";
 	mMapDifficultyImageNamePrefix = "MapImage_";*/
-	curSelectedSlot = -1;
+	curSelectedSlot = ITEM_SLOT_DEFAULT_INDEX;
 
 	curPlayerGraphicIndex = 0;
 	curDifficultyIndex = 0;
@@ -54,7 +55,7 @@ CLobbyWidget::CLobbyWidget()
 
 		for (int i = 0; i < itemSlotCount; i++)
 		{
-			CDataStorageManager::GetInst()->SetSelectedItemTypeInSlotIndex(i, -1);
+			CDataStorageManager::GetInst()->SetSelectedItemTypeInSlotIndex(i, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
 		}
 	}
 
@@ -91,7 +92,10 @@ bool CLobbyWidget::Init()
 	InitItemInfoTooltip();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
+	{
 		InitOtherPlayersInfo();
+		UpdateOtherPlayerInfo();
+	}
 
 	auto pathLeft = DIRECT_LEFT_PATH;
 	auto pathRight = DIRECT_RIGHT_PATH;
@@ -350,7 +354,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 		mArrItemInfoValueText[dataIndex]->SetZOrder(ZORDER_LOBBY_TOOLTIP_TEXT);
 	}
 
-	TriggerItemTooltip(-1);
+	TriggerItemTooltip(PLAYER_ITEM_TYPE_DEFAULT_INDEX);
 }
 
 void CLobbyWidget::InitDifficultiImage()
@@ -495,7 +499,7 @@ void CLobbyWidget::InitItemButtons()
 				// 해당 아이템 선택했다는것.
 				this->SelectItemForSlot(curSelectedSlot, i);
 				// 아이템 배열 창 닫기.
-				this->TriggerItemButtons(-1);
+				this->TriggerItemButtons(ITEM_SLOT_DEFAULT_INDEX);
 			});
 		selectItemButton->SetEventCallback(EButtonEventState::Hovered
 			, [this, i]()
@@ -509,7 +513,7 @@ void CLobbyWidget::InitItemButtons()
 			, [this, i]()
 			{
 				//CLog::PrintLog("selectItemButton Unhoverd index: " + std::to_string(i));
-				this->TriggerItemTooltip(-1);
+				this->TriggerItemTooltip(PLAYER_ITEM_TYPE_DEFAULT_INDEX);
 			});
 	}
 }
@@ -533,14 +537,14 @@ void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemTypeIndex)
 	itemImage->SetEnable(true);
 }
 
-void CLobbyWidget::TriggerItemButtons(int _index)
+void CLobbyWidget::TriggerItemButtons(int _itemSlotIndex)
 {
 	// 슬롯위에 아이템 배열 창 나오게 하거나 / 사라지게 하는 기능.
-	// _index 는 슬롯 위치를 위해 받는것.
+	// _itemSlotIndex 는 슬롯 위치를 위해 받는것.
 
-	curSelectedSlot = _index;
+	curSelectedSlot = _itemSlotIndex;
 
-	if (_index == -1)
+	if (_itemSlotIndex == ITEM_SLOT_DEFAULT_INDEX)
 	{
 		for (int i = 0; i < itemTypeCount; i++)
 		{
@@ -554,7 +558,7 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 	// 인덱스 들어온 지점에, 순서대로 세로 위로 쪼르륵 아이템 나열 -> 선택 가능하게끔.
 	for (int i = 0; i < itemTypeCount; i++)
 	{
-		FVector2D tempPos = mSlotPosBase + FVector2D::Axis[EAxis::Y] * 10 + mSlotPosAdd * _index // 가로 슬롯 기준 위치 -> 몇번쨰 슬롯에서 눌렸지?
+		FVector2D tempPos = mSlotPosBase + FVector2D::Axis[EAxis::Y] * 10 + mSlotPosAdd * _itemSlotIndex // 가로 슬롯 기준 위치 -> 몇번쨰 슬롯에서 눌렸지?
 			+ FVector2D(0, mSlotSize.y * (i + 1)) * mSlotInnerItemSizeRate // 세로로 한칸씩 올릴꺼
 			+ FVector2D(0, 5) * (i + 1); // 간격
 		mArrItemButtonInList[i]->SetEnable(true);
@@ -568,7 +572,7 @@ void CLobbyWidget::TriggerItemButtons(int _index)
 
 void CLobbyWidget::TriggerItemTooltip(int _itemTypeIndex, FVector2D _pos)
 {
-	if (_itemTypeIndex == -1)
+	if (_itemTypeIndex == PLAYER_ITEM_TYPE_DEFAULT_INDEX)
 	{
 		mToolTipShasdowImage->SetEnable(false);
 		mToolTipBack2Image->SetEnable(false);
@@ -646,6 +650,89 @@ void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t*
 	_button.SetTint(EButtonState::Hovered, TintHovered);
 	_button.SetTint(EButtonState::Click, TintClick);
 
+}
+
+void CLobbyWidget::UpdateOtherPlayerInfo()
+{
+	int count = CMultiplayManager::GetInst()->GetPlayerCount();
+
+	for (int i = 0; i < count; i++)
+	{
+		auto info = CMultiplayManager::GetInst()->GetPlayerInfoByIndex(i);
+		// host
+		mArrPlayerWidgetGroup[i].mPlayerHostImage->SetEnable(info.isHost);
+
+		// player text
+		mArrPlayerWidgetGroup[i].mPlayerText->SetText((PLAYER_NUMBER_PREFIX_TEXT + std::to_wstring(info.id)).c_str());
+
+		// item
+		for (int j = 0; j < info.arrItemType.size(); j++)
+		{
+			bool _isEnable = info.arrItemType[j] != PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+			auto _image = mArrPlayerWidgetGroup[i].mArrPlayerItemImage[j];
+			_image->SetEnable(_isEnable);
+
+			if (_isEnable)
+			{
+				_image->SetTexture(mArrItemImageName[info.arrItemType[j]], mArrItemImagePath[info.arrItemType[j]]);
+			}
+		}
+
+		// ready
+		// character color
+	}
+}
+
+void CLobbyWidget::AddListener()
+{
+	auto curScene = CSceneManager::GetInst()->GetCurrentScene();
+	if (curScene == nullptr)
+		return;
+
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+	if (sceneNetController == nullptr)
+		return;
+
+	sceneNetController->AddListener(this);
+}
+
+void CLobbyWidget::RemoveListener()
+{
+	auto curScene = CSceneManager::GetInst()->GetCurrentScene();
+	if (curScene == nullptr)
+		return;
+
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+	if (sceneNetController == nullptr)
+		return;
+	sceneNetController->RemoveListener(this);
+}
+
+void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
+{
+	switch (msg.msgType)
+	{
+	case (int)ServerMessage::Type::MSG_DISCONNECT:
+		break;
+	case (int)ServerMessage::Type::MSG_NEW_OWNER:
+		break;
+	case (int)ServerMessage::Type::MSG_JOIN:
+		break;
+	case (int)ServerMessage::Type::MSG_READY:
+		break;
+	case (int)ServerMessage::Type::MSG_UNREADY:
+		break;
+	case (int)ServerMessage::Type::MSG_START_ACK:
+		break;
+	case (int)ServerMessage::Type::MSG_PICK_MAP:
+		break;
+	case (int)ServerMessage::Type::MSG_PICK_ITEM:
+		break;
+	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
+		break;
+	default:
+		break;
+	}
 }
 
 void CLobbyWidget::OnCharacterLeftButtonClick()
@@ -752,7 +839,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 			AddWidget(tempItemSlotImage);
 			tempItemSlotImage->SetPivot(itemBasePivot);
 			tempItemSlotImage->SetSize(itemBaseSize);
-			tempItemSlotImage->SetPos(itemBasePos + FVector2D(textBaseSize.y * 0.8f * j, (textBaseSize.y) * i * -1));
+			tempItemSlotImage->SetPos(itemBasePos + FVector2D(textBaseSize.y * 0.8f * j, (textBaseSize.y) * i * -1.0f));
 			tempItemSlotImage->SetTexture(ITEM_EMPTY_SQUARE_NAME, ITEM_EMPTY_SQUARE_PATH);
 			tempItemSlotImage->SetColor(FVector4D::White);
 			tempItemSlotImage->SetZOrder(ZORDER_LOBBY_PLAYER);
@@ -762,7 +849,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 			AddWidget(tempItemImage);
 			tempItemImage->SetPivot(itemBasePivot);
 			tempItemImage->SetSize(itemBaseSize * mSlotInnerItemSizeRate);
-			tempItemImage->SetPos(itemBasePos + FVector2D(textBaseSize.y * 0.8f * j, (textBaseSize.y) * i * -1));
+			tempItemImage->SetPos(itemBasePos + FVector2D(textBaseSize.y * 0.8f * j, (textBaseSize.y) * i * -1.0f));
 			tempItemImage->SetTexture(ITEM_HP_ICON_NAME, ITEM_HP_ICON_PATH);
 			tempItemImage->SetColor(FVector4D::White);
 			tempItemImage->SetZOrder(ZORDER_LOBBY_PLAYER_ITEM_ICON);

@@ -42,7 +42,7 @@ private:
 	void ExitButtonClick();
 
 	// IObjectNetworkController을(를) 통해 상속됨
-	virtual void ProcessMessage(RecvMessage& msg) override;
+	virtual void ProcessMessage(const RecvMessage& msg) override;
 
 	// IObjectNetworkController을(를) 통해 상속됨
 	virtual void AddListener() override;

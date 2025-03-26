@@ -6,17 +6,7 @@
 class IObjectNetworkController abstract
 {
 protected:
-	/*
-		auto curScene = CSceneManager::GetInst()->GetCurrentScene();
-		if (curScene == nullptr)
-			return;
-
-		auto netController = dynamic_cast<ISceneNetworkController*>(curScene);
-		netController->AddListener(this);
-		// netController->RemoveListener(this);
-	*/
 	virtual void AddListener() = 0;
-	virtual void RemoveListener() = 0;
 	/*void AddListener()
 	{
 		auto curScene = CSceneManager::GetInst()->GetCurrentScene();
@@ -28,9 +18,10 @@ protected:
 			return;
 
 		sceneNetController->AddListener(this);
-	}
+	}	*/
 
-	void RemoveListener()
+	virtual void RemoveListener() = 0;
+	/*void RemoveListener()
 	{
 		auto curScene = CSceneManager::GetInst()->GetCurrentScene();
 		if (curScene == nullptr)
@@ -43,5 +34,16 @@ protected:
 	}*/
 
 public:
-	virtual void ProcessMessage(struct RecvMessage& msg) = 0;
+	virtual void ProcessMessage(const struct RecvMessage& msg) = 0;
+	/*
+		void ProcessMessage(const RecvMessage& msg)
+		{
+			switch (msg.msgType)
+			{
+			case (int)ServerMessage::Type::MSG_..:
+			default:
+				break;
+			}
+		}
+	*/
 };

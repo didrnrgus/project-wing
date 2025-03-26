@@ -2,9 +2,13 @@
 
 #define IP_ADDRESS_DEFAULT "127.0.0.1"
 #define PLAYER_COUNT_MAX 5
+#define PLAYER_ITEM_COUNT_MAX 3
+#define PLAYER_ITEM_TYPE_DEFAULT_INDEX -1
 #define PLAYER_EMPTY_TEXT L"Player_Empty"
 #define PLAYER_NUMBER_PREFIX_TEXT L"Player_Num_"
 #define PLAYER_TITLE_TEXT L"PLAYER TITLE"
+
+#define ITEM_SLOT_DEFAULT_INDEX -1
 
 #define RESULT "results"
 #define PROPERTIES "properties"

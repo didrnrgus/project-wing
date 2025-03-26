@@ -227,7 +227,7 @@ void CTitleWidget::ExitButtonClick()
 	CGameManager::GetInst()->ExitGame();
 }
 
-void CTitleWidget::ProcessMessage(RecvMessage& msg)
+void CTitleWidget::ProcessMessage(const RecvMessage& msg)
 {
 
 }

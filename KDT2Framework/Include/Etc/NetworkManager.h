@@ -94,7 +94,7 @@ private:
 	void Clear();
 
 	// 프레임워크 제한받지않고 메시지 받음.
-	void ProcessMessage(struct RecvMessage& msg);
+	void ProcessMessage(const struct RecvMessage& msg);
 	
 	DECLARE_SINGLE(CNetworkManager);
 };

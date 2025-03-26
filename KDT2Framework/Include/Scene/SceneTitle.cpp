@@ -42,9 +42,10 @@ void CSceneTitle::Update(float DeltaTime)
 void CSceneTitle::ProcessMessage()
 {
 	RecvMessage msg;
-
 	if (CNetworkManager::GetInst()->PollMessage(msg))
 	{
+		DistributeMessage(msg);
+
 		switch (msg.msgType)
 		{
 		case (int)ServerMessage::Type::MSG_CONNECTED:
@@ -67,7 +68,7 @@ void CSceneTitle::ProcessMessage()
 
 }
 
-void CSceneTitle::DistributeMessage(RecvMessage& msg)
+void CSceneTitle::DistributeMessage(const RecvMessage& msg)
 {
 	for (auto it : mObjNetworkController)
 	{

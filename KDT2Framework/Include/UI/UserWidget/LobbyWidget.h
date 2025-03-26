@@ -1,7 +1,8 @@
 ﻿#pragma once
 #include "UI\UserWidget\UserWidget.h"
+#include "Interface/IObjectNetworkController.h"
 
-class CLobbyWidget : public CUserWidget
+class CLobbyWidget : public CUserWidget, public IObjectNetworkController
 {
 	friend class CSceneUIManager;
 
@@ -116,8 +117,15 @@ private:
 	void UpdateMapInfoText();
 
 	void SelectItemForSlot(int _slotIndex, int _itemTypeIndex);
-	void TriggerItemButtons(int _index);
+	void TriggerItemButtons(int _itemSlotIndex);
 	void TriggerItemTooltip(int _itemTypeIndex, FVector2D _pos = FVector2D::Zero); // 아이템타입의 인덱스.
 	void SetButton(class CButton& _button, const char* _name, const wchar_t* _path);
+
+	void UpdateOtherPlayerInfo();
+
+	// IObjectNetworkController을(를) 통해 상속됨
+	void AddListener() override;
+	void RemoveListener() override;
+	void ProcessMessage(const RecvMessage& msg) override;
 };
 
