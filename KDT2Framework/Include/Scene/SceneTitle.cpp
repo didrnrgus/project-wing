@@ -4,6 +4,7 @@
 #include "Etc/NetworkManager.h"
 #include "Scene/SceneLobby.h"
 #include "Scene/SceneManager.h"
+#include "Interface/IObjectNetworkController.h"
 
 CSceneTitle::CSceneTitle()
 {
@@ -64,6 +65,36 @@ void CSceneTitle::ProcessMessage()
 		}
 	}
 
+}
+
+void CSceneTitle::DistributeMessage(RecvMessage& msg)
+{
+	for (auto it : mObjNetworkController)
+	{
+		(it)->ProcessMessage(msg);
+	}
+}
+
+void CSceneTitle::AddListener(IObjectNetworkController* obj)
+{
+	mObjNetworkController.push_back(obj);
+}
+
+void CSceneTitle::RemoveListener(IObjectNetworkController* obj)
+{
+	if (obj)
+	{
+		auto it = std::find_if(mObjNetworkController.begin(), mObjNetworkController.end(),
+			[obj](const IObjectNetworkController* const _obj)
+			{
+				return _obj == obj;
+			});
+
+		if (it != mObjNetworkController.end())
+		{
+			mObjNetworkController.erase(it);
+		}
+	}
 }
 
 

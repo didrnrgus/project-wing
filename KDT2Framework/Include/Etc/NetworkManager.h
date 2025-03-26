@@ -70,15 +70,17 @@ private:
 
 	std::mutex mQueueMutex;
 	std::queue<RecvMessage> mMessageQueue;
-	bool mIsConnected;
-	bool mIsMultiplay;	// title scene 에서 결정 됨.
+	bool mIsConnection;			// 커넥션 시도부터 true.
+	bool mIsConnectCompleted;	// 커넥션 메시지 받고나서야 true.
+	bool mIsMultiplay;			// title scene 에서 결정 됨.
 
 public:
 	bool ConnetServer();
 	void SendMsg(int senderId, int msgType, const void* body, int bodyLen);
 	bool PollMessage(RecvMessage& out);
 	void Clear(std::function<void()>&& Func);
-	bool IsConnected() { return mIsConnected; }
+	bool IsConnection() { return mIsConnection; }
+	bool IsConnectCompleted() { return mIsConnectCompleted; }
 
 	void SetIsMultiplay(bool _isMulti) { mIsMultiplay = _isMulti; }
 	bool IsMultiplay() { return mIsMultiplay; }
@@ -90,6 +92,8 @@ private:
 	bool ReceiveMsg(SOCKET sock, MessageHeader& header, std::vector<char>& bodyBuffer);
 	bool RecvAll(SOCKET sock, char* buffer, int len);
 	void Clear();
+
+	// 프레임워크 제한받지않고 메시지 받음.
 	void ProcessMessage(struct RecvMessage& msg);
 	
 	DECLARE_SINGLE(CNetworkManager);

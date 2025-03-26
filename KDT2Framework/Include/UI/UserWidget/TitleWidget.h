@@ -1,7 +1,8 @@
 ﻿#pragma once
 #include "UI/UserWidget/UserWidget.h"
+#include "Interface/IObjectNetworkController.h"
 
-class CTitleWidget : public CUserWidget
+class CTitleWidget : public CUserWidget, public IObjectNetworkController
 {
 	friend class CSceneUIManager;
 
@@ -11,6 +12,8 @@ protected:
 
 private:
 	int mTaskID;
+	float mCurReConnectionTime;
+	float mMaxReConnectionTime;
 
 protected:
 	CSharedPtr<class CButton>	mSinglePlayButton;
@@ -25,6 +28,7 @@ protected:
 
 public:
 	virtual bool Init() override;
+	virtual void Update(float DeltaTime) override;
 
 private:
 	void SetButtonWithTextBlock(CSharedPtr<class CButton>& button, std::string name, FVector2D pos
@@ -36,5 +40,12 @@ private:
 	void MultiPlayButtonClick();
 	void RankButtonClick();
 	void ExitButtonClick();
+
+	// IObjectNetworkController을(를) 통해 상속됨
+	virtual void ProcessMessage(RecvMessage& msg) override;
+
+	// IObjectNetworkController을(를) 통해 상속됨
+	virtual void AddListener() override;
+	virtual void RemoveListener() override;
 };
 

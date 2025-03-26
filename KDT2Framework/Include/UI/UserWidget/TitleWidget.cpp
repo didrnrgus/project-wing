@@ -13,20 +13,27 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/ProcessManager.h"
 #include "Etc/NetworkManager.h"
+#include "Interface/ISceneNetworkController.h"
 
 extern BOOL option2Visible;
 
 CTitleWidget::CTitleWidget()
 {
+	AddListener();
+	mMaxReConnectionTime = 10.0f;
+	mCurReConnectionTime = 0.0f;
 }
 
 CTitleWidget::~CTitleWidget()
 {
+	RemoveListener();
 }
 
 bool CTitleWidget::Init()
 {
 	CUserWidget::Init();
+
+
 	CLog::PrintLog("CTitleWidget::Init()");
 
 	FResolution RS = CDevice::GetInst()->GetResolution();
@@ -46,6 +53,24 @@ bool CTitleWidget::Init()
 		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
 
 	return true;
+}
+
+void CTitleWidget::Update(float DeltaTime)
+{
+	CUserWidget::Update(DeltaTime);
+
+	if (CNetworkManager::GetInst()->IsConnection()
+		&& !CNetworkManager::GetInst()->IsConnectCompleted())
+	{
+		mCurReConnectionTime += DeltaTime;
+
+		if (mCurReConnectionTime >= mMaxReConnectionTime)
+		{
+			mCurReConnectionTime = 0.0f;
+			CLog::PrintLog("CNetworkManager::GetInst()->ConnetServer();");
+			CNetworkManager::GetInst()->ConnetServer();
+		}
+	}
 }
 
 void CTitleWidget::SetButtonWithTextBlock(CSharedPtr<CButton>& button, std::string name, FVector2D pos
@@ -73,7 +98,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	ShowLoading(true);
 
 #ifdef _DEBUG
-	int waitTime = 1;
+	int waitTime = 1000;
 #else
 	int waitTime = 2000;
 #endif // _DEBUG
@@ -126,6 +151,8 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 
 	if (_isActiveServerProcess)
 	{
+		AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~💻💻💻💻💻");
+		std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
 	}
 
@@ -133,6 +160,10 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	
 	if (_isMultiPlay)
 	{
+		AddQueueLoadingDescText(L"호스트 서버에 접속 중 입니다.\n메뉴 바 에서 호스트 정보 확인하셨죠??");
+		std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
+
+		// 첫번쨰 시도 -> 실패해도 Update() 에서 될때까지 커넥션 한다.
 		CNetworkManager::GetInst()->ConnetServer();
 	}
 	else
@@ -141,6 +172,8 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 		// 멀티플레이에서는 연결 성공했을때 하자.
 		CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 	}
+
+	SetIsSkipLoadingTextUpdate(true);
 }
 
 void CTitleWidget::SinglePlayButtonClick()
@@ -192,4 +225,34 @@ void CTitleWidget::ExitButtonClick()
 		return;
 
 	CGameManager::GetInst()->ExitGame();
+}
+
+void CTitleWidget::ProcessMessage(RecvMessage& msg)
+{
+
+}
+
+void CTitleWidget::AddListener()
+{
+	auto curScene = CSceneManager::GetInst()->GetCurrentScene();
+	if (curScene == nullptr)
+		return;
+
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+	if (sceneNetController == nullptr)
+		return;
+
+	sceneNetController->AddListener(this);
+}
+
+void CTitleWidget::RemoveListener()
+{
+	auto curScene = CSceneManager::GetInst()->GetCurrentScene();
+	if (curScene == nullptr)
+		return;
+
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+	if (sceneNetController == nullptr)
+		return;
+	sceneNetController->RemoveListener(this);
 }

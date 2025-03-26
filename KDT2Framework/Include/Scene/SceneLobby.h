@@ -22,11 +22,16 @@ protected:
 	
 	// ISceneNetworkController을(를) 통해 상속됨
 	virtual void ProcessMessage() override;
+	virtual void DistributeMessage(struct RecvMessage& msg) override;
 
 public:
 	virtual CSceneObject* GetPlayer(int index) override;
 	virtual bool SetChangeGraphic(int playerIndex, int graphicIndex) override;
 
+	const class CLobbyWidget* GetLoobWidget() { return mLobbyWidget; }
 
+	// ISceneNetworkController을(를) 통해 상속됨
+	virtual void AddListener(class IObjectNetworkController* obj) override;
+	virtual void RemoveListener(class IObjectNetworkController* obj) override;
 };
 

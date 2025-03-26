@@ -6,6 +6,7 @@
 #include "Object/PlayerGraphicObject.h"
 #include "Object/CameraObject.h"
 #include "Etc/NetworkManager.h"
+#include "Interface/IObjectNetworkController.h"
 
 CSceneLobby::CSceneLobby()
 {
@@ -62,6 +63,36 @@ bool CSceneLobby::SetChangeGraphic(int playerIndex, int graphicIndex)
 	return result;
 }
 
+void CSceneLobby::DistributeMessage(RecvMessage& msg)
+{
+	for (auto it : mObjNetworkController)
+	{
+		(it)->ProcessMessage(msg);
+	}
+}
+
+void CSceneLobby::AddListener(IObjectNetworkController* obj)
+{
+	mObjNetworkController.push_back(obj);
+}
+
+void CSceneLobby::RemoveListener(IObjectNetworkController* obj)
+{
+	if (obj)
+	{
+		auto it = std::find_if(mObjNetworkController.begin(), mObjNetworkController.end(),
+			[obj](const IObjectNetworkController* const _obj)
+			{
+				return _obj == obj;
+			});
+
+		if (it != mObjNetworkController.end())
+		{
+			mObjNetworkController.erase(it);
+		}
+	}
+}
+
 #pragma endregion
 
 #pragma region ISceneNetworkController
@@ -73,59 +104,45 @@ void CSceneLobby::ProcessMessage()
 
 	if (CNetworkManager::GetInst()->PollMessage(msg))
 	{
+		// 순서: 커넥트 -> 방장누구? -> 기존인원 리스트
 		switch (msg.msgType)
 		{
-		case (int)ServerMessage::Type::MSG_CONNECTED:
+		case (int)ServerMessage::Type::MSG_JOIN:
 		{
-			int id;
-			memcpy(&id, msg.body.data(), sizeof(int));
-			CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] Connected. My ID: " + std::to_string(id));
+			break;
+		}
+		case (int)ServerMessage::Type::MSG_DISCONNECT:
+		{
 			break;
 		}
 		case (int)ServerMessage::Type::MSG_NEW_OWNER:
 		{
-			int id;
-			memcpy(&id, msg.body.data(), sizeof(int));
-			CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New Room Owner: " + std::to_string(id));
 			break;
 		}
 		case (int)ServerMessage::Type::MSG_PICK_MAP:
 		{
-			if (msg.body.size() >= sizeof(int))
-			{
-				int mapId;
-				memcpy(&mapId, msg.body.data(), sizeof(int));
-				CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Map changed to " + std::to_string(mapId));
-			}
 			break;
 		}
 		case (int)ServerMessage::Type::MSG_PICK_ITEM:
 		{
-			if (msg.body.size() >= sizeof(int) * 2)
-			{
-				int slot, itemId;
-				memcpy(&slot, msg.body.data(), sizeof(int));
-				memcpy(&itemId, msg.body.data() + sizeof(int), sizeof(int));
-				CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " picked item " + std::to_string(itemId) + " in slot " + std::to_string(slot));
-			}
 			break;
 		}
-
 		case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
 		{
-			if (msg.body.size() >= sizeof(int))
-			{
-				int characterId;
-				memcpy(&characterId, msg.body.data(), sizeof(int));
-				CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " picked character " + std::to_string(characterId));
-			}
 			break;
 		}
-		
-		default:
-			if (msg.msgType != (int)ServerMessage::Type::MSG_HEARTBEAT_ACK)
-				CLog::PrintLog("[MSG " + std::to_string(msg.msgType) + "] From " + std::to_string(msg.senderId));
+		case (int)ServerMessage::Type::MSG_READY:
+		{
 			break;
+		}
+		case (int)ServerMessage::Type::MSG_UNREADY:
+		{
+			break;
+		}
+		case (int)ServerMessage::Type::MSG_START_ACK:
+		{
+			break;
+		}
 		}
 	}
 }

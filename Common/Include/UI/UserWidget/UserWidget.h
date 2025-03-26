@@ -18,12 +18,18 @@ private:
 	std::vector<const wchar_t*> mLoadingTextStrings;
 	bool mIsLoading = false;
 	float loadingUpdateTime = 0.0f;
+	float loadingTextUpdateTime = 0.0f;
+	bool mIsSkipLoadingTextUpdate = false;
+
 	int curLoadingTextIndex = 0;
 	std::list<std::wstring> mLoadingTextQueue;
+	std::mutex mQueueMutex;
 
 protected:
 	std::vector<CSharedPtr<CWidget>>	mWidgetList;
 	
+protected:
+	void SetIsSkipLoadingTextUpdate(bool _isSkip) { mIsSkipLoadingTextUpdate = _isSkip; }
 
 public:
 	void AddWidget(CWidget* Widget)

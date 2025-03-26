@@ -9,6 +9,7 @@
 
 CUserWidget::CUserWidget()
 {
+	mIsSkipLoadingTextUpdate = false;
 }
 
 CUserWidget::~CUserWidget()
@@ -26,12 +27,15 @@ void CUserWidget::ShowLoading(bool isLoading)
 
 void CUserWidget::AddQueueLoadingDescText(const std::wstring wstrDesc)
 {
+
 	for (int i = 1; i <= wstrDesc.length(); i++)
 	{
 		auto str = wstrDesc.substr(0, i);
+
+		std::lock_guard<std::mutex> lock(mQueueMutex);
 		mLoadingTextQueue.push_back(str);
 #ifdef _DEBUG
-		std::this_thread::sleep_for(std::chrono::milliseconds(1));
+		std::this_thread::sleep_for(std::chrono::milliseconds(10));
 #else
 		std::this_thread::sleep_for(std::chrono::milliseconds(50));
 #endif // _DEBUG
@@ -55,11 +59,23 @@ void CUserWidget::UpdateLoading(float DeltaTime)
 		mLoadingText->SetText(mLoadingTextStrings[curLoadingTextIndex]);
 	}
 
-	if (mLoadingTextQueue.size() > 0)
+
+	if (mIsSkipLoadingTextUpdate)
+		return;
+
+	loadingTextUpdateTime += DeltaTime;
+
+	if (loadingTextUpdateTime > 0.03f)
 	{
-		mLoadingDescText->SetText(mLoadingTextQueue.begin()->c_str());
-		mLoadingTextQueue.pop_front();
+		loadingTextUpdateTime = 0.0f;
+		std::lock_guard<std::mutex> lock(mQueueMutex);
+		if (mLoadingTextQueue.size() > 0)
+		{
+			mLoadingDescText->SetText(mLoadingTextQueue.begin()->c_str());
+			mLoadingTextQueue.pop_front();
+		}
 	}
+
 }
 
 bool CUserWidget::Init()
