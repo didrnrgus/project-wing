@@ -33,6 +33,13 @@ private:
 	bool mIsStart;
 
 public:
+	void ClearProperties() 
+	{
+		mPlayerInfoList.clear();
+		mCurMapIndex = 0;
+		mIsStart = false;
+	}
+
 	void AddPlayer(int _id);
 	bool RemovePlayer(int _id);
 	int GetPlayerCount() { return mPlayerInfoList.size(); }

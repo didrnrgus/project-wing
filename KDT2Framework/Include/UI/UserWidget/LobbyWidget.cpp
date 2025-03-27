@@ -77,11 +77,14 @@ CLobbyWidget::CLobbyWidget()
 
 CLobbyWidget::~CLobbyWidget()
 {
+	RemoveListener();
 }
 
 bool CLobbyWidget::Init()
 {
 	CUserWidget::Init();
+	AddListener();
+
 	CDataStorageManager::GetInst()->InitCurSelectedData();
 	InitScrollSelectButtons();
 	InitItemButtons();
@@ -403,6 +406,7 @@ void CLobbyWidget::InitNextPrevButton()
 			CNetworkManager::GetInst()->Clear(
 				[]()
 				{
+					CMultiplayManager::GetInst()->
 					CProcessManager::GetInst()->Terminate();
 				});
 			CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
@@ -654,6 +658,36 @@ void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t*
 
 void CLobbyWidget::UpdateOtherPlayerInfo()
 {
+	// init
+	for (int i = 0; i < mArrPlayerWidgetGroup.size(); i++)
+	{
+		// host init
+		mArrPlayerWidgetGroup[i].mPlayerHostImage->SetEnable(false);
+		
+		// player text init 
+		mArrPlayerWidgetGroup[i].mPlayerText->SetText(PLAYER_EMPTY_TEXT);
+		
+		// character color init 
+		auto color = FVector4D::White;
+		
+		// ready init 
+		color.w = 0.5f;
+		mArrPlayerWidgetGroup[i].mPlayerText->SetTextColor(color);
+
+		// item init 
+		for (int j = 0; j < mArrPlayerWidgetGroup[i].mArrPlayerItemImage.size(); j++)
+		{
+			auto _image = mArrPlayerWidgetGroup[i].mArrPlayerItemImage[j];
+			auto _slotImage = mArrPlayerWidgetGroup[i].mArrPlayerSlotImage[j];
+			_image->SetEnable(false);
+
+			_image->SetColor(color);
+			_slotImage->SetColor(color);
+		}
+
+	}
+	
+	// setting from multiplay info data
 	int count = CMultiplayManager::GetInst()->GetPlayerCount();
 
 	for (int i = 0; i < count; i++)
@@ -665,31 +699,36 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 		// player text
 		mArrPlayerWidgetGroup[i].mPlayerText->SetText((PLAYER_NUMBER_PREFIX_TEXT + std::to_wstring(info.id)).c_str());
 
+		// character color
+		auto characterInfo = CDataStorageManager::GetInst()->GetCharacterState(info.characterType);
+		auto color = FVector4D::GetColorFromString(characterInfo.ColorName);
+		
+		// ready
+		color.w = info.isReady || info.isHost ? 1.0f : 0.5f;
+		mArrPlayerWidgetGroup[i].mPlayerText->SetTextColor(color);
+
 		// item
 		for (int j = 0; j < info.arrItemType.size(); j++)
 		{
 			bool _isEnable = info.arrItemType[j] != PLAYER_ITEM_TYPE_DEFAULT_INDEX;
 			auto _image = mArrPlayerWidgetGroup[i].mArrPlayerItemImage[j];
+			auto _slotImage = mArrPlayerWidgetGroup[i].mArrPlayerSlotImage[j];
+
 			_image->SetEnable(_isEnable);
 
 			if (_isEnable)
-			{
 				_image->SetTexture(mArrItemImageName[info.arrItemType[j]], mArrItemImagePath[info.arrItemType[j]]);
-			}
+			
+			_image->SetColor(color);
+			_slotImage->SetColor(color);
 		}
 
-		// ready
-		// character color
 	}
 }
 
 void CLobbyWidget::AddListener()
 {
-	auto curScene = CSceneManager::GetInst()->GetCurrentScene();
-	if (curScene == nullptr)
-		return;
-
-	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
 	if (sceneNetController == nullptr)
 		return;
 
@@ -698,11 +737,7 @@ void CLobbyWidget::AddListener()
 
 void CLobbyWidget::RemoveListener()
 {
-	auto curScene = CSceneManager::GetInst()->GetCurrentScene();
-	if (curScene == nullptr)
-		return;
-
-	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
 	if (sceneNetController == nullptr)
 		return;
 	sceneNetController->RemoveListener(this);
@@ -713,22 +748,17 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 	switch (msg.msgType)
 	{
 	case (int)ServerMessage::Type::MSG_DISCONNECT:
-		break;
 	case (int)ServerMessage::Type::MSG_NEW_OWNER:
-		break;
 	case (int)ServerMessage::Type::MSG_JOIN:
-		break;
 	case (int)ServerMessage::Type::MSG_READY:
-		break;
 	case (int)ServerMessage::Type::MSG_UNREADY:
+	case (int)ServerMessage::Type::MSG_PICK_ITEM:
+	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
+		UpdateOtherPlayerInfo();
 		break;
 	case (int)ServerMessage::Type::MSG_START_ACK:
 		break;
 	case (int)ServerMessage::Type::MSG_PICK_MAP:
-		break;
-	case (int)ServerMessage::Type::MSG_PICK_ITEM:
-		break;
-	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
 		break;
 	default:
 		break;
@@ -814,10 +844,10 @@ void CLobbyWidget::InitOtherPlayersInfo()
 		tempTextBlock->SetPos(textBasePos - FVector2D::Axis[EAxis::Y] * (textBaseSize.y) * i);
 		tempTextBlock->SetText(PLAYER_EMPTY_TEXT);
 		tempTextBlock->SetTextColor(FVector4D::White);
+		tempTextBlock->SetOpacity(0.5f);
 		tempTextBlock->SetAlignH(ETextAlignH::Left);
 		tempTextBlock->SetFontSize(fontSize);
 		tempTextBlock->SetShadowEnable(false);
-		//tempTextBlock->SetShadowOffset(3.f, 3.f);
 		tempTextBlock->SetTextShadowColor(FVector4D::Gray30);
 		tempTextBlock->SetZOrder(ZORDER_LOBBY_PLAYER);
 		group.mPlayerText = tempTextBlock;

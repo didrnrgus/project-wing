@@ -19,7 +19,6 @@ extern BOOL option2Visible;
 
 CTitleWidget::CTitleWidget()
 {
-	AddListener();
 	mMaxReConnectionTime = 10.0f;
 	mCurReConnectionTime = 0.0f;
 }
@@ -32,10 +31,9 @@ CTitleWidget::~CTitleWidget()
 bool CTitleWidget::Init()
 {
 	CUserWidget::Init();
-
+	AddListener();
 
 	CLog::PrintLog("CTitleWidget::Init()");
-
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	FVector2D size = FVector2D(200.0f, 100.0f);
 	FVector2D singlePos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 4) - size * 0.5f;
@@ -234,24 +232,15 @@ void CTitleWidget::ProcessMessage(const RecvMessage& msg)
 
 void CTitleWidget::AddListener()
 {
-	auto curScene = CSceneManager::GetInst()->GetCurrentScene();
-	if (curScene == nullptr)
-		return;
-
-	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
 	if (sceneNetController == nullptr)
 		return;
-
 	sceneNetController->AddListener(this);
 }
 
 void CTitleWidget::RemoveListener()
 {
-	auto curScene = CSceneManager::GetInst()->GetCurrentScene();
-	if (curScene == nullptr)
-		return;
-
-	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
 	if (sceneNetController == nullptr)
 		return;
 	sceneNetController->RemoveListener(this);

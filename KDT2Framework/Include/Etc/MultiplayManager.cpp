@@ -4,8 +4,7 @@ DEFINITION_SINGLE(CMultiplayManager);
 
 CMultiplayManager::CMultiplayManager()
 {
-	mCurMapIndex = 0;
-	mIsStart = false;
+	ClearProperties();
 }
 
 CMultiplayManager::~CMultiplayManager()

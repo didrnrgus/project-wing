@@ -9,27 +9,18 @@ protected:
 	virtual void AddListener() = 0;
 	/*void AddListener()
 	{
-		auto curScene = CSceneManager::GetInst()->GetCurrentScene();
-		if (curScene == nullptr)
-			return;
-
-		auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
+		auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
 		if (sceneNetController == nullptr)
 			return;
-
 		sceneNetController->AddListener(this);
 	}	*/
 
 	virtual void RemoveListener() = 0;
 	/*void RemoveListener()
 	{
-		auto curScene = CSceneManager::GetInst()->GetCurrentScene();
-		if (curScene == nullptr)
-			return;
-
-		auto sceneNetController = dynamic_cast<ISceneNetworkController*>(curScene);
-		if (sceneNetController == nullptr)
-			return;
+		auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
+	if (sceneNetController == nullptr)
+		return;
 		sceneNetController->RemoveListener(this);
 	}*/
 
