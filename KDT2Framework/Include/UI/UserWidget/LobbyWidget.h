@@ -113,11 +113,11 @@ private:
 
 	void OnCharacterLeftButtonClick();
 	void OnCharacterRightButtonClick();
-	void UpdatePlayerStatText();
+	void UpdatePlayerStat();
 
 	void OnMapLeftButtonClick();
 	void OnMapRightButtonClick();
-	void UpdateMapInfoText();
+	void UpdateMapInfo();
 
 	void SelectItemForSlot(int _slotIndex, int _itemTypeIndex);
 	void TriggerItemArrayButtons(int _itemSlotIndex);

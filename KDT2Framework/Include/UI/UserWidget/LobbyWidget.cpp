@@ -166,9 +166,8 @@ void CLobbyWidget::InitScrollSelectButtons()
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		auto _isHost = CMultiplayManager::GetInst()->GetIsHost();
-		mMapLeftButton->SetEnable(_isHost);
-		mMapRightButton->SetEnable(_isHost);
+		mMapLeftButton->SetEnable(false);
+		mMapRightButton->SetEnable(false);
 	}
 }
 
@@ -396,7 +395,7 @@ void CLobbyWidget::InitNextPrevButton()
 			{
 				if (CMultiplayManager::GetInst()->GetIsHost())
 					SendMessageTrigger(ClientMessage::Type::MSG_START);
-				else 
+				else
 				{
 					if (CMultiplayManager::GetInst()->GetPlayerInfoByMyId().isReady)
 						SendMessageTrigger(ClientMessage::Type::MSG_UNREADY);
@@ -697,13 +696,13 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 
 		// host init
 		mArrPlayerWidgetGroup[i].mPlayerHostImage->SetEnable(false);
-		
+
 		// player text init 
 		mArrPlayerWidgetGroup[i].mPlayerText->SetText(PLAYER_EMPTY_TEXT);
-		
+
 		// character color init 
 		auto color = FVector4D::White;
-		
+
 		// ready init 
 		color.w = 0.5f;
 		mArrPlayerWidgetGroup[i].mPlayerText->SetTextColor(color);
@@ -720,7 +719,7 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 		}
 
 	}
-	
+
 	// setting from multiplay info data
 	int count = CMultiplayManager::GetInst()->GetPlayerCount();
 	int myId = CMultiplayManager::GetInst()->GetMyId();
@@ -740,7 +739,7 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 		// character color
 		auto characterInfo = CDataStorageManager::GetInst()->GetCharacterState(info.characterType);
 		auto color = FVector4D::GetColorFromString(characterInfo.ColorName);
-		
+
 		// ready
 		color.w = info.isReady || info.isHost ? 1.0f : 0.5f;
 		mArrPlayerWidgetGroup[i].mPlayerText->SetTextColor(color);
@@ -756,7 +755,7 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 
 			if (_isEnable)
 				_image->SetTexture(mArrItemImageName[info.arrItemType[j]], mArrItemImagePath[info.arrItemType[j]]);
-			
+
 			_image->SetColor(color);
 			_slotImage->SetColor(color);
 		}
@@ -790,15 +789,24 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 	case (int)ServerMessage::Type::MSG_JOIN:
 	case (int)ServerMessage::Type::MSG_READY:
 	case (int)ServerMessage::Type::MSG_UNREADY:
-	case (int)ServerMessage::Type::MSG_PICK_ITEM:
 	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
+	case (int)ServerMessage::Type::MSG_PICK_MAP:
+	case (int)ServerMessage::Type::MSG_PICK_ITEM:
 	case (int)ServerMessage::Type::MSG_CLIENT_LIST:
+	{
 		UpdateOtherPlayerInfo();
+
+		bool _isHost = CMultiplayManager::GetInst()->GetIsHost();
+		mMapLeftButton->SetEnable(_isHost);
+		mMapRightButton->SetEnable(_isHost);
+
+		curDifficultyIndex = CMultiplayManager::GetInst()->GetCurMapIndex();
+		UpdateMapInfo();
+
 		break;
+	}
 	case (int)ServerMessage::Type::MSG_START_ACK:
 		StartGame();
-		break;
-	case (int)ServerMessage::Type::MSG_PICK_MAP:
 		break;
 	default:
 		break;
@@ -808,45 +816,34 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 void CLobbyWidget::OnCharacterLeftButtonClick()
 {
 	CLog::PrintLog("CharacterLeftButtonClick()");
-	auto playerController = dynamic_cast<IScenePlayerGraphicController*>(mScene);
+	curPlayerGraphicIndex++;
 
-	if (playerController)
+	if (curPlayerGraphicIndex == CDataStorageManager::GetInst()->GetCharacterCount())
+		curPlayerGraphicIndex = 0;
+
+	UpdatePlayerStat();
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		curPlayerGraphicIndex++;
-
-		if (curPlayerGraphicIndex == CDataStorageManager::GetInst()->GetCharacterCount())
-			curPlayerGraphicIndex = 0;
-
-		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
-		UpdatePlayerStatText();
-
-		if (CNetworkManager::GetInst()->IsMultiplay())
-		{
-			SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
-		}
+		SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
 	}
 }
 
 void CLobbyWidget::OnCharacterRightButtonClick()
 {
 	CLog::PrintLog("CharacterRightButtonClick()");
-	auto playerController = dynamic_cast<IScenePlayerGraphicController*>(mScene);
+	if (curPlayerGraphicIndex > 0)
+		curPlayerGraphicIndex--;
+	else
+		curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
 
-	if (playerController)
+	UpdatePlayerStat();
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		if (curPlayerGraphicIndex > 0)
-			curPlayerGraphicIndex--;
-		else
-			curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
-
-		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
-		UpdatePlayerStatText();
-
-		if (CNetworkManager::GetInst()->IsMultiplay())
-		{
-			SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
-		}
+		SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
 	}
+
 }
 
 void CLobbyWidget::InitOtherPlayersInfo()
@@ -955,8 +952,15 @@ void CLobbyWidget::InitOtherPlayersInfo()
 	}
 }
 
-void CLobbyWidget::UpdatePlayerStatText()
+void CLobbyWidget::UpdatePlayerStat()
 {
+	auto playerController = dynamic_cast<IScenePlayerGraphicController*>(mScene);
+
+	if (playerController)
+	{
+		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
+	}
+
 	int count = (int)ECharacterStatText::End;
 	FCharacterState stat = CDataStorageManager::GetInst()->GetCharacterState(curPlayerGraphicIndex);
 
@@ -980,11 +984,7 @@ void CLobbyWidget::OnMapLeftButtonClick()
 	if (curDifficultyIndex < 0)
 		curDifficultyIndex = CDataStorageManager::GetInst()->GetMapInfoCount() - 1;
 
-	mMapDifficultyImage->SetTexture(mArrMapDifficultyImageName[curDifficultyIndex]
-		, mArrMapDifficultyImagePath[curDifficultyIndex]);
-	mMapDifficultyImage->SetColor(mArrMapDifficultyImageColor[curDifficultyIndex]);
-
-	UpdateMapInfoText();
+	UpdateMapInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
@@ -1001,11 +1001,7 @@ void CLobbyWidget::OnMapRightButtonClick()
 	if (curDifficultyIndex == CDataStorageManager::GetInst()->GetMapInfoCount())
 		curDifficultyIndex = 0;
 
-	mMapDifficultyImage->SetTexture(mArrMapDifficultyImageName[curDifficultyIndex]
-		, mArrMapDifficultyImagePath[curDifficultyIndex]);
-	mMapDifficultyImage->SetColor(mArrMapDifficultyImageColor[curDifficultyIndex]);
-
-	UpdateMapInfoText();
+	UpdateMapInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
@@ -1013,8 +1009,12 @@ void CLobbyWidget::OnMapRightButtonClick()
 	}
 }
 
-void CLobbyWidget::UpdateMapInfoText()
+void CLobbyWidget::UpdateMapInfo()
 {
+	mMapDifficultyImage->SetTexture(mArrMapDifficultyImageName[curDifficultyIndex]
+		, mArrMapDifficultyImagePath[curDifficultyIndex]);
+	mMapDifficultyImage->SetColor(mArrMapDifficultyImageColor[curDifficultyIndex]);
+
 	int count = (int)EMapInfoText::End;
 	FMapInfo info = CDataStorageManager::GetInst()->GetMapInfo(curDifficultyIndex);
 
