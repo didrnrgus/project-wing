@@ -406,7 +406,7 @@ void CLobbyWidget::InitNextPrevButton()
 			CNetworkManager::GetInst()->Clear(
 				[]()
 				{
-					CMultiplayManager::GetInst()->
+					CMultiplayManager::GetInst()->ClearProperties();
 					CProcessManager::GetInst()->Terminate();
 				});
 			CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
