@@ -73,6 +73,7 @@ void CNetworkManager::Clear()
 
 	mIsConnection = false;
 	mIsConnectCompleted = false;
+	SetIsMultiplay(false);
 
 	if (mSock == INVALID_SOCKET)
 		return;
@@ -106,6 +107,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED MyID: " + std::to_string(id));
 		
 		CMultiplayManager::GetInst()->AddPlayer(id);
+		CMultiplayManager::GetInst()->SetMyId(id);
 		break;
 	}
 

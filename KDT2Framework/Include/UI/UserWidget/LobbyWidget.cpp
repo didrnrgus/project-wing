@@ -163,6 +163,13 @@ void CLobbyWidget::InitScrollSelectButtons()
 	mCharacterRightButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnCharacterRightButtonClick);
 	mMapLeftButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnMapLeftButtonClick);
 	mMapRightButton->SetEventCallback(EButtonEventState::Click, this, &CLobbyWidget::OnMapRightButtonClick);
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
+	{
+		auto _isHost = CMultiplayManager::GetInst()->GetIsHost();
+		mMapLeftButton->SetEnable(_isHost);
+		mMapRightButton->SetEnable(_isHost);
+	}
 }
 
 void CLobbyWidget::InitPlayerStatText()
@@ -385,11 +392,21 @@ void CLobbyWidget::InitNextPrevButton()
 	mNextButton->SetEventCallback(EButtonEventState::Click
 		, [this]()
 		{
-			CLog::PrintLog("mNextButton Click curPlayerGraphicIndex: " + std::to_string(curPlayerGraphicIndex));
-			CLog::PrintLog("mNextButton Click curDifficultyIndex: " + std::to_string(curDifficultyIndex));
-			CDataStorageManager::GetInst()->SetSelectedCharacterIndex(curPlayerGraphicIndex);
-			CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
-			CSceneManager::GetInst()->CreateLoadScene<CSceneInGame>();
+			if (CNetworkManager::GetInst()->IsMultiplay())
+			{
+				if (CMultiplayManager::GetInst()->GetIsHost())
+					SendMessageTrigger(ClientMessage::Type::MSG_START);
+				else 
+				{
+					if (CMultiplayManager::GetInst()->GetPlayerInfoByMyId().isReady)
+						SendMessageTrigger(ClientMessage::Type::MSG_UNREADY);
+					else
+						SendMessageTrigger(ClientMessage::Type::MSG_READY);
+					return;
+				}
+			}
+
+			StartGame();
 		});
 
 	// previous button
@@ -456,7 +473,7 @@ void CLobbyWidget::InitItemButtons()
 			, [this, i]()
 			{
 				CLog::PrintLog("slotButton index: " + std::to_string(i));
-				this->TriggerItemButtons(i);
+				this->TriggerItemArrayButtons(i);
 			});
 	}
 
@@ -503,7 +520,7 @@ void CLobbyWidget::InitItemButtons()
 				// 해당 아이템 선택했다는것.
 				this->SelectItemForSlot(curSelectedSlot, i);
 				// 아이템 배열 창 닫기.
-				this->TriggerItemButtons(ITEM_SLOT_DEFAULT_INDEX);
+				this->TriggerItemArrayButtons(ITEM_SLOT_DEFAULT_INDEX);
 			});
 		selectItemButton->SetEventCallback(EButtonEventState::Hovered
 			, [this, i]()
@@ -539,9 +556,14 @@ void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemTypeIndex)
 	itemImage->SetTexture(mArrItemImageName[_itemTypeIndex]
 		, mArrItemImagePath[_itemTypeIndex]);
 	itemImage->SetEnable(true);
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
+	{
+		SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, _slotIndex, _itemTypeIndex);
+	}
 }
 
-void CLobbyWidget::TriggerItemButtons(int _itemSlotIndex)
+void CLobbyWidget::TriggerItemArrayButtons(int _itemSlotIndex)
 {
 	// 슬롯위에 아이템 배열 창 나오게 하거나 / 사라지게 하는 기능.
 	// _itemSlotIndex 는 슬롯 위치를 위해 받는것.
@@ -656,11 +678,23 @@ void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t*
 
 }
 
+void CLobbyWidget::StartGame()
+{
+	CLog::PrintLog("mNextButton Click curPlayerGraphicIndex: " + std::to_string(curPlayerGraphicIndex));
+	CLog::PrintLog("mNextButton Click curDifficultyIndex: " + std::to_string(curDifficultyIndex));
+	CDataStorageManager::GetInst()->SetSelectedCharacterIndex(curPlayerGraphicIndex);
+	CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
+	CSceneManager::GetInst()->CreateLoadScene<CSceneInGame>();
+}
+
 void CLobbyWidget::UpdateOtherPlayerInfo()
 {
 	// init
 	for (int i = 0; i < mArrPlayerWidgetGroup.size(); i++)
 	{
+		// player check back
+		mArrPlayerWidgetGroup[i].mPlayerCheckBackImage->SetEnable(false);
+
 		// host init
 		mArrPlayerWidgetGroup[i].mPlayerHostImage->SetEnable(false);
 		
@@ -689,10 +723,14 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 	
 	// setting from multiplay info data
 	int count = CMultiplayManager::GetInst()->GetPlayerCount();
+	int myId = CMultiplayManager::GetInst()->GetMyId();
 
 	for (int i = 0; i < count; i++)
 	{
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoByIndex(i);
+		// player check back
+		mArrPlayerWidgetGroup[i].mPlayerCheckBackImage->SetEnable(info.id == myId);
+
 		// host
 		mArrPlayerWidgetGroup[i].mPlayerHostImage->SetEnable(info.isHost);
 
@@ -754,9 +792,11 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 	case (int)ServerMessage::Type::MSG_UNREADY:
 	case (int)ServerMessage::Type::MSG_PICK_ITEM:
 	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
+	case (int)ServerMessage::Type::MSG_CLIENT_LIST:
 		UpdateOtherPlayerInfo();
 		break;
 	case (int)ServerMessage::Type::MSG_START_ACK:
+		StartGame();
 		break;
 	case (int)ServerMessage::Type::MSG_PICK_MAP:
 		break;
@@ -779,6 +819,11 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 
 		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
 		UpdatePlayerStatText();
+
+		if (CNetworkManager::GetInst()->IsMultiplay())
+		{
+			SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
+		}
 	}
 }
 
@@ -796,6 +841,11 @@ void CLobbyWidget::OnCharacterRightButtonClick()
 
 		playerController->SetChangeGraphic(0, curPlayerGraphicIndex);
 		UpdatePlayerStatText();
+
+		if (CNetworkManager::GetInst()->IsMultiplay())
+		{
+			SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
+		}
 	}
 }
 
@@ -818,7 +868,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 	// 120.0f, 490.0f
 	float fontSize = 30.0f;
 	FVector2D textBasePivot = FVector2D(0.0f, 0.4f);
-	FVector2D textBaseSize = FVector2D(190.0f, fontSize + 10.0f);
+	FVector2D textBaseSize = FVector2D(220.0f, fontSize + 10.0f);
 	FVector2D textBasePos = FVector2D(110.0f, 490.0f);
 
 	FVector2D hostBasePivot = FVector2D(1.0f, 0.5f);
@@ -831,11 +881,26 @@ void CLobbyWidget::InitOtherPlayersInfo()
 	FVector2D itemBaseSize = hostBaseSize;
 	FVector2D itemBasePos = textBasePos + FVector2D(textBaseSize.x + itemBaseSize.x * 0.5f, 0.0f);
 
+	FVector2D playerCheckBackPivot = FVector2D(0.0f, 0.5f);
+	FVector2D playerCheckBackSize = textBaseSize + FVector2D(100.0f, 0.0f);
+	FVector2D playerCheckBackPos = textBasePos;
+
 	mArrPlayerWidgetGroup.resize(PLAYER_COUNT_MAX);
 
 	for (int i = 0; i < mArrPlayerWidgetGroup.size(); i++)
 	{
 		PlayerWidgetGroup group;
+
+		auto tempPlayerCheckBackImage = mScene->GetUIManager()->CreateWidget<CImage>("PlayerCheckBackImage_" + std::to_string(i));
+		AddWidget(tempPlayerCheckBackImage);
+		tempPlayerCheckBackImage->SetPivot(playerCheckBackPivot);
+		tempPlayerCheckBackImage->SetSize(playerCheckBackSize);
+		tempPlayerCheckBackImage->SetPos(playerCheckBackPos - FVector2D::Axis[EAxis::Y] * (textBaseSize.y) * i);
+		tempPlayerCheckBackImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
+		tempPlayerCheckBackImage->SetColor(FVector4D::Gray30);
+		tempPlayerCheckBackImage->SetZOrder(ZORDER_LOBBY_PLAYER_CHECK_BACK);
+		tempPlayerCheckBackImage->SetEnable(false);
+		group.mPlayerCheckBackImage = tempPlayerCheckBackImage;
 
 		auto tempTextBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>("PlayerText_" + std::to_string(i));
 		AddWidget(tempTextBlock);
@@ -920,6 +985,11 @@ void CLobbyWidget::OnMapLeftButtonClick()
 	mMapDifficultyImage->SetColor(mArrMapDifficultyImageColor[curDifficultyIndex]);
 
 	UpdateMapInfoText();
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
+	{
+		SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_MAP, curDifficultyIndex);
+	}
 }
 
 void CLobbyWidget::OnMapRightButtonClick()
@@ -936,6 +1006,11 @@ void CLobbyWidget::OnMapRightButtonClick()
 	mMapDifficultyImage->SetColor(mArrMapDifficultyImageColor[curDifficultyIndex]);
 
 	UpdateMapInfoText();
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
+	{
+		SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_MAP, curDifficultyIndex);
+	}
 }
 
 void CLobbyWidget::UpdateMapInfoText()

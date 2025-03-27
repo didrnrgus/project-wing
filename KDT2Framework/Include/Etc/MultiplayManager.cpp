@@ -72,6 +72,11 @@ void CMultiplayManager::SetHostFromId(int _id)
 {
 	auto& playerInfo = GetPlayerInfoByID(_id);
 	playerInfo.isHost = true;
+
+	if (_id == GetMyId())
+	{
+		mIsHost = true;
+	}
 }
 
 void CMultiplayManager::SetPlayerItemFromId(int _senderId, int _slotIndex, int _itemTypeIndex)

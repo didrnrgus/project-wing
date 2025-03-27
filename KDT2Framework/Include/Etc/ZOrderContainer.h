@@ -1,5 +1,6 @@
 ﻿#pragma once
 
+#define ZORDER_LOBBY_PLAYER_CHECK_BACK	4
 #define ZORDER_LOBBY_PLAYER				5
 #define ZORDER_LOBBY_PLAYER_ITEM_ICON	6
 

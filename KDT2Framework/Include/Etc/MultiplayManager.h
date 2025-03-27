@@ -27,8 +27,12 @@ namespace Multiplay
 
 class CMultiplayManager
 {
+	friend class CNetworkManager;
+
 private:
 	std::list<Multiplay::FPlayerInfo> mPlayerInfoList;
+	int mMyId;
+	bool mIsHost;
 	int mCurMapIndex;
 	bool mIsStart;
 
@@ -36,28 +40,34 @@ public:
 	void ClearProperties() 
 	{
 		mPlayerInfoList.clear();
+		mMyId = -1;
 		mCurMapIndex = 0;
 		mIsStart = false;
+		mIsHost = false;
 	}
 
-	void AddPlayer(int _id);
-	bool RemovePlayer(int _id);
-	int GetPlayerCount() { return mPlayerInfoList.size(); }
-	// 리턴 값 읽기용도.
+	// 리턴: 값복사
 	const Multiplay::FPlayerInfo GetPlayerInfoByIndex(int _index);
-
-	void SetCurMapIndex(int _mapIndex) { mCurMapIndex = _mapIndex; }
+	const Multiplay::FPlayerInfo GetPlayerInfoByMyId() { return GetPlayerInfoByID(mMyId); }
+	int GetPlayerCount() { return mPlayerInfoList.size(); }
+	int GetMyId() { return mMyId; }
+	int GetIsHost() { return mIsHost; }
 	int GetCurMapIndex() { return mCurMapIndex; }
-	void SetIsGameStart(bool _isStart) { mIsStart = _isStart; }
+	int GetIsGameStart() { return mIsStart; }
 
+private:
+	void AddPlayer(int _id);
+	// 리턴: 레퍼런스
+	Multiplay::FPlayerInfo& GetPlayerInfoByID(int _id);
+	bool RemovePlayer(int _id);
+	void SetMyId(int _myId) { mMyId = _myId; }
+	void SetCurMapIndex(int _mapIndex) { mCurMapIndex = _mapIndex; }
+	void SetIsGameStart(bool _isStart) { mIsStart = _isStart; }
 	void SetHostFromId(int _id);
 	void SetPlayerItemFromId(int _senderId, int _slotIndex, int _itemTypeIndex);
 	void SetPlayerCharacterFromId(int _senderId, int _characterIndex);
 	void SetPlayerIsReadyFromId(int _senderId, bool _isReady);
 	void SetPlayerIsDeadInGameFromId(int _senderId, bool _isDead);
-private:
-	// 리턴 값 내부 변경 가능.
-	Multiplay::FPlayerInfo& GetPlayerInfoByID(int _id);
 
 	DECLARE_SINGLE(CMultiplayManager);
 };

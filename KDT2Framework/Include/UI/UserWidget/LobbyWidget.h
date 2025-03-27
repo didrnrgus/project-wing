@@ -50,6 +50,7 @@ protected:
 	struct PlayerWidgetGroup
 	{
 		CSharedPtr<class CImage> mPlayerHostImage;
+		CSharedPtr<class CImage> mPlayerCheckBackImage;
 		CSharedPtr<class CTextBlock> mPlayerText;
 		std::vector<CSharedPtr<class CImage>> mArrPlayerSlotImage;
 		std::vector<CSharedPtr<class CImage>> mArrPlayerItemImage;
@@ -108,6 +109,8 @@ private:
 	void InitItemInfoTooltip();
 	void InitOtherPlayersInfo();
 
+	void StartGame();
+
 	void OnCharacterLeftButtonClick();
 	void OnCharacterRightButtonClick();
 	void UpdatePlayerStatText();
@@ -117,7 +120,7 @@ private:
 	void UpdateMapInfoText();
 
 	void SelectItemForSlot(int _slotIndex, int _itemTypeIndex);
-	void TriggerItemButtons(int _itemSlotIndex);
+	void TriggerItemArrayButtons(int _itemSlotIndex);
 	void TriggerItemTooltip(int _itemTypeIndex, FVector2D _pos = FVector2D::Zero); // 아이템타입의 인덱스.
 	void SetButton(class CButton& _button, const char* _name, const wchar_t* _path);
 
