@@ -105,9 +105,46 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 			memcpy(&id, msg.body.data(), sizeof(int));
 
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED MyID: " + std::to_string(id));
-		
-		CMultiplayManager::GetInst()->AddPlayer(id);
+
+		//CMultiplayManager::GetInst()->AddPlayer(id);
 		CMultiplayManager::GetInst()->SetMyId(id);
+		break;
+	}
+
+	case (int)ServerMessage::Type::MSG_ROOM_FULL_INFO: // 이거 받기전까진 타이틀에 머무른다.
+	{
+		if (msg.body.size() >= sizeof(int) * 3)
+		{
+			const char* ptr = msg.body.data();
+			int ownerId, mapId, playerCount;
+			memcpy(&ownerId, ptr, sizeof(int)); ptr += sizeof(int);
+			memcpy(&mapId, ptr, sizeof(int)); ptr += sizeof(int);
+			memcpy(&playerCount, ptr, sizeof(int)); ptr += sizeof(int);
+			CLog::PrintLog("[ROOM_INFO] Owner: " + std::to_string(ownerId) 
+									+ ", Map: " + std::to_string(mapId) 
+									+ ", Players: " + std::to_string(playerCount));
+
+			for (int i = 0; i < playerCount; ++i)
+			{
+				int id, items[3];
+				bool ready;
+				memcpy(&id, ptr, sizeof(int)); ptr += sizeof(int);
+				memcpy(&ready, ptr, sizeof(bool)); ptr += sizeof(bool);
+				memcpy(items, ptr, sizeof(int) * 3); ptr += sizeof(int) * 3;
+				CLog::PrintLog(+ "  Player " + std::to_string(id) + 
+					" - Ready: " + (ready ? "Yes" : "No") + 
+					", Items: [" + std::to_string(items[0]) + ", " + std::to_string(items[1]) + ", " + std::to_string(items[2]) + "]");
+
+				CMultiplayManager::GetInst()->AddPlayer(id);
+				CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(id, ready);
+				CMultiplayManager::GetInst()->SetPlayerItemFromId(id, 0, items[0]);
+				CMultiplayManager::GetInst()->SetPlayerItemFromId(id, 1, items[1]);
+				CMultiplayManager::GetInst()->SetPlayerItemFromId(id, 2, items[2]);
+			}
+
+			CMultiplayManager::GetInst()->SetHostFromId(ownerId);
+			CMultiplayManager::GetInst()->SetCurMapIndex(mapId);
+		}
 		break;
 	}
 
@@ -120,7 +157,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 			memcpy(&id, msg.body.data(), sizeof(int));
 
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_DISCONNECT ID: " + std::to_string(id));
-		
+
 		CMultiplayManager::GetInst()->RemovePlayer(id);
 		break;
 	}
@@ -144,30 +181,6 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_CLIENT_LIST:
-	{
-		// 기존 방에 있던얘들 ID List 받음.
-		std::string log = "[System " + std::to_string(msg.msgType) + "] MSG_CLIENT_LIST received: ";
-		std::vector<int> arrID;
-		int count = msg.body.size() / sizeof(int);
-
-		for (int i = 0; i < count; ++i)
-		{
-			int id;
-			memcpy(&id, msg.body.data() + i * sizeof(int), sizeof(int));
-			arrID.push_back(id);
-			log += id + " ";
-		}
-		CLog::PrintLog(log);
-
-		for (auto playerID : arrID)
-		{
-			CMultiplayManager::GetInst()->AddPlayer(playerID);
-		}
-
-		break;
-	}
-
 	case (int)ServerMessage::Type::MSG_JOIN:
 	{
 		// 방에 다른애가 들어옴.
@@ -181,7 +194,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-		/////////////////로비 플레이어 / 맵 세팅////////////////////////////////////////
+	/////////////////로비 플레이어 / 맵 세팅////////////////////////////////////////
 	case (int)ServerMessage::Type::MSG_PICK_MAP:
 	{
 		int mapId;
@@ -221,7 +234,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-		//////////////////////로비 게임 시작관련///////////////////////////////////
+	//////////////////////로비 게임 시작관련///////////////////////////////////
 	case (int)ServerMessage::Type::MSG_READY:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_READY " + std::to_string(msg.senderId));
 
@@ -262,10 +275,6 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 
 		//////////////////////기타 상시///////////////////////////////////
-	case (int)ServerMessage::Type::MSG_INFO:
-		CLog::PrintLog("[Info " + std::to_string(msg.msgType) + "] MSG_INFO " + msg.body.data());
-		break;
-
 	default:
 		if (msg.msgType != (int)ServerMessage::Type::MSG_HEARTBEAT_ACK)
 			CLog::PrintLog("[MSG " + std::to_string(msg.msgType) + "] From " + std::to_string(msg.senderId));
@@ -342,23 +351,45 @@ bool CNetworkManager::RecvAll(SOCKET sock, char* buffer, int len)
 #pragma region MessageProcess
 
 /*
-client.SendMsg(0, (int)ClientMessage::Type::MSG_START, nullptr, 0);
-client.SendMsg(0, (int)ClientMessage::Type::MSG_READY, nullptr, 0);
-client.SendMsg(0, (int)ClientMessage::Type::MSG_UNREADY, nullptr, 0);
-client.SendMsg(0, (int)ClientMessage::Type::MSG_MOVE_UP, nullptr, 0);
-client.SendMsg(0, (int)ClientMessage::Type::MSG_MOVE_DOWN, nullptr, 0);
-client.SendMsg(0, (int)ClientMessage::Type::MSG_PLAYER_DEAD, nullptr, 0);
+while (true)
+{
+	std::string input;
+	std::getline(std::cin, input);
 
-// 여기서부터는 데이터가 껴들어감.
-int mapId = std::stoi(input.substr(4));
-client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_MAP, &mapId, sizeof(int));
-
-int characterId = std::stoi(input.substr(5));
-client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_CHARACTER, &characterId, sizeof(int));
-
-int data[2] = { slot, itemId };
-client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_ITEM, data, sizeof(data));
-*/
+	if (input == "start")
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_START, nullptr, 0);
+	else if (input == "ready")
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_READY, nullptr, 0);
+	else if (input == "unready")
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_UNREADY, nullptr, 0);
+	else if (input == "up")
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_MOVE_UP, nullptr, 0);
+	else if (input == "down")
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_MOVE_DOWN, nullptr, 0);
+	else if (input == "dead")
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_PLAYER_DEAD, nullptr, 0);
+	else if (input.rfind("map ", 0) == 0)
+	{
+		int mapId = std::stoi(input.substr(4));
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_MAP, &mapId, sizeof(int));
+	}
+	else if (input.rfind("char ", 0) == 0)
+	{
+		int charId = std::stoi(input.substr(5));
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_CHARACTER, &charId, sizeof(int));
+	}
+	else if (input.rfind("item ", 0) == 0)
+	{
+		int slot = -1, itemId = -1;
+		sscanf_s(input.c_str() + 5, "%d %d", &slot, &itemId);
+		int data[2] = { slot, itemId };
+		client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_ITEM, data, sizeof(data));
+	}
+	else
+	{
+		std::cout << "[Client] Unknown command.\n";
+	}
+}*/
 
 /*
 // 메시지 처리 루프

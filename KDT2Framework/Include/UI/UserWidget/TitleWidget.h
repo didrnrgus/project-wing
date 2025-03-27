@@ -1,8 +1,7 @@
 ﻿#pragma once
 #include "UI/UserWidget/UserWidget.h"
-#include "Interface/IObjectNetworkController.h"
 
-class CTitleWidget : public CUserWidget, public IObjectNetworkController
+class CTitleWidget : public CUserWidget
 {
 	friend class CSceneUIManager;
 
@@ -41,11 +40,5 @@ private:
 	void RankButtonClick();
 	void ExitButtonClick();
 
-	// IObjectNetworkController을(를) 통해 상속됨
-	virtual void ProcessMessage(const RecvMessage& msg) override;
-
-	// IObjectNetworkController을(를) 통해 상속됨
-	virtual void AddListener() override;
-	virtual void RemoveListener() override;
 };
 

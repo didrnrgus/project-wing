@@ -4,8 +4,10 @@
 
 extern std::string gIPAddress;
 
-namespace ClientMessage {
-	enum class Type {
+namespace ClientMessage
+{
+	enum class Type
+	{
 		MSG_HEARTBEAT,
 		MSG_START,
 		MSG_PICK_CHARACTER,
@@ -19,17 +21,18 @@ namespace ClientMessage {
 	};
 }
 
-namespace ServerMessage {
-	enum class Type {
+namespace ServerMessage
+{
+	enum class Type
+	{
 		MSG_CONNECTED,
+		MSG_NEW_OWNER,
 		MSG_HEARTBEAT_ACK,
 		MSG_START_ACK,
 		MSG_JOIN,
 		MSG_DISCONNECT,
 		MSG_CONNECTED_REJECT,
-		MSG_INFO,
-		MSG_NEW_OWNER,
-		MSG_CLIENT_LIST,
+		MSG_ROOM_FULL_INFO,
 		MSG_PICK_CHARACTER,
 		MSG_PICK_ITEM,
 		MSG_PICK_MAP,

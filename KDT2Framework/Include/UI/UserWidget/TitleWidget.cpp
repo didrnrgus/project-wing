@@ -25,14 +25,11 @@ CTitleWidget::CTitleWidget()
 
 CTitleWidget::~CTitleWidget()
 {
-	RemoveListener();
 }
 
 bool CTitleWidget::Init()
 {
 	CUserWidget::Init();
-	AddListener();
-
 	CLog::PrintLog("CTitleWidget::Init()");
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	FVector2D size = FVector2D(200.0f, 100.0f);
@@ -225,23 +222,3 @@ void CTitleWidget::ExitButtonClick()
 	CGameManager::GetInst()->ExitGame();
 }
 
-void CTitleWidget::ProcessMessage(const RecvMessage& msg)
-{
-
-}
-
-void CTitleWidget::AddListener()
-{
-	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
-	if (sceneNetController == nullptr)
-		return;
-	sceneNetController->AddListener(this);
-}
-
-void CTitleWidget::RemoveListener()
-{
-	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
-	if (sceneNetController == nullptr)
-		return;
-	sceneNetController->RemoveListener(this);
-}

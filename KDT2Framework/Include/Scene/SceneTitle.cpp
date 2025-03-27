@@ -48,7 +48,7 @@ void CSceneTitle::ProcessMessage()
 
 		switch (msg.msgType)
 		{
-		case (int)ServerMessage::Type::MSG_CONNECTED:
+		case (int)ServerMessage::Type::MSG_ROOM_FULL_INFO:
 		{
 			// 멀티모드에서는 커넥트 성공했을때 씬 넘긴다.
 			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();

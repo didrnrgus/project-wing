@@ -24,6 +24,7 @@ protected:
 	virtual void DistributeMessage(const struct RecvMessage& msg) override;
 
 public:
+	// ISceneNetworkController을(를) 통해 상속됨
 	virtual void AddListener(class IObjectNetworkController* obj) override;
 	virtual void RemoveListener(class IObjectNetworkController* obj) override;
 };

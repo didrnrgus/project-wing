@@ -792,7 +792,6 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
 	case (int)ServerMessage::Type::MSG_PICK_MAP:
 	case (int)ServerMessage::Type::MSG_PICK_ITEM:
-	case (int)ServerMessage::Type::MSG_CLIENT_LIST:
 	{
 		UpdateOtherPlayerInfo();
 
