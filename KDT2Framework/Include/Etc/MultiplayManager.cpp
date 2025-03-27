@@ -56,7 +56,7 @@ Multiplay::FPlayerInfo& CMultiplayManager::GetPlayerInfoByID(int _id)
 
 const Multiplay::FPlayerInfo CMultiplayManager::GetPlayerInfoByIndex(int _index)
 {
-	if (_index >= mPlayerInfoList.size()) 
+	if (_index >= mPlayerInfoList.size())
 	{
 		Multiplay::FPlayerInfo info;
 		info.id = -1;
@@ -70,31 +70,31 @@ const Multiplay::FPlayerInfo CMultiplayManager::GetPlayerInfoByIndex(int _index)
 
 void CMultiplayManager::SetHostFromId(int _id)
 {
-	auto playerInfo = GetPlayerInfoByID(_id);
+	auto& playerInfo = GetPlayerInfoByID(_id);
 	playerInfo.isHost = true;
 }
 
 void CMultiplayManager::SetPlayerItemFromId(int _senderId, int _slotIndex, int _itemTypeIndex)
 {
-	auto playerInfo = GetPlayerInfoByID(_senderId);
+	auto& playerInfo = GetPlayerInfoByID(_senderId);
 	playerInfo.arrItemType[_slotIndex] = _itemTypeIndex;
 }
 
 void CMultiplayManager::SetPlayerCharacterFromId(int _senderId, int _characterIndex)
 {
-	auto playerInfo = GetPlayerInfoByID(_senderId);
+	auto& playerInfo = GetPlayerInfoByID(_senderId);
 	playerInfo.characterType = _characterIndex;
 }
 
 void CMultiplayManager::SetPlayerIsReadyFromId(int _senderId, bool _isReady)
 {
-	auto playerInfo = GetPlayerInfoByID(_senderId);
+	auto& playerInfo = GetPlayerInfoByID(_senderId);
 	playerInfo.isReady = _isReady;
 }
 
 void CMultiplayManager::SetPlayerIsDeadInGameFromId(int _senderId, bool _isDead)
 {
-	auto playerInfo = GetPlayerInfoByID(_senderId);
+	auto& playerInfo = GetPlayerInfoByID(_senderId);
 	playerInfo.isDeadInGame = _isDead;
 }
 
