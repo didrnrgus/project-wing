@@ -30,7 +30,7 @@ namespace ServerMessage
 		MSG_HEARTBEAT_ACK,
 		MSG_START_ACK,
 		MSG_JOIN,
-		MSG_DISCONNECT,
+		MSG_DISCONNECT, // 이건 누가 나간거.
 		MSG_CONNECTED_REJECT,
 		MSG_ROOM_FULL_INFO,
 		MSG_PICK_CHARACTER,
@@ -41,7 +41,8 @@ namespace ServerMessage
 		MSG_MOVE_UP,
 		MSG_MOVE_DOWN,
 		MSG_PLAYER_DEAD,
-		MSG_GAME_OVER
+		MSG_GAME_OVER,
+		MSG_END
 	};
 }
 

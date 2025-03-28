@@ -109,6 +109,7 @@ private:
 	void InitItemInfoTooltip();
 	void InitOtherPlayersInfo();
 
+	void GoToTitle();
 	void StartGame();
 
 	void OnCharacterLeftButtonClick();

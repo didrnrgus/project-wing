@@ -294,6 +294,11 @@ void CNetworkManager::ReceiveThread(SOCKET sock)
 		if (!ReceiveMsg(sock, header, bodyBuffer))
 		{
 			CLog::PrintLog("Disconnected from server.");
+
+			// 나에게 보내는 라스트 메시지..
+			std::lock_guard<std::mutex> lock(mQueueMutex);
+			mMessageQueue.push({ 0, (int)ServerMessage::Type::MSG_END, std::move(bodyBuffer) });
+
 			break;
 		}
 		std::lock_guard<std::mutex> lock(mQueueMutex);

@@ -416,16 +416,10 @@ void CLobbyWidget::InitNextPrevButton()
 	mPrevButton->SetSize(FVector2D::One * 96.0f * 1.0f);
 	mPrevButton->SetPos(FVector2D(100, 650));
 	mPrevButton->SetEventCallback(EButtonEventState::Click
-		, []()
+		, [this]()
 		{
 			CLog::PrintLog("mPrevButton Click");
-			CNetworkManager::GetInst()->Clear(
-				[]()
-				{
-					CMultiplayManager::GetInst()->ClearProperties();
-					CProcessManager::GetInst()->Terminate();
-				});
-			CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
+			GoToTitle();
 		});
 }
 
@@ -677,6 +671,17 @@ void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t*
 
 }
 
+void CLobbyWidget::GoToTitle()
+{
+	CNetworkManager::GetInst()->Clear(
+		[]()
+		{
+			CMultiplayManager::GetInst()->ClearProperties();
+			CProcessManager::GetInst()->Terminate();
+		});
+	CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
+}
+
 void CLobbyWidget::StartGame()
 {
 	CLog::PrintLog("mNextButton Click curPlayerGraphicIndex: " + std::to_string(curPlayerGraphicIndex));
@@ -806,6 +811,9 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 	}
 	case (int)ServerMessage::Type::MSG_START_ACK:
 		StartGame();
+		break;
+	case (int)ServerMessage::Type::MSG_END:
+		GoToTitle();
 		break;
 	default:
 		break;
