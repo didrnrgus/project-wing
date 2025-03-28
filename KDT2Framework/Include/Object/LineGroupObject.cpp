@@ -173,7 +173,7 @@ void CLineGroupObject::ArrangeLines()
 	mCurLineNodeIndex++;
 	if (mCurLineNodeIndex % mLineNodesCount == 0)
 	{
-		mLineNodesCycleCount++;
+		//mLineNodesCycleCount++;
 	}
 
 	AddLine(ELinePosType::Top, mCurLineNodeIndex);

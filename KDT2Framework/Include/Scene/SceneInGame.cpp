@@ -48,6 +48,7 @@ bool CSceneInGame::Init()
 void CSceneInGame::Update(float DeltaTime)
 {
 	CScene::Update(DeltaTime);
+	ProcessMessage();
 
 	if (mGamePlayState == EGamePlayState::ReadyCount)
 	{
@@ -164,6 +165,46 @@ void CSceneInGame::SetGamePlayState(EGamePlayState::Type type)
 	for (auto e : mArrGamePlayStateCtlr)
 	{
 		e->SetGamePlayState(type);
+	}
+}
+
+void CSceneInGame::ProcessMessage()
+{
+	// 메시지 큐에서 메시지 뽑는 역할.
+	RecvMessage msg;
+	if (CNetworkManager::GetInst()->PollMessage(msg))
+	{
+		DistributeMessage(msg);
+	}
+}
+
+void CSceneInGame::DistributeMessage(const RecvMessage& msg)
+{
+	for (auto it : mObjNetworkController)
+	{
+		(it)->ProcessMessage(msg);
+	}
+}
+
+void CSceneInGame::AddListener(IObjectNetworkController* obj)
+{
+	mObjNetworkController.push_back(obj);
+}
+
+void CSceneInGame::RemoveListener(IObjectNetworkController* obj)
+{
+	if (obj)
+	{
+		auto it = std::find_if(mObjNetworkController.begin(), mObjNetworkController.end(),
+			[obj](const IObjectNetworkController* const _obj)
+			{
+				return _obj == obj;
+			});
+
+		if (it != mObjNetworkController.end())
+		{
+			mObjNetworkController.erase(it);
+		}
 	}
 }
 

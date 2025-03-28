@@ -13,6 +13,9 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/TaskManager.h"
 #include "Render/RenderManager.h"
+#include "Interface/ISceneNetworkController.h"
+#include "Etc/NetworkManager.h"
+#include "Etc/MultiplayManager.h"
 
 CPlayerInGameObject::CPlayerInGameObject()
 {
@@ -28,11 +31,13 @@ CPlayerInGameObject::CPlayerInGameObject(CPlayerInGameObject&& Obj)
 
 CPlayerInGameObject::~CPlayerInGameObject()
 {
+	RemoveListener();
 }
 
 bool CPlayerInGameObject::Init()
 {
 	CPlayerGraphicObject::Init();
+	AddListener();
 
 	auto scale = mRoot->GetWorldScale();
 	mBody = CreateComponent<CColliderSphere2D>("ColliderSphere2D");
@@ -151,6 +156,10 @@ void CPlayerInGameObject::MoveUpStart(float DeltaTime)
 
 	mIsMovingUp = true;
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpStart mIsMovingUp: " + std::to_string(mIsMovingUp));
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
+		SendMessageTrigger(ClientMessage::Type::MSG_MOVE_UP);
+
 }
 
 void CPlayerInGameObject::MoveUpHold(float DeltaTime)
@@ -170,6 +179,9 @@ void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
 {
 	mIsMovingUp = false;
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpRelease mIsMovingUp: " + std::to_string(mIsMovingUp));
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
+		SendMessageTrigger(ClientMessage::Type::MSG_MOVE_DOWN);
 }
 
 void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CColliderBase* Dest)
@@ -271,16 +283,10 @@ void CPlayerInGameObject::OnPlayerDead()
 		sceneInGame->SetGamePlayState(EGamePlayState::Dead);
 	}
 
-	// 쓰레드 시작.
-	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
-		[this]()
-		{
-			std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+	if (CNetworkManager::GetInst()->IsMultiplay())
+		SendMessageTrigger(ClientMessage::Type::MSG_PLAYER_DEAD);
 
-			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
-			CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
-			CLog::PrintLog("NEXT SCENE -> GAME_RESULT");
-		})));
+
 }
 
 void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector)
@@ -288,4 +294,52 @@ void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector)
 	// 외부 -> 서버데이터로 포지션 컨트롤 
 	// 씬에서 호출
 	mRoot->SetWorldPos(moveValueVector);
+}
+
+void CPlayerInGameObject::AddListener()
+{
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
+	if (sceneNetController == nullptr)
+		return;
+	sceneNetController->AddListener(this);
+}
+
+void CPlayerInGameObject::RemoveListener()
+{
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
+	if (sceneNetController == nullptr)
+		return;
+	sceneNetController->RemoveListener(this);
+}
+
+void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
+{
+	switch (msg.msgType)
+	{
+	case (int)ServerMessage::Type::MSG_GAME_OVER:
+	{
+		// 쓰레드 시작.
+		mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+			[this]()
+			{
+				SendMessageTrigger(ClientMessage::Type::MSG_UNREADY);
+				SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, 0, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
+				SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, 1, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
+				SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, 2, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
+				SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, 0);
+
+				if(CMultiplayManager::GetInst()->GetIsHost())
+					SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_MAP, 0);
+
+				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+				CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
+				CLog::PrintLog("NEXT SCENE -> GAME_RESULT");
+			})));
+		break;
+	}
+	default:
+		break;
+	}
 }

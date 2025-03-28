@@ -20,8 +20,8 @@ protected:
 	/*void RemoveListener()
 	{
 		auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
-	if (sceneNetController == nullptr)
-		return;
+		if (sceneNetController == nullptr)
+			return;
 		sceneNetController->RemoveListener(this);
 	}*/
 

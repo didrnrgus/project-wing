@@ -2,8 +2,9 @@
 #include "PlayerGraphicObject.h"
 #include "Interface/IPlayerStatController.h"
 #include "Interface/IGamePlayStateController.h"
+#include "Interface/IObjectNetworkController.h"
 
-class CPlayerInGameObject : public CPlayerGraphicObject, public IPlayerStatController, public IGamePlayStateController
+class CPlayerInGameObject : public CPlayerGraphicObject, public IPlayerStatController, public IGamePlayStateController, public IObjectNetworkController
 {
 	friend class CScene;
 
@@ -50,5 +51,11 @@ public:
 	}
 
 	inline bool GetIsMine() { return mIsMine; }
+
+
+	// IObjectNetworkController을(를) 통해 상속됨
+	void AddListener() override;
+	void RemoveListener() override;
+	void ProcessMessage(const RecvMessage& msg) override;
 };
 

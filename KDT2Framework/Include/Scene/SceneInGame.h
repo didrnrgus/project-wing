@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "Scene\Scene.h"
 #include "Interface/IScenePlayerInGameController.h"
-#include "Interface/IGamePlayStateController.h"
+#include "Interface/ISceneNetworkController.h"
 
-class CSceneInGame : public CScene, public IScenePlayerInGameController
+class CSceneInGame : public CScene, public IScenePlayerInGameController, public ISceneNetworkController
 {
 	friend class CSceneManager;
 
@@ -12,7 +12,7 @@ private:
 	virtual ~CSceneInGame();
 
 private:
-	std::vector<IGamePlayStateController*> mArrGamePlayStateCtlr;
+	std::vector<class IGamePlayStateController*> mArrGamePlayStateCtlr;
 	EGamePlayState::Type mGamePlayState = EGamePlayState::Ready;
 	int mCurReadyCount;
 	float mReadyCountTime;
@@ -34,6 +34,12 @@ public:
 	// 플레이어/서버/씬도 사용할 수 있음.
 	void SetGamePlayState(EGamePlayState::Type type);
 	EGamePlayState::Type GetGamePlayState() { return mGamePlayState; }
+
+	// ISceneNetworkController을(를) 통해 상속됨
+	void ProcessMessage() override;
+	void DistributeMessage(const RecvMessage& msg) override;
+	void AddListener(IObjectNetworkController* obj) override;
+	void RemoveListener(IObjectNetworkController* obj) override;
 };
 
 
