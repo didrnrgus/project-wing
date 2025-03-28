@@ -18,8 +18,8 @@ private:
 private:
 	static void Init();
 	static float Update();
-
 public:
+	static wchar_t* GetFPS();
 	static float GetDeltaTime();
 };
 

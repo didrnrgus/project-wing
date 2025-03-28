@@ -20,10 +20,11 @@ private:
 	float loadingUpdateTime = 0.0f;
 	float loadingTextUpdateTime = 0.0f;
 	bool mIsSkipLoadingTextUpdate = false;
-
 	int curLoadingTextIndex = 0;
 	std::list<std::wstring> mLoadingTextQueue;
 	std::mutex mQueueMutex;
+
+	CSharedPtr<class CTextBlock> mFpsText;
 
 protected:
 	std::vector<CSharedPtr<CWidget>>	mWidgetList;

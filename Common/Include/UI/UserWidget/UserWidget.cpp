@@ -6,6 +6,7 @@
 #include "UI/Common/TextBlock.h"
 #include "Etc/ConstValues.h"
 #include "Etc/ZOrderContainer.h"
+#include "Share/Timer.h"
 
 CUserWidget::CUserWidget()
 {
@@ -96,7 +97,7 @@ bool CUserWidget::Init()
 	mLoadingBackImage->SetColor(FVector4D::Black);
 	mLoadingBackImage->SetOpacity(0.8f);
 	mLoadingBackImage->SetPos(FVector2D::Zero);
-    mLoadingBackImage->SetZOrder(ZORDER_LOADING);
+    mLoadingBackImage->SetZOrder(ZORDER_LOADING_BACK);
 	mLoadingBackImage->SetEnable(false);
 
 	FVector2D loadingSize = FVector2D(190.0f, 120.0f);
@@ -128,6 +129,19 @@ bool CUserWidget::Init()
 	mLoadingDescText->SetPos(FVector2D(RS.Width, RS.Height) * 0.5f - descSize * 0.5f + FVector2D::Axis[EAxis::Y] * 40);
 	mLoadingDescText->SetZOrder(ZORDER_LOADING);
 	mLoadingDescText->SetEnable(false);
+
+	FVector2D fpsTextSize = FVector2D(300.0f, 20.0f);
+	mFpsText = mScene->GetUIManager()->CreateWidget<CTextBlock>("FpsText");
+	AddWidget(mFpsText);
+	mFpsText->SetPivot(FVector2D::Zero);
+	mFpsText->SetText(L"FPS: ");
+	mFpsText->SetTextColor(FVector4D::Green);
+	mFpsText->SetAlignH(ETextAlignH::Left);
+	mFpsText->SetFontSize(20.f);
+	mFpsText->SetShadowEnable(false);
+	mFpsText->SetSize(fpsTextSize);
+	mFpsText->SetPos(FVector2D::One * 0.0f);
+	mFpsText->SetZOrder(ZORDER_FPS);
 
 	return true;
 }
@@ -161,6 +175,9 @@ void CUserWidget::Update(float DeltaTime)
 	// loading
 	if (mIsLoading)
 		UpdateLoading(DeltaTime);
+
+	if (mFpsText)
+		mFpsText->SetText(CTimer::GetFPS());
 }
 
 void CUserWidget::Render()

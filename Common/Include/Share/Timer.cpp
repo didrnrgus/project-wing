@@ -1,5 +1,4 @@
 ﻿#include "Timer.h"
-#include "Log.h"
 
 LARGE_INTEGER CTimer::mSecond = {};
 LARGE_INTEGER CTimer::mTime = {};
@@ -31,18 +30,18 @@ float CTimer::Update()
 	if (mFPSTick == 60)
 	{
 		mFPS = mFPSTick / mFPSTime;
-
 		mFPSTick = 0;
 		mFPSTime = 0.f;
 	}
 
-	char	FPSText[64] = {};
-
-	sprintf_s(FPSText, "FPS : %.5f", mFPS);
-
-	//CLog::PrintLog(FPSText);
-
 	return mDeltaTime;
+}
+
+wchar_t* CTimer::GetFPS()
+{
+	wchar_t	FPSText[64] = {};
+	swprintf_s(FPSText, L"FPS : %.2f", mFPS);
+	return FPSText;
 }
 
 float CTimer::GetDeltaTime()
