@@ -135,6 +135,9 @@
     <ClCompile Include="Etc\MultiplayManager.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
+    <ClCompile Include="Object\PlayerInGameOtherObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="Etc\MultiplayManager.h">
       <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerInGameOtherObject.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

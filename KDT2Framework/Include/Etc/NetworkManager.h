@@ -42,7 +42,7 @@ namespace ServerMessage
 		MSG_MOVE_DOWN,
 		MSG_PLAYER_DEAD,
 		MSG_GAME_OVER,
-		MSG_END
+		MSG_END // 내가 끊긴거
 	};
 }
 

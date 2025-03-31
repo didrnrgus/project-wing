@@ -52,15 +52,13 @@ protected:
 
 public:
 	virtual void ProcessMessage(const struct RecvMessage& msg) = 0;
-	/*
-		void ProcessMessage(const RecvMessage& msg)
+	/*void ProcessMessage(const RecvMessage& msg)
+	{
+		switch (msg.msgType)
 		{
-			switch (msg.msgType)
-			{
-			case (int)ServerMessage::Type::MSG_..:
-			default:
-				break;
-			}
+		case (int)ServerMessage::Type::MSG_..:
+		default:
+			break;
 		}
-	*/
+	}*/
 };

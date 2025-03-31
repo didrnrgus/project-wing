@@ -3,6 +3,7 @@
 #include "Scene/Input.h"
 #include "Scene/SceneInGame.h"
 #include "Scene/SceneLobby.h"
+#include "Scene/SceneTitle.h"
 #include "Scene/SceneManager.h"
 #include "Component/SpriteComponent.h"
 #include "Component/ColliderSphere2D.h"
@@ -322,6 +323,7 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 		mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
 			[this]()
 			{
+				CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_GAME_OVER");
 				SendMessageTrigger(ClientMessage::Type::MSG_UNREADY);
 				SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, 0, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
 				SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, 1, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
@@ -331,12 +333,22 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 				if(CMultiplayManager::GetInst()->GetIsHost())
 					SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_MAP, 0);
 
+				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
 				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
+				CLog::PrintLog("CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>()");
 				CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
-				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
-				CLog::PrintLog("NEXT SCENE -> GAME_RESULT");
 			})));
+		break;
+	}
+	case (int)ServerMessage::Type::MSG_END:
+	{
+		CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_END");
+		CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(1000));");
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		
+		CLog::PrintLog("CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>()");
+		CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
 		break;
 	}
 	default:
