@@ -182,7 +182,9 @@ void CLineGroupObject::ArrangeLines()
 
 void CLineGroupObject::MoveLines(float DeltaTime)
 {
-	float moveValue =  mTargetPlayerStat->GetSpeed() * DeltaTime * -1.0f;
+	float boostMultiplyValue = mTargetPlayerStat->GetBoostValue();
+	float moveValue = mTargetPlayerStat->GetSpeed() * DeltaTime * -1.0f * boostMultiplyValue;
+
 	mMovedValue += moveValue;
 
 	if (mMovedValue < -mSnapXValue)

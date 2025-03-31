@@ -19,8 +19,6 @@ protected:
 	CSharedPtr<class CSpriteComponent> mDeadSign;
 private:
 	bool mIsMovingUp = false;
-	bool mIsMine = false;
-	class IGamePlayShakeController* mCameraShake;
 	int mTaskID;
 
 public:
@@ -34,6 +32,10 @@ private:
 	void MoveUpHold(float DeltaTime);
 	void MoveUpRelease(float DeltaTime);
 
+	void BoostModeStart(float DeltaTime);
+	void BoostModeHold(float DeltaTime);
+	void BoostModeRelease(float DeltaTime);
+
 	void CollisionMapBegin(const FVector3D& HitPoint, class CColliderBase* Dest);
 	void SetMovePlayer(FVector3D moveValueVector, float DeltaTime);
 	void UpdateDecreaseHp(float DeltaTime);
@@ -44,14 +46,8 @@ private:
 public:
 	// WorldPosition
 	void SetMovePlayer(FVector3D moveValueVector);
-	inline void SetIsMine(bool isMine) { mIsMine = isMine; }
-	inline void SetShakeCamera(class IGamePlayShakeController* cameraShake)
-	{
-		mCameraShake = cameraShake;
-	}
 
-	inline bool GetIsMine() { return mIsMine; }
-
+	
 
 	// IObjectNetworkController을(를) 통해 상속됨
 	void AddListener() override;

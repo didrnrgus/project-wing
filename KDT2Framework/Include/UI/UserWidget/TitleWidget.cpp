@@ -93,13 +93,15 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	ShowLoading(true);
 
 #ifdef _DEBUG
-	int waitTime = 1000;
+	int waitTime = 500;
+	int isSkip = true;
 #else
 	int waitTime = 2000;
+	int isSkip = false;
 #endif // _DEBUG
 
 	// config load
-	AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻");
+	AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻", isSkip);
 	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 	std::string webserverPath = WEBSERVER_PATH;
 	std::string path = webserverPath + CONFIG_PATH;
@@ -108,7 +110,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	CDataStorageManager::GetInst()->SetConfigData(configResult);
 
 	// characters load
-	AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽");
+	AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽", isSkip);
 	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
 	std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -116,7 +118,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
 
 	// maps load
-	AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️");
+	AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️", isSkip);
 	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 	for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
 	{
@@ -127,7 +129,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	}
 
 	// stat load
-	AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력.스피드.민첩.디펜스 4가지가 있어요.");
+	AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력.스피드.민첩.디펜스 4가지가 있어요.", isSkip);
 	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
 	std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -135,7 +137,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	CDataStorageManager::GetInst()->SetStatInfoData(charactersResult);
 
 	// item load
-	AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 소유한 아이템의 스텟 패시브 효과만 있어요.");
+	AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 소유한 아이템의 스텟 패시브 효과만 있어요.", isSkip);
 	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
 	std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -146,7 +148,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 
 	if (_isActiveServerProcess)
 	{
-		AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~💻💻💻💻💻");
+		AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~💻💻💻💻💻", isSkip);
 		std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
 	}
@@ -155,7 +157,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	
 	if (_isMultiPlay)
 	{
-		AddQueueLoadingDescText(L"호스트 서버에 접속 중 입니다.\n메뉴 바 에서 호스트 정보 확인하셨죠??");
+		AddQueueLoadingDescText(L"호스트 서버에 접속 중 입니다.\n메뉴 바 에서 호스트 정보 확인하셨죠??", isSkip);
 		std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
 
 		// 첫번쨰 시도 -> 실패해도 Update() 에서 될때까지 커넥션 한다.

@@ -40,7 +40,7 @@ public:
 	}
 
 	void ShowLoading(bool isLoading);
-	void AddQueueLoadingDescText(const std::wstring wstrDesc);
+	void AddQueueLoadingDescText(const std::wstring _wstrDesc, bool _isSkip);
 	void UpdateLoading(float DeltaTime);
 	bool IsLoading() { return mIsLoading; }
 

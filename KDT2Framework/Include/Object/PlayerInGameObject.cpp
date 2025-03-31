@@ -64,6 +64,14 @@ bool CPlayerInGameObject::Init()
 	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("MoveUp",
 		EInputType::Up, this, &CPlayerInGameObject::MoveUpRelease);
 
+	mScene->GetInput()->AddBindKey("BoostMode", VK_SPACE);
+	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("BoostMode",
+		EInputType::Down, this, &CPlayerInGameObject::BoostModeStart);
+	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("BoostMode",
+		EInputType::Hold, this, &CPlayerInGameObject::BoostModeHold);
+	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("BoostMode",
+		EInputType::Up, this, &CPlayerInGameObject::BoostModeRelease);
+
 	SetPlayerFrezeCallback(this, &CPlayerInGameObject::OnFrezeCallback);
 
 #ifdef _DEBUG
@@ -185,6 +193,23 @@ void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
 		SendMessageTrigger(ClientMessage::Type::MSG_MOVE_DOWN);
 }
 
+void CPlayerInGameObject::BoostModeStart(float DeltaTime)
+{
+	CLog::PrintLog("CPlayerInGameObject::BoostModeStart");
+	SetIsBoostMode(true);
+}
+
+void CPlayerInGameObject::BoostModeHold(float DeltaTime)
+{
+	//CLog::PrintLog("CPlayerInGameObject::BoostModeHold");
+}
+
+void CPlayerInGameObject::BoostModeRelease(float DeltaTime)
+{
+	CLog::PrintLog("CPlayerInGameObject::BoostModeRelease");
+	SetIsBoostMode(false);
+}
+
 void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CColliderBase* Dest)
 {
 	if (!IsGamePlayEnableByState())
@@ -251,7 +276,11 @@ void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
 void CPlayerInGameObject::UpdateDistance(float DeltaTime)
 {
 	float speed = GetSpeed();
-	float speedPerFrame = speed * DeltaTime * 0.01f;
+	float boostMultiplyValue = GetBoostValue();
+	float speedPerFrame = 
+		speed * DeltaTime		// 1초에 얼마만큼 
+		* 0.01f					// 미터법
+		* boostMultiplyValue;	// 부스트 속도 곱계산. 
 	AddPlayDistance(speedPerFrame);
 }
 
@@ -273,6 +302,8 @@ void CPlayerInGameObject::OnFrezeCallback()
 
 void CPlayerInGameObject::OnPlayerDead()
 {
+	CLog::PrintLog("CPlayerInGameObject::OnPlayerDead");
+
 	// 죽은표시 하기 -> 몇초뒤에 Result씬으로 이동
 	mDeadSign->SetRelativePos(FVector3D(0.0f, 0.0f, -0.1f));
 	mDeadSign->SetEnable(true);
@@ -286,7 +317,19 @@ void CPlayerInGameObject::OnPlayerDead()
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 		SendMessageTrigger(ClientMessage::Type::MSG_PLAYER_DEAD);
+	else
+	{
+		// 쓰레드 시작.
+		mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+			[this]()
+			{
+				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
+				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
+				CLog::PrintLog("CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>()");
+				CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+			})));
+	}
 
 }
 

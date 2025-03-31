@@ -24,6 +24,7 @@ private:
 
 	bool isStun; // 박았을때 잠시 멈춰야 해서.
 	bool isProtection;
+	bool isBoostMode;
 	float playDistance;
 
 	std::function<void()> playerFrezeCallback;
@@ -43,6 +44,7 @@ private:
 
 		isStun = false;
 		isProtection = false;
+		isBoostMode = false;
 		playDistance = 0.0f;
 
 		return true;
@@ -54,8 +56,8 @@ public:
 		return InitStat(stat.HP, stat.Speed, stat.Dex, stat.Def);
 	}
 
-	inline void SetIndex(int _index) { index = _index; }
-	inline void AddValueByStatIndex(EStatInfoText::Type _statIndex, int _value)
+	void SetIndex(int _index) { index = _index; }
+	void AddValueByStatIndex(EStatInfoText::Type _statIndex, int _value)
 	{
 		switch (_statIndex)
 		{
@@ -99,9 +101,9 @@ public:
 			playerFrezeCallback = nullptr;
 		}
 	}
-	inline void AddHp(float _addHp) 
-	{ 
-		curHp += _addHp; 
+	inline void AddHp(float _addHp)
+	{
+		curHp += _addHp;
 
 		if (curHp > maxHp)
 			maxHp = curHp;
@@ -111,6 +113,7 @@ public:
 	inline void AddDef(float _addDefVal) { addedDef += _addDefVal; }
 	inline void AddPlayDistance(float _addDist) { playDistance += _addDist; }
 	inline void SetStun() { isStun = true; }
+	inline void SetIsBoostMode(const bool _isBoostMode) { isBoostMode = _isBoostMode; }
 	inline void ReleaseStun(float DeltaTime)
 	{
 		addedReleaseStunValue += DeltaTime;
@@ -140,6 +143,7 @@ public:
 	inline bool GetIsDeath() { return GetCurHP() > 0.0f; }
 	inline bool GetIsStun() { return isStun; }
 	inline bool GetIsProtection() { return isProtection; }
+	inline float GetBoostValue() { return isBoostMode ? 2.0f : 1.0f; }
 	inline float GetPlayDistance() { return playDistance; }
 
 public:

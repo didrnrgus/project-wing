@@ -26,12 +26,17 @@ void CUserWidget::ShowLoading(bool isLoading)
 	mLoadingDescText->SetEnable(isLoading);
 }
 
-void CUserWidget::AddQueueLoadingDescText(const std::wstring wstrDesc)
+void CUserWidget::AddQueueLoadingDescText(const std::wstring _wstrDesc, bool _isSkip)
 {
-
-	for (int i = 1; i <= wstrDesc.length(); i++)
+	if (_isSkip)
 	{
-		auto str = wstrDesc.substr(0, i);
+		mLoadingTextQueue.push_back(_wstrDesc);
+		return;
+	}
+
+	for (int i = 1; i <= _wstrDesc.length(); i++)
+	{
+		auto str = _wstrDesc.substr(0, i);
 
 		std::lock_guard<std::mutex> lock(mQueueMutex);
 		mLoadingTextQueue.push_back(str);
@@ -97,7 +102,7 @@ bool CUserWidget::Init()
 	mLoadingBackImage->SetColor(FVector4D::Black);
 	mLoadingBackImage->SetOpacity(0.8f);
 	mLoadingBackImage->SetPos(FVector2D::Zero);
-    mLoadingBackImage->SetZOrder(ZORDER_LOADING_BACK);
+	mLoadingBackImage->SetZOrder(ZORDER_LOADING_BACK);
 	mLoadingBackImage->SetEnable(false);
 
 	FVector2D loadingSize = FVector2D(190.0f, 120.0f);
@@ -112,7 +117,7 @@ bool CUserWidget::Init()
 	mLoadingText->SetTextShadowColor(FVector4D::Gray30);
 	mLoadingText->SetSize(loadingSize);
 	mLoadingText->SetPos(FVector2D(RS.Width, RS.Height) * 0.5f - loadingSize * 0.5f - FVector2D(0.0f, 60.0f));
-    mLoadingText->SetZOrder(ZORDER_LOADING);
+	mLoadingText->SetZOrder(ZORDER_LOADING);
 	mLoadingText->SetEnable(false);
 
 	FVector2D descSize = FVector2D(1000.0f, 120.0f);

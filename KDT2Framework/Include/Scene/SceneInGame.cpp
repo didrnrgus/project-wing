@@ -3,6 +3,7 @@
 #include "Scene/SceneUIManager.h"
 #include "Object/PlayerGraphicObject.h"
 #include "Object/PlayerInGameObject.h"
+#include "Object/PlayerInGameOtherObject.h"
 #include "Object/LineGroupObject.h"
 #include "Object/CameraObject.h"
 #include "Etc/DataStorageManager.h"
@@ -11,6 +12,8 @@
 #include "Interface/IGamePlayStateController.h"
 #include "Interface/IGamePlayShakeController.h"
 #include "Scene/Input.h"
+#include "Etc/NetworkManager.h"
+#include "Etc/MultiplayManager.h"
 
 CSceneInGame::CSceneInGame()
 {
@@ -24,7 +27,7 @@ bool CSceneInGame::Init()
 {
 	CScene::Init();
 
-	GetInput()->AddBindKey("StartAndStop", VK_SPACE);
+	GetInput()->AddBindKey("StartAndStop", 'Z');
 	GetInput()->AddBindFunction("StartAndStop", EInputType::Down
 		, [this](float DeltaTime)
 		{
@@ -75,40 +78,74 @@ bool CSceneInGame::InitObject()
 {
 	CCameraObject* camera = CreateObj<CCameraObject>("Camera");
 	CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
-	CPlayerInGameObject* playerInGame = CreateObj<CPlayerInGameObject>("PlayerInGame");
+	CPlayerInGameObject* myPlayerObject = nullptr;
 
 	// players init
 	players.resize(5, nullptr); // 미리 칸 만들어놓기.
 
-	// my player setting
-	players[0] = playerInGame;
-	playerInGame->SetIsMine(true);
+	if (CNetworkManager::GetInst()->IsMultiplay())
+	{
+		auto myPlayerInfo = CMultiplayManager::GetInst()->GetPlayerInfoByMyId();
+		int playerCount = CMultiplayManager::GetInst()->GetPlayerCount();
+
+		for (int i = 0; i < playerCount; i++)
+		{
+			CPlayerGraphicObject* _playerObject = nullptr;
+			auto _netPlayerInfo = CMultiplayManager::GetInst()->GetPlayerInfoByIndex(i);
+			int _id = _netPlayerInfo.id;
+			bool _isMine = myPlayerInfo.id == _id;
+
+			if (_isMine)
+				_playerObject = CreateObj<CPlayerInGameObject>("[IsMine]PlayerInGameObject" + std::to_string(_id));
+			else
+				_playerObject = CreateObj<CPlayerInGameOtherObject>("PlayerInGameObject" + std::to_string(_id));
+
+			_playerObject->SetIsMine(_isMine);
+			players[i] = _playerObject;
+
+			if (_isMine)
+			{
+				myPlayerObject = dynamic_cast<CPlayerInGameObject*>(_playerObject);
+			}
+
+			// 캐릭터 왼관 세팅
+			SetChangeGraphic(i, _netPlayerInfo.characterType);
+		}
+	}
+	else
+	{
+		myPlayerObject = CreateObj<CPlayerInGameObject>("PlayerInGame");
+
+		// my player setting
+		players[0] = myPlayerObject;
+		myPlayerObject->SetIsMine(true);
+
+		// 캐릭터 왼관 세팅
+		SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
+	}
 
 	// 플레이어 오브젝트에 카메라 쉐이크 인터페이스 등록.
 	auto cameraShake = dynamic_cast<IGamePlayShakeController*>(camera);
 	if (cameraShake)
 	{
-		playerInGame->SetShakeCamera(cameraShake);
+		myPlayerObject->SetShakeCamera(cameraShake);
 	}
 
 	// 선택한 캐릭의 스탯 인터페이스 가져오기.
-	auto playerInGameStat = dynamic_cast<IPlayerStatController*>(playerInGame);
-	if (playerInGameStat != nullptr)
+	auto _playerInGameStat = dynamic_cast<IPlayerStatController*>(myPlayerObject);
+	if (_playerInGameStat != nullptr)
 	{
 		// lineGroup setting
-		lineGroup->SetTargetStat(playerInGameStat);
+		lineGroup->SetTargetStat(_playerInGameStat);
 	}
 
-	SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
-
 	// IGamePlayStateController arr setting
-	// 맵도 포함시키고.
 	auto lineGroupGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(lineGroup);
 	if (lineGroupGamePlayStateCtlr)
 		mArrGamePlayStateCtlr.push_back(lineGroupGamePlayStateCtlr);
 
 	// 이거 내가 조작하는 플레이어만 포함시키자.
-	auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(playerInGame);
+	auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(myPlayerObject);
 	if (playerGamePlayStateCtlr)
 		mArrGamePlayStateCtlr.push_back(playerGamePlayStateCtlr);
 
