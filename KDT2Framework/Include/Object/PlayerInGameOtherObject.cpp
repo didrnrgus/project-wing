@@ -43,10 +43,10 @@ void CPlayerInGameOtherObject::RemoveListener()
 
 void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 {
-	switch (msg.msgType)
+	/*switch (msg.msgType)
 	{
-		case (int)ServerMessage::Type
+		case (int)ServerMessage::MSG_MOVE_UP
 	default:
 		break;
-	}
+	}*/
 }

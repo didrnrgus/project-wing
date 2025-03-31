@@ -286,6 +286,7 @@ void CPlayerInGameObject::UpdateDistance(float DeltaTime)
 
 void CPlayerInGameObject::OnFrezeCallback()
 {
+	// 조작 안되고 떨어지기 시작 함.
 	CLog::PrintLog("CPlayerInGameObject::OnFrezeCallback()");
 	auto curColor = mRoot->GetColor();
 	curColor.x *= 0.7f;

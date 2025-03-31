@@ -57,7 +57,7 @@ public:
 	}
 
 	void SetIndex(int _index) { index = _index; }
-	void AddValueByStatIndex(EStatInfoText::Type _statIndex, int _value)
+	void AddValueByStatIndex(EStatInfoText::Type _statIndex, float _value)
 	{
 		switch (_statIndex)
 		{
@@ -85,6 +85,7 @@ public:
 
 		if (curHp <= 0.0f && playerFrezeCallback != nullptr)
 		{
+			curHp = 0.0f;
 			playerFrezeCallback();
 			playerFrezeCallback = nullptr;
 		}
@@ -97,6 +98,7 @@ public:
 
 		if (curHp <= 0.0f && playerFrezeCallback != nullptr)
 		{
+			curHp = 0.0f;
 			playerFrezeCallback();
 			playerFrezeCallback = nullptr;
 		}

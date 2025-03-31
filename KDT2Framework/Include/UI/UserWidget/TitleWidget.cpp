@@ -150,7 +150,11 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	{
 		AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~💻💻💻💻💻", isSkip);
 		std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/server.exe");
+#ifdef _DEBUG
+		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/Debug/project-wing-socket-server.exe");
+#else
+		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/Release/project-wing-socket-server.exe");
+#endif
 	}
 
 	CNetworkManager::GetInst()->SetIsMultiplay(_isMultiPlay);

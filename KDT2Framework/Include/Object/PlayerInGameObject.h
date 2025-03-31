@@ -47,8 +47,6 @@ public:
 	// WorldPosition
 	void SetMovePlayer(FVector3D moveValueVector);
 
-	
-
 	// IObjectNetworkController을(를) 통해 상속됨
 	void AddListener() override;
 	void RemoveListener() override;
