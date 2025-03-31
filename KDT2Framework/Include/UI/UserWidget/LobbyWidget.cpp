@@ -394,13 +394,13 @@ void CLobbyWidget::InitNextPrevButton()
 			if (CNetworkManager::GetInst()->IsMultiplay())
 			{
 				if (CMultiplayManager::GetInst()->GetIsHost())
-					SendMessageTrigger(ClientMessage::Type::MSG_START);
+					SendMessageTrigger(ClientMessage::MSG_START);
 				else
 				{
 					if (CMultiplayManager::GetInst()->GetPlayerInfoByMyId().isReady)
-						SendMessageTrigger(ClientMessage::Type::MSG_UNREADY);
+						SendMessageTrigger(ClientMessage::MSG_UNREADY);
 					else
-						SendMessageTrigger(ClientMessage::Type::MSG_READY);
+						SendMessageTrigger(ClientMessage::MSG_READY);
 					return;
 				}
 			}
@@ -552,7 +552,7 @@ void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemTypeIndex)
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, _slotIndex, _itemTypeIndex);
+		SendMessageTriggerItem(ClientMessage::MSG_PICK_ITEM, _slotIndex, _itemTypeIndex);
 	}
 }
 
@@ -789,14 +789,14 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 {
 	switch (msg.msgType)
 	{
-	case (int)ServerMessage::Type::MSG_DISCONNECT:
-	case (int)ServerMessage::Type::MSG_NEW_OWNER:
-	case (int)ServerMessage::Type::MSG_JOIN:
-	case (int)ServerMessage::Type::MSG_READY:
-	case (int)ServerMessage::Type::MSG_UNREADY:
-	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
-	case (int)ServerMessage::Type::MSG_PICK_MAP:
-	case (int)ServerMessage::Type::MSG_PICK_ITEM:
+	case (int)ServerMessage::MSG_DISCONNECT:
+	case (int)ServerMessage::MSG_NEW_OWNER:
+	case (int)ServerMessage::MSG_JOIN:
+	case (int)ServerMessage::MSG_READY:
+	case (int)ServerMessage::MSG_UNREADY:
+	case (int)ServerMessage::MSG_PICK_CHARACTER:
+	case (int)ServerMessage::MSG_PICK_MAP:
+	case (int)ServerMessage::MSG_PICK_ITEM:
 	{
 		UpdateOtherPlayerInfo();
 
@@ -809,10 +809,10 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_START_ACK:
+	case (int)ServerMessage::MSG_START_ACK:
 		StartGame();
 		break;
-	case (int)ServerMessage::Type::MSG_END:
+	case (int)ServerMessage::MSG_END:
 		GoToTitle();
 		break;
 	default:
@@ -832,7 +832,7 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
+		SendMessageTriggerInt(ClientMessage::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
 	}
 }
 
@@ -848,7 +848,7 @@ void CLobbyWidget::OnCharacterRightButtonClick()
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
+		SendMessageTriggerInt(ClientMessage::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
 	}
 
 }
@@ -995,7 +995,7 @@ void CLobbyWidget::OnMapLeftButtonClick()
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_MAP, curDifficultyIndex);
+		SendMessageTriggerInt(ClientMessage::MSG_PICK_MAP, curDifficultyIndex);
 	}
 }
 
@@ -1012,7 +1012,7 @@ void CLobbyWidget::OnMapRightButtonClick()
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_MAP, curDifficultyIndex);
+		SendMessageTriggerInt(ClientMessage::MSG_PICK_MAP, curDifficultyIndex);
 	}
 }
 

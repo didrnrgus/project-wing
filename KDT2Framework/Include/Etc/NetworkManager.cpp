@@ -97,7 +97,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 	// 인게임 메시지도 마찬가지로 인게임에서 구현하자.
 	switch (msg.msgType)
 	{
-	case (int)ServerMessage::Type::MSG_CONNECTED:
+	case (int)ServerMessage::MSG_CONNECTED:
 	{
 		mIsConnectCompleted = true;
 		int id;
@@ -111,7 +111,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_ROOM_FULL_INFO: // 이거 받기전까진 타이틀에 머무른다.
+	case (int)ServerMessage::MSG_ROOM_FULL_INFO: // 이거 받기전까진 타이틀에 머무른다.
 	{
 		if (msg.body.size() >= sizeof(int) * 3)
 		{
@@ -148,7 +148,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_DISCONNECT:
+	case (int)ServerMessage::MSG_DISCONNECT:
 	{
 		mIsConnection = false;
 		mIsConnectCompleted = false;
@@ -162,14 +162,14 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_CONNECTED_REJECT:
+	case (int)ServerMessage::MSG_CONNECTED_REJECT:
 	{
 		std::string reason(msg.body.begin(), msg.body.end());
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED_REJECT Reason: " + reason);
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_NEW_OWNER:
+	case (int)ServerMessage::MSG_NEW_OWNER:
 	{
 		int id;
 		if (msg.body.size() >= sizeof(int))
@@ -181,7 +181,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_JOIN:
+	case (int)ServerMessage::MSG_JOIN:
 	{
 		// 방에 다른애가 들어옴.
 		int newId;
@@ -195,7 +195,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 	}
 
 	/////////////////로비 플레이어 / 맵 세팅////////////////////////////////////////
-	case (int)ServerMessage::Type::MSG_PICK_MAP:
+	case (int)ServerMessage::MSG_PICK_MAP:
 	{
 		int mapId;
 		if (msg.body.size() >= sizeof(int))
@@ -207,7 +207,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_PICK_ITEM:
+	case (int)ServerMessage::MSG_PICK_ITEM:
 	{
 		// 이건 msg.senderId 도 중요하다.
 		int slot, itemId, senderId = msg.senderId;
@@ -222,7 +222,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
+	case (int)ServerMessage::MSG_PICK_CHARACTER:
 	{
 		int characterId, senderId = msg.senderId;
 		if (msg.body.size() >= sizeof(int))
@@ -235,48 +235,48 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 	}
 
 	//////////////////////로비 게임 시작관련///////////////////////////////////
-	case (int)ServerMessage::Type::MSG_READY:
+	case (int)ServerMessage::MSG_READY:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_READY " + std::to_string(msg.senderId));
 
 		CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(msg.senderId, true);
 		break;
 
-	case (int)ServerMessage::Type::MSG_UNREADY:
+	case (int)ServerMessage::MSG_UNREADY:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_UNREADY " + std::to_string(msg.senderId));
 
 		CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(msg.senderId, false);
 		break;
 
-	case (int)ServerMessage::Type::MSG_START_ACK:
+	case (int)ServerMessage::MSG_START_ACK:
 		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_START_ACK");
 
 		CMultiplayManager::GetInst()->SetIsGameStart(true);
 		break;
 
 		//////////////////////인게임 게임로직///////////////////////////////////
-	case (int)ServerMessage::Type::MSG_PLAYER_DEAD:
+	case (int)ServerMessage::MSG_PLAYER_DEAD:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PLAYER_DEAD " + std::to_string(msg.senderId));
 
 		CMultiplayManager::GetInst()->SetPlayerIsDeadInGameFromId(msg.senderId, true);
 		break;
 
-	case (int)ServerMessage::Type::MSG_GAME_OVER:
+	case (int)ServerMessage::MSG_GAME_OVER:
 		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_GAME_OVER " + msg.body.data());
 
 		CMultiplayManager::GetInst()->SetIsGameStart(false);
 		break;
 
-	case (int)ServerMessage::Type::MSG_MOVE_UP:
+	case (int)ServerMessage::MSG_MOVE_UP:
 		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_MOVE_UP");
 		break;
 
-	case (int)ServerMessage::Type::MSG_MOVE_DOWN:
+	case (int)ServerMessage::MSG_MOVE_DOWN:
 		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_MOVE_DOWN");
 		break;
 
 		//////////////////////기타 상시///////////////////////////////////
 	default:
-		if (msg.msgType != (int)ServerMessage::Type::MSG_HEARTBEAT_ACK)
+		if (msg.msgType != (int)ServerMessage::MSG_HEARTBEAT_ACK)
 			CLog::PrintLog("[MSG " + std::to_string(msg.msgType) + "] From " + std::to_string(msg.senderId));
 		break;
 	}
@@ -297,7 +297,7 @@ void CNetworkManager::ReceiveThread(SOCKET sock)
 
 			// 나에게 보내는 라스트 메시지..
 			std::lock_guard<std::mutex> lock(mQueueMutex);
-			mMessageQueue.push({ 0, (int)ServerMessage::Type::MSG_END, std::move(bodyBuffer) });
+			mMessageQueue.push({ 0, (int)ServerMessage::MSG_END, std::move(bodyBuffer) });
 
 			break;
 		}
@@ -314,7 +314,7 @@ void CNetworkManager::HeartbeatThread(SOCKET sock)
 			break;
 
 		std::this_thread::sleep_for(std::chrono::seconds(1));
-		SendMsg(0, (int)ClientMessage::Type::MSG_HEARTBEAT, nullptr, 0);
+		SendMsg(0, (int)ClientMessage::MSG_HEARTBEAT, nullptr, 0);
 	}
 }
 
@@ -362,33 +362,33 @@ while (true)
 	std::getline(std::cin, input);
 
 	if (input == "start")
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_START, nullptr, 0);
+		client.SendMsg(0, (int)ClientMessage::MSG_START, nullptr, 0);
 	else if (input == "ready")
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_READY, nullptr, 0);
+		client.SendMsg(0, (int)ClientMessage::MSG_READY, nullptr, 0);
 	else if (input == "unready")
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_UNREADY, nullptr, 0);
+		client.SendMsg(0, (int)ClientMessage::MSG_UNREADY, nullptr, 0);
 	else if (input == "up")
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_MOVE_UP, nullptr, 0);
+		client.SendMsg(0, (int)ClientMessage::MSG_MOVE_UP, nullptr, 0);
 	else if (input == "down")
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_MOVE_DOWN, nullptr, 0);
+		client.SendMsg(0, (int)ClientMessage::MSG_MOVE_DOWN, nullptr, 0);
 	else if (input == "dead")
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_PLAYER_DEAD, nullptr, 0);
+		client.SendMsg(0, (int)ClientMessage::MSG_PLAYER_DEAD, nullptr, 0);
 	else if (input.rfind("map ", 0) == 0)
 	{
 		int mapId = std::stoi(input.substr(4));
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_MAP, &mapId, sizeof(int));
+		client.SendMsg(0, (int)ClientMessage::MSG_PICK_MAP, &mapId, sizeof(int));
 	}
 	else if (input.rfind("char ", 0) == 0)
 	{
 		int charId = std::stoi(input.substr(5));
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_CHARACTER, &charId, sizeof(int));
+		client.SendMsg(0, (int)ClientMessage::MSG_PICK_CHARACTER, &charId, sizeof(int));
 	}
 	else if (input.rfind("item ", 0) == 0)
 	{
 		int slot = -1, itemId = -1;
 		sscanf_s(input.c_str() + 5, "%d %d", &slot, &itemId);
 		int data[2] = { slot, itemId };
-		client.SendMsg(0, (int)ClientMessage::Type::MSG_PICK_ITEM, data, sizeof(data));
+		client.SendMsg(0, (int)ClientMessage::MSG_PICK_ITEM, data, sizeof(data));
 	}
 	else
 	{
@@ -403,33 +403,33 @@ if (client.PollMessage(msg))
 {
 	switch (msg.msgType)
 	{
-	case (int)ServerMessage::Type::MSG_CONNECTED:
+	case (int)ServerMessage::MSG_CONNECTED:
 	{
 		int id;
 		memcpy(&id, msg.body.data(), sizeof(int));
 		std::cout << "[System " << msg.msgType << "] Connected. My ID: " << id << "\n";
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_NEW_OWNER:
+	case (int)ServerMessage::MSG_NEW_OWNER:
 	{
 		int id;
 		memcpy(&id, msg.body.data(), sizeof(int));
 		std::cout << "[System " << msg.msgType << "] New Room Owner: " << id << "\n";
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_PLAYER_DEAD:
+	case (int)ServerMessage::MSG_PLAYER_DEAD:
 		std::cout << "[Game " << msg.msgType << "] Player " << msg.senderId << " died.\n";
 		break;
 
-	case (int)ServerMessage::Type::MSG_READY:
+	case (int)ServerMessage::MSG_READY:
 		std::cout << "[Game " << msg.msgType << "] Player " << msg.senderId << " MSG_READY \n";
 		break;
 
-	case (int)ServerMessage::Type::MSG_UNREADY:
+	case (int)ServerMessage::MSG_UNREADY:
 		std::cout << "[Game " << msg.msgType << "] Player " << msg.senderId << " MSG_UNREADY \n";
 		break;
 
-	case (int)ServerMessage::Type::MSG_PICK_MAP:
+	case (int)ServerMessage::MSG_PICK_MAP:
 	{
 		if (msg.body.size() >= sizeof(int)) {
 			int mapId;
@@ -439,7 +439,7 @@ if (client.PollMessage(msg))
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_PICK_ITEM:
+	case (int)ServerMessage::MSG_PICK_ITEM:
 	{
 		if (msg.body.size() >= sizeof(int) * 2) {
 			int slot, itemId;
@@ -450,7 +450,7 @@ if (client.PollMessage(msg))
 		break;
 	}
 
-	case (int)ServerMessage::Type::MSG_PICK_CHARACTER:
+	case (int)ServerMessage::MSG_PICK_CHARACTER:
 	{
 		if (msg.body.size() >= sizeof(int)) {
 			int characterId;
@@ -459,7 +459,7 @@ if (client.PollMessage(msg))
 		}
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_CLIENT_LIST:
+	case (int)ServerMessage::MSG_CLIENT_LIST:
 	{
 		std::cout << "[System " << msg.msgType << "] Client list received: ";
 		int count = msg.body.size() / sizeof(int);
@@ -471,7 +471,7 @@ if (client.PollMessage(msg))
 		std::cout << "\n";
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_JOIN:
+	case (int)ServerMessage::MSG_JOIN:
 	{
 		if (msg.body.size() >= sizeof(int)) {
 			int newId;
@@ -480,42 +480,42 @@ if (client.PollMessage(msg))
 		}
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_DISCONNECT:
+	case (int)ServerMessage::MSG_DISCONNECT:
 	{
 		int id;
 		memcpy(&id, msg.body.data(), sizeof(int));
 		std::cout << "[System " << msg.msgType << "] MSG_DISCONNECT from server. ID: " << id << "\n";
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_CONNECTED_REJECT:
+	case (int)ServerMessage::MSG_CONNECTED_REJECT:
 	{
 		std::string reason(msg.body.begin(), msg.body.end());
 		std::cout << "[System " << msg.msgType << "] MSG_CONNECTED_REJECT from server. Reason: " << reason << "\n";
 		//exit(0); // 앱 종료.
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_GAME_OVER:
+	case (int)ServerMessage::MSG_GAME_OVER:
 		std::cout << "[Game " << msg.msgType << "] " << msg.body.data() << "\n";
 		break;
 
-	case (int)ServerMessage::Type::MSG_MOVE_UP:
+	case (int)ServerMessage::MSG_MOVE_UP:
 		std::cout << "[Game] Client " << msg.senderId << " moved UP\n";
 		break;
 
-	case (int)ServerMessage::Type::MSG_MOVE_DOWN:
+	case (int)ServerMessage::MSG_MOVE_DOWN:
 		std::cout << "[Game] Client " << msg.senderId << " moved DOWN\n";
 		break;
 
-	case (int)ServerMessage::Type::MSG_INFO:
+	case (int)ServerMessage::MSG_INFO:
 		std::cout << "[Info " << msg.msgType << "] " << msg.body.data() << "\n";
 		break;
 
-	case (int)ServerMessage::Type::MSG_START_ACK:
+	case (int)ServerMessage::MSG_START_ACK:
 
 		break;
 
 	default:
-		if (msg.msgType != (int)ServerMessage::Type::MSG_HEARTBEAT_ACK)
+		if (msg.msgType != (int)ServerMessage::MSG_HEARTBEAT_ACK)
 			std::cout << "[MSG " << msg.msgType << "] From " << msg.senderId << "\n";
 		break;
 	}

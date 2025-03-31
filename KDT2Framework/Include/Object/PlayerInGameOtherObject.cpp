@@ -45,7 +45,7 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 {
 	switch (msg.msgType)
 	{
-	//case (int)ServerMessage::Type::MSG_..:
+		case (int)ServerMessage::Type
 	default:
 		break;
 	}

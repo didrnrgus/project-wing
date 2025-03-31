@@ -6,7 +6,7 @@ extern std::string gIPAddress;
 
 namespace ClientMessage
 {
-	enum class Type
+	enum Type
 	{
 		MSG_HEARTBEAT,
 		MSG_START,
@@ -23,7 +23,7 @@ namespace ClientMessage
 
 namespace ServerMessage
 {
-	enum class Type
+	enum Type
 	{
 		MSG_CONNECTED,
 		MSG_NEW_OWNER,

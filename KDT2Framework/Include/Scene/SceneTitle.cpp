@@ -48,13 +48,13 @@ void CSceneTitle::ProcessMessage()
 
 		switch (msg.msgType)
 		{
-		case (int)ServerMessage::Type::MSG_ROOM_FULL_INFO:
+		case (int)ServerMessage::MSG_ROOM_FULL_INFO:
 		{
 			// 멀티모드에서는 커넥트 성공했을때 씬 넘긴다.
 			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 			break;
 		}
-		case (int)ServerMessage::Type::MSG_CONNECTED_REJECT:
+		case (int)ServerMessage::MSG_CONNECTED_REJECT:
 		{
 			// 이유 알려주는 UI 필요.
 			CNetworkManager::GetInst()->SetIsMultiplay(false);

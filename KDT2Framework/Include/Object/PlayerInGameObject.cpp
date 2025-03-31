@@ -167,7 +167,7 @@ void CPlayerInGameObject::MoveUpStart(float DeltaTime)
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpStart mIsMovingUp: " + std::to_string(mIsMovingUp));
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
-		SendMessageTrigger(ClientMessage::Type::MSG_MOVE_UP);
+		SendMessageTrigger(ClientMessage::MSG_MOVE_UP);
 
 }
 
@@ -190,7 +190,7 @@ void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpRelease mIsMovingUp: " + std::to_string(mIsMovingUp));
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
-		SendMessageTrigger(ClientMessage::Type::MSG_MOVE_DOWN);
+		SendMessageTrigger(ClientMessage::MSG_MOVE_DOWN);
 }
 
 void CPlayerInGameObject::BoostModeStart(float DeltaTime)
@@ -316,7 +316,7 @@ void CPlayerInGameObject::OnPlayerDead()
 	}
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
-		SendMessageTrigger(ClientMessage::Type::MSG_PLAYER_DEAD);
+		SendMessageTrigger(ClientMessage::MSG_PLAYER_DEAD);
 	else
 	{
 		// 쓰레드 시작.
@@ -360,21 +360,21 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 {
 	switch (msg.msgType)
 	{
-	case (int)ServerMessage::Type::MSG_GAME_OVER:
+	case (int)ServerMessage::MSG_GAME_OVER:
 	{
 		// 쓰레드 시작.
 		mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
 			[this]()
 			{
 				CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_GAME_OVER");
-				SendMessageTrigger(ClientMessage::Type::MSG_UNREADY);
-				SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, 0, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
-				SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, 1, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
-				SendMessageTriggerItem(ClientMessage::Type::MSG_PICK_ITEM, 2, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
-				SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_CHARACTER, 0);
+				SendMessageTrigger(ClientMessage::MSG_UNREADY);
+				SendMessageTriggerItem(ClientMessage::MSG_PICK_ITEM, 0, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
+				SendMessageTriggerItem(ClientMessage::MSG_PICK_ITEM, 1, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
+				SendMessageTriggerItem(ClientMessage::MSG_PICK_ITEM, 2, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
+				SendMessageTriggerInt(ClientMessage::MSG_PICK_CHARACTER, 0);
 
 				if(CMultiplayManager::GetInst()->GetIsHost())
-					SendMessageTriggerInt(ClientMessage::Type::MSG_PICK_MAP, 0);
+					SendMessageTriggerInt(ClientMessage::MSG_PICK_MAP, 0);
 
 				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
 				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
@@ -384,7 +384,7 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 			})));
 		break;
 	}
-	case (int)ServerMessage::Type::MSG_END:
+	case (int)ServerMessage::MSG_END:
 	{
 		CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_END");
 		CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(1000));");
