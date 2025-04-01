@@ -16,7 +16,7 @@ protected:
 
 protected:
 	CSharedPtr<class CColliderSphere2D> mBody;
-	CSharedPtr<class CSpriteComponent> mDeadSign;
+	
 private:
 	bool mIsMovingUp = false;
 	int mTaskID;
@@ -44,8 +44,6 @@ private:
 	void OnPlayerDead();
 
 public:
-	// WorldPosition
-	void SetMovePlayer(FVector3D moveValueVector);
 
 	// IObjectNetworkController을(를) 통해 상속됨
 	void AddListener() override;

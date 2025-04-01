@@ -47,15 +47,6 @@ bool CPlayerInGameObject::Init()
 	mBody->SetRadius(scale.y * 0.2f);
 	mBody->SetCollisionBeginFunc<CPlayerInGameObject>(this, &CPlayerInGameObject::CollisionMapBegin);
 
-	mDeadSign = CreateComponent<CSpriteComponent>(TEXTURE_NAME_DEAD_SIGN);
-	mRoot->AddChild(mDeadSign);
-	mDeadSign->SetTexture(TEXTURE_NAME_DEAD_SIGN, TEXTURE_PATH_DEAD_SIGN);
-	mDeadSign->SetPivot(FVector2D::One * 0.5f);
-	mDeadSign->SetColor(FVector4D::Red * 0.8f);
-	mDeadSign->SetWorldScale(FVector2D(1.1f, 1.0f) * 128.0f * 1.5f);
-	//CRenderManager::GetInst()->MoveRenderElement(mDeadSign, true);
-	mDeadSign->SetEnable(false);
-
 	mScene->GetInput()->AddBindKey("MoveUp", VK_LBUTTON);
 	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("MoveUp",
 		EInputType::Down, this, &CPlayerInGameObject::MoveUpStart);
@@ -133,6 +124,7 @@ void CPlayerInGameObject::Update(float DeltaTime)
 		ReleaseStun(DeltaTime);
 	}
 
+	UpdateDistance(DeltaTime);
 	UpdateDecreaseHp(DeltaTime);
 
 	if (!mIsMovingUp && mIsMine)
@@ -197,6 +189,8 @@ void CPlayerInGameObject::BoostModeStart(float DeltaTime)
 {
 	CLog::PrintLog("CPlayerInGameObject::BoostModeStart");
 	SetIsBoostMode(true);
+	if (CNetworkManager::GetInst()->IsMultiplay())
+		SendMessageTrigger(ClientMessage::MSG_BOOST_ON);
 }
 
 void CPlayerInGameObject::BoostModeHold(float DeltaTime)
@@ -208,6 +202,8 @@ void CPlayerInGameObject::BoostModeRelease(float DeltaTime)
 {
 	CLog::PrintLog("CPlayerInGameObject::BoostModeRelease");
 	SetIsBoostMode(false);
+	if (CNetworkManager::GetInst()->IsMultiplay())
+		SendMessageTrigger(ClientMessage::MSG_BOOST_OFF);
 }
 
 void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CColliderBase* Dest)
@@ -222,18 +218,20 @@ void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CCollider
 		return;
 
 	mCameraShake->SetShakeSceneObject(0.5f, 10.0f);
+	float _damage = CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage;
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
+		SendMessageTriggerFloat(ClientMessage::MSG_TAKE_DAMAGE, _damage);
 
 	if (GetCurHP() <= 0.0f)
-	{
 		OnPlayerDead();
-	}
 	else
 	{
 		SetStun();
-		Damaged(CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage);
+		Damaged(_damage);
 	}
 
-	CLog::PrintLog("CPlayerInGameObject::CollisionMap");
+	CLog::PrintLog("CPlayerInGameObject::CollisionMapBegin");
 }
 
 void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector, float DeltaTime)
@@ -264,8 +262,6 @@ void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
 
 	//CLog::PrintLog("CPlayerInGameObject::UpdateDecreaseHp()");
 
-	UpdateDistance(DeltaTime);
-
 #ifdef _DEBUG
 	DamagedPerDistance(DeltaTime * 10.0f);
 #else
@@ -275,9 +271,15 @@ void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
 
 void CPlayerInGameObject::UpdateDistance(float DeltaTime)
 {
+	if (!IsGamePlayEnableByState())
+		return;
+
+	if (GetIsStun())
+		return;
+
 	float speed = GetSpeed();
 	float boostMultiplyValue = GetBoostValue();
-	float speedPerFrame = 
+	float speedPerFrame =
 		speed * DeltaTime		// 1초에 얼마만큼 
 		* 0.01f					// 미터법
 		* boostMultiplyValue;	// 부스트 속도 곱계산. 
@@ -316,9 +318,7 @@ void CPlayerInGameObject::OnPlayerDead()
 		sceneInGame->SetGamePlayState(EGamePlayState::Dead);
 	}
 
-	if (CNetworkManager::GetInst()->IsMultiplay())
-		SendMessageTrigger(ClientMessage::MSG_PLAYER_DEAD);
-	else
+	if (!CNetworkManager::GetInst()->IsMultiplay())
 	{
 		// 쓰레드 시작.
 		mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
@@ -331,14 +331,6 @@ void CPlayerInGameObject::OnPlayerDead()
 				CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
 			})));
 	}
-
-}
-
-void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector)
-{
-	// 외부 -> 서버데이터로 포지션 컨트롤 
-	// 씬에서 호출
-	mRoot->SetWorldPos(moveValueVector);
 }
 
 void CPlayerInGameObject::AddListener()
@@ -361,6 +353,11 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 {
 	switch (msg.msgType)
 	{
+	case (int)ServerMessage::MSG_PLAYER_DEAD:
+	{
+
+		break;
+	}
 	case (int)ServerMessage::MSG_GAME_OVER:
 	{
 		// 쓰레드 시작.
@@ -374,7 +371,7 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 				SendMessageTriggerItem(ClientMessage::MSG_PICK_ITEM, 2, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
 				SendMessageTriggerInt(ClientMessage::MSG_PICK_CHARACTER, 0);
 
-				if(CMultiplayManager::GetInst()->GetIsHost())
+				if (CMultiplayManager::GetInst()->GetIsHost())
 					SendMessageTriggerInt(ClientMessage::MSG_PICK_MAP, 0);
 
 				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
@@ -390,7 +387,7 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 		CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_END");
 		CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(1000));");
 		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-		
+
 		CLog::PrintLog("CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>()");
 		CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
 		break;

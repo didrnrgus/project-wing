@@ -85,6 +85,8 @@ bool CLobbyWidget::Init()
 	CUserWidget::Init();
 	AddListener();
 
+	mIsStartTrigger = false;
+
 	CDataStorageManager::GetInst()->InitCurSelectedData();
 	InitScrollSelectButtons();
 	InitItemButtons();
@@ -129,9 +131,10 @@ void CLobbyWidget::Update(float DeltaTime)
 		mMapDifficultyImage->SetPos(mMapDifficultyImagePos + FVector2D(0.0f, tempVal * 10));
 	}
 
-	if (CNetworkManager::GetInst()->IsMultiplay())
+	if (mIsStartTrigger)
 	{
-
+		mIsStartTrigger = false;
+		StartGame();
 	}
 }
 
@@ -397,7 +400,7 @@ void CLobbyWidget::InitNextPrevButton()
 					SendMessageTrigger(ClientMessage::MSG_START);
 				else
 				{
-					if (CMultiplayManager::GetInst()->GetPlayerInfoByMyId().isReady)
+					if (CMultiplayManager::GetInst()->GetPlayerInfoFromMyId().isReady)
 						SendMessageTrigger(ClientMessage::MSG_UNREADY);
 					else
 						SendMessageTrigger(ClientMessage::MSG_READY);
@@ -405,7 +408,7 @@ void CLobbyWidget::InitNextPrevButton()
 				}
 			}
 
-			StartGame();
+			mIsStartTrigger = true;
 		});
 
 	// previous button

@@ -47,6 +47,15 @@ bool CPlayerGraphicObject::Init()
 	mRoot->SetColor(FVector4D::GetColorFromString(defaultPlayerStat.ColorName));
 	SetRootComponent(mRoot);
 
+	mDeadSign = CreateComponent<CSpriteComponent>(TEXTURE_NAME_DEAD_SIGN);
+	mRoot->AddChild(mDeadSign);
+	mDeadSign->SetTexture(TEXTURE_NAME_DEAD_SIGN, TEXTURE_PATH_DEAD_SIGN);
+	mDeadSign->SetPivot(FVector2D::One * 0.5f);
+	mDeadSign->SetColor(FVector4D::Red * 0.8f);
+	mDeadSign->SetWorldScale(FVector2D(1.1f, 1.0f) * 128.0f * 1.5f);
+	//CRenderManager::GetInst()->MoveRenderElement(mDeadSign, true);
+	mDeadSign->SetEnable(false);
+
 	mAnimation = mRoot->CreateAnimation2D<CAnimation2D>();
 	for (int i = 0; i < CDataStorageManager::GetInst()->GetCharacterCount(); i++)
 	{
@@ -77,6 +86,11 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 		float tempVal = cos(DirectX::XMConvertToRadians(mMapDifficultySinAngle));
 		mRoot->SetWorldPos(mRootInitPos + FVector3D::Axis[EAxis::Y] * tempVal * 10);
 	}
+}
+
+void CPlayerGraphicObject::SetMovePlayer(FVector3D _worldPos)
+{
+	mRoot->SetWorldPos(_worldPos);
 }
 
 bool CPlayerGraphicObject::SetChangeGraphic(int index)

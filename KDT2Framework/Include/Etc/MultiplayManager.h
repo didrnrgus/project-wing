@@ -11,6 +11,9 @@ namespace Multiplay
 		bool isHost;
 		bool isReady;
 		bool isDeadInGame;
+		float curHp;
+		float distance;
+		float height;
 		std::vector<int> arrItemType;
 
 		FPlayerInfo()
@@ -20,6 +23,9 @@ namespace Multiplay
 			isHost = false;
 			isReady = false;
 			isDeadInGame = false;
+			curHp = 0.0f;
+			distance = 0.0f;
+			height = 0.0f;
 			arrItemType.resize(PLAYER_ITEM_COUNT_MAX, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
 		}
 	};
@@ -46,9 +52,9 @@ public:
 		mIsHost = false;
 	}
 
-	// 리턴: 값복사
-	const Multiplay::FPlayerInfo GetPlayerInfoByIndex(int _index);
-	const Multiplay::FPlayerInfo GetPlayerInfoByMyId() { return GetPlayerInfoByID(mMyId); }
+	const Multiplay::FPlayerInfo GetPlayerInfoByIndex(const int _index);
+	const Multiplay::FPlayerInfo GetPlayerInfoValueById(const int _id) { return GetPlayerInfoByID(_id); }
+	const Multiplay::FPlayerInfo GetPlayerInfoFromMyId() { return GetPlayerInfoByID(mMyId); }
 	int GetPlayerCount() { return mPlayerInfoList.size(); }
 	int GetMyId() { return mMyId; }
 	int GetIsHost() { return mIsHost; }
@@ -57,18 +63,19 @@ public:
 
 private:
 	void AddPlayer(int _id);
-	// 리턴: 레퍼런스
-	Multiplay::FPlayerInfo& GetPlayerInfoByID(int _id);
-	bool RemovePlayer(int _id);
-	void SetMyId(int _myId) { mMyId = _myId; }
-	void SetCurMapIndex(int _mapIndex) { mCurMapIndex = _mapIndex; }
-	void SetIsGameStart(bool _isStart) { mIsStart = _isStart; }
-	void SetHostFromId(int _id);
-	void SetPlayerItemFromId(int _senderId, int _slotIndex, int _itemTypeIndex);
-	void SetPlayerCharacterFromId(int _senderId, int _characterIndex);
-	void SetPlayerIsReadyFromId(int _senderId, bool _isReady);
-	void SetPlayerIsDeadInGameFromId(int _senderId, bool _isDead);
-
+	Multiplay::FPlayerInfo& GetPlayerInfoByID(const int _id);
+	bool RemovePlayer(const int _id);
+	void SetMyId(const int _myId) { mMyId = _myId; }
+	void SetCurMapIndex(const int _mapIndex) { mCurMapIndex = _mapIndex; }
+	void SetIsGameStart(const bool _isStart) { mIsStart = _isStart; }
+	void SetHostFromId(const int _id);
+	void SetPlayerItemFromId(const int _senderId, const int _slotIndex, const int _itemTypeIndex);
+	void SetPlayerCharacterFromId(const int _senderId, const int _characterIndex);
+	void SetPlayerIsReadyFromId(const int _senderId, const bool _isReady);
+	void SetPlayerIsDeadInGameFromId(const int _senderId, const bool _isDead);
+	void SetPlayerCurHpInGameFromId(const int _senderId, const float _curHp);
+	void SetPlayerDistanceInGameFromId(const int _senderId, const float _distance);
+	void SetPlayerHeightInGameFromId(const int _senderId, const float _height);
 	DECLARE_SINGLE(CMultiplayManager);
 };
 

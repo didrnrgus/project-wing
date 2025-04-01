@@ -64,7 +64,10 @@ void CSceneInGame::Update(float DeltaTime)
 			mInGameWidget->SetStartCount(mCurReadyCount);
 
 			if (mCurReadyCount < 0)
-				SetGamePlayState(EGamePlayState::Start);
+			{
+				if(!CNetworkManager::GetInst()->IsMultiplay())
+					SetGamePlayState(EGamePlayState::Start);
+			}
 		}
 	}
 }
@@ -78,14 +81,13 @@ bool CSceneInGame::InitObject()
 {
 	CCameraObject* camera = CreateObj<CCameraObject>("Camera");
 	CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
-	CPlayerInGameObject* myPlayerObject = nullptr;
 
 	// players init
 	players.resize(5, nullptr); // 미리 칸 만들어놓기.
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		auto myPlayerInfo = CMultiplayManager::GetInst()->GetPlayerInfoByMyId();
+		auto myPlayerInfo = CMultiplayManager::GetInst()->GetPlayerInfoFromMyId();
 		int playerCount = CMultiplayManager::GetInst()->GetPlayerCount();
 
 		for (int i = 0; i < playerCount; i++)
@@ -104,9 +106,13 @@ bool CSceneInGame::InitObject()
 			players[i] = _playerObject;
 
 			if (_isMine)
-			{
-				myPlayerObject = dynamic_cast<CPlayerInGameObject*>(_playerObject);
-			}
+				mMyPlayerObject = dynamic_cast<CPlayerInGameObject*>(_playerObject);
+
+			auto _tempNetworkController = dynamic_cast<IObjectNetworkController*>(_playerObject);
+			if (_tempNetworkController != nullptr)
+				_tempNetworkController->SetNetID(_id);
+
+			_playerObject->SetIndexInScene(i);
 
 			// 캐릭터 왼관 세팅
 			SetChangeGraphic(i, _netPlayerInfo.characterType);
@@ -114,25 +120,28 @@ bool CSceneInGame::InitObject()
 	}
 	else
 	{
-		myPlayerObject = CreateObj<CPlayerInGameObject>("PlayerInGame");
+		mMyPlayerObject = CreateObj<CPlayerInGameObject>("PlayerInGame");
 
 		// my player setting
-		players[0] = myPlayerObject;
-		myPlayerObject->SetIsMine(true);
+		players[0] = mMyPlayerObject;
+		mMyPlayerObject->SetIsMine(true);
 
 		// 캐릭터 왼관 세팅
 		SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
 	}
 
+	if (mMyPlayerObject == nullptr)
+		return false;
+
 	// 플레이어 오브젝트에 카메라 쉐이크 인터페이스 등록.
 	auto cameraShake = dynamic_cast<IGamePlayShakeController*>(camera);
 	if (cameraShake)
 	{
-		myPlayerObject->SetShakeCamera(cameraShake);
+		mMyPlayerObject->SetShakeCamera(cameraShake);
 	}
 
 	// 선택한 캐릭의 스탯 인터페이스 가져오기.
-	auto _playerInGameStat = dynamic_cast<IPlayerStatController*>(myPlayerObject);
+	auto _playerInGameStat = dynamic_cast<IPlayerStatController*>(mMyPlayerObject);
 	if (_playerInGameStat != nullptr)
 	{
 		// lineGroup setting
@@ -145,7 +154,7 @@ bool CSceneInGame::InitObject()
 		mArrGamePlayStateCtlr.push_back(lineGroupGamePlayStateCtlr);
 
 	// 이거 내가 조작하는 플레이어만 포함시키자.
-	auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(myPlayerObject);
+	auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(mMyPlayerObject);
 	if (playerGamePlayStateCtlr)
 		mArrGamePlayStateCtlr.push_back(playerGamePlayStateCtlr);
 
@@ -182,7 +191,7 @@ bool CSceneInGame::SetChangeGraphic(int playerIndex, int graphicIndex)
 
 bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValueVector)
 {
-	auto tempPlayer = dynamic_cast<CPlayerInGameObject*>(players[playerIndex].Get());
+	auto tempPlayer = dynamic_cast<CPlayerGraphicObject*>(players[playerIndex].Get());
 
 	if (tempPlayer == nullptr)
 	{
@@ -212,6 +221,17 @@ void CSceneInGame::ProcessMessage()
 	if (CNetworkManager::GetInst()->PollMessage(msg))
 	{
 		DistributeMessage(msg);
+
+		switch (msg.msgType)
+		{
+		case (int)ServerMessage::MSG_COUNTDOWN_FINISHED:
+		{
+			SetGamePlayState(EGamePlayState::Start);
+			break;
+		}
+		default:
+			break;
+		}
 	}
 }
 

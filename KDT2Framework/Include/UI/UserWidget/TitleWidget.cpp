@@ -134,7 +134,7 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
 	std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
 	CLog::PrintLog("statsResult: " + statsResult);
-	CDataStorageManager::GetInst()->SetStatInfoData(charactersResult);
+	CDataStorageManager::GetInst()->SetStatInfoData(statsResult);
 
 	// item load
 	AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 소유한 아이템의 스텟 패시브 효과만 있어요.", isSkip);

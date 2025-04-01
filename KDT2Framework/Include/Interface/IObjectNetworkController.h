@@ -7,6 +7,9 @@
 class IObjectNetworkController abstract
 {
 protected:
+	int mNetID = -1;
+
+protected:
 	virtual void AddListener() = 0;
 	/*void AddListener()
 	{
@@ -43,6 +46,12 @@ protected:
 		CNetworkManager::GetInst()->SendMsg(0, (int)_msgType, &_data, sizeof(int));
 	}
 
+	// ClientMessage::MSG_TAKE_DAMAGE
+	void SendMessageTriggerFloat(ClientMessage::Type _msgType, float _data)
+	{
+		CNetworkManager::GetInst()->SendMsg(0, (int)_msgType, &_data, sizeof(float));
+	}
+
 	// ClientMessage::MSG_PICK_ITEM
 	void SendMessageTriggerItem(ClientMessage::Type _msgType, int _slotIndex, int _itemId)
 	{
@@ -61,4 +70,8 @@ public:
 			break;
 		}
 	}*/
+
+public:
+	void SetNetID(int _id) { mNetID = _id; }
+	int GetNetID() { return mNetID; }
 };

@@ -12,6 +12,7 @@ private:
 	virtual ~CSceneInGame();
 
 private:
+	class CPlayerInGameObject* mMyPlayerObject = nullptr;
 	std::vector<class IGamePlayStateController*> mArrGamePlayStateCtlr;
 	EGamePlayState::Type mGamePlayState = EGamePlayState::Ready;
 	int mCurReadyCount;
@@ -34,6 +35,7 @@ public:
 	// 플레이어/서버/씬도 사용할 수 있음.
 	void SetGamePlayState(EGamePlayState::Type type);
 	EGamePlayState::Type GetGamePlayState() { return mGamePlayState; }
+	class CPlayerInGameObject* GetMyPlayerObject() { return mMyPlayerObject; }
 
 	// ISceneNetworkController을(를) 통해 상속됨
 	void ProcessMessage() override;
