@@ -380,10 +380,8 @@ void CInput::UpdateInput(float DeltaTime)
                     mMouseDown[i] = true;
                     mMouseHold[i] = true;
 
-					CLog::PrintLog("x: " + std::to_string(mMousePos.x)
-						+ ", y: " + std::to_string(mMousePos.y));
-					CLog::PrintLog("world_x: " + std::to_string(mMouseWorldPos2D.x)
-						+ ", world_y: " + std::to_string(mMouseWorldPos2D.y));
+					/*CLog::PrintLog("x: " + std::to_string(mMousePos.x) + ", y: " + std::to_string(mMousePos.y));
+					CLog::PrintLog("world_x: " + std::to_string(mMouseWorldPos2D.x) + ", world_y: " + std::to_string(mMouseWorldPos2D.y));*/
                 }
 
                 // 이전 프레임에도 눌렀고 지금도 누르고 있다는 것이다.

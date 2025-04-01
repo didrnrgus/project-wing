@@ -2,8 +2,12 @@
 #include "Device.h"
 #include "Component/SpriteComponent.h"
 #include "Component/CameraComponent.h"
+#include "Component/WidgetComponent.h"
 #include "Etc/DataStorageManager.h"
 #include "Scene/SceneManager.h"
+#include "UI/UserWidget/DebugWidget.h"
+#include "Scene/SceneUIManager.h"
+#include "Scene/Scene.h"
 
 CPlayerGraphicObject::CPlayerGraphicObject()
 {
@@ -46,6 +50,20 @@ bool CPlayerGraphicObject::Init()
 	mRoot->SetWorldScale(tempRootSize);
 	mRoot->SetColor(FVector4D::GetColorFromString(defaultPlayerStat.ColorName));
 	SetRootComponent(mRoot);
+
+	mDebugTextComp = CreateComponent<CWidgetComponent>("mDebugTextComp");
+	mRoot->AddChild(mDebugTextComp);
+	mDebugTextComp->SetRelativePos(FVector2D(0.0f, 0.0f));
+	mDebugWidget = mScene->GetUIManager()->CreateWidget<CDebugWidget>("mDebugWidget");
+	mDebugWidget->SetEnableFPS(false);
+	mDebugTextComp->SetWidget(mDebugWidget);
+
+#ifdef _DEBUG
+	mDebugTextComp->SetEnable(true);
+#else
+	mDebugTextComp->SetEnable(false);
+#endif // _DEBUG
+
 
 	mDeadSign = CreateComponent<CSpriteComponent>(TEXTURE_NAME_DEAD_SIGN);
 	mRoot->AddChild(mDeadSign);

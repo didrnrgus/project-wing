@@ -17,6 +17,11 @@ CUserWidget::~CUserWidget()
 {
 }
 
+void CUserWidget::SetEnableFPS(bool _isEnable)
+{
+	mFpsText->SetEnable(_isEnable);
+}
+
 void CUserWidget::ShowLoading(bool isLoading)
 {
 	mIsLoading = isLoading;

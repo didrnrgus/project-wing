@@ -70,8 +70,21 @@ bool CPlayerInGameObject::Init()
 	mScene->GetInput()->AddBindFunction("DecreaseHP", EInputType::Down
 		, [this](float DeltaTime)
 		{
-			CLog::PrintLog("mScene->GetInput()->AddBindKey(\"DecreaseHP\", 'Z');");
-			Damaged(20.0f);
+			CLog::PrintLog("mScene->GetInput()->AddBindKey(\"DecreaseHP\", \'Z\');");
+			mCameraShake->SetShakeSceneObject(0.5f, 10.0f);
+
+			float _damage = CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage;
+
+			if (CNetworkManager::GetInst()->IsMultiplay())
+				SendMessageTriggerFloat(ClientMessage::MSG_TAKE_DAMAGE, _damage);
+
+			if (GetCurHP() <= 0.0f)
+				OnPlayerDead();
+			else
+			{
+				SetStun();
+				Damaged(_damage);
+			}
 		});
 #endif // _DEBUG
 

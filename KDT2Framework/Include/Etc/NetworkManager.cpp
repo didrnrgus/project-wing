@@ -108,7 +108,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		if (msg.body.size() >= sizeof(int))
 			memcpy(&id, msg.body.data(), sizeof(int));
 
-		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED MyID: " + std::to_string(id));
+		// CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED MyID: " + std::to_string(id));
 
 		//CMultiplayManager::GetInst()->AddPlayer(id);
 		CMultiplayManager::GetInst()->SetMyId(id);
@@ -124,9 +124,9 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 			memcpy(&ownerId, ptr, sizeof(int)); ptr += sizeof(int);
 			memcpy(&mapId, ptr, sizeof(int)); ptr += sizeof(int);
 			memcpy(&playerCount, ptr, sizeof(int)); ptr += sizeof(int);
-			CLog::PrintLog("[ROOM_INFO] Owner: " + std::to_string(ownerId) 
-									+ ", Map: " + std::to_string(mapId) 
-									+ ", Players: " + std::to_string(playerCount));
+			// CLog::PrintLog("[ROOM_INFO] Owner: " + std::to_string(ownerId) 
+									//+ ", Map: " + std::to_string(mapId) 
+									//+ ", Players: " + std::to_string(playerCount));
 
 			for (int i = 0; i < playerCount; ++i)
 			{
@@ -135,9 +135,9 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 				memcpy(&id, ptr, sizeof(int)); ptr += sizeof(int);
 				memcpy(&ready, ptr, sizeof(bool)); ptr += sizeof(bool);
 				memcpy(items, ptr, sizeof(int) * 3); ptr += sizeof(int) * 3;
-				CLog::PrintLog(+ "  Player " + std::to_string(id) + 
-					" - Ready: " + (ready ? "Yes" : "No") + 
-					", Items: [" + std::to_string(items[0]) + ", " + std::to_string(items[1]) + ", " + std::to_string(items[2]) + "]");
+				// CLog::PrintLog(+ "  Player " + std::to_string(id) + 
+					//" - Ready: " + (ready ? "Yes" : "No") + 
+					//", Items: [" + std::to_string(items[0]) + ", " + std::to_string(items[1]) + ", " + std::to_string(items[2]) + "]");
 
 				CMultiplayManager::GetInst()->AddPlayer(id);
 				CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(id, ready);
@@ -160,7 +160,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		if (msg.body.size() >= sizeof(int))
 			memcpy(&id, msg.body.data(), sizeof(int));
 
-		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_DISCONNECT ID: " + std::to_string(id));
+		// CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_DISCONNECT ID: " + std::to_string(id));
 
 		CMultiplayManager::GetInst()->RemovePlayer(id);
 		break;
@@ -169,7 +169,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 	case (int)ServerMessage::MSG_CONNECTED_REJECT:
 	{
 		std::string reason(msg.body.begin(), msg.body.end());
-		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED_REJECT Reason: " + reason);
+		// CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CONNECTED_REJECT Reason: " + reason);
 		break;
 	}
 
@@ -179,7 +179,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		if (msg.body.size() >= sizeof(int))
 			memcpy(&id, msg.body.data(), sizeof(int));
 
-		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_NEW_OWNER: " + std::to_string(id));
+		// CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_NEW_OWNER: " + std::to_string(id));
 
 		CMultiplayManager::GetInst()->SetHostFromId(id);
 		break;
@@ -192,7 +192,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		if (msg.body.size() >= sizeof(int))
 			memcpy(&newId, msg.body.data(), sizeof(int));
 
-		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New client MSG_JOIN: " + std::to_string(newId));
+		// CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New client MSG_JOIN: " + std::to_string(newId));
 
 		CMultiplayManager::GetInst()->AddPlayer(newId);
 		break;
@@ -205,7 +205,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		if (msg.body.size() >= sizeof(int))
 			memcpy(&mapId, msg.body.data(), sizeof(int));
 
-		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PICK_MAP " + std::to_string(mapId));
+		// CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PICK_MAP " + std::to_string(mapId));
 
 		CMultiplayManager::GetInst()->SetCurMapIndex(mapId);
 		break;
@@ -220,7 +220,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 			memcpy(&slot, msg.body.data(), sizeof(int));
 			memcpy(&itemId, msg.body.data() + sizeof(int), sizeof(int));
 		}
-		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " MSG_PICK_ITEM " + std::to_string(itemId) + " in slot " + std::to_string(slot));
+		// CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " MSG_PICK_ITEM " + std::to_string(itemId) + " in slot " + std::to_string(slot));
 
 		CMultiplayManager::GetInst()->SetPlayerItemFromId(msg.senderId, slot, itemId);
 		break;
@@ -232,7 +232,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		if (msg.body.size() >= sizeof(int))
 			memcpy(&characterId, msg.body.data(), sizeof(int));
 
-		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " MSG_PICK_CHARACTER " + std::to_string(characterId));
+		// CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] Player " + std::to_string(msg.senderId) + " MSG_PICK_CHARACTER " + std::to_string(characterId));
 
 		CMultiplayManager::GetInst()->SetPlayerCharacterFromId(msg.senderId, characterId);
 		break;
@@ -240,19 +240,19 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 
 	//////////////////////로비 게임 시작관련///////////////////////////////////
 	case (int)ServerMessage::MSG_READY:
-		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_READY " + std::to_string(msg.senderId));
+		// CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_READY " + std::to_string(msg.senderId));
 
 		CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(msg.senderId, true);
 		break;
 
 	case (int)ServerMessage::MSG_UNREADY:
-		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_UNREADY " + std::to_string(msg.senderId));
+		// CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_UNREADY " + std::to_string(msg.senderId));
 
 		CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(msg.senderId, false);
 		break;
 
 	case (int)ServerMessage::MSG_START_ACK:
-		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_START_ACK");
+		// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_START_ACK");
 		
 		int allReady;
 		memcpy(&allReady, msg.body.data(), sizeof(int));
@@ -262,69 +262,69 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 
 		//////////////////////인게임 게임로직///////////////////////////////////
 	case (int)ServerMessage::MSG_COUNTDOWN_FINISHED:
-		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_COUNTDOWN_FINISHED " + std::to_string(msg.senderId));
+		// CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_COUNTDOWN_FINISHED " + std::to_string(msg.senderId));
 		break;
 
 	case (int)ServerMessage::MSG_PLAYER_DEAD:
-		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PLAYER_DEAD " + std::to_string(msg.senderId));
+		// CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_PLAYER_DEAD " + std::to_string(msg.senderId));
 
 		CMultiplayManager::GetInst()->SetPlayerIsDeadInGameFromId(msg.senderId, true);
 		break;
 
 	case (int)ServerMessage::MSG_GAME_OVER:
-		CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_GAME_OVER " + msg.body.data());
+		// CLog::PrintLog("[Game " + std::to_string(msg.msgType) + "] MSG_GAME_OVER " + msg.body.data());
 
 		CMultiplayManager::GetInst()->SetIsGameStart(false);
 		break;
 
 	case (int)ServerMessage::MSG_MOVE_UP:
-		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_MOVE_UP");
+		// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_MOVE_UP");
 		break;
 
 	case (int)ServerMessage::MSG_MOVE_DOWN:
-		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_MOVE_DOWN");
+		// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_MOVE_DOWN");
 		break;
 
 	case (int)ServerMessage::MSG_PLAYER_DISTANCE:
 	{
-		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_PLAYER_DISTANCE");
+		//// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_PLAYER_DISTANCE");
 
 		float distance;
 		if (msg.body.size() >= sizeof(float))
 			memcpy(&distance, msg.body.data(), sizeof(float));
 
-		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_PLAYER_DISTANCE: " + std::to_string(distance));
+		//// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_PLAYER_DISTANCE: " + std::to_string(distance));
 		CMultiplayManager::GetInst()->SetPlayerDistanceInGameFromId(msg.senderId, distance);
 		break;
 	}
 	case (int)ServerMessage::MSG_PLAYER_HEIGHT:
 	{
-		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_PLAYER_HEIGHT");
+		//// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_PLAYER_HEIGHT");
 
 		float height;
 		if (msg.body.size() >= sizeof(float))
 			memcpy(&height, msg.body.data(), sizeof(float));
 
-		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_PLAYER_HEIGHT: " + std::to_string(height));
+		//// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_PLAYER_HEIGHT: " + std::to_string(height));
 		CMultiplayManager::GetInst()->SetPlayerHeightInGameFromId(msg.senderId, height);
 		break;
 	}
 	case (int)ServerMessage::MSG_TAKEN_DAMAGE:
 	{
-		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_TAKEN_DAMAGE");
+		//// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_TAKEN_DAMAGE");
 
 		float curHp;
 		if (msg.body.size() >= sizeof(float))
 			memcpy(&curHp, msg.body.data(), sizeof(float));
 
-		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_TAKEN_DAMAGE: " + std::to_string(curHp));
+		//// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_TAKEN_DAMAGE: " + std::to_string(curHp));
 		CMultiplayManager::GetInst()->SetPlayerCurHpInGameFromId(msg.senderId, curHp);
 		break;
 	}
 		//////////////////////기타 상시///////////////////////////////////
 	default:
 		if (msg.msgType != (int)ServerMessage::MSG_HEARTBEAT_ACK)
-			CLog::PrintLog("[MSG " + std::to_string(msg.msgType) + "] From " + std::to_string(msg.senderId));
+			// CLog::PrintLog("[MSG " + std::to_string(msg.msgType) + "] From " + std::to_string(msg.senderId));
 		break;
 	}
 }

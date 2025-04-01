@@ -182,6 +182,7 @@
     <ClCompile Include="Scene\SceneInGame.cpp" />
     <ClCompile Include="Scene\SceneLobby.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
+    <ClCompile Include="UI\UserWidget\DebugWidget.cpp" />
     <ClCompile Include="UI\UserWidget\InGameWidget.cpp" />
     <ClCompile Include="UI\UserWidget\LobbyWidget.cpp" />
     <ClCompile Include="UI\UserWidget\TitleWidget.cpp" />
@@ -222,6 +223,7 @@
     <ClInclude Include="Scene\SceneInGame.h" />
     <ClInclude Include="Scene\SceneLobby.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
+    <ClInclude Include="UI\UserWidget\DebugWidget.h" />
     <ClInclude Include="UI\UserWidget\InGameWidget.h" />
     <ClInclude Include="UI\UserWidget\LobbyWidget.h" />
     <ClInclude Include="UI\UserWidget\TitleWidget.h" />

@@ -31,8 +31,8 @@ protected:
 	
 protected:
 	void SetIsSkipLoadingTextUpdate(bool _isSkip) { mIsSkipLoadingTextUpdate = _isSkip; }
-
 public:
+	void SetEnableFPS(bool _isEnable);
 	void AddWidget(CWidget* Widget)
 	{
 		Widget->SetParent(this);

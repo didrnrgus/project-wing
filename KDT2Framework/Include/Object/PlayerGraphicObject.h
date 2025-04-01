@@ -26,6 +26,10 @@ protected:
 	int mIndexInScene = -1;
 	class IGamePlayShakeController* mCameraShake;
 	
+	// Debug TextBlock
+	CSharedPtr<class CWidgetComponent> mDebugTextComp;
+	class CDebugWidget* mDebugWidget;
+
 public:
 	virtual bool Init() override;
 	virtual void Update(float DeltaTime) override;

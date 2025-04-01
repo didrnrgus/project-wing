@@ -27,20 +27,20 @@ bool CSceneInGame::Init()
 {
 	CScene::Init();
 
-	GetInput()->AddBindKey("StartAndStop", 'Z');
-	GetInput()->AddBindFunction("StartAndStop", EInputType::Down
-		, [this](float DeltaTime)
-		{
-			CLog::PrintLog("StartAndStop Trigger Lambda");
+	//GetInput()->AddBindKey("StartAndStop", 'Z');
+	//GetInput()->AddBindFunction("StartAndStop", EInputType::Down
+	//	, [this](float DeltaTime)
+	//	{
+	//		CLog::PrintLog("StartAndStop Trigger Lambda");
 
-			if (GetGamePlayState() != EGamePlayState::Freze)
-				return;
+	//		if (GetGamePlayState() != EGamePlayState::Freze)
+	//			return;
 
-			if (GetGamePlayState() != EGamePlayState::Start)
-				SetGamePlayState(EGamePlayState::Start);
-			else
-				SetGamePlayState(EGamePlayState::Pause);
-		});
+	//		if (GetGamePlayState() != EGamePlayState::Start)
+	//			SetGamePlayState(EGamePlayState::Start);
+	//		else
+	//			SetGamePlayState(EGamePlayState::Pause);
+	//	});
 
 	SetGamePlayState(EGamePlayState::ReadyCount);
 	mCurReadyCount = mInGameWidget->GetStartCountArrCount();
@@ -227,7 +227,16 @@ void CSceneInGame::ProcessMessage()
 		{
 		case (int)ServerMessage::MSG_COUNTDOWN_FINISHED:
 		{
+			mInGameWidget->SetStartCount(-1);
 			SetGamePlayState(EGamePlayState::Start);
+			break;
+		}
+		case (int)ServerMessage::MSG_PLAYER_DEAD:
+		{
+			// 내꺼 가져옴. -> 조종하고 있는 플레이어.
+			auto myPlayerNetInfo = CMultiplayManager::GetInst()->GetPlayerInfoFromMyId();
+			if(myPlayerNetInfo.isDeadInGame)
+				SetGamePlayState(EGamePlayState::Dead);
 			break;
 		}
 		default:
