@@ -69,7 +69,7 @@ void CSceneLobby::ProcessMessage()
 {
 	// 메시지 큐에서 메시지 뽑는 역할.
 	RecvMessage msg;
-	if (CNetworkManager::GetInst()->PollMessage(msg))
+	while (CNetworkManager::GetInst()->PollMessage(msg))
 	{
 		DistributeMessage(msg);
 	}

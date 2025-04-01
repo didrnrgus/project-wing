@@ -10,9 +10,6 @@ protected:
 	CLobbyWidget();
 	virtual ~CLobbyWidget();
 
-private:
-	bool mIsStartTrigger = false;
-
 protected:
 	// character select
 	CSharedPtr<class CButton> mCharacterLeftButton;

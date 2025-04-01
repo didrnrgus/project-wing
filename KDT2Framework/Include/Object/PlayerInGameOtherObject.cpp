@@ -56,14 +56,17 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 	{
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
 		// mini HP ¿¬°á?
+
 		break;
 	}
 	case (int)ServerMessage::MSG_PLAYER_DEAD:
 	{
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
+
 		// dead sign
 		mDeadSign->SetRelativePos(FVector3D(0.0f, 0.0f, -0.1f));
-		mDeadSign->SetEnable(true);
+		mDeadSign->SetEnable(info.isDeadInGame);
+
 		break;
 	}
 	case (int)ServerMessage::MSG_PLAYER_DISTANCE:

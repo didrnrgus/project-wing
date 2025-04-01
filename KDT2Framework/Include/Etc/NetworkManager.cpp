@@ -47,10 +47,14 @@ void CNetworkManager::SendMsg(int senderId, int msgType, const void* body, int b
 	if (body && bodyLen > 0) SendAll(mSock, (char*)body, bodyLen);
 }
 
+// false 를 리턴할때까지 반복해서 돌려라.
 bool CNetworkManager::PollMessage(RecvMessage& out)
 {
 	std::lock_guard<std::mutex> lock(mQueueMutex);
-	if (mMessageQueue.empty()) return false;
+	
+	if (mMessageQueue.empty()) 
+		return false;
+	
 	out = std::move(mMessageQueue.front());
 	ProcessMessage(out);
 	mMessageQueue.pop();
@@ -249,8 +253,11 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 
 	case (int)ServerMessage::MSG_START_ACK:
 		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_START_ACK");
+		
+		int allReady;
+		memcpy(&allReady, msg.body.data(), sizeof(int));
 
-		CMultiplayManager::GetInst()->SetIsGameStart(true);
+		CMultiplayManager::GetInst()->SetIsGameStart(allReady == 1 ? true : false);
 		break;
 
 		//////////////////////인게임 게임로직///////////////////////////////////

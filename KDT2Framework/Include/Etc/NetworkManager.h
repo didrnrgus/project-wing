@@ -93,7 +93,9 @@ private:
 public:
 	bool ConnetServer();
 	void SendMsg(int senderId, int msgType, const void* body, int bodyLen);
-	bool PollMessage(RecvMessage& out);
+	
+	// false 를 리턴할때까지 반복해서 돌려라.
+	bool PollMessage(RecvMessage& out);	
 	void Clear(std::function<void()>&& Func);
 	bool IsConnection() { return mIsConnection; }
 	bool IsConnectCompleted() { return mIsConnectCompleted; }

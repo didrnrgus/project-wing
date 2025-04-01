@@ -42,7 +42,7 @@ void CSceneTitle::Update(float DeltaTime)
 void CSceneTitle::ProcessMessage()
 {
 	RecvMessage msg;
-	if (CNetworkManager::GetInst()->PollMessage(msg))
+	while (CNetworkManager::GetInst()->PollMessage(msg))
 	{
 		DistributeMessage(msg);
 
