@@ -53,8 +53,8 @@ public:
 	}
 
 	const Multiplay::FPlayerInfo GetPlayerInfoByIndex(const int _index);
-	const Multiplay::FPlayerInfo GetPlayerInfoValueById(const int _id) { return GetPlayerInfoByID(_id); }
-	const Multiplay::FPlayerInfo GetPlayerInfoFromMyId() { return GetPlayerInfoByID(mMyId); }
+	const Multiplay::FPlayerInfo GetPlayerInfoValueById(const int _id);
+	const Multiplay::FPlayerInfo GetPlayerInfoFromMyId();
 	int GetPlayerCount() { return mPlayerInfoList.size(); }
 	int GetMyId() { return mMyId; }
 	int GetIsHost() { return mIsHost; }
@@ -62,6 +62,7 @@ public:
 	int GetIsGameStart() { return mIsStart; }
 
 private:
+	bool IsContainID(int _id);
 	void AddPlayer(int _id);
 	Multiplay::FPlayerInfo& GetPlayerInfoByID(const int _id);
 	bool RemovePlayer(const int _id);

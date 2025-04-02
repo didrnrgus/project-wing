@@ -154,8 +154,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 
 	case (int)ServerMessage::MSG_DISCONNECT:
 	{
-		mIsConnection = false;
-		mIsConnectCompleted = false;
+		// 이건 다른놈이 나간거야.
 		int id;
 		if (msg.body.size() >= sizeof(int))
 			memcpy(&id, msg.body.data(), sizeof(int));
@@ -350,7 +349,8 @@ void CNetworkManager::ReceiveThread(SOCKET sock)
 			// 나에게 보내는 라스트 메시지..
 			std::lock_guard<std::mutex> lock(mQueueMutex);
 			mMessageQueue.push({ 0, (int)ServerMessage::MSG_END, std::move(bodyBuffer) });
-
+			mIsConnection = false;
+			mIsConnectCompleted = false;
 			break;
 		}
 		std::lock_guard<std::mutex> lock(mQueueMutex);

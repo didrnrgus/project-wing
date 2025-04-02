@@ -63,7 +63,8 @@ bool CPlayerInGameObject::Init()
 	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("BoostMode",
 		EInputType::Up, this, &CPlayerInGameObject::BoostModeRelease);
 
-	SetPlayerFrezeCallback(this, &CPlayerInGameObject::OnFrezeCallback);
+	if (CNetworkManager::GetInst()->IsMultiplay())
+		SetPlayerFrezeCallback(this, &CPlayerInGameObject::OnFrezeCallback);
 
 #ifdef _DEBUG
 	mScene->GetInput()->AddBindKey("DecreaseHP", 'Z');
