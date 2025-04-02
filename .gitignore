@@ -8,7 +8,7 @@
 
 KDT2Framework/Bin/Log/
 KDT2Framework/BinObj/
-!KDT2Framework/Bin/Server/server.exe
+!KDT2Framework/Bin/Server/**/*.exe
 
 Common/Bin/Log/
 Common/BinObj/

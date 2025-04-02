@@ -21,16 +21,28 @@ CTitleWidget::CTitleWidget()
 {
 	mMaxReConnectionTime = 10.0f;
 	mCurReConnectionTime = 0.0f;
+
+#ifdef _DEBUG
+	mWaitTime = 500;
+	mIsSkip = true;
+#else
+	mWaitTime = 500;
+	mIsSkip = true;
+#endif // _DEBUG
+
 }
 
 CTitleWidget::~CTitleWidget()
 {
+	RemoveListener();
 }
 
 bool CTitleWidget::Init()
 {
 	CUserWidget::Init();
 	CLog::PrintLog("CTitleWidget::Init()");
+	AddListener();
+
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	FVector2D size = FVector2D(200.0f, 100.0f);
 	FVector2D singlePos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 4) - size * 0.5f;
@@ -46,6 +58,9 @@ bool CTitleWidget::Init()
 		, &CTitleWidget::RankButtonClick, mRankTextBlock, TEXT("Rank"));
 	SetButtonWithTextBlock(mExitButton, "Exit", exitPos
 		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
+
+	if (CDataStorageManager::GetInst()->GetIsLoadedData() == false)
+		LoadGameData();
 
 	return true;
 }
@@ -88,93 +103,105 @@ void CTitleWidget::SetButtonWithTextBlock(CSharedPtr<CButton>& button, std::stri
 	textBlock->SetTextShadowColor(FVector4D::Gray30);
 }
 
-void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
+void CTitleWidget::LoadGameData()
 {
-	ShowLoading(true);
+	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[this]()
+		{
+			ShowLoading(true);
 
+			// config load
+			AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+			std::string webserverPath = WEBSERVER_PATH;
+			std::string path = webserverPath + CONFIG_PATH;
+			std::string configResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("configResult: " + configResult);
+			CDataStorageManager::GetInst()->SetConfigData(configResult);
+
+			// characters load
+			AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
+			std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("charactersResult: " + charactersResult);
+			CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
+
+			// maps load
+			AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+			for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
+			{
+				path = webserverPath + mapFileName;
+				std::string mapResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+				CLog::PrintLog("mapResult: " + mapResult);
+				CDataStorageManager::GetInst()->SetMapData(mapResult);
+			}
+
+			// stat load
+			AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력.스피드.민첩.디펜스 4가지가 있어요.", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
+			std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("statsResult: " + statsResult);
+			CDataStorageManager::GetInst()->SetStatInfoData(statsResult);
+
+			// item load
+			AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 소유한 아이템의 스텟 패시브 효과만 있어요.", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
+			std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("itemResult: " + itemResult);
+			CDataStorageManager::GetInst()->SetItemInfoData(itemResult);
+
+			CDataStorageManager::GetInst()->SetIsLoadedData(true);
+
+			CTaskManager::GetInst()->RemoveTask(mTaskID);
+			ShowLoading(false);
+		})));
+}
+
+void CTitleWidget::LoadProcess()
+{
+	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[this]()
+		{
+			ShowLoading(true);
+
+			if (!option2Visible)
+			{
+				AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~💻💻💻💻💻", mIsSkip);
+				std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 #ifdef _DEBUG
-	int waitTime = 500;
-	int isSkip = true;
+				CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/Debug/project-wing-socket-server.exe");
 #else
-	int waitTime = 500;
-	int isSkip = true;
-#endif // _DEBUG
-
-	// config load
-	AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻", isSkip);
-	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-	std::string webserverPath = WEBSERVER_PATH;
-	std::string path = webserverPath + CONFIG_PATH;
-	std::string configResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-	CLog::PrintLog("configResult: " + configResult);
-	CDataStorageManager::GetInst()->SetConfigData(configResult);
-
-	// characters load
-	AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽", isSkip);
-	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
-	std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-	CLog::PrintLog("charactersResult: " + charactersResult);
-	CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
-
-	// maps load
-	AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️", isSkip);
-	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-	for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
-	{
-		path = webserverPath + mapFileName;
-		std::string mapResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-		CLog::PrintLog("mapResult: " + mapResult);
-		CDataStorageManager::GetInst()->SetMapData(mapResult);
-	}
-
-	// stat load
-	AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력.스피드.민첩.디펜스 4가지가 있어요.", isSkip);
-	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
-	std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-	CLog::PrintLog("statsResult: " + statsResult);
-	CDataStorageManager::GetInst()->SetStatInfoData(statsResult);
-
-	// item load
-	AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 소유한 아이템의 스텟 패시브 효과만 있어요.", isSkip);
-	std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-	path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
-	std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-	CLog::PrintLog("itemResult: " + itemResult);
-	CDataStorageManager::GetInst()->SetItemInfoData(itemResult);
-
-	CTaskManager::GetInst()->RemoveTask(mTaskID);
-
-	if (_isActiveServerProcess)
-	{
-		AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~💻💻💻💻💻", isSkip);
-		std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
-#ifdef _DEBUG
-		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/Debug/project-wing-socket-server.exe");
-#else
-		CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/Release/project-wing-socket-server.exe");
+				CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/Release/project-wing-socket-server.exe");
 #endif
-	}
+			}
 
-	CNetworkManager::GetInst()->SetIsMultiplay(_isMultiPlay);
-	
-	if (_isMultiPlay)
-	{
-		AddQueueLoadingDescText(L"호스트 서버에 접속 중 입니다.\n메뉴 바 에서 호스트 정보 확인하셨죠??", isSkip);
-		std::this_thread::sleep_for(std::chrono::milliseconds(waitTime));
+			CNetworkManager::GetInst()->SetIsMultiplay(true);
+			AddQueueLoadingDescText(L"호스트 서버에 접속 중 입니다.\n메뉴 바 에서 호스트 정보 확인하셨죠??", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 
-		// 첫번쨰 시도 -> 실패해도 Update() 에서 될때까지 커넥션 한다.
-		CNetworkManager::GetInst()->ConnetServer();
-	}
-	else
-	{
-		// Single mode.
-		// 멀티플레이에서는 연결 성공했을때 하자.
-		CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
-	}
+			// 첫번쨰 시도 -> 실패해도 Update() 에서 될때까지 커넥션 한다.
+			CNetworkManager::GetInst()->ConnetServer();
 
-	SetIsSkipLoadingTextUpdate(true);
+		})));
+}
+
+void CTitleWidget::LoadScene()
+{
+	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[this]()
+		{
+			ShowLoading(true);
+			AddQueueLoadingDescText(L"로비로 이동중입니다!!!", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+
+			ShowLoading(false);
+			CTaskManager::GetInst()->RemoveTask(mTaskID);
+			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+		})));
 }
 
 void CTitleWidget::SinglePlayButtonClick()
@@ -185,12 +212,7 @@ void CTitleWidget::SinglePlayButtonClick()
 	if (IsLoading())
 		return;
 
-	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
-		[this]()
-		{
-			LoadGameData(false);
-		})));
-
+	LoadScene();
 }
 
 void CTitleWidget::MultiPlayButtonClick()
@@ -201,12 +223,7 @@ void CTitleWidget::MultiPlayButtonClick()
 	if (IsLoading())
 		return;
 
-	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
-		[this]()
-		{
-			LoadGameData(!option2Visible, true);
-		})));
-
+	LoadProcess();
 }
 
 void CTitleWidget::RankButtonClick()
@@ -228,3 +245,39 @@ void CTitleWidget::ExitButtonClick()
 	CGameManager::GetInst()->ExitGame();
 }
 
+void CTitleWidget::AddListener()
+{
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
+	if (sceneNetController == nullptr)
+		return;
+	sceneNetController->AddListener(this);
+}
+
+void CTitleWidget::RemoveListener()
+{
+	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
+	if (sceneNetController == nullptr)
+		return;
+	sceneNetController->RemoveListener(this);
+}
+
+void CTitleWidget::ProcessMessage(const RecvMessage& msg)
+{
+	switch (msg.msgType)
+	{
+	case (int)ServerMessage::MSG_ROOM_FULL_INFO:
+	{
+		LoadScene();
+		break;
+	}
+	case (int)ServerMessage::MSG_CONNECTED_REJECT:
+	{
+		// 이유 알려주는 UI 필요.
+		CNetworkManager::GetInst()->SetIsMultiplay(false);
+		ShowLoading(false);
+		break;
+	}
+	default:
+		break;
+	}
+}

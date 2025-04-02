@@ -28,9 +28,6 @@ private:
 
 protected:
 	std::vector<CSharedPtr<CWidget>>	mWidgetList;
-	
-protected:
-	void SetIsSkipLoadingTextUpdate(bool _isSkip) { mIsSkipLoadingTextUpdate = _isSkip; }
 public:
 	void SetEnableFPS(bool _isEnable);
 	void AddWidget(CWidget* Widget)
@@ -39,7 +36,7 @@ public:
 		mWidgetList.emplace_back(Widget);
 	}
 
-	void ShowLoading(bool isLoading);
+	void ShowLoading(bool _isLoading);
 	void AddQueueLoadingDescText(const std::wstring _wstrDesc, bool _isSkip);
 	void UpdateLoading(float DeltaTime);
 	bool IsLoading() { return mIsLoading; }

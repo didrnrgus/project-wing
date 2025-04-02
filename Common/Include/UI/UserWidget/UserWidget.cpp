@@ -22,13 +22,14 @@ void CUserWidget::SetEnableFPS(bool _isEnable)
 	mFpsText->SetEnable(_isEnable);
 }
 
-void CUserWidget::ShowLoading(bool isLoading)
+void CUserWidget::ShowLoading(bool _isLoading)
 {
-	mIsLoading = isLoading;
+	mIsLoading = _isLoading;
 
-	mLoadingBackImage->SetEnable(isLoading);
-	mLoadingText->SetEnable(isLoading);
-	mLoadingDescText->SetEnable(isLoading);
+	mLoadingBackImage->SetEnable(_isLoading);
+	mLoadingText->SetEnable(_isLoading);
+	mLoadingDescText->SetEnable(_isLoading);
+	mIsSkipLoadingTextUpdate = !_isLoading;
 }
 
 void CUserWidget::AddQueueLoadingDescText(const std::wstring _wstrDesc, bool _isSkip)

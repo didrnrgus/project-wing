@@ -19,6 +19,8 @@ private:
 	int curSelectedMapIndex;
 	int curSelectedCharacterIndex;
 	std::map<int, int> curSelectedItemIndex;
+	bool isLoadedData = false;
+
 public:
 	void InitCurSelectedData();
 	void SetConfigData(std::string strJson);
@@ -28,10 +30,12 @@ public:
 	void SetMapData(std::string strJson);
 	void SetSpriteAtlasInfo(std::string strJson);
 
+	inline void SetIsLoadedData(bool _isLoaded) { isLoadedData = _isLoaded; }
 	inline void SetSelectedMapIndex(int mapIndex) { curSelectedMapIndex = mapIndex; }
 	inline void SetSelectedCharacterIndex(int characterIndex) { curSelectedCharacterIndex = characterIndex; }
 	inline void SetSelectedItemTypeInSlotIndex(int slotIndex, int itemTypeIndex) { curSelectedItemIndex[slotIndex] = itemTypeIndex; }
 
+	inline bool GetIsLoadedData() { return isLoadedData; }
 	inline const FConfig GetConfig() { return mConfigData; }
 	inline const int GetCharacterCount() { return mCharacterInfoDatas.size(); }
 	inline const int GetSelectableItemCount() { return mConfigData.SelectableItemCount; }
