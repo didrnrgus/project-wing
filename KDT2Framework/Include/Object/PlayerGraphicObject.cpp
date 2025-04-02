@@ -55,7 +55,6 @@ bool CPlayerGraphicObject::Init()
 	mRoot->AddChild(mDebugTextComp);
 	mDebugTextComp->SetRelativePos(FVector2D(-150.0f, 0.0f));
 	mDebugWidget = mScene->GetUIManager()->CreateWidget<CDebugWidget>("mDebugWidget");
-	mDebugWidget->SetEnableFPS(false);
 	mDebugTextComp->SetWidget(mDebugWidget);
 #ifdef _DEBUG
 	mDebugTextComp->SetEnable(true);

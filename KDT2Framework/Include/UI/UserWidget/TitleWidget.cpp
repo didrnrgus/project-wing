@@ -39,7 +39,7 @@ CTitleWidget::~CTitleWidget()
 
 bool CTitleWidget::Init()
 {
-	CUserWidget::Init();
+	CSceneWidget::Init();
 	CLog::PrintLog("CTitleWidget::Init()");
 	AddListener();
 
@@ -67,7 +67,7 @@ bool CTitleWidget::Init()
 
 void CTitleWidget::Update(float DeltaTime)
 {
-	CUserWidget::Update(DeltaTime);
+	CSceneWidget::Update(DeltaTime);
 
 	if (CNetworkManager::GetInst()->IsConnection()
 		&& !CNetworkManager::GetInst()->IsConnectCompleted())

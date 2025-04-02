@@ -1,7 +1,7 @@
 ﻿#pragma once
-#include "UI\UserWidget\UserWidget.h"
+#include "UI/UserWidget/SceneWidget.h"
 
-class CInGameWidget : public CUserWidget
+class CInGameWidget : public CSceneWidget
 {
 	friend class CSceneUIManager;
 

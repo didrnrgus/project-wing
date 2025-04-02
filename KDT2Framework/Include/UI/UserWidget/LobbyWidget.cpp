@@ -82,7 +82,7 @@ CLobbyWidget::~CLobbyWidget()
 
 bool CLobbyWidget::Init()
 {
-	CUserWidget::Init();
+	CSceneWidget::Init();
 	AddListener();
 
 	CDataStorageManager::GetInst()->InitCurSelectedData();
@@ -115,7 +115,7 @@ bool CLobbyWidget::Init()
 
 void CLobbyWidget::Update(float DeltaTime)
 {
-	CUserWidget::Update(DeltaTime);
+	CSceneWidget::Update(DeltaTime);
 
 	// 맵 선택 이미지 웨이브.
 	{

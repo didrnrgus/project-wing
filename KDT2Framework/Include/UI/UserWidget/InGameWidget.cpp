@@ -23,7 +23,7 @@ CInGameWidget::~CInGameWidget()
 
 bool CInGameWidget::Init()
 {
-	CUserWidget::Init();
+	CSceneWidget::Init();
 
 	FResolution RS = CDevice::GetInst()->GetResolution();
 
@@ -143,7 +143,7 @@ bool CInGameWidget::Init()
 
 void CInGameWidget::Update(float DeltaTime)
 {
-	CUserWidget::Update(DeltaTime);
+	CSceneWidget::Update(DeltaTime);
 
 	if (mPlayerStat)
 		UpdateTargetPlayerStat(DeltaTime);

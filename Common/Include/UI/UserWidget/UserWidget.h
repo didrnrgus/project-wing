@@ -2,8 +2,7 @@
 
 #include "../Widget.h"
 
-class CUserWidget :
-    public CWidget
+class CUserWidget : public CWidget
 {
 	friend class CSceneUIManager;
 
@@ -11,35 +10,15 @@ protected:
 	CUserWidget();
 	virtual ~CUserWidget();
 
-private:
-	CSharedPtr<class CImage> mLoadingBackImage;
-	CSharedPtr<class CTextBlock> mLoadingText;
-	CSharedPtr<class CTextBlock> mLoadingDescText;
-	std::vector<const wchar_t*> mLoadingTextStrings;
-	bool mIsLoading = false;
-	float loadingUpdateTime = 0.0f;
-	float loadingTextUpdateTime = 0.0f;
-	bool mIsSkipLoadingTextUpdate = false;
-	int curLoadingTextIndex = 0;
-	std::list<std::wstring> mLoadingTextQueue;
-	std::mutex mQueueMutex;
-
-	CSharedPtr<class CTextBlock> mFpsText;
-
 protected:
 	std::vector<CSharedPtr<CWidget>>	mWidgetList;
+
 public:
-	void SetEnableFPS(bool _isEnable);
 	void AddWidget(CWidget* Widget)
 	{
 		Widget->SetParent(this);
 		mWidgetList.emplace_back(Widget);
 	}
-
-	void ShowLoading(bool _isLoading);
-	void AddQueueLoadingDescText(const std::wstring _wstrDesc, bool _isSkip);
-	void UpdateLoading(float DeltaTime);
-	bool IsLoading() { return mIsLoading; }
 
 public:
 	virtual bool Init();

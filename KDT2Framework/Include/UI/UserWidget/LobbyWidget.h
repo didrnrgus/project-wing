@@ -1,8 +1,8 @@
 ﻿#pragma once
-#include "UI\UserWidget\UserWidget.h"
+#include "UI/UserWidget/SceneWidget.h"
 #include "Interface/IObjectNetworkController.h"
 
-class CLobbyWidget : public CUserWidget, public IObjectNetworkController
+class CLobbyWidget : public CSceneWidget, public IObjectNetworkController
 {
 	friend class CSceneUIManager;
 

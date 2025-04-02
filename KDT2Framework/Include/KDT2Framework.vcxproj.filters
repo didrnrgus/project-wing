@@ -141,6 +141,9 @@
     <ClCompile Include="UI\UserWidget\DebugWidget.cpp">
       <Filter>UI\UserWidget</Filter>
     </ClCompile>
+    <ClCompile Include="UI\UserWidget\SceneWidget.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -259,6 +262,9 @@
     </ClInclude>
     <ClInclude Include="UI\UserWidget\DebugWidget.h">
       <Filter>UI\UserWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserWidget\SceneWidget.h">
+      <Filter>헤더 파일</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

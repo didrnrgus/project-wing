@@ -185,6 +185,7 @@
     <ClCompile Include="UI\UserWidget\DebugWidget.cpp" />
     <ClCompile Include="UI\UserWidget\InGameWidget.cpp" />
     <ClCompile Include="UI\UserWidget\LobbyWidget.cpp" />
+    <ClCompile Include="UI\UserWidget\SceneWidget.cpp" />
     <ClCompile Include="UI\UserWidget\TitleWidget.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -226,6 +227,7 @@
     <ClInclude Include="UI\UserWidget\DebugWidget.h" />
     <ClInclude Include="UI\UserWidget\InGameWidget.h" />
     <ClInclude Include="UI\UserWidget\LobbyWidget.h" />
+    <ClInclude Include="UI\UserWidget\SceneWidget.h" />
     <ClInclude Include="UI\UserWidget\TitleWidget.h" />
   </ItemGroup>
   <ItemGroup>
