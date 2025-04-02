@@ -63,7 +63,7 @@ bool CPlayerInGameObject::Init()
 	mScene->GetInput()->AddBindFunction<CPlayerInGameObject>("BoostMode",
 		EInputType::Up, this, &CPlayerInGameObject::BoostModeRelease);
 
-	if (CNetworkManager::GetInst()->IsMultiplay())
+	if (!CNetworkManager::GetInst()->IsMultiplay())
 		SetPlayerFrezeCallback(this, &CPlayerInGameObject::OnFrezeCallback);
 
 #ifdef _DEBUG
