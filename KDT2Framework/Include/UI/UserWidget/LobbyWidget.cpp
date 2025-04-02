@@ -98,6 +98,7 @@ bool CLobbyWidget::Init()
 	{
 		InitOtherPlayersInfo();
 		UpdateOtherPlayerInfo();
+		UpdateMapInfo();
 	}
 
 	auto pathLeft = DIRECT_LEFT_PATH;
@@ -162,9 +163,16 @@ void CLobbyWidget::InitScrollSelectButtons()
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
-		mMapLeftButton->SetEnable(false);
-		mMapRightButton->SetEnable(false);
+		bool _isHost = CMultiplayManager::GetInst()->GetIsHost();
+		mMapLeftButton->SetEnable(_isHost);
+		mMapRightButton->SetEnable(_isHost);
 	}
+	else 
+	{
+		mMapLeftButton->SetEnable(true);
+		mMapRightButton->SetEnable(true);
+	}
+
 }
 
 void CLobbyWidget::InitPlayerStatText()
@@ -364,6 +372,9 @@ void CLobbyWidget::InitItemInfoTooltip()
 
 void CLobbyWidget::InitDifficultiImage()
 {
+	if(CNetworkManager::GetInst()->IsMultiplay())
+		curDifficultyIndex = CMultiplayManager::GetInst()->GetCurMapIndex();
+
 	// difficulty Image
 	mMapDifficultyImage = mScene->GetUIManager()->CreateWidget<CImage>(mArrMapDifficultyImageName[0]);
 	AddWidget(mMapDifficultyImage);
@@ -478,7 +489,7 @@ void CLobbyWidget::InitItemButtons()
 			, mArrSlotImagePath[(int)SlotType::Fully]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 1));
-		buttonBackImage->SetColor(FVector4D::Red);
+		buttonBackImage->SetColor(FVector4D::Black);
 		buttonBackImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_SLOT);
 		buttonBackImage->SetEnable(false);
 		mArrSlotImageInList.push_back(buttonBackImage);

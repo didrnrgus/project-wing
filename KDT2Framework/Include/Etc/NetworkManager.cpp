@@ -130,16 +130,18 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 
 			for (int i = 0; i < playerCount; ++i)
 			{
-				int id, items[3];
+				int id, characterId, items[3];
 				bool ready;
 				memcpy(&id, ptr, sizeof(int)); ptr += sizeof(int);
 				memcpy(&ready, ptr, sizeof(bool)); ptr += sizeof(bool);
+				memcpy(&characterId, ptr, sizeof(int)); ptr += sizeof(int);
 				memcpy(items, ptr, sizeof(int) * 3); ptr += sizeof(int) * 3;
 				// CLog::PrintLog(+ "  Player " + std::to_string(id) + 
 					//" - Ready: " + (ready ? "Yes" : "No") + 
 					//", Items: [" + std::to_string(items[0]) + ", " + std::to_string(items[1]) + ", " + std::to_string(items[2]) + "]");
 
 				CMultiplayManager::GetInst()->AddPlayer(id);
+				CMultiplayManager::GetInst()->SetPlayerCharacterFromId(id, characterId);
 				CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(id, ready);
 				CMultiplayManager::GetInst()->SetPlayerItemFromId(id, 0, items[0]);
 				CMultiplayManager::GetInst()->SetPlayerItemFromId(id, 1, items[1]);
