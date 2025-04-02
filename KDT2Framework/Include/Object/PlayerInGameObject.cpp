@@ -297,6 +297,11 @@ void CPlayerInGameObject::UpdateDistance(float DeltaTime)
 		* 0.01f					// 미터법
 		* boostMultiplyValue;	// 부스트 속도 곱계산. 
 	AddPlayDistance(speedPerFrame);
+
+	std::wstring distanceText = L"distance: ";
+	float dist = GetPlayDistance();
+	distanceText += std::to_wstring(dist);
+	SetDebugText(distanceText.c_str());
 }
 
 void CPlayerInGameObject::OnFrezeCallback()

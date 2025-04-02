@@ -11,6 +11,7 @@
 #include "Scene/SceneTitle.h"
 #include "Etc/DataStorageManager.h"
 #include "Interface/IPlayerStatController.h"
+#include "Object/PlayerInGameObject.h"
 
 CInGameWidget::CInGameWidget()
 {
@@ -55,7 +56,7 @@ bool CInGameWidget::Init()
 	if (inGameScene)
 	{
 		// 내가 조작하는 플레이어를 가져와서 거기에 붙은 스탯을 불러오는것.
-		auto player = inGameScene->GetPlayer(0);
+		auto player = inGameScene->GetMyPlayerObject();
 		mPlayerStat = dynamic_cast<IPlayerStatController*>(player);
 
 		if (mPlayerStat == nullptr)

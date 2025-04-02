@@ -53,17 +53,15 @@ bool CPlayerGraphicObject::Init()
 
 	mDebugTextComp = CreateComponent<CWidgetComponent>("mDebugTextComp");
 	mRoot->AddChild(mDebugTextComp);
-	mDebugTextComp->SetRelativePos(FVector2D(0.0f, 0.0f));
+	mDebugTextComp->SetRelativePos(FVector2D(-150.0f, 0.0f));
 	mDebugWidget = mScene->GetUIManager()->CreateWidget<CDebugWidget>("mDebugWidget");
 	mDebugWidget->SetEnableFPS(false);
 	mDebugTextComp->SetWidget(mDebugWidget);
-
 #ifdef _DEBUG
 	mDebugTextComp->SetEnable(true);
 #else
 	mDebugTextComp->SetEnable(false);
 #endif // _DEBUG
-
 
 	mDeadSign = CreateComponent<CSpriteComponent>(TEXTURE_NAME_DEAD_SIGN);
 	mRoot->AddChild(mDeadSign);
@@ -94,6 +92,7 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 	// 맵 선택 이미지 웨이브.
 	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::Lobby)
 	{
+		SetDebugText(std::wstring(L"dt: " + std::to_wstring(DeltaTime)).c_str());
 		mMapDifficultySinAngle += DeltaTime * 180.0f;
 
 		if (mMapDifficultySinAngle >= 360.0f)
@@ -132,4 +131,9 @@ bool CPlayerGraphicObject::SetChangeGraphic(int index)
 #endif // _DEBUG
 
 	return false;
+}
+
+void CPlayerGraphicObject::SetDebugText(const wchar_t* wstr)
+{
+	mDebugWidget->SetDebugText(wstr);
 }

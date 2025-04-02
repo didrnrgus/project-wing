@@ -400,6 +400,10 @@ void CLobbyWidget::InitNextPrevButton()
 					return;
 				}
 			}
+			else 
+			{
+				StartGame();
+			}
 		});
 
 	// previous button

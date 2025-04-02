@@ -179,6 +179,7 @@ public:
 	void SetRelativePos(float x, float y);
 
 	void SetWorldScale(const FVector3D& Scale);
+	void UpdateWorldScaleFromParent();
 	void SetWorldScale(float x, float y, float z);
 	void SetWorldScale(const FVector2D& Scale);
 	void SetWorldScale(float x, float y);

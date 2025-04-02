@@ -510,29 +510,45 @@ void CSceneComponent::SetRelativePos(float x, float y)
     SetRelativePos(FVector3D(x, y, mRelativePos.z));
 }
 
-void CSceneComponent::SetWorldScale(const FVector3D& Scale)
+void CSceneComponent::SetWorldScale(const FVector3D& scale)
 {
-    mWorldScale = Scale;
+    mWorldScale = scale;
 
+    // 부모가 있다면 상대 스케일 다시 계산
     if (mParent)
     {
         mRelativeScale = mWorldScale / mParent->mWorldScale;
     }
-
     else
     {
         mRelativeScale = mWorldScale;
     }
 
-    size_t  Size = mChildList.size();
-
-    for (size_t i = 0; i < Size; ++i)
+    // 자식들의 월드 스케일 재계산 (상대 스케일은 유지)
+    for (auto child : mChildList)
     {
-        mChildList[i]->SetWorldScale(mChildList[i]->mRelativeScale * mWorldScale);
-
-        mChildList[i]->SetWorldPos(mChildList[i]->mRelativePos * mWorldScale + mWorldPos);
+        child->UpdateWorldScaleFromParent();
     }
 }
+
+void CSceneComponent::UpdateWorldScaleFromParent()
+{
+    if (mParent)
+    {
+        mWorldScale = mParent->mWorldScale * mRelativeScale;
+    }
+    else
+    {
+        mWorldScale = mRelativeScale;
+    }
+
+    // 자식들도 계속 재귀적으로 갱신
+    for (auto child : mChildList)
+    {
+        child->UpdateWorldScaleFromParent();
+    }
+}
+
 
 void CSceneComponent::SetWorldScale(float x, float y, float z)
 {

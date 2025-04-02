@@ -46,4 +46,5 @@ public:
 
 	inline void SetIndexInScene(int _index) { mIndexInScene = _index; }
 	inline int GetIndexInScene() { return mIndexInScene; }
+	void SetDebugText(const wchar_t* wstr);
 };

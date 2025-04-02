@@ -72,8 +72,6 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 	}
 	case (int)ServerMessage::MSG_PLAYER_DISTANCE:
 	{
-		CLog::PrintLog("case (int)ServerMessage::MSG_PLAYER_DISTANCE: OTHER: " + std::to_string(GetNetID()));
-		CLog::PrintLog("case (int)ServerMessage::MSG_PLAYER_DISTANCE: MY: " + std::to_string(CMultiplayManager::GetInst()->GetMyId()));
 
 		// 타겟팅 하고있는 플레이어.
 		auto inGameScene = dynamic_cast<CSceneInGame*>(mScene);
@@ -85,9 +83,11 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
 		float otherDist = info.distance;
 
+		SetDebugText(std::wstring(L"distance: " + std::to_wstring(otherDist) + L"\ntargetDist: " + std::to_wstring(myDist)).c_str());
+
 		// 타겟(나)이 앞에있다면, +가 나옴.
-		float gapBaseOnTarget = myDist - otherDist; 
-		FVector3D worldPos = FVector3D(myPlayerObject->GetWorldPosition().x - gapBaseOnTarget, info.height, 0.0f);
+		float gapBaseOnTarget = myDist - otherDist;
+		FVector3D worldPos = FVector3D(myPlayerObject->GetWorldPosition().x - gapBaseOnTarget * 100.0f, info.height, 0.0f);
 		SetMovePlayer(worldPos);
 		break;
 	}

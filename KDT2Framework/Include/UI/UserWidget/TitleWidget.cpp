@@ -96,8 +96,8 @@ void CTitleWidget::LoadGameData(bool _isActiveServerProcess, bool _isMultiPlay)
 	int waitTime = 500;
 	int isSkip = true;
 #else
-	int waitTime = 2000;
-	int isSkip = false;
+	int waitTime = 500;
+	int isSkip = true;
 #endif // _DEBUG
 
 	// config load

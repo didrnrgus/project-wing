@@ -20,7 +20,7 @@ bool CDebugWidget::Init()
 	mDebugText = mScene->GetUIManager()->CreateWidget<CTextBlock>("DebugText");
 	AddWidget(mDebugText);
 	mDebugText->SetPivot(FVector2D(0.0f, 1.0f));
-	mDebugText->SetSize(FVector2D(500.0, 100.0f));
+	mDebugText->SetSize(FVector2D(500.0, 200.0f));
 	mDebugText->SetPos(FVector2D(0.0f, 0.0f));
 	mDebugText->SetText(L"DebugText");
 	mDebugText->SetTextColor(FVector4D::Red);
@@ -31,9 +31,9 @@ bool CDebugWidget::Init()
 	return true;
 }
 
-void CDebugWidget::SetDebugText(const wchar_t* wc)
+void CDebugWidget::SetDebugText(const wchar_t* wstr)
 {
-	mDebugText->SetText(wc);
+	mDebugText->SetText(wstr);
 }
 
 const wchar_t* CDebugWidget::GetDebugText()
