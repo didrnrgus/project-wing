@@ -172,8 +172,8 @@ void CLobbyWidget::InitPlayerStatText()
 	int count = (int)ECharacterStatText::End;
 	mArrPlayerStatNameText.resize(count);
 	mArrPlayerStatValueText.resize(count);
-	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.8f);
-	FVector2D valueBasePos = FVector2D(670.0f, mResolution.y * 0.8f);
+	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.87f);
+	FVector2D valueBasePos = FVector2D(650.0f, mResolution.y * 0.87f);
 	FVector2D textSize = FVector2D(200.0f, 40.0f);
 	FVector2D nameBasePivot = FVector2D(0.0f, 0.0f);
 	FVector2D valueBasePivot = FVector2D(0.0f, 0.0f);

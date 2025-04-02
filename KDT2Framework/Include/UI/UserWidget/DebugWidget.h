@@ -11,7 +11,7 @@ protected:
 
 protected:
 	CSharedPtr<class CTextBlock> mDebugText;
-
+	
 public:
 	virtual bool Init();
 

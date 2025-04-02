@@ -321,6 +321,11 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		CMultiplayManager::GetInst()->SetPlayerCurHpInGameFromId(msg.senderId, curHp);
 		break;
 	}
+	case (int)ServerMessage::MSG_TAKEN_STUN:
+	{
+		 //CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_TAKEN_STUN");
+		break;
+	}
 		//////////////////////기타 상시///////////////////////////////////
 	default:
 		if (msg.msgType != (int)ServerMessage::MSG_HEARTBEAT_ACK)

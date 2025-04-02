@@ -139,6 +139,7 @@ namespace ECharacterStatText
 		Speed,
 		Dex,
 		Def,
+		Stun,
 		Size,
 		End
 	};
@@ -150,6 +151,7 @@ namespace ECharacterStatText
 		,TEXT("Speed")
 		,TEXT("Dex")
 		,TEXT("Def")
+		,TEXT("Stun")
 		,TEXT("Size")
 	};
 }
@@ -166,6 +168,7 @@ namespace ECharacterStatText
 			"hp": 100.0,
 			"dex": 100.0,
 			"def": 10.0,
+			"stun_duration": 2.0,
 			"image_sequence_name": "PlayerIdle",
 			"size_x": 200.0,
 			"size_y": 135.0
@@ -181,6 +184,7 @@ struct FCharacterState
 	float HP;
 	float Dex;
 	float Def;
+	float StunDuration;
 	std::string ImageSequenceName;
 	float SizeX;
 	float SizeY;
@@ -199,6 +203,8 @@ struct FCharacterState
 			return std::to_wstring((int)Dex);
 		case ECharacterStatText::Def:
 			return std::to_wstring((int)Def);
+		case ECharacterStatText::Stun:
+			return std::to_wstring((int)StunDuration);
 		case ECharacterStatText::Size:
 			return (std::to_wstring((int)SizeX) + L" * " + std::to_wstring((int)SizeY));
 		}

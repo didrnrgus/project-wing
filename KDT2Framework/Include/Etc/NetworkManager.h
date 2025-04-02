@@ -49,6 +49,7 @@ namespace ServerMessage
 		MSG_PLAYER_DISTANCE, // 거리 전송 메시지.
 		MSG_PLAYER_HEIGHT,
 		MSG_TAKEN_DAMAGE,	// 현재 HP 알려줌.
+		MSG_TAKEN_STUN,
 		MSG_BOOST_ON,
 		MSG_BOOST_OFF,
 

@@ -13,6 +13,7 @@ private:
 	float baseSpeed;
 	float baseDex;
 	float baseDef;
+	float stunDuration;
 
 	float curHp;
 	float addedSpeed;
@@ -30,12 +31,13 @@ private:
 	std::function<void()> playerFrezeCallback;
 
 private:
-	bool InitStat(float _maxHp, float _speed, float _dex, float _def)
+	bool InitStat(float _maxHp, float _speed, float _dex, float _def, float _stun)
 	{
 		maxHp = _maxHp;
 		baseSpeed = _speed;
 		baseDex = _dex;
 		baseDef = _def;
+		stunDuration = _stun;
 
 		curHp = maxHp;
 		addedSpeed = 0.0f;
@@ -56,7 +58,7 @@ private:
 public:
 	bool InitStat(FCharacterState stat)
 	{
-		return InitStat(stat.HP, stat.Speed, stat.Dex, stat.Def);
+		return InitStat(stat.HP, stat.Speed, stat.Dex, stat.Def, stat.StunDuration);
 	}
 
 	//void SetIndex(int _index) { index = _index; }
@@ -117,12 +119,24 @@ public:
 	inline void AddDex(float _addDexVal) { addedDex += _addDexVal; }
 	inline void AddDef(float _addDefVal) { addedDef += _addDefVal; }
 	inline void AddPlayDistance(float _addDist) { playDistance += _addDist; }
+	inline void SetPlayDistance(float _dist) { playDistance = _dist; }
+	inline void SetCurHp(const float _curHp) 
+	{
+		curHp = _curHp; 
+
+		if (curHp <= 0.0f && playerFrezeCallback != nullptr)
+		{
+			curHp = 0.0f;
+			playerFrezeCallback();
+			playerFrezeCallback = nullptr;
+		}
+	}
 	inline void SetStun() { isStun = true; }
 	inline void SetIsBoostMode(const bool _isBoostMode) { isBoostMode = _isBoostMode; }
 	inline void ReleaseStun(float DeltaTime)
 	{
 		addedReleaseStunValue += DeltaTime;
-		if (addedReleaseStunValue > 2.0f)
+		if (addedReleaseStunValue > stunDuration)
 		{
 			addedReleaseStunValue = 0.0f;
 			isStun = false;
@@ -145,6 +159,7 @@ public:
 	inline float GetSpeed() { return baseSpeed + addedSpeed; }
 	inline float GetDex() { return baseDex + addedDex; }
 	inline float GetDef() { return baseDef + addedDef; }
+	inline float GetStunDuration() { return stunDuration; }
 	inline bool GetIsDeath() { return GetCurHP() > 0.0f; }
 	inline bool GetIsStun() { return isStun; }
 	inline bool GetIsProtection() { return isProtection; }

@@ -71,20 +71,10 @@ bool CPlayerInGameObject::Init()
 		, [this](float DeltaTime)
 		{
 			CLog::PrintLog("mScene->GetInput()->AddBindKey(\"DecreaseHP\", \'Z\');");
-			mCameraShake->SetShakeSceneObject(0.5f, 10.0f);
-
 			float _damage = CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage;
 
 			if (CNetworkManager::GetInst()->IsMultiplay())
 				SendMessageTriggerFloat(ClientMessage::MSG_TAKE_DAMAGE, _damage);
-
-			if (GetCurHP() <= 0.0f)
-				OnPlayerDead();
-			else
-			{
-				SetStun();
-				Damaged(_damage);
-			}
 		});
 #endif // _DEBUG
 
@@ -157,7 +147,7 @@ void CPlayerInGameObject::SetGamePlayState(EGamePlayState::Type type)
 void CPlayerInGameObject::MoveDown(float DeltaTime)
 {
 	auto moveValueVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * -1.0f;
-	SetMovePlayer(moveValueVector, DeltaTime);
+	SetMovePlayer(moveValueVector);
 }
 
 void CPlayerInGameObject::MoveUpStart(float DeltaTime)
@@ -186,7 +176,7 @@ void CPlayerInGameObject::MoveUpHold(float DeltaTime)
 
 	//CLog::PrintLog("CPlayerInGameObject::MoveUpHold mIsMovingUp: " + std::to_string(mIsMovingUp));
 	auto moveValueVector = FVector3D::Axis[EAxis::Y] * GetDex() * DeltaTime * 1.0f;
-	SetMovePlayer(moveValueVector, DeltaTime);
+	SetMovePlayer(moveValueVector);
 }
 
 void CPlayerInGameObject::MoveUpRelease(float DeltaTime)
@@ -235,19 +225,21 @@ void CPlayerInGameObject::CollisionMapBegin(const FVector3D& HitPoint, CCollider
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 		SendMessageTriggerFloat(ClientMessage::MSG_TAKE_DAMAGE, _damage);
-
-	if (GetCurHP() <= 0.0f)
-		OnPlayerDead();
 	else
 	{
-		SetStun();
-		Damaged(_damage);
+		if (GetCurHP() <= 0.0f)
+			OnPlayerDead();
+		else
+		{
+			SetStun();
+			Damaged(_damage);
+		}
 	}
 
 	CLog::PrintLog("CPlayerInGameObject::CollisionMapBegin");
 }
 
-void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector, float DeltaTime)
+void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector)
 {
 	// 자기 자신이 호출
 	if (!IsGamePlayEnableByState())
@@ -260,6 +252,20 @@ void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector, float DeltaTi
 	auto resultPos = pos + moveValueVector;
 	resultPos.y = Clamp(resultPos.y, mResolution.y * -0.5f, mResolution.y * 0.5f);
 	mRoot->SetWorldPos(resultPos);
+}
+
+void CPlayerInGameObject::SetMovePlayer(float _height)
+{
+	// 자기 자신이 호출
+	if (!IsGamePlayEnableByState())
+		return;
+
+	if (GetIsStun())
+		return;
+
+	auto pos = mRoot->GetWorldPosition();
+	pos.y = _height;
+	mRoot->SetWorldPos(pos);
 }
 
 void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
@@ -275,11 +281,14 @@ void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
 
 	//CLog::PrintLog("CPlayerInGameObject::UpdateDecreaseHp()");
 
+	if (!CNetworkManager::GetInst()->IsMultiplay())
+	{
 #ifdef _DEBUG
-	DamagedPerDistance(DeltaTime * 10.0f);
+		DamagedPerDistance(DeltaTime * 10.0f);
 #else
-	DamagedPerDistance(DeltaTime);
+		DamagedPerDistance(DeltaTime);
 #endif // _DEBUG
+	}
 }
 
 void CPlayerInGameObject::UpdateDistance(float DeltaTime)
@@ -290,18 +299,16 @@ void CPlayerInGameObject::UpdateDistance(float DeltaTime)
 	if (GetIsStun())
 		return;
 
-	float speed = GetSpeed();
-	float boostMultiplyValue = GetBoostValue();
-	float speedPerFrame =
-		speed * DeltaTime		// 1초에 얼마만큼 
-		* 0.01f					// 미터법
-		* boostMultiplyValue;	// 부스트 속도 곱계산. 
-	AddPlayDistance(speedPerFrame);
-
-	std::wstring distanceText = L"distance: ";
-	float dist = GetPlayDistance();
-	distanceText += std::to_wstring(dist);
-	SetDebugText(distanceText.c_str());
+	if (!CNetworkManager::GetInst()->IsMultiplay())
+	{
+		float speed = GetSpeed();
+		float boostMultiplyValue = GetBoostValue();
+		float speedPerFrame =
+			speed * DeltaTime		// 1초에 얼마만큼 
+			* 0.01f					// 미터법
+			* boostMultiplyValue;	// 부스트 속도 곱계산. 
+		AddPlayDistance(speedPerFrame);
+	}
 }
 
 void CPlayerInGameObject::OnFrezeCallback()
@@ -371,9 +378,40 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 {
 	switch (msg.msgType)
 	{
+	case (int)ServerMessage::MSG_PLAYER_DISTANCE:
+	{
+		if (msg.senderId != GetNetID())
+			return;
+
+		auto info = CMultiplayManager::GetInst()->GetPlayerInfoFromMyId();
+		SetPlayDistance(info.distance);
+		SetDebugText(std::wstring(L"dist: " + std::to_wstring(info.distance) + L"\nhp: " + std::to_wstring(info.curHp)).c_str());
+		break;
+	}
+	case (int)ServerMessage::MSG_TAKEN_DAMAGE:
+	{	// 현재 체력 줌.
+		if (msg.senderId != GetNetID())
+			return;
+
+		auto info = CMultiplayManager::GetInst()->GetPlayerInfoFromMyId();
+		SetCurHp(info.curHp);
+		SetDebugText(std::wstring(L"dist: " + std::to_wstring(info.distance) + L"\nhp: " + std::to_wstring(info.curHp)).c_str());
+		break;
+	}
+	case (int)ServerMessage::MSG_TAKEN_STUN:
+	{
+		if (msg.senderId != GetNetID())
+			return;
+
+		SetStun();
+		break;
+	}
 	case (int)ServerMessage::MSG_PLAYER_DEAD:
 	{
+		if (msg.senderId != GetNetID())
+			return;
 
+		OnPlayerDead();
 		break;
 	}
 	case (int)ServerMessage::MSG_GAME_OVER:

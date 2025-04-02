@@ -37,7 +37,8 @@ private:
 	void BoostModeRelease(float DeltaTime);
 
 	void CollisionMapBegin(const FVector3D& HitPoint, class CColliderBase* Dest);
-	void SetMovePlayer(FVector3D moveValueVector, float DeltaTime);
+	void SetMovePlayer(FVector3D moveValueVector);
+	void SetMovePlayer(float _height);
 	void UpdateDecreaseHp(float DeltaTime);
 	void UpdateDistance(float DeltaTime);
 	void OnFrezeCallback();
