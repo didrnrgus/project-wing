@@ -340,9 +340,7 @@ void CPlayerInGameObject::OnPlayerDead()
 	// 씬한테 그만하라고 전달 -> 씬은 현재 타깃플레이어와 맵에 대해서만 스탑을 해줘야 함.
 	auto sceneInGame = dynamic_cast<CSceneInGame*>(mScene);
 	if (sceneInGame)
-	{
 		sceneInGame->SetGamePlayState(EGamePlayState::Dead);
-	}
 
 	if (!CNetworkManager::GetInst()->IsMultiplay())
 	{
@@ -353,8 +351,7 @@ void CPlayerInGameObject::OnPlayerDead()
 				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
 				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
-				CLog::PrintLog("CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>()");
-				CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+				mScene->GotoLobby();
 			})));
 	}
 }
@@ -415,38 +412,14 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 		OnPlayerDead();
 		break;
 	}
-	case (int)ServerMessage::MSG_GAME_OVER:
-	{
-		// 쓰레드 시작.
-		mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
-			[this]()
-			{
-				CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_GAME_OVER");
-				SendMessageTrigger(ClientMessage::MSG_UNREADY);
-				SendMessageTriggerItem(ClientMessage::MSG_PICK_ITEM, 0, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
-				SendMessageTriggerItem(ClientMessage::MSG_PICK_ITEM, 1, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
-				SendMessageTriggerItem(ClientMessage::MSG_PICK_ITEM, 2, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
-				SendMessageTriggerInt(ClientMessage::MSG_PICK_CHARACTER, 0);
-
-				if (CMultiplayManager::GetInst()->GetIsHost())
-					SendMessageTriggerInt(ClientMessage::MSG_PICK_MAP, 0);
-
-				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
-				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-
-				CLog::PrintLog("CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>()");
-				CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
-			})));
-		break;
-	}
 	case (int)ServerMessage::MSG_END:
 	{
 		CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_END");
-		CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(1000));");
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+		CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
+		std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
-		CLog::PrintLog("CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>()");
-		CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
+		mScene->GotoTitle();
+
 		break;
 	}
 	default:

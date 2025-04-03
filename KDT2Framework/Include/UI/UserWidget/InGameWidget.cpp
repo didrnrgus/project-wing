@@ -25,6 +25,8 @@ bool CInGameWidget::Init()
 {
 	CSceneWidget::Init();
 
+	auto mapInfo = CDataStorageManager::GetInst()->GetSelectedMapInfo();
+
 	FResolution RS = CDevice::GetInst()->GetResolution();
 
 	CSharedPtr<CImage> hpBackImage = mScene->GetUIManager()->CreateWidget<CImage>("HPBackImage");
@@ -48,7 +50,7 @@ bool CInGameWidget::Init()
 	mHpFrontImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mHpFrontImage->SetPivot(pivot);
 	mHpFrontImage->SetSize(mHpFrontSize);
-	mHpFrontImage->SetColor(FVector4D::Red);
+	mHpFrontImage->SetColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 	mHpFrontImage->SetOpacity(0.5f);
 	mHpFrontImage->SetPos(frontPos);
 
@@ -109,7 +111,7 @@ bool CInGameWidget::Init()
 		mStartCountText->SetSize(size);
 		mStartCountText->SetPos(pos);
 		mStartCountText->SetText(mStartCountTextArr[mStartCountTextArr.size() - 1]);
-		mStartCountText->SetTextColor(FVector4D::Green);
+		mStartCountText->SetTextColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 		mStartCountText->SetFontSize(200.0f);
 		mStartCountText->SetAlignH(ETextAlignH::Center);
 		mStartCountText->SetShadowEnable(false);
@@ -129,7 +131,7 @@ bool CInGameWidget::Init()
 		mPlayDistanceText->SetSize(size);
 		mPlayDistanceText->SetPos(pos);
 		mPlayDistanceText->SetText((std::to_wstring(0) + L"m").c_str());
-		mPlayDistanceText->SetTextColor(FVector4D::Green);
+		mPlayDistanceText->SetTextColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 		mPlayDistanceText->SetFontSize(100.0f);
 		mPlayDistanceText->SetAlignH(ETextAlignH::Right);
 		mPlayDistanceText->SetShadowEnable(false);
@@ -151,6 +153,8 @@ void CInGameWidget::Update(float DeltaTime)
 
 void CInGameWidget::InitSelectedItemSlot()
 {
+	auto mapInfo = CDataStorageManager::GetInst()->GetSelectedMapInfo();
+
 	for (int i = 0; i < itemSlotCount; i++)
 	{
 		// 슬롯 이미지.
@@ -162,7 +166,7 @@ void CInGameWidget::InitSelectedItemSlot()
 			, mSlotImagePaths[(int)SlotType::Added]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize);
-		buttonBackImage->SetColor(FVector4D::Green);
+		buttonBackImage->SetColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 		buttonBackImage->SetPos(tempPos);
 
 		// 슬롯 내부 아이템 이미지.
@@ -182,7 +186,7 @@ void CInGameWidget::InitSelectedItemSlot()
 		}
 		buttonImage->SetPivot(FVector2D::One * 0.5f);
 		buttonImage->SetSize(mSlotSize * mSlotInnerItemSizeRate * mSlotInnerItemSizeRate);
-		buttonImage->SetColor(FVector4D::Green);
+		buttonImage->SetColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 		buttonImage->SetPos(tempPos);
 
 	}

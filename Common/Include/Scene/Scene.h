@@ -2,6 +2,9 @@
 
 #include "../GameInfo.h"
 #include "../Object/SceneObject.h"
+#include "Etc/ProcessManager.h"
+#include "Etc/NetworkManager.h"
+#include "Etc/MultiplayManager.h"
 
 class CScene abstract
 {
@@ -19,6 +22,11 @@ protected:
 	class CSceneUIManager* mUIManager = nullptr;
 	std::list<CSharedPtr<class CSceneObject>>	mObjList;
 	bool	mDebugQuadTree = true;
+
+private:
+	bool mGotoTitle;
+	bool mGotoLobby;
+	bool mGotoInGame;
 
 public:
 	class CSceneUIManager* GetUIManager()	const
@@ -56,6 +64,19 @@ public:
 	virtual void Render();
 	virtual void RenderUI();
 	virtual void EndFrame();
+
+	void GotoTitle() 
+	{ 
+		CNetworkManager::GetInst()->Clear(
+			[this]()
+			{
+				CMultiplayManager::GetInst()->ClearProperties();
+				CProcessManager::GetInst()->Terminate();
+				mGotoTitle = true;
+			});
+	}
+	void GotoLobby() { mGotoLobby = true; }
+	void GotoInGame() { mGotoInGame = true; }
 
 protected:
 	virtual bool InitAsset() = 0;

@@ -322,9 +322,33 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		CMultiplayManager::GetInst()->SetPlayerCurHpInGameFromId(msg.senderId, curHp);
 		break;
 	}
+	case (int)ServerMessage::MSG_BOOST_ON:
+	{
+		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_BOOST_ON");
+		break;
+	}
+	case (int)ServerMessage::MSG_BOOST_OFF:
+	{
+		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_BOOST_OFF");
+		break;
+	}
 	case (int)ServerMessage::MSG_TAKEN_STUN:
 	{
 		 //CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_TAKEN_STUN");
+		break;
+	}
+	case (int)ServerMessage::MSG_OBSTACLE:
+	{
+		CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_OBSTACLE");
+		//const char* ptr = msg.body.data();
+		//float scale, rotation, height;
+		//memcpy(&scale, ptr, sizeof(float)); ptr += sizeof(float);
+		//memcpy(&rotation, ptr, sizeof(float)); ptr += sizeof(float);
+		//memcpy(&height, ptr, sizeof(float)); ptr += sizeof(float);
+
+		//CLog::PrintLog(std::string("MSG_OBSTACLE ") + "scale: " + std::to_string(scale));
+		//CLog::PrintLog(std::string("MSG_OBSTACLE ") + "rotation: " + std::to_string(rotation));
+		//CLog::PrintLog(std::string("MSG_OBSTACLE ") + "height: " + std::to_string(height));
 		break;
 	}
 		//////////////////////기타 상시///////////////////////////////////

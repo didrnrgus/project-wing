@@ -62,6 +62,7 @@ namespace EMapInfoText
 	"difficulty_color_name": "Cyan",
 	"difficulty_rate": 10.0,
 	"collision_damage": 20.0,
+	"obstacle_interval_time": 2.0,
 	"line_node_list": [
 		{
 			"top_y_pos": 720.0,
@@ -77,6 +78,7 @@ struct FMapInfo
 	std::string DifficultyColorName;
 	float DifficultyRate;
 	float CollisionDamage;
+	float ObstacleIntervalTime;
 	std::vector<FLineNode> lineNodes;
 
 	const wchar_t* GetIconPath(int idx)

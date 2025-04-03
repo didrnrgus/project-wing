@@ -3,7 +3,13 @@
 #include "Scene/Scene.h"
 #include "Interface/ISceneNetworkController.h"
 #include "Etc/NetworkManager.h"
-
+/*
+protected:
+	virtual void AddListener() override;
+	virtual void RemoveListener() override;
+public:
+	virtual void ProcessMessage(const struct RecvMessage& msg) override;
+*/
 class IObjectNetworkController abstract
 {
 protected:

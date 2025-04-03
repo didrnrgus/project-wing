@@ -72,6 +72,18 @@ void CSceneLobby::ProcessMessage()
 	while (CNetworkManager::GetInst()->PollMessage(msg))
 	{
 		DistributeMessage(msg);
+
+		switch (msg.msgType)
+		{
+		case (int)ServerMessage::MSG_END:
+		{
+			GotoTitle();
+			break;
+		}
+		default:
+			break;
+		}
+		
 	}
 }
 

@@ -8,6 +8,9 @@
 #include "../Render/RenderManager.h"
 #include "SceneUIManager.h"
 #include "Scene/SceneManager.h"
+#include "Scene/SceneTitle.h"
+#include "Scene/SceneLobby.h"
+#include "Scene/SceneInGame.h"
 
 CScene::CScene()
 {
@@ -72,6 +75,10 @@ bool CScene::Init()
 	InitAsset();
 	InitObject();
 	InitWidget();
+
+	mGotoTitle = false;
+	mGotoLobby = false;
+	mGotoInGame = false;
 
 	return true;
 }
@@ -144,6 +151,22 @@ void CScene::Update(float DeltaTime)
 	sprintf_s(Text, "ObjCount : %d", Count);
 
 	//CLog::PrintLog(Text);
+
+	if (mGotoTitle)
+	{
+		CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
+		return;
+	}
+	if (mGotoLobby)
+	{
+		CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+		return;
+	}
+	if (mGotoInGame)
+	{
+		CSceneManager::GetInst()->CreateLoadScene<CSceneInGame>();
+		return;
+	}
 }
 
 void CScene::PostUpdate(float DeltaTime)

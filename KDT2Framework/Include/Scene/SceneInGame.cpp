@@ -1,11 +1,14 @@
 ﻿#include "SceneInGame.h"
 #include "UI/UserWidget/InGameWidget.h"
 #include "Scene/SceneUIManager.h"
+#include "Scene/SceneLobby.h"
+#include "Scene/SceneTitle.h"
 #include "Object/PlayerGraphicObject.h"
 #include "Object/PlayerInGameObject.h"
 #include "Object/PlayerInGameOtherObject.h"
 #include "Object/LineGroupObject.h"
 #include "Object/CameraObject.h"
+#include "Object/ObstacleGroupObject.h"
 #include "Etc/DataStorageManager.h"
 #include "Etc/ConstValues.h"
 #include "Interface/IPlayerStatController.h"
@@ -14,6 +17,7 @@
 #include "Scene/Input.h"
 #include "Etc/NetworkManager.h"
 #include "Etc/MultiplayManager.h"
+#include "Etc/TaskManager.h"
 
 CSceneInGame::CSceneInGame()
 {
@@ -45,6 +49,7 @@ bool CSceneInGame::Init()
 	SetGamePlayState(EGamePlayState::ReadyCount);
 	mCurReadyCount = mInGameWidget->GetStartCountArrCount();
 	mReadyCountTime = 0.0f;
+
 	return true;
 }
 
@@ -81,6 +86,7 @@ bool CSceneInGame::InitObject()
 {
 	CCameraObject* camera = CreateObj<CCameraObject>("Camera");
 	CLineGroupObject* lineGroup = CreateObj<CLineGroupObject>("LineGroupObject");
+	CObstacleGroupObject* obstacle = CreateObj<CObstacleGroupObject>("Obstacle");
 
 	// players init
 	players.resize(5, nullptr); // 미리 칸 만들어놓기.
@@ -146,12 +152,17 @@ bool CSceneInGame::InitObject()
 	{
 		// lineGroup setting
 		lineGroup->SetTargetStat(_playerInGameStat);
+		obstacle->SetTargetStat(_playerInGameStat);
 	}
 
 	// IGamePlayStateController arr setting
 	auto lineGroupGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(lineGroup);
 	if (lineGroupGamePlayStateCtlr)
 		mArrGamePlayStateCtlr.push_back(lineGroupGamePlayStateCtlr);
+
+	auto obstacleGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(obstacle);
+	if (obstacleGamePlayStateCtlr)
+		mArrGamePlayStateCtlr.push_back(obstacleGamePlayStateCtlr);
 
 	// 이거 내가 조작하는 플레이어만 포함시키자.
 	auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(mMyPlayerObject);
@@ -237,6 +248,20 @@ void CSceneInGame::ProcessMessage()
 			auto myPlayerNetInfo = CMultiplayManager::GetInst()->GetPlayerInfoFromMyId();
 			if(myPlayerNetInfo.isDeadInGame)
 				SetGamePlayState(EGamePlayState::Dead);
+			break;
+		}
+		case (int)ServerMessage::MSG_GAME_OVER:
+		{
+			// 쓰레드 시작.
+			mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+				[this]()
+				{
+					CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_GAME_OVER");
+					CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
+					std::this_thread::sleep_for(std::chrono::milliseconds(3000));
+
+					GotoLobby();
+				})));
 			break;
 		}
 		default:

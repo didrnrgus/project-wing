@@ -428,7 +428,7 @@ void CLobbyWidget::InitNextPrevButton()
 		, [this]()
 		{
 			CLog::PrintLog("mPrevButton Click");
-			GoToTitle();
+			mScene->GotoTitle();
 		});
 }
 
@@ -680,24 +680,13 @@ void CLobbyWidget::SetButton(CButton& _button, const char* _name, const wchar_t*
 
 }
 
-void CLobbyWidget::GoToTitle()
-{
-	CNetworkManager::GetInst()->Clear(
-		[]()
-		{
-			CMultiplayManager::GetInst()->ClearProperties();
-			CProcessManager::GetInst()->Terminate();
-		});
-	CSceneManager::GetInst()->CreateLoadScene<CSceneTitle>();
-}
-
 void CLobbyWidget::StartGame()
 {
 	CLog::PrintLog("mNextButton Click curPlayerGraphicIndex: " + std::to_string(curPlayerGraphicIndex));
 	CLog::PrintLog("mNextButton Click curDifficultyIndex: " + std::to_string(curDifficultyIndex));
 	CDataStorageManager::GetInst()->SetSelectedCharacterIndex(curPlayerGraphicIndex);
 	CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
-	CSceneManager::GetInst()->CreateLoadScene<CSceneInGame>();
+	mScene->GotoInGame();
 }
 
 void CLobbyWidget::UpdateOtherPlayerInfo()
@@ -825,9 +814,6 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 
 		break;
 	}
-	case (int)ServerMessage::MSG_END:
-		GoToTitle();
-		break;
 	default:
 		break;
 	}

@@ -173,6 +173,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Object\CameraObject.cpp" />
     <ClCompile Include="Object\LineGroupObject.cpp" />
+    <ClCompile Include="Object\ObstacleGroupObject.cpp" />
     <ClCompile Include="Object\PlayerGraphicObject.cpp" />
     <ClCompile Include="Object\PlayerInGameObject.cpp" />
     <ClCompile Include="Object\PlayerInGameOtherObject.cpp" />
@@ -215,6 +216,7 @@
     <ClInclude Include="Interface\IPlayerStatController.h" />
     <ClInclude Include="Object\CameraObject.h" />
     <ClInclude Include="Object\LineGroupObject.h" />
+    <ClInclude Include="Object\ObstacleGroupObject.h" />
     <ClInclude Include="Object\PlayerGraphicObject.h" />
     <ClInclude Include="Object\PlayerInGameObject.h" />
     <ClInclude Include="Object\PlayerInGameOtherObject.h" />

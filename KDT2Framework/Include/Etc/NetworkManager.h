@@ -52,6 +52,7 @@ namespace ServerMessage
 		MSG_TAKEN_STUN,
 		MSG_BOOST_ON,
 		MSG_BOOST_OFF,
+		MSG_OBSTACLE,
 
 		MSG_HEARTBEAT_ACK,
 		MSG_END

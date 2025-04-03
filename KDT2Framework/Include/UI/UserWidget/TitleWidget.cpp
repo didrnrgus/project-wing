@@ -200,7 +200,8 @@ void CTitleWidget::LoadScene()
 
 			ShowLoading(false);
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
-			CSceneManager::GetInst()->CreateLoadScene<CSceneLobby>();
+
+			mScene->GotoLobby();
 		})));
 }
 

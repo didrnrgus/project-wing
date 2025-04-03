@@ -18,6 +18,8 @@ private:
 	int mCurReadyCount;
 	float mReadyCountTime;
 	class CInGameWidget* mInGameWidget = nullptr;
+	
+	int mTaskID;
 
 protected:
 	virtual bool Init() override;
