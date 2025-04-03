@@ -71,7 +71,7 @@ bool CInGameWidget::Init()
 		// 아이템 아이콘 path setting
 		auto itemDatas = CDataStorageManager::GetInst()->GetItemInfoDatas();
 		int index = 0;
-		for (auto item : itemDatas)
+		for (auto& item : itemDatas)
 		{
 			mItemImagePaths.push_back(item.second.GetItmeImagePath(index));
 			mItemImageNames.push_back(item.second.GetItmeImageName(index));
@@ -114,7 +114,8 @@ bool CInGameWidget::Init()
 		mStartCountText->SetTextColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 		mStartCountText->SetFontSize(200.0f);
 		mStartCountText->SetAlignH(ETextAlignH::Center);
-		mStartCountText->SetShadowEnable(false);
+		mStartCountText->SetShadowEnable(true);
+		mStartCountText->SetShadowOffset(10.0f, 10.0f);
 		mStartCountText->SetTextShadowColor(FVector4D::Gray30);
 		mStartCountText->SetZOrder(ZORDER_INGAME_START_COUNT_TEXT);
 	}
@@ -134,7 +135,8 @@ bool CInGameWidget::Init()
 		mPlayDistanceText->SetTextColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 		mPlayDistanceText->SetFontSize(100.0f);
 		mPlayDistanceText->SetAlignH(ETextAlignH::Right);
-		mPlayDistanceText->SetShadowEnable(false);
+		mPlayDistanceText->SetShadowEnable(true);
+		mPlayDistanceText->SetShadowOffset(5.f, 5.f);
 		mPlayDistanceText->SetTextShadowColor(FVector4D::Gray30);
 		mPlayDistanceText->SetZOrder(ZORDER_INGAME_START_COUNT_TEXT);
 		mPlayDistanceText->SetEnable(false);

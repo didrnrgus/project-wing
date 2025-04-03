@@ -6,6 +6,7 @@
 #include "Etc/ZOrderContainer.h"
 #include "Etc/MultiplayManager.h"
 #include "Etc/NetworkManager.h"
+#include "Etc/DataStorageManager.h"
 
 CPlayerObjectWidget::CPlayerObjectWidget()
 {
@@ -27,7 +28,9 @@ bool CPlayerObjectWidget::Init()
 	mInfoText->SetTextColor(FVector4D::White);
 	mInfoText->SetAlignH(ETextAlignH::Left);
 	mInfoText->SetFontSize(30.0f);
-	mInfoText->SetShadowEnable(false);
+	mInfoText->SetShadowEnable(true);
+	mInfoText->SetShadowOffset(3.f, 3.f);
+	mInfoText->SetTextShadowColor(FVector4D::Gray30);
 	mInfoText->SetZOrder(ZORDER_FPS);
 	return true;
 }
@@ -38,11 +41,17 @@ void CPlayerObjectWidget::Update(float DeltaTime)
 
 	if (CNetworkManager::GetInst()->IsMultiplay() && mObjectNetworkController)
 	{
-		auto playerInfo = CMultiplayManager::GetInst()->GetPlayerInfoValueById(mObjectNetworkController->GetNetID());
+		if (!CMultiplayManager::GetInst()->GetIsGameStart())
+			return;
 
+		auto playerInfo = CMultiplayManager::GetInst()->GetPlayerInfoValueById(mObjectNetworkController->GetNetID());
 		wchar_t	_InfoText[64] = {};
-		swprintf_s(_InfoText, L"[P%d]\nHP: %.0f\nDist: %.0fm", playerInfo.id, playerInfo.curHp, playerInfo.distance);
+		//swprintf_s(_InfoText, L"[P%d]\nHP: %.0f\nDist: %.0fm", playerInfo.id, playerInfo.curHp, playerInfo.distance);
+		swprintf_s(_InfoText, L"[P%d] HP: %.0f | Dist: %.0fm", playerInfo.id, playerInfo.curHp, playerInfo.distance);
 		mInfoText->SetText(_InfoText);
+		
+		auto playerStat = CDataStorageManager::GetInst()->GetCharacterState(playerInfo.characterType);
+		mInfoText->SetTextColor(FVector4D::GetColorFromString(playerStat.ColorName));
 	}
 }
 

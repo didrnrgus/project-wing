@@ -130,7 +130,7 @@ void CTitleWidget::LoadGameData()
 			// maps load
 			AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️", mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
-			for (std::string mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
+			for (auto mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
 			{
 				path = webserverPath + mapFileName;
 				std::string mapResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);

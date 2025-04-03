@@ -219,7 +219,7 @@ void CSceneInGame::SetGamePlayState(EGamePlayState::Type type)
 	mGamePlayState = type;
 
 	// 다른애들한테 알려주고.  map, myPlayer
-	for (auto e : mArrGamePlayStateCtlr)
+	for (auto& e : mArrGamePlayStateCtlr)
 	{
 		e->SetGamePlayState(type);
 	}
@@ -252,6 +252,8 @@ void CSceneInGame::ProcessMessage()
 		}
 		case (int)ServerMessage::MSG_GAME_OVER:
 		{
+			CMultiplayManager::GetInst()->ResetPlayerAfterInGame();
+
 			// 쓰레드 시작.
 			mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
 				[this]()
@@ -272,9 +274,9 @@ void CSceneInGame::ProcessMessage()
 
 void CSceneInGame::DistributeMessage(const RecvMessage& msg)
 {
-	for (auto it : mObjNetworkController)
+	for (auto& it : mObjNetworkController)
 	{
-		(it)->ProcessMessage(msg);
+		it->ProcessMessage(msg);
 	}
 }
 

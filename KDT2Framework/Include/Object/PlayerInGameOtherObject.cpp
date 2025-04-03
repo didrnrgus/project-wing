@@ -50,6 +50,9 @@ void CPlayerInGameOtherObject::RemoveListener()
 
 void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 {
+	if (msg.senderId != GetNetID())
+		return;
+
 	switch (msg.msgType)
 	{
 	case (int)ServerMessage::MSG_TAKEN_DAMAGE:
@@ -72,16 +75,15 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 	}
 	case (int)ServerMessage::MSG_PLAYER_DISTANCE:
 	{
+		// 현재 타게팅된 플레이어를 기준으로 상대적인 화면 위치를 지정해야 함.
+		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
+		float otherDist = info.distance;
 
 		// 타겟팅 하고있는 플레이어.
 		auto inGameScene = dynamic_cast<CSceneInGame*>(mScene);
 		auto myPlayerObject = inGameScene->GetMyPlayerObject();
 		auto myPlayerStat = dynamic_cast<IPlayerStatController*>(myPlayerObject);
 		float myDist = myPlayerStat->GetPlayDistance();
-
-		// 현재 타게팅된 플레이어를 기준으로 상대적인 화면 위치를 지정해야 함.
-		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
-		float otherDist = info.distance;
 
 		SetDebugText(std::wstring(L"distance: " + std::to_wstring(otherDist) + L"\ntargetDist: " + std::to_wstring(myDist)).c_str());
 
@@ -95,6 +97,7 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 	{
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
 		float otherHeight = info.height;
+
 		FVector3D worldPos = GetWorldPosition();
 		worldPos.y = otherHeight;
 		SetMovePlayer(worldPos);

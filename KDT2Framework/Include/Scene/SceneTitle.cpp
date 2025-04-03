@@ -51,9 +51,9 @@ void CSceneTitle::ProcessMessage()
 
 void CSceneTitle::DistributeMessage(const RecvMessage& msg)
 {
-	for (auto it : mObjNetworkController)
+	for (auto& it : mObjNetworkController)
 	{
-		(it)->ProcessMessage(msg);
+		it->ProcessMessage(msg);
 	}
 }
 

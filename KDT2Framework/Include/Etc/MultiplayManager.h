@@ -19,14 +19,24 @@ namespace Multiplay
 		FPlayerInfo()
 		{
 			id = -1;
-			characterType = 0;
 			isHost = false;
+			arrItemType.resize(PLAYER_ITEM_COUNT_MAX, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
+			Init();
+		}
+
+		void Init()
+		{
+			characterType = 0;
 			isReady = false;
 			isDeadInGame = false;
 			curHp = 0.0f;
 			distance = 0.0f;
 			height = 0.0f;
-			arrItemType.resize(PLAYER_ITEM_COUNT_MAX, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
+
+			for (auto& itemType : arrItemType)
+			{
+				itemType = PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+			}
 		}
 	};
 }
@@ -50,6 +60,14 @@ public:
 		mCurMapIndex = 0;
 		mIsStart = false;
 		mIsHost = false;
+	}
+
+	void ResetPlayerAfterInGame()
+	{
+   		for (auto& playerInfo : mPlayerInfoList)
+		{
+			playerInfo.Init();
+		}
 	}
 
 	const Multiplay::FPlayerInfo GetPlayerInfoByIndex(const int _index);

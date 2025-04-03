@@ -31,9 +31,9 @@ protected:
     virtual void DistributeMessage(const struct RecvMessage& msg) = 0;
     /*void DistributeMessage(struct RecvMessage& msg)
     {
-        for (auto it : mObjNetworkController)
+        for (auto& it : mObjNetworkController)
         {
-            (it)->ProcessMessage(msg);
+            it->ProcessMessage(msg);
         }
     }*/
 

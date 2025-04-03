@@ -43,7 +43,7 @@ CLobbyWidget::CLobbyWidget()
 	{ // 아이템 정보 세팅.
 		auto itemInfos = CDataStorageManager::GetInst()->GetItemInfoDatas();
 		int index = 0;
-		for (auto item : itemInfos)
+		for (auto& item : itemInfos)
 		{
 			mArrItemImagePath.push_back(item.second.GetItmeImagePath(index));
 			mArrItemImageName.push_back(item.second.GetItmeImageName(index));
