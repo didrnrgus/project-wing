@@ -29,6 +29,8 @@ protected:
 	// Debug TextBlock
 	CSharedPtr<class CWidgetComponent> mDebugTextComp;
 	class CDebugWidget* mDebugWidget;
+	CSharedPtr<class CWidgetComponent> mPlayerObjectWidgetComp;
+	class CPlayerObjectWidget* mPlayerObjectWidget;
 
 public:
 	virtual bool Init() override;

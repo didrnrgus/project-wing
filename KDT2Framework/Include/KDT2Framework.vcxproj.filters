@@ -141,8 +141,11 @@
     <ClCompile Include="UI\UserWidget\DebugWidget.cpp">
       <Filter>UI\UserWidget</Filter>
     </ClCompile>
+    <ClCompile Include="UI\UserWidget\PlayerObjectWidget.cpp">
+      <Filter>UI\UserWidget</Filter>
+    </ClCompile>
     <ClCompile Include="UI\UserWidget\SceneWidget.cpp">
-      <Filter>소스 파일</Filter>
+      <Filter>UI\UserWidget</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -264,7 +267,10 @@
       <Filter>UI\UserWidget</Filter>
     </ClInclude>
     <ClInclude Include="UI\UserWidget\SceneWidget.h">
-      <Filter>헤더 파일</Filter>
+      <Filter>UI\UserWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserWidget\PlayerObjectWidget.h">
+      <Filter>UI\UserWidget</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -4,10 +4,15 @@
 #include "Component/CameraComponent.h"
 #include "Component/WidgetComponent.h"
 #include "Etc/DataStorageManager.h"
+#include "Etc/NetworkManager.h"
 #include "Scene/SceneManager.h"
 #include "UI/UserWidget/DebugWidget.h"
+#include "UI/UserWidget/PlayerObjectWidget.h"
 #include "Scene/SceneUIManager.h"
 #include "Scene/Scene.h"
+#include "Interface/IObjectNetworkController.h"
+#include "Object/PlayerInGameObject.h"
+#include "Object/PlayerInGameOtherObject.h"
 
 CPlayerGraphicObject::CPlayerGraphicObject()
 {
@@ -62,6 +67,40 @@ bool CPlayerGraphicObject::Init()
 	mDebugTextComp->SetEnable(false);
 #endif // _DEBUG
 
+	mPlayerObjectWidgetComp = CreateComponent<CWidgetComponent>("mPlayerObjectWidgetComp");
+	mRoot->AddChild(mPlayerObjectWidgetComp);
+	//mPlayerObjectWidgetComp->SetRelativePos(FVector2D(100.0f, -100.0f));
+	mPlayerObjectWidget = mScene->GetUIManager()->CreateWidget<CPlayerObjectWidget>("mPlayerObjectWidget");
+	mPlayerObjectWidgetComp->SetWidget(mPlayerObjectWidget);
+
+	if (CNetworkManager::GetInst()->IsMultiplay()
+		&& CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::InGame)
+	{
+		auto playerInGameObj = dynamic_cast<CPlayerInGameObject*>(this);
+		if (playerInGameObj)
+		{
+			auto objNetController = dynamic_cast<IObjectNetworkController*>(playerInGameObj);
+			if (objNetController)
+				mPlayerObjectWidget->SetObjectNetworkController(objNetController);
+		}
+
+		auto playerInGameOtherObj = dynamic_cast<CPlayerInGameOtherObject*>(this);
+		if (playerInGameOtherObj)
+		{
+			auto objNetController = dynamic_cast<IObjectNetworkController*>(playerInGameOtherObj);
+			if (objNetController)
+				mPlayerObjectWidget->SetObjectNetworkController(objNetController);
+		}
+
+		mPlayerObjectWidget->SetEnable(playerInGameOtherObj);
+		mPlayerObjectWidgetComp->SetEnable(playerInGameOtherObj);
+	}
+	else 
+	{
+		mPlayerObjectWidgetComp->SetEnable(false);
+		mPlayerObjectWidget->SetEnable(false);
+	}
+
 	mDeadSign = CreateComponent<CSpriteComponent>(TEXTURE_NAME_DEAD_SIGN);
 	mRoot->AddChild(mDeadSign);
 	mDeadSign->SetTexture(TEXTURE_NAME_DEAD_SIGN, TEXTURE_PATH_DEAD_SIGN);
@@ -101,6 +140,15 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 
 		float tempVal = cos(DirectX::XMConvertToRadians(mMapDifficultySinAngle));
 		mRoot->SetWorldPos(mRootInitPos + FVector3D::Axis[EAxis::Y] * tempVal * 10);
+	}
+
+	if (CSceneManager::GetInst()->GetCurrentSceneType() == EGameScene::InGame)
+	{
+		mPlayerObjectWidgetComp->SetRelativePos(FVector2D(100.0f, -100.0f));
+
+		auto widgetPos = mPlayerObjectWidgetComp->GetWorldPosition();
+		widgetPos.x = Clamp(widgetPos.x, mResolution.x * 0.5f * -1.0f, mResolution.x * 0.5f * 1.0f - 180.0f);
+		mPlayerObjectWidgetComp->SetWorldPos(widgetPos);
 	}
 }
 

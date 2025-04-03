@@ -13,7 +13,7 @@ protected:
 	CSharedPtr<class CTextBlock> mDebugText;
 	
 public:
-	virtual bool Init();
+	virtual bool Init() override;
 
 	void SetDebugText(const wchar_t* wc);
 	const wchar_t* GetDebugText();
