@@ -6,6 +6,9 @@
 #include "Component/SpriteComponent.h"
 #include "Scene/SceneInGame.h"
 #include "Object/PlayerInGameObject.h"
+#include "Etc/DataStorageManager.h"
+#include "Etc/NetworkManager.h"
+#include "Etc/MultiplayManager.h"
 
 
 CPlayerInGameOtherObject::CPlayerInGameOtherObject()
@@ -29,6 +32,32 @@ bool CPlayerInGameOtherObject::Init()
 {
 	CPlayerGraphicObject::Init();
 	AddListener();
+
+	SetPlayerNetIdCallback(
+		[this](int _netId)
+		{
+			CLog::PrintLog("CPlayerInGameOtherObject::Init() SetPlayerNetIdCallback ########");
+			int itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
+			auto itemDatas = CDataStorageManager::GetInst()->GetItemInfoDatas();
+			auto playerNetInfo = CMultiplayManager::GetInst()->GetPlayerInfoValueById(_netId);
+			// 선택한 캐릭의 초기 스텟 등록.
+			auto initializedStatData = CDataStorageManager::GetInst()->GetCharacterState(playerNetInfo.characterType);
+			InitStat(initializedStatData);
+
+			// 아이템 착용한것 플레이어에 스텟 적용. 베이스 스탯에 Add 하는 형식임 이전에 Init되어 있어야 함.
+			for (int i = 0; i < itemSlotCount; i++)
+			{
+				int itemIndexInSlot = playerNetInfo.arrItemType[i];
+				if (itemIndexInSlot >= 0)
+				{
+					// 어떤 스탯에 얼마를 적용할것인지.
+					AddValueByStatIndex(
+						static_cast<EStatInfoText::Type>(itemDatas[itemIndexInSlot].StatType)
+						, itemDatas[itemIndexInSlot].AddValue);
+				}
+			}
+		});
+
 	return true;
 }
 
@@ -64,7 +93,7 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 	case (int)ServerMessage::MSG_PLAYER_DEAD:
 	{
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
-	
+
 		if (info.isDeadInGame)
 		{
 			// dead sign

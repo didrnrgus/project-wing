@@ -18,6 +18,10 @@ private:
 public:
 	static bool Init();
 	static void Destroy();
+	/*
+		char _logStr[128] = {};
+		sprintf_s(_logStr, "");
+	*/
 	static void PrintLog(const std::string& Text,
 		ELogPrintType PrintType = ELogPrintType::All);
 	static void SaveLog();

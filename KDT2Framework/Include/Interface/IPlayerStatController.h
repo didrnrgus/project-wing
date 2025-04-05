@@ -166,7 +166,7 @@ public:
 	inline float GetBoostValue() { return isBoostMode ? 2.0f : 1.0f; }
 	inline float GetPlayDistance() { return playDistance; }
 
-public:
+protected:
 	// 콜백 함수들 등록
 	template <typename T>
 	void SetPlayerFrezeCallback(T* Obj, void(T::* Func)())

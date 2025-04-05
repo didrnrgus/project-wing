@@ -1,8 +1,10 @@
 #pragma once
 #include "Object/PlayerGraphicObject.h"
 #include "Interface/IObjectNetworkController.h"
+#include "Interface/IPlayerStatController.h"
+#include "Interface/IGamePlayStateController.h"
 
-class CPlayerInGameOtherObject: public CPlayerGraphicObject, public IObjectNetworkController
+class CPlayerInGameOtherObject: public CPlayerGraphicObject, public IObjectNetworkController, public IPlayerStatController, public IGamePlayStateController
 {
 	friend class CScene;
 

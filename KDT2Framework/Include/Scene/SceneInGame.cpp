@@ -104,15 +104,26 @@ bool CSceneInGame::InitObject()
 			bool _isMine = myPlayerInfo.id == _id;
 
 			if (_isMine)
-				_playerObject = CreateObj<CPlayerInGameObject>("[IsMine]PlayerInGameObject" + std::to_string(_id));
+			{
+				mMyPlayerObject = CreateObj<CPlayerInGameObject>("[IsMine]PlayerInGameObject" + std::to_string(_id));
+				_playerObject = mMyPlayerObject;
+
+				auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(mMyPlayerObject);
+				if (playerGamePlayStateCtlr)
+					mArrGamePlayStateCtlr.push_back(playerGamePlayStateCtlr);
+			}
 			else
-				_playerObject = CreateObj<CPlayerInGameOtherObject>("PlayerInGameObject" + std::to_string(_id));
+			{
+				auto _playerOtherObject = CreateObj<CPlayerInGameOtherObject>("PlayerInGameObject" + std::to_string(_id));
+				_playerObject = _playerOtherObject;
+
+				auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(_playerOtherObject);
+				if (playerGamePlayStateCtlr)
+					mArrGamePlayStateCtlr.push_back(playerGamePlayStateCtlr);
+			}
 
 			_playerObject->SetIsMine(_isMine);
 			players[i] = _playerObject;
-
-			if (_isMine)
-				mMyPlayerObject = dynamic_cast<CPlayerInGameObject*>(_playerObject);
 
 			auto _tempNetworkController = dynamic_cast<IObjectNetworkController*>(_playerObject);
 			if (_tempNetworkController != nullptr)
@@ -134,6 +145,11 @@ bool CSceneInGame::InitObject()
 
 		// 캐릭터 왼관 세팅
 		SetChangeGraphic(0, CDataStorageManager::GetInst()->GetSelectedCharacterIndex());
+	
+		// 이거 내가 조작하는 플레이어만 포함시키자.
+		auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(mMyPlayerObject);
+		if (playerGamePlayStateCtlr)
+			mArrGamePlayStateCtlr.push_back(playerGamePlayStateCtlr);
 	}
 
 	if (mMyPlayerObject == nullptr)
@@ -164,10 +180,6 @@ bool CSceneInGame::InitObject()
 	if (obstacleGamePlayStateCtlr)
 		mArrGamePlayStateCtlr.push_back(obstacleGamePlayStateCtlr);
 
-	// 이거 내가 조작하는 플레이어만 포함시키자.
-	auto playerGamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(mMyPlayerObject);
-	if (playerGamePlayStateCtlr)
-		mArrGamePlayStateCtlr.push_back(playerGamePlayStateCtlr);
 
 	SetGamePlayState(EGamePlayState::Ready);
 	return true;
@@ -177,6 +189,10 @@ bool CSceneInGame::InitWidget()
 {
 	mInGameWidget = mUIManager->CreateWidget<CInGameWidget>(SCENE_INGAME_WIDGET);
 	mUIManager->AddToViewport(mInGameWidget);
+
+	auto _gamePlayStateCtlr = dynamic_cast<IGamePlayStateController*>(mInGameWidget);
+	if (_gamePlayStateCtlr)
+		mArrGamePlayStateCtlr.push_back(_gamePlayStateCtlr);
 	return true;
 }
 
@@ -185,6 +201,39 @@ bool CSceneInGame::InitWidget()
 CSceneObject* CSceneInGame::GetPlayer(int index)
 {
 	return players[index];
+}
+
+bool CSceneInGame::GetOtherPlayerStatByNetId(int _netId, IPlayerStatController*& _playerStatOut)
+{
+	for (auto _player : players)
+	{
+		if (!_player)
+			continue;
+
+		auto _playerObject = dynamic_cast<CPlayerInGameOtherObject*>(_player.Get());
+
+		if (!_playerObject)
+			continue;
+
+		auto _netObject = dynamic_cast<IObjectNetworkController*>(_playerObject);
+
+		if (!_netObject)
+			continue;
+
+		if (_netId != _netObject->GetNetID())
+			continue;
+
+		auto _playerStat = dynamic_cast<IPlayerStatController*>(_playerObject);
+
+		if (!_playerStat)
+			continue;
+
+		_playerStatOut = _playerStat;
+		return true;
+	}
+
+	_playerStatOut = nullptr;
+	return false;
 }
 
 bool CSceneInGame::SetChangeGraphic(int playerIndex, int graphicIndex)
@@ -246,7 +295,7 @@ void CSceneInGame::ProcessMessage()
 		{
 			// 내꺼 가져옴. -> 조종하고 있는 플레이어.
 			auto myPlayerNetInfo = CMultiplayManager::GetInst()->GetPlayerInfoFromMyId();
-			if(myPlayerNetInfo.isDeadInGame)
+			if (myPlayerNetInfo.isDeadInGame)
 				SetGamePlayState(EGamePlayState::Dead);
 			break;
 		}

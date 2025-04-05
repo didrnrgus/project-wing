@@ -14,6 +14,7 @@ class IObjectNetworkController abstract
 {
 protected:
 	int mNetID = -1;
+	std::function<void(int)> playerNetIdCallback;
 
 protected:
 	virtual void AddListener() = 0;
@@ -40,7 +41,7 @@ protected:
 	// ClientMessage::MSG_MOVE_UP
 	// ClientMessage::MSG_MOVE_DOWN
 	// ClientMessage::MSG_PLAYER_DEAD
-	void SendMessageTrigger(ClientMessage::Type _msgType) 
+	void SendMessageTrigger(ClientMessage::Type _msgType)
 	{
 		CNetworkManager::GetInst()->SendMsg(0, (int)_msgType, nullptr, 0);
 	}
@@ -65,6 +66,20 @@ protected:
 		CNetworkManager::GetInst()->SendMsg(0, (int)_msgType, data, sizeof(data));
 	}
 
+	// 템플릿 콜백 등록
+	template <typename T>
+	void SetPlayerNetIdCallback(T* Obj, void(T::* Func)())
+	{
+		playerNetIdCallback = std::bind(Func, Obj);
+	}
+
+	// 람다 콜백 등록
+	using CallbackFuncType = std::function<void(int)>; // 타입 이름 충돌 방지
+	void SetPlayerNetIdCallback(CallbackFuncType&& Func)
+	{
+		playerNetIdCallback = std::move(Func);
+	}
+
 public:
 	virtual void ProcessMessage(const struct RecvMessage& msg) = 0;
 	/*void ProcessMessage(const RecvMessage& msg)
@@ -78,6 +93,12 @@ public:
 	}*/
 
 public:
-	void SetNetID(int _id) { mNetID = _id; }
+	void SetNetID(int _id)
+	{
+		mNetID = _id;
+
+		if (playerNetIdCallback != nullptr)
+			playerNetIdCallback(mNetID);
+	}
 	int GetNetID() { return mNetID; }
 };

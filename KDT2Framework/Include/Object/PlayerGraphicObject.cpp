@@ -147,7 +147,7 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 		mPlayerObjectWidgetComp->SetRelativePos(FVector2D(100.0f, -100.0f));
 
 		auto widgetPos = mPlayerObjectWidgetComp->GetWorldPosition();
-		widgetPos.x = Clamp(widgetPos.x, mResolution.x * 0.5f * -1.0f, mResolution.x * 0.5f * 1.0f - 180.0f);
+		widgetPos.x = Clamp(widgetPos.x, mResolution.x * 0.5f * -1.0f, mResolution.x * 0.5f * 1.0f - 80.0f);
 		mPlayerObjectWidgetComp->SetWorldPos(widgetPos);
 	}
 }
