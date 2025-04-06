@@ -25,6 +25,8 @@ protected:
 	bool mIsMine = false;
 	int mIndexInScene = -1;
 	class IGamePlayShakeController* mCameraShake;
+
+	FVector3D mDestPos;
 	
 	// Debug TextBlock
 	CSharedPtr<class CWidgetComponent> mDebugTextComp;
@@ -49,4 +51,6 @@ public:
 	inline void SetIndexInScene(int _index) { mIndexInScene = _index; }
 	inline int GetIndexInScene() { return mIndexInScene; }
 	void SetDebugText(const wchar_t* wstr);
+
+	FVector3D GetDestWorldPos() { return mDestPos; }
 };

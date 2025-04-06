@@ -36,7 +36,7 @@ bool CPlayerInGameOtherObject::Init()
 	SetPlayerNetIdCallback(
 		[this](int _netId)
 		{
-			CLog::PrintLog("CPlayerInGameOtherObject::Init() SetPlayerNetIdCallback ########");
+			CLog::PrintLog("CPlayerInGameOtherObject::Init() SetPlayerNetIdCallback");
 			int itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
 			auto itemDatas = CDataStorageManager::GetInst()->GetItemInfoDatas();
 			auto playerNetInfo = CMultiplayManager::GetInst()->GetPlayerInfoValueById(_netId);
@@ -127,7 +127,7 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
 		float otherHeight = info.height;
 
-		FVector3D worldPos = GetWorldPosition();
+		FVector3D worldPos = GetDestWorldPos();
 		worldPos.y = otherHeight;
 		SetMovePlayer(worldPos);
 		break;

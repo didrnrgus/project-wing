@@ -233,9 +233,6 @@
     <ClInclude Include="Etc\ZOrderContainer.h">
       <Filter>Etc</Filter>
     </ClInclude>
-    <ClInclude Include="Interface\IScenePlayerInGameController.h">
-      <Filter>Interface</Filter>
-    </ClInclude>
     <ClInclude Include="Interface\IPlayerStatController.h">
       <Filter>Interface</Filter>
     </ClInclude>

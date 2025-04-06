@@ -213,7 +213,6 @@
     <ClInclude Include="Interface\IObjectNetworkController.h" />
     <ClInclude Include="Interface\ISceneNetworkController.h" />
     <ClInclude Include="Interface\IScenePlayerGraphicController.h" />
-    <ClInclude Include="Interface\IScenePlayerInGameController.h" />
     <ClInclude Include="Interface\IPlayerStatController.h" />
     <ClInclude Include="Object\CameraObject.h" />
     <ClInclude Include="Object\LineGroupObject.h" />

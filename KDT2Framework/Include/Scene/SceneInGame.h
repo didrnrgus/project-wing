@@ -1,9 +1,9 @@
 ﻿#pragma once
 #include "Scene\Scene.h"
-#include "Interface/IScenePlayerInGameController.h"
+#include "Interface/IScenePlayerGraphicController.h"
 #include "Interface/ISceneNetworkController.h"
 
-class CSceneInGame : public CScene, public IScenePlayerInGameController, public ISceneNetworkController
+class CSceneInGame : public CScene, public IScenePlayerGraphicController, public ISceneNetworkController
 {
 	friend class CSceneManager;
 
@@ -28,7 +28,6 @@ protected:
 	virtual bool InitObject() override;
 	virtual bool InitWidget() override;
 	virtual bool SetChangeGraphic(int playerIndex, int graphicIndex) override;
-	virtual bool SetMovePlayer(int playerIndex, FVector3D moveValueVector) override;
 
 public:
 	// 플레이어 캐릭터 종류가 아닌 현재방의 사용자캐릭을 불러오는것이다.

@@ -50,6 +50,8 @@ bool CPlayerGraphicObject::Init()
 	mRoot = CreateComponent<CSpriteComponent>("PlayerRoot");
 	mRoot->SetPivot(0.5f, 0.5f);
 	mRoot->SetWorldPos(mRootInitPos);
+	mDestPos = mRootInitPos;
+
 	auto defaultPlayerStat = CDataStorageManager::GetInst()->GetCharacterState(0);
 	FVector3D tempRootSize = FVector3D(defaultPlayerStat.SizeX, defaultPlayerStat.SizeY, 1.f);
 	mRoot->SetWorldScale(tempRootSize);
@@ -149,12 +151,19 @@ void CPlayerGraphicObject::Update(float DeltaTime)
 		auto widgetPos = mPlayerObjectWidgetComp->GetWorldPosition();
 		widgetPos.x = Clamp(widgetPos.x, mResolution.x * 0.5f * -1.0f, mResolution.x * 0.5f * 1.0f - 80.0f);
 		mPlayerObjectWidgetComp->SetWorldPos(widgetPos);
+
+		if (!mIsMine)
+		{
+			FVector3D _curPos = mRoot->GetWorldPosition();
+			FVector3D _pos = mDestPos - _curPos;
+			mRoot->SetWorldPos(_curPos + _pos * DeltaTime * 10.0f);
+		}
 	}
 }
 
 void CPlayerGraphicObject::SetMovePlayer(FVector3D _worldPos)
 {
-	mRoot->SetWorldPos(_worldPos);
+	mDestPos = _worldPos;
 }
 
 bool CPlayerGraphicObject::SetChangeGraphic(int index)

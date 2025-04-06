@@ -249,19 +249,6 @@ bool CSceneInGame::SetChangeGraphic(int playerIndex, int graphicIndex)
 	return true;
 }
 
-bool CSceneInGame::SetMovePlayer(int playerIndex, FVector3D moveValueVector)
-{
-	auto tempPlayer = dynamic_cast<CPlayerGraphicObject*>(players[playerIndex].Get());
-
-	if (tempPlayer == nullptr)
-	{
-		return false;
-	}
-
-	tempPlayer->SetMovePlayer(moveValueVector);
-	return true;
-}
-
 void CSceneInGame::SetGamePlayState(EGamePlayState::Type type)
 {
 	// 씬 상태 바꾸고.
