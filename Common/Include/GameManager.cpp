@@ -83,8 +83,8 @@ bool CGameManager::Init(HINSTANCE hInst)
 
 	mhInst = hInst;
 
-	lstrcpy(mClassName, TEXT("KDT2Framework"));
-	lstrcpy(mTitleName, TEXT("KDT2Framework"));
+	lstrcpy(mClassName, TEXT("ProjectWing"));
+	lstrcpy(mTitleName, TEXT("ProjectWing"));
 
 	RegisterWindowClass();
 
@@ -382,18 +382,19 @@ void CGameManager::OpenPopup(HWND hWnd)
 		pt.x, pt.y, 300, 150,  // 마우스 포인터 위치 (pt.x, pt.y)에서 창을 열기
 		hWnd, NULL, GetModuleHandle(NULL), NULL);
 
+	std::wstring _ipAddr(gIPAddress.begin(), gIPAddress.end());
 	// 입력 필드 추가
-	HWND hEditBox = CreateWindowExA(0, "EDIT", gIPAddress.c_str(),
+	HWND hEditBox = CreateWindowEx(0, TEXT("EDIT"), _ipAddr.c_str(),
 		WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
 		50, 30, 200, 20, hPopup, (HMENU)ID_EDITBOX, GetModuleHandle(NULL), NULL);
 
 	// 확인 버튼 추가
-	CreateWindowExA(0, "BUTTON", "확인",
+	CreateWindowEx(0, TEXT("BUTTON"), TEXT("확인"),
 		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
 		50, 60, 50, 30, hPopup, (HMENU)ID_OK_BUTTON, GetModuleHandle(NULL), NULL);
 
 	// 취소 버튼 추가
-	CreateWindowExA(0, "BUTTON", "취소",
+	CreateWindowEx(0, TEXT("BUTTON"), TEXT("취소"),
 		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
 		150, 60, 50, 30, hPopup, (HMENU)ID_CANCEL_BUTTON, GetModuleHandle(NULL), NULL);
 
