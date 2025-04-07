@@ -1,6 +1,7 @@
 ﻿#include "GameInfo.h"
 #include "Etc/JsonController.h"
 #include "Etc/NotionDBController.h"
+#include "Etc/DataStorageManager.h"
 
 DEFINITION_SINGLE(CJsonController);
 
@@ -10,6 +11,34 @@ CJsonController::~CJsonController() {}
 
 template<typename T>
 nlohmann::json CJsonController::ConvertToJson(const T& data) { return nlohmann::json(); }
+
+template<>
+nlohmann::json CJsonController::ConvertToJson(const FUserRankInfo& data)
+{
+	return {
+		{"parent", {
+			{"database_id", CDataStorageManager::GetInst()->GetConfig().DatabaseID}
+		}},
+		{"properties", {
+			{"title", {
+				{"title", {{
+					{"text", {{"content", "Untitled"}}}
+				}}}
+			}},
+			{"name", {
+				{"rich_text", {{
+					{"text", {{"content", data.Name}}}
+				}}}
+			}},
+			{"map", {{"number", data.Map}}},
+			{"character", {{"number", data.Character}}},
+			{"distance", {{"number", data.Distance}}},
+			{"item_0", {{"number", data.Item_0}}},
+			{"item_1", {{"number", data.Item_0}}},
+			{"item_2", {{"number", data.Item_2}}}
+		}}
+	};
+}
 
 template<typename T>
 bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string, T>& datas) { return false; }
@@ -186,9 +215,6 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FConfig& data)
 	if (json.contains("db_id"))
 		data.DatabaseID = json["db_id"].get<std::string>();
 
-	if (json.contains("db_url"))
-		data.DatabaseURL = json["db_url"].get<std::string>();
-
 	if (json.contains("api_key"))
 		data.APIKey = json["api_key"].get<std::string>();
 
@@ -229,7 +255,7 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FMapInfo& data)
 
 	if (json.contains("difficulty_rate"))
 		data.DifficultyRate = json["difficulty_rate"].get<float>();
-	
+
 	if (json.contains("collision_damage"))
 		data.CollisionDamage = json["collision_damage"].get<float>();
 

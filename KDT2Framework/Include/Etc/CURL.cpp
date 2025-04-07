@@ -1,6 +1,7 @@
 ﻿#include "GameInfo.h"
 #include "Etc/CURL.h"
 #include "Etc/NotionDBController.h"
+#include "Etc/DataStorageManager.h"
 
 DEFINITION_SINGLE(CCURL);
 
@@ -33,8 +34,6 @@ std::string CCURL::SendRequest(const std::string& InURL
 	curl_easy_setopt(curl, CURLOPT_CAINFO, CACERT_PATH);
 
 	std::string response;
-	std::string auth = HEADER_AUTHORIZATION + CNotionDBController::GetInst()->GetNotionAPIKey();
-	std::string version = HEADER_NOTION_VERSION + CNotionDBController::GetInst()->GetLastUpdateDate();
 
 	curl_easy_setopt(curl, CURLOPT_URL, InURL.c_str());
 	curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, WriteCallback);
@@ -45,8 +44,8 @@ std::string CCURL::SendRequest(const std::string& InURL
 	if (InMethod != METHOD_GET)
 	{
 		// 헤더 추가
-		headers = curl_slist_append(headers, auth.c_str());
-		headers = curl_slist_append(headers, version.c_str());
+		headers = curl_slist_append(headers, (HEADER_AUTHORIZATION + CDataStorageManager::GetInst()->GetConfig().APIKey).c_str());
+		headers = curl_slist_append(headers, HEADER_NOTION_VERSION);
 		headers = curl_slist_append(headers, HEADER_CONTENT_TYPE);
 
 		curl_easy_setopt(curl, CURLOPT_HTTPHEADER, headers);

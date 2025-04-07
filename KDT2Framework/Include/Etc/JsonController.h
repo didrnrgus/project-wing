@@ -4,30 +4,8 @@
 #include "Etc/ConstValues.h"
 #include "Etc/JsonContainer.h"
 
-namespace nlohmann {
-	template <>
-	struct adl_serializer<FUserInfo>
-	{
-		static void to_json(json& j, const FUserInfo& userInfo)
-		{
-			j = nlohmann::json
-			{
-				{PROP_NAME, userInfo.Name}
-				,{PROP_MAP, userInfo.Map}
-				,{PROP_DISTANCE, userInfo.Distance}
-				,{PROP_TIME, userInfo.Time}
-			};
-		}
-
-		static void from_json(const json& j, FUserInfo& userInfo)
-		{
-			j.at(PROP_NAME).get_to(userInfo.Name);
-			j.at(PROP_MAP).get_to(userInfo.Map);
-			j.at(PROP_DISTANCE).get_to(userInfo.Distance);
-			j.at(PROP_TIME).get_to(userInfo.Time);
-		}
-	};
-
+namespace nlohmann
+{
 	template<>
 	struct adl_serializer<FLineNode>
 	{
@@ -63,7 +41,7 @@ public:
 	bool ParseJson(const nlohmann::json& json, T& data);
 
 	template<typename T>
-	bool ParseJson(const nlohmann::json& json, std::map<int,T>& datas);
+	bool ParseJson(const nlohmann::json& json, std::map<int, T>& datas);
 
 	template<typename T>
 	bool ParseJson(const nlohmann::json& json, std::map<std::string, T>& datas);
@@ -72,10 +50,10 @@ public:
 
 	FSpriteSheetInfo ParseJsonFSpriteSheetInfo(const nlohmann::json& json);
 
-	std::string ReadJsonFile(const std::string& filePath) 
+	std::string ReadJsonFile(const std::string& filePath)
 	{
 		std::ifstream file(filePath);  // 파일 열기
-		if (!file.is_open()) 
+		if (!file.is_open())
 		{
 			throw std::runtime_error("파일을 열 수 없습니다: " + filePath);
 		}

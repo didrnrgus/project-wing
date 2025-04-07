@@ -15,6 +15,8 @@ private:
 	// 아틀라스 내 slace 한스프라이트 시트요소이름.
 	std::map<std::string, std::map<std::string, FSpriteSheetInfo>> mSpriteAtlasInfoBySpriteName;
 	std::map<std::string, FSpriteAtlasInfo> mSpriteAtlasInfoByFileName;
+
+	std::map<std::string, FUserRankInfo>& mUserRankInfosByPageId;
 private:
 	int curSelectedMapIndex;
 	int curSelectedCharacterIndex;
@@ -34,6 +36,8 @@ public:
 	inline void SetSelectedMapIndex(int mapIndex) { curSelectedMapIndex = mapIndex; }
 	inline void SetSelectedCharacterIndex(int characterIndex) { curSelectedCharacterIndex = characterIndex; }
 	inline void SetSelectedItemTypeInSlotIndex(int slotIndex, int itemTypeIndex) { curSelectedItemIndex[slotIndex] = itemTypeIndex; }
+
+	inline void UpdateUserRankInfos();
 
 	inline bool GetIsLoadedData() { return isLoadedData; }
 	inline const FConfig GetConfig() { return mConfigData; }

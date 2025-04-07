@@ -1,5 +1,6 @@
 ﻿#include "DataStorageManager.h"
 #include "Etc/JsonController.h"
+#include "Etc/NotionDBController.h"
 
 DEFINITION_SINGLE(CDataStorageManager);
 
@@ -67,6 +68,12 @@ void CDataStorageManager::SetSpriteAtlasInfo(std::string strJson)
 	nlohmann::json json = nlohmann::json::parse(strJson);
 	CJsonController::GetInst()->ParseJson(json, mSpriteAtlasInfoBySpriteName);
 	CJsonController::GetInst()->ParseJson(json, mSpriteAtlasInfoByFileName);
+}
+
+inline void CDataStorageManager::UpdateUserRankInfos()
+{
+	mUserRankInfosByPageId.clear();
+	CNotionDBController::GetInst()->ReadRecords(mUserRankInfosByPageId);
 }
 
 const FLineNode CDataStorageManager::GetLineNodeInSelectedMap(int lineNodeIndex)

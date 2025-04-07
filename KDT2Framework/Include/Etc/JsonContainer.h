@@ -3,16 +3,22 @@
 #include "GameInfo.h"
 #include "Etc/ConstValues.h"
 
-struct FUserInfo
+struct FUserRankInfo
 {
-	std::string Name = "";
-	std::string Map = "";
-	int Distance = 0; // Rank
-	int Time = 0;
+	std::string Name;
+	int Map;
+	int Character;
+	int Distance; // Rank
+	int Item_0;
+	int Item_1;
+	int Item_2;
 
-	FUserInfo() {};
-	FUserInfo(std::string name, std::string map, int dist, int time)
-		: Name(name), Map(map), Distance(dist), Time(time) {};
+	FUserRankInfo() {};
+	FUserRankInfo(std::string _name, int _map, int _character, int _dist
+		, int _item_0, int _item_1, int _item_2)
+		: Name(_name), Map(_map), Character(_character), Distance(_dist)
+		, Item_0(_item_0), Item_1(_item_1), Item_2(_item_2)
+	{}
 };
 
 /*
@@ -218,8 +224,7 @@ struct FCharacterState
 /*
 {
 	"db_id": "19e45759635e8028adb0d83e3cf969ff",
-	"db_url": "https://api.notion.com/v1/databases/19e45759635e8028adb0d83e3cf969ff",
-	"api_key": "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",
+	"api_key": "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",
 	"map_file_list": [
 		"map_0.json",
 		"map_1.json",
@@ -234,7 +239,6 @@ struct FCharacterState
 struct FConfig
 {
 	std::string DatabaseID;
-	std::string DatabaseURL;
 	std::string APIKey;
 	std::vector<std::string> mapFileNameList;
 	std::string CharacterFileName;
