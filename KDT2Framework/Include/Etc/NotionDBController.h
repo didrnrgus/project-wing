@@ -11,8 +11,8 @@ class CNotionDBController
 public:
 	bool CreateUserRecord(const FUserRankInfo& userInfo);
 	//bool UpdateRecord(const std::string& page_id);
-	//bool DeleteRecord(const std::string& page_id);
-	bool ReadRecords(std::map<std::string, FUserRankInfo>& users);
+	bool DeleteRecord(const std::string& page_id);
+	bool ReadRecords();
 
 	DECLARE_SINGLE(CNotionDBController);
 };

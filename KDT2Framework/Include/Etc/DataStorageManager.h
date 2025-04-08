@@ -16,7 +16,7 @@ private:
 	std::map<std::string, std::map<std::string, FSpriteSheetInfo>> mSpriteAtlasInfoBySpriteName;
 	std::map<std::string, FSpriteAtlasInfo> mSpriteAtlasInfoByFileName;
 
-	std::map<std::string, FUserRankInfo>& mUserRankInfosByPageId;
+	std::map<std::string, FUserRankInfo> mUserRankInfosByPageId;
 private:
 	int curSelectedMapIndex;
 	int curSelectedCharacterIndex;
@@ -31,13 +31,14 @@ public:
 	void SetItemInfoData(std::string strJson);
 	void SetMapData(std::string strJson);
 	void SetSpriteAtlasInfo(std::string strJson);
+	void SetRankData(std::string strJson);
 
 	inline void SetIsLoadedData(bool _isLoaded) { isLoadedData = _isLoaded; }
 	inline void SetSelectedMapIndex(int mapIndex) { curSelectedMapIndex = mapIndex; }
 	inline void SetSelectedCharacterIndex(int characterIndex) { curSelectedCharacterIndex = characterIndex; }
 	inline void SetSelectedItemTypeInSlotIndex(int slotIndex, int itemTypeIndex) { curSelectedItemIndex[slotIndex] = itemTypeIndex; }
 
-	inline void UpdateUserRankInfos();
+	void UpdateUserRankInfos();
 
 	inline bool GetIsLoadedData() { return isLoadedData; }
 	inline const FConfig GetConfig() { return mConfigData; }
@@ -103,6 +104,7 @@ public:
 	inline const std::map<int, FItemInfo> GetItemInfoDatas() { return mItemInfoDatasByIndex; }
 	inline const FItemInfo GetItemInfoDataByIndex(int index) { return mItemInfoDatasByIndex[index]; }
 	inline const int GetCurSelectedItemIDBySlotIndex(int index) { return curSelectedItemIndex[index]; }
+
 private:
 	DECLARE_SINGLE(CDataStorageManager)
 };

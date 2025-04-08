@@ -38,6 +38,7 @@ private:
 		, void(CTitleWidget::* Func)(), CSharedPtr<class CTextBlock>& textBlock, const wchar_t* textBlockContent);
 	
 	void LoadGameData();
+	void LoadRankData();
 	void LoadProcess();
 	void LoadScene();
 	

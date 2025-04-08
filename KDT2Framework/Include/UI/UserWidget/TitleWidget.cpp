@@ -158,6 +158,25 @@ void CTitleWidget::LoadGameData()
 
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
 			ShowLoading(false);
+
+			LoadRankData();
+		})));
+}
+
+void CTitleWidget::LoadRankData()
+{
+	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[this]()
+		{
+			ShowLoading(true);
+
+			// rank load
+			AddQueueLoadingDescText(L"Ranking Data를 로딩 중 입니다.\n🏃🏻🏃🏻🏃🏻🏃🏻🏃🏻", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+			CDataStorageManager::GetInst()->UpdateUserRankInfos();
+
+			CTaskManager::GetInst()->RemoveTask(mTaskID);
+			ShowLoading(false);
 		})));
 }
 

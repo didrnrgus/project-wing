@@ -31,12 +31,12 @@ bool CNotionDBController::CreateUserRecord(const FUserRankInfo& userInfo)
     return true;
 }
 
-bool CNotionDBController::ReadRecords(std::map<std::string, FUserRankInfo>& users)
+bool CNotionDBController::ReadRecords()
 {
     CLog::PrintLog("CNotionDBController::ReadRecords()");
 
     char url[128] = {};
-    sprintf_s(url, NOTION_URL_FORMAT_DATABSE_ID_QUERY, CDataStorageManager::GetInst()->GetConfig().DatabaseID);
+    sprintf_s(url, NOTION_URL_FORMAT_DATABSE_ID_QUERY, CDataStorageManager::GetInst()->GetConfig().DatabaseID.c_str());
 
     // Notion API는 GET이 아니라 POST 사용!
     std::string response = CCURL::GetInst()->SendRequest(url
@@ -46,9 +46,7 @@ bool CNotionDBController::ReadRecords(std::map<std::string, FUserRankInfo>& user
     if (response.empty())
         return false;
     
-    nlohmann::json jsonData = nlohmann::json::parse(response);
-    if (CJsonController::GetInst()->ParseLineNodeInfo(jsonData, users) == false)
-        return false;
+    CDataStorageManager::GetInst()->SetRankData(response);
 
     return true;
 }
@@ -70,21 +68,22 @@ bool CNotionDBController::ReadRecords(std::map<std::string, FUserRankInfo>& user
 //    return true;
 //}
 
-//bool CNotionDBController::DeleteRecord(const std::string& page_id)
-//{
-//    const std::string url = BASE_URL + "pages/" + page_id;
-//    nlohmann::json jsonData;
-//    jsonData[ATT_ARCHIVED] = true;
-//
-//    std::string response = CCURL::GetInst()->SendRequest(url
-//    , METHOD_PATCH
-//    , jsonData.dump());
-//
-//    if (response.empty())
-//        return false;
-//
-//    return true;
-//}
+bool CNotionDBController::DeleteRecord(const std::string& page_id)
+{
+    char url[128] = {};
+    sprintf_s(url, "%spages/%s", BASE_URL, page_id);
+    nlohmann::json jsonData;
+    jsonData[ATT_ARCHIVED] = true;
+
+    std::string response = CCURL::GetInst()->SendRequest(url
+    , METHOD_PATCH
+    , jsonData.dump());
+
+    if (response.empty())
+        return false;
+
+    return true;
+}
 
 
 

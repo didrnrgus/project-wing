@@ -70,10 +70,16 @@ void CDataStorageManager::SetSpriteAtlasInfo(std::string strJson)
 	CJsonController::GetInst()->ParseJson(json, mSpriteAtlasInfoByFileName);
 }
 
-inline void CDataStorageManager::UpdateUserRankInfos()
+void CDataStorageManager::SetRankData(std::string strJson)
+{
+	nlohmann::json json = nlohmann::json::parse(strJson);
+	CJsonController::GetInst()->ParseJson(json, mUserRankInfosByPageId);
+}
+
+void CDataStorageManager::UpdateUserRankInfos()
 {
 	mUserRankInfosByPageId.clear();
-	CNotionDBController::GetInst()->ReadRecords(mUserRankInfosByPageId);
+	CNotionDBController::GetInst()->ReadRecords();
 }
 
 const FLineNode CDataStorageManager::GetLineNodeInSelectedMap(int lineNodeIndex)
