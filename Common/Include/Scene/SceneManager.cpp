@@ -2,6 +2,7 @@
 #include "Scene/SceneTitle.h"
 #include "Scene/SceneLobby.h"
 #include "Scene/SceneInGame.h"
+#include "Scene/SceneResult.h"
 
 DEFINITION_SINGLE(CSceneManager)
 
@@ -22,6 +23,8 @@ EGameScene::Type CSceneManager::SetCurrentSceneType(CScene* scene)
 		mSceneType = EGameScene::Lobby;
 	else if (dynamic_cast<CSceneInGame*>(scene))
 		mSceneType = EGameScene::InGame;
+	else if (dynamic_cast<CSceneResult*>(scene))
+		mSceneType = EGameScene::Result;
 	else
 		mSceneType = EGameScene::End;
 
@@ -30,8 +33,8 @@ EGameScene::Type CSceneManager::SetCurrentSceneType(CScene* scene)
 
 bool CSceneManager::Init()
 {
-	mCurrentScene = CreateScene<CSceneTitle>();
-
+	//mCurrentScene = CreateScene<CSceneTitle>();
+	mCurrentScene = CreateScene<CSceneResult>();
 	return true;
 }
 

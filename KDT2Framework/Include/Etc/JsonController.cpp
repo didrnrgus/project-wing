@@ -136,6 +136,7 @@ bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string
 				rankInfo.Item_2 = rankInfoJson[PROPERTIES]["item_2"][ATT_NUMBER].get<int>();
 			}
 
+			rankInfo.PageId = pageID;
 
 			datas.emplace(std::pair<std::string, FUserRankInfo>(pageID, rankInfo));
 		}

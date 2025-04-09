@@ -5,6 +5,7 @@
 
 struct FUserRankInfo
 {
+	std::string PageId;
 	std::string Name;
 	int Map;
 	int Character;

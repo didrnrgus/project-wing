@@ -17,11 +17,13 @@ private:
 	std::map<std::string, FSpriteAtlasInfo> mSpriteAtlasInfoByFileName;
 
 	std::map<std::string, FUserRankInfo> mUserRankInfosByPageId;
+
 private:
 	int curSelectedMapIndex;
 	int curSelectedCharacterIndex;
 	std::map<int, int> curSelectedItemIndex;
 	bool isLoadedData = false;
+	FUserRankInfo curUserResult;
 
 public:
 	void InitCurSelectedData();
@@ -38,6 +40,9 @@ public:
 	inline void SetSelectedCharacterIndex(int characterIndex) { curSelectedCharacterIndex = characterIndex; }
 	inline void SetSelectedItemTypeInSlotIndex(int slotIndex, int itemTypeIndex) { curSelectedItemIndex[slotIndex] = itemTypeIndex; }
 
+	void ClearCurUserResult() { curUserResult = FUserRankInfo(); }
+	void SetCurUserResult(FUserRankInfo _info) { curUserResult = _info; }
+	FUserRankInfo GetCurUserResult() { return curUserResult; }
 	void UpdateUserRankInfos();
 
 	inline bool GetIsLoadedData() { return isLoadedData; }
@@ -104,7 +109,7 @@ public:
 	inline const std::map<int, FItemInfo> GetItemInfoDatas() { return mItemInfoDatasByIndex; }
 	inline const FItemInfo GetItemInfoDataByIndex(int index) { return mItemInfoDatasByIndex[index]; }
 	inline const int GetCurSelectedItemIDBySlotIndex(int index) { return curSelectedItemIndex[index]; }
-
+	std::vector<FUserRankInfo> GetArrayUserRankByCategory(EResultMenuTap::Type _type, int _value);
 private:
 	DECLARE_SINGLE(CDataStorageManager)
 };

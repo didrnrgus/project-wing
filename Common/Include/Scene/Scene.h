@@ -27,6 +27,7 @@ private:
 	bool mGotoTitle;
 	bool mGotoLobby;
 	bool mGotoInGame;
+	bool mGotoResult;
 
 public:
 	class CSceneUIManager* GetUIManager()	const

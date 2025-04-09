@@ -11,6 +11,7 @@
 #include "Scene/SceneTitle.h"
 #include "Scene/SceneLobby.h"
 #include "Scene/SceneInGame.h"
+#include "Scene/SceneResult.h"
 
 CScene::CScene()
 {
@@ -79,6 +80,7 @@ bool CScene::Init()
 	mGotoTitle = false;
 	mGotoLobby = false;
 	mGotoInGame = false;
+	mGotoResult = false;
 
 	return true;
 }
@@ -165,6 +167,11 @@ void CScene::Update(float DeltaTime)
 	if (mGotoInGame)
 	{
 		CSceneManager::GetInst()->CreateLoadScene<CSceneInGame>();
+		return;
+	}
+	if (mGotoResult)
+	{
+		CSceneManager::GetInst()->CreateLoadScene<CSceneResult>();
 		return;
 	}
 }

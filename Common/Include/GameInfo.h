@@ -385,3 +385,13 @@ namespace EGamePlayState
 		End		// 정상종료
 	};
 }
+
+namespace EResultMenuTap
+{
+	enum Type
+	{
+		Map = 0,
+		Character,
+		End
+	};
+}

@@ -183,11 +183,13 @@
     <ClCompile Include="Scene\SceneCollision.cpp" />
     <ClCompile Include="Scene\SceneInGame.cpp" />
     <ClCompile Include="Scene\SceneLobby.cpp" />
+    <ClCompile Include="Scene\SceneResult.cpp" />
     <ClCompile Include="Scene\SceneTitle.cpp" />
     <ClCompile Include="UI\UserWidget\DebugWidget.cpp" />
     <ClCompile Include="UI\UserWidget\InGameWidget.cpp" />
     <ClCompile Include="UI\UserWidget\LobbyWidget.cpp" />
     <ClCompile Include="UI\UserWidget\PlayerObjectWidget.cpp" />
+    <ClCompile Include="UI\UserWidget\ResultWidget.cpp" />
     <ClCompile Include="UI\UserWidget\SceneWidget.cpp" />
     <ClCompile Include="UI\UserWidget\TitleWidget.cpp" />
   </ItemGroup>
@@ -226,11 +228,13 @@
     <ClInclude Include="Scene\SceneCollision.h" />
     <ClInclude Include="Scene\SceneInGame.h" />
     <ClInclude Include="Scene\SceneLobby.h" />
+    <ClInclude Include="Scene\SceneResult.h" />
     <ClInclude Include="Scene\SceneTitle.h" />
     <ClInclude Include="UI\UserWidget\DebugWidget.h" />
     <ClInclude Include="UI\UserWidget\InGameWidget.h" />
     <ClInclude Include="UI\UserWidget\LobbyWidget.h" />
     <ClInclude Include="UI\UserWidget\PlayerObjectWidget.h" />
+    <ClInclude Include="UI\UserWidget\ResultWidget.h" />
     <ClInclude Include="UI\UserWidget\SceneWidget.h" />
     <ClInclude Include="UI\UserWidget\TitleWidget.h" />
   </ItemGroup>

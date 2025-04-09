@@ -89,4 +89,36 @@ const FLineNode CDataStorageManager::GetLineNodeInSelectedMap(int lineNodeIndex)
 	return mMapInfoDatasByIndex[curSelectedMapIndex].lineNodes[useIndex];
 }
 
+std::vector<FUserRankInfo> CDataStorageManager::GetArrayUserRankByCategory(EResultMenuTap::Type _type, int _value)
+{
+	std::vector<FUserRankInfo> result;
+
+	for (const auto& pair : mUserRankInfosByPageId)
+	{
+		const FUserRankInfo& info = pair.second;
+
+		if (_type == EResultMenuTap::Map)
+		{
+			if (info.Map == _value)
+			{
+				result.push_back(info);
+			}
+		}
+		else if (_type == EResultMenuTap::Character)
+		{
+			if (info.Character == _value)
+			{
+				result.push_back(info);
+			}
+		}
+		
+	}
+
+	std::sort(result.begin(), result.end(), [](const FUserRankInfo& a, const FUserRankInfo& b) {
+		return a.Distance > b.Distance; // 내림차순
+		});
+
+	return result;
+}
+
 
