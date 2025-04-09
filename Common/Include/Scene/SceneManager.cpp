@@ -33,8 +33,7 @@ EGameScene::Type CSceneManager::SetCurrentSceneType(CScene* scene)
 
 bool CSceneManager::Init()
 {
-	//mCurrentScene = CreateScene<CSceneTitle>();
-	mCurrentScene = CreateScene<CSceneResult>();
+	mCurrentScene = CreateScene<CSceneTitle>();
 	return true;
 }
 

@@ -157,8 +157,8 @@ void CInGameWidget::InitSelectedItemSlot()
 	int index = 0;
 	for (auto& item : itemDatas)
 	{
-		mItemImagePaths.push_back(item.second.GetItmeImagePath(index));
-		mItemImageNames.push_back(item.second.GetItmeImageName(index));
+		mItemImagePaths.push_back(FItemInfo::GetItmeImagePath(index));
+		mItemImageNames.push_back(FItemInfo::GetItmeImageName(index));
 		index++;
 	}
 

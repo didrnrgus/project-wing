@@ -35,8 +35,8 @@ CLobbyWidget::CLobbyWidget()
 	for (int i = 0; i < CDataStorageManager::GetInst()->GetMapInfoCount(); i++)
 	{
 		auto mapInfo = CDataStorageManager::GetInst()->GetMapInfo(i);
-		mArrMapDifficultyImagePath.push_back(mapInfo.GetIconPath(i));
-		mArrMapDifficultyImageName.push_back(mapInfo.GetIconName(i));
+		mArrMapDifficultyImagePath.push_back(FMapInfo::GetIconPath(i));
+		mArrMapDifficultyImageName.push_back(FMapInfo::GetIconName(i));
 		mArrMapDifficultyImageColor.push_back(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
 	}
 
@@ -45,8 +45,8 @@ CLobbyWidget::CLobbyWidget()
 		int index = 0;
 		for (auto& item : itemInfos)
 		{
-			mArrItemImagePath.push_back(item.second.GetItmeImagePath(index));
-			mArrItemImageName.push_back(item.second.GetItmeImageName(index));
+			mArrItemImagePath.push_back(FItemInfo::GetItmeImagePath(index));
+			mArrItemImageName.push_back(FItemInfo::GetItmeImageName(index));
 			index++;
 		}
 

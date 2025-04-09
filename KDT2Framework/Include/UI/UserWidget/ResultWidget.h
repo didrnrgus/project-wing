@@ -27,7 +27,7 @@ protected:
 		CSharedPtr<class CButton> menuTapButton;
 		CSharedPtr<class CTextBlock> menuTapText;
 	};
-	std::vector<FMenuTap> mArrCategoryMenuTap;
+	std::vector<FMenuTap> mArrMainCategoryMenuTap;
 	std::vector<std::vector<FMenuTap>> mArrSubCategoryMunuTap;
 	//std::vector<FMenuTap> mArrMapMenuTap;
 	//std::vector<FMenuTap> mArrCharacterMenuTap;
@@ -41,7 +41,7 @@ protected:
 		std::vector<CSharedPtr<class CImage>> arrSlotImage;
 		std::vector<CSharedPtr<class CImage>> arrItemImage;
 	};
-	//std::vector<FUserPrintGroup> mArrUserInfoText;
+	std::vector<FUserPrintGroup> mArrUserInfoText;
 
 	CSharedPtr<class CTextBlock> mResultTitle; // 타이틀 표시
 	FUserPrintGroup mCurResultUserPrint; // 현재 플레이 한 유저.

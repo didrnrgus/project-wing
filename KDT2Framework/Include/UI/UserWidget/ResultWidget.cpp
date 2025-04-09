@@ -24,6 +24,9 @@ bool CResultWidget::Init()
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	mResolution = FVector2D(RS.Width, RS.Height);
 
+	mArrSubCategoryMunuTap.resize((int)EResultMenuTap::End);
+	mCurSubCategoryMenuTap.resize((int)EResultMenuTap::End, 0);
+
 	mResultTitle = mScene->GetUIManager()->CreateWidget<CTextBlock>("mResultTitle");
 	AddWidget(mResultTitle);
 	mResultTitle->SetPivot(FVector2D::One * 0.5f);
@@ -40,9 +43,8 @@ bool CResultWidget::Init()
 	InitMemu();
 	InitUserRankPrint();
 
-	mArrSubCategoryMunuTap.resize((int)EResultMenuTap::End);
-	mCurSubCategoryMenuTap.resize((int)EResultMenuTap::End, 0);
 	OnClickMainCategoryMenuTapButton(EResultMenuTap::Map);
+	OnClickSubCategoryMenuTapButton(0);
 	return true;
 }
 
@@ -58,7 +60,7 @@ void CResultWidget::InitMemu()
 	// 메인카테고리
 	FVector2D _pivotMain = FVector2D(0.0f, 1.0f);
 	FVector2D _sizeMain = FVector2D(200.0f, 50.0f);
-	FVector2D _basePosMain = FVector2D(400.0f, mResolution.y * 0.8f); // 임의
+	FVector2D _basePosMain = FVector2D(180.0f, mResolution.y * 0.8f);
 	float _gapMainX = 10.0f;
 
 	for (int i = 0; i < (int)EResultMenuTap::End; i++)
@@ -94,7 +96,7 @@ void CResultWidget::InitMemu()
 			});
 		_menuTap.menuTapButton = _menuTapButton;
 
-		mArrCategoryMenuTap.push_back(_menuTap);
+		mArrMainCategoryMenuTap.push_back(_menuTap);
 	}
 
 	FVector2D _pivotSub = FVector2D(0.0f, 1.0f);
@@ -103,8 +105,7 @@ void CResultWidget::InitMemu()
 	float _gapSubX = 10.0f;
 
 	// 서브카테고리, 맵
-	//int _mapCount = CDataStorageManager::GetInst()->GetMapInfoCount();
-	int _mapCount = 3;
+	int _mapCount = CDataStorageManager::GetInst()->GetMapInfoCount();
 
 	for (int i = 0; i < _mapCount; i++)
 	{
@@ -140,12 +141,10 @@ void CResultWidget::InitMemu()
 		_menuTap.menuTapButton = _menuTapButton;
 
 		mArrSubCategoryMunuTap[(int)EResultMenuTap::Map].push_back(_menuTap);
-		//mArrMapMenuTap.push_back(_menuTap);
 	}
 
 	// 서브카테고리, 캐릭터
-	//int _characterCount = CDataStorageManager::GetInst()->GetCharacterCount();
-	int _characterCount = 5;
+	int _characterCount = CDataStorageManager::GetInst()->GetCharacterCount();
 
 	for (int i = 0; i < _characterCount; i++)
 	{
@@ -163,6 +162,7 @@ void CResultWidget::InitMemu()
 		_menuTapText->SetShadowEnable(true);
 		_menuTapText->SetShadowOffset(3.f, 3.f);
 		_menuTapText->SetTextShadowColor(FVector4D::Gray30);
+		_menuTapText->SetEnable(false);
 		_menuTap.menuTapText = _menuTapText;
 
 		CSharedPtr<CButton> _menuTapButton = mScene->GetUIManager()->CreateWidget<CButton>("_menuTapButton");
@@ -178,23 +178,24 @@ void CResultWidget::InitMemu()
 				CLog::PrintLog("OnClickSubCategoryMenuTapButton(): " + std::to_string(i));
 				OnClickSubCategoryMenuTapButton(i);
 			});
+		_menuTapButton->SetEnable(false);
 		_menuTap.menuTapButton = _menuTapButton;
 
 		mArrSubCategoryMunuTap[(int)EResultMenuTap::Character].push_back(_menuTap);
-		//mArrCharacterMenuTap.push_back(_menuTap);
 	}
 }
 
 void CResultWidget::InitUserRankPrint()
 {
 	// mRankMaxCount 인원수에 맞게 미리 위치 세팅
-	FVector2D _basePos = FVector2D(400.0f, mResolution.y * 0.63f); // 임의
+	FVector2D _basePos = FVector2D(270.0f, mResolution.y * 0.63f);
 	float _gapY = mRowTextFontSize;
 
 	for (int i = 0; i < mRankMaxCount; i++)
 	{
 		FUserPrintGroup _group;
 		SetPositionUserPrintRow(_group, _basePos + FVector2D(0.0f, -(30.0f + _gapY) * i));
+		mArrUserInfoText.push_back(_group);
 	}
 }
 
@@ -241,8 +242,7 @@ void CResultWidget::SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2
 	FVector2D _posItemBase = _posDistance + FVector2D(_sizeDistance.x + _gapX, -_sizeItem.y * 0.5f);
 	float _itemGapX = 5.0f;
 	float _innerItemSizeRate = 0.65f;
-	//int _itemCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
-	int _itemCount = 3;
+	int _itemCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
 
 	for (int i = 0; i < _itemCount; i++)
 	{
@@ -250,10 +250,12 @@ void CResultWidget::SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2
 		CSharedPtr<CImage> _itemSlotImage = mScene->GetUIManager()->CreateWidget<CImage>("_itemSlotImage");
 		AddWidget(_itemSlotImage);
 		SetImage(_itemSlotImage, _pivotItem, _sizeItem, _posItem, _color, ITEM_EMPTY_SQUARE_NAME, ITEM_EMPTY_SQUARE_PATH);
+		_groupOut.arrSlotImage.push_back(_itemSlotImage);
 
 		CSharedPtr<CImage> _itemImage = mScene->GetUIManager()->CreateWidget<CImage>("_itemImage");
 		AddWidget(_itemImage);
 		SetImage(_itemImage, _pivotItem, _sizeItem * _innerItemSizeRate, _posItem, _color, ITEM_HP_ICON_NAME, ITEM_HP_ICON_PATH);
+		_groupOut.arrItemImage.push_back(_itemImage);
 	}
 
 }
@@ -284,52 +286,72 @@ void CResultWidget::SetImage(CImage* _image, FVector2D _pivot, FVector2D _size, 
 
 void CResultWidget::OnClickMainCategoryMenuTapButton(EResultMenuTap::Type _tap)
 {
-	mCurMainCategoryMenuTap = _tap;
-	// 메뉴 모양 업데이트, 아래 리스트
-	// 어차피 텍스트나 아이템 이미지 등 위치 정렬은 되어있으니까, 데이터 업데이트만 하면 됨.
-	// 이것만 업뎃 std::vector<FUserPrintGroup> mArrUserInfoText;
-	std::vector<FUserRankInfo> _arrRankInfo;
+	int _beforeMainCategory = mCurMainCategoryMenuTap;
 
-	if (mCurMainCategoryMenuTap == EResultMenuTap::Map)
+	// 현재 메인 카테고리 업데이트.
+	mCurMainCategoryMenuTap = _tap;
+
+	// 메인카테고리 탭은 색깔 변화
+	for (int i = 0; i < mArrMainCategoryMenuTap.size(); i++)
 	{
-		_arrRankInfo = CDataStorageManager::GetInst()->GetArrayUserRankByMap(0);
+		if (i == (int)mCurMainCategoryMenuTap)
+			mArrMainCategoryMenuTap[i].menuTapText->SetTextColor(FVector4D::Green);
+		else
+			mArrMainCategoryMenuTap[i].menuTapText->SetTextColor(FVector4D::Green * 0.5f);
 	}
-	else if (mCurMainCategoryMenuTap == EResultMenuTap::Character)
+
+	{// 서브카테고리 이전 SetEnable
+		auto& _arrSub = mArrSubCategoryMunuTap[_beforeMainCategory];
+		for (auto& _sub : _arrSub)
+		{
+			_sub.menuTapText->SetEnable(false);
+			_sub.menuTapButton->SetEnable(false);
+		}
+	}
+
+	{// 서브카테고리 현재 SetEnable
+		auto& _arrSub = mArrSubCategoryMunuTap[mCurMainCategoryMenuTap];
+		for (auto& _sub : _arrSub)
+		{
+			_sub.menuTapText->SetEnable(true);
+			_sub.menuTapButton->SetEnable(true);
+		}
+	}
+
 	{
-		_arrRankInfo = CDataStorageManager::GetInst()->GetArrayUserRankByCharacter(0);
+		// 서브카테고리 선택된 탭 외에 비활성화
+		auto& _arrSub = mArrSubCategoryMunuTap[mCurMainCategoryMenuTap];
+
+		for (auto& _sub : _arrSub)
+			_sub.menuTapText->SetTextColor(FVector4D::Green * 0.5f);
+
+		// 서브 카테고리 중 선택된 탭 활성화 -> 색깔변화
+		_arrSub[mCurSubCategoryMenuTap[mCurMainCategoryMenuTap]].menuTapText->SetTextColor(FVector4D::Green);
 	}
+
+	// 현재 메인 / 서브 카테고리에 맞는 데이터 가져옴.
+	std::vector<FUserRankInfo> _arrRankInfo;
+	_arrRankInfo = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(
+		mCurMainCategoryMenuTap
+		, mCurSubCategoryMenuTap[(int)mCurMainCategoryMenuTap]);
 
 	UpdateUserRankPrint(_arrRankInfo);
-
-
-
 }
 
 void CResultWidget::OnClickSubCategoryMenuTapButton(int _index)
 {
+	// 서브 카테고리 업데이트 -> 메인은 냅둔다.
+	// 현재 메인 / 서브 카테고리에 맞는 데이터 가져옴.
 	const int _menuTapIndex = (int)mCurMainCategoryMenuTap;
 	mCurSubCategoryMenuTap[_menuTapIndex] = _index;
 
 	// 서브 메뉴 탭 변경.
-	// 일단 다끄고.
-	for (auto& _arrMain : mArrSubCategoryMunuTap)
-	{
-		for (auto& _sub : _arrMain)
-		{
-			_sub.menuTapButton->SetEnable(false);
-			_sub.menuTapText->SetEnable(false);
-		}
-	}
+	// 현재 메인 카테고리 -> 서브 카테고리 업데이트 -> 서브 카테고리 색 변화.
+	auto& _arrSub = mArrSubCategoryMunuTap[_menuTapIndex];
+	for (auto& _sub : _arrSub)
+		_sub.menuTapText->SetTextColor(FVector4D::Green * 0.5f);
 
-	{
-		auto& _arrMain = mArrSubCategoryMunuTap[_menuTapIndex];
-		for (auto& _sub : _arrMain)
-		{
-			_sub.menuTapButton->SetEnable(true);
-			_sub.menuTapText->SetEnable(true);
-		}
-	}
-
+	_arrSub[mCurSubCategoryMenuTap[_menuTapIndex]].menuTapText->SetTextColor(FVector4D::Green);
 
 	// 데이터 가져오기.
 	std::vector<FUserRankInfo> _arrRankInfo;
@@ -340,11 +362,39 @@ void CResultWidget::OnClickSubCategoryMenuTapButton(int _index)
 	);
 
 	// Print Row.
-
+	UpdateUserRankPrint(_arrRankInfo);
 }
 
 void CResultWidget::UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo)
 {
 	// 세팅해놓은 텍스트나 이미지의 데이터 업데이트.
+	//for (int i = 0; i < _arrInfo.size(); i++)
+	for (int i = 0; i < mRankMaxCount; i++) 두개들어올 수도 있다 조건봐서 최소값으로 변경
+	{
+		auto _info = _arrInfo[i];
+		auto& _printGroup = mArrUserInfoText[i];
+		auto _mapStat = CDataStorageManager::GetInst()->GetMapInfo(_info.Map);
+		auto _charStat = CDataStorageManager::GetInst()->GetCharacterState(_info.Character);
 
+		_printGroup.nameText->SetText(std::wstring(_info.Name.begin(), _info.Name.end()).c_str());
+		_printGroup.mapText->SetText(std::wstring(_mapStat.Name.begin(), _mapStat.Name.end()).c_str());
+		_printGroup.characterText->SetText(std::wstring(_charStat.Name.begin(), _charStat.Name.end()).c_str());
+		_printGroup.distanceText->SetText(std::wstring(std::to_wstring(_info.Distance) + L"m").c_str());
+
+		bool _isEnable = _info.Item_0 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+		_printGroup.arrItemImage[0]->SetEnable(_isEnable);
+		if (_isEnable)
+			_printGroup.arrItemImage[0]->SetTexture(FItemInfo::GetItmeImageName(_info.Item_0), FItemInfo::GetItmeImagePath(_info.Item_0));
+
+		_isEnable = _info.Item_1 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+		_printGroup.arrItemImage[1]->SetEnable(_isEnable);
+		if (_isEnable)
+			_printGroup.arrItemImage[1]->SetTexture(FItemInfo::GetItmeImageName(_info.Item_1), FItemInfo::GetItmeImagePath(_info.Item_1));
+
+		_isEnable = _info.Item_2 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+		_printGroup.arrItemImage[2]->SetEnable(_isEnable);
+		if (_isEnable)
+			_printGroup.arrItemImage[2]->SetTexture(FItemInfo::GetItmeImageName(_info.Item_2), FItemInfo::GetItmeImagePath(_info.Item_2));
+
+	}
 }

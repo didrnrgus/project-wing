@@ -88,7 +88,7 @@ struct FMapInfo
 	float ObstacleIntervalTime;
 	std::vector<FLineNode> lineNodes;
 
-	const wchar_t* GetIconPath(int idx)
+	static const wchar_t* GetIconPath(int idx)
 	{
 		switch (idx)
 		{
@@ -104,7 +104,7 @@ struct FMapInfo
 		}
 	}
 
-	const char* GetIconName(int idx)
+	static const char* GetIconName(int idx)
 	{
 		switch (idx)
 		{
@@ -364,7 +364,7 @@ struct FItemInfo
 	float AddValue;
 	std::string Desc;
 
-	const wchar_t* GetItmeImagePath(int _index)
+	static const wchar_t* GetItmeImagePath(int _index)
 	{
 		switch (_index)
 		{
@@ -381,7 +381,7 @@ struct FItemInfo
 		}
 	}
 
-	const char* GetItmeImageName(int _index)
+	static const char* GetItmeImageName(int _index)
 	{
 		switch (_index)
 		{

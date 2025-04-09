@@ -78,6 +78,7 @@ public:
 	}
 	void GotoLobby() { mGotoLobby = true; }
 	void GotoInGame() { mGotoInGame = true; }
+	void GotoResult() { mGotoResult = true; }
 
 protected:
 	virtual bool InitAsset() = 0;
