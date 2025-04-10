@@ -11,7 +11,6 @@ protected:
 	virtual ~CTitleWidget();
 
 private:
-	int mTaskID;
 	float mCurReConnectionTime;
 	float mMaxReConnectionTime;
 	
@@ -40,7 +39,6 @@ private:
 	void LoadGameData();
 	void LoadRankData();
 	void LoadProcess();
-	void LoadScene();
 	
 	void SinglePlayButtonClick();
 	void MultiPlayButtonClick();

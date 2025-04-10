@@ -302,6 +302,12 @@ void CSceneInGame::ProcessMessage()
 				})));
 			break;
 		}
+		case (int)ServerMessage::MSG_END:
+		{
+			CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_END");
+			mInGameWidget->LoadScene(EGameScene::Title);
+			break;
+		}
 		default:
 			break;
 		}

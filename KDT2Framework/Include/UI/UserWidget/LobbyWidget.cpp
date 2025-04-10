@@ -15,6 +15,7 @@
 #include "Etc/NetworkManager.h"
 #include "Etc/ProcessManager.h"
 #include "Etc/MultiplayManager.h"
+#include "Etc/TaskManager.h"
 
 CLobbyWidget::CLobbyWidget()
 {
@@ -389,12 +390,12 @@ void CLobbyWidget::InitDifficultiImage()
 void CLobbyWidget::InitNextPrevButton()
 {
 	// next button
-	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>("NextButton");
+	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>(ARROW_SQUARE_RIGHT_NAME);
 	AddWidget(mNextButton);
-	SetButton(*mNextButton.Get(), "NextButton", ARROW_SQUARE_RIGHT_PATH);
+	SetButton(*mNextButton.Get(), ARROW_SQUARE_RIGHT_NAME, ARROW_SQUARE_RIGHT_PATH);
 	mNextButton->SetPivot(FVector2D::One * 0.5f);
 	mNextButton->SetSize(FVector2D::One * 128 * 1.0f);
-	mNextButton->SetPos(FVector2D(1150, 100));
+	mNextButton->SetPos(FVector2D(1150.0f, 100.0f));
 	mNextButton->SetEventCallback(EButtonEventState::Click
 		, [this]()
 		{
@@ -418,17 +419,17 @@ void CLobbyWidget::InitNextPrevButton()
 		});
 
 	// previous button
-	mPrevButton = mScene->GetUIManager()->CreateWidget<CButton>("PrevButton");
+	mPrevButton = mScene->GetUIManager()->CreateWidget<CButton>(ARROW_SQUARE_LEFT_NAME);
 	AddWidget(mPrevButton);
-	SetButton(*mPrevButton.Get(), "PrevButton", ARROW_SQUARE_LEFT_PATH);
+	SetButton(*mPrevButton.Get(), ARROW_SQUARE_LEFT_NAME, ARROW_SQUARE_LEFT_PATH);
 	mPrevButton->SetPivot(FVector2D::One * 0.5f);
 	mPrevButton->SetSize(FVector2D::One * 96.0f * 1.0f);
-	mPrevButton->SetPos(FVector2D(100, 650));
+	mPrevButton->SetPos(FVector2D(100.0f, 650.0f));
 	mPrevButton->SetEventCallback(EButtonEventState::Click
 		, [this]()
 		{
 			CLog::PrintLog("mPrevButton Click");
-			mScene->GotoTitle();
+			LoadScene(EGameScene::Title);
 		});
 }
 
@@ -686,7 +687,7 @@ void CLobbyWidget::StartGame()
 	CLog::PrintLog("mNextButton Click curDifficultyIndex: " + std::to_string(curDifficultyIndex));
 	CDataStorageManager::GetInst()->SetSelectedCharacterIndex(curPlayerGraphicIndex);
 	CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
-	mScene->GotoInGame();
+	LoadScene(EGameScene::InGame);
 }
 
 void CLobbyWidget::UpdateOtherPlayerInfo()

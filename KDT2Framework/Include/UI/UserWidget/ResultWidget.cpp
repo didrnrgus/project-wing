@@ -8,6 +8,7 @@
 #include "UI/Common/Image.h"
 #include "Etc/DataStorageManager.h"
 #include "Etc/JsonContainer.h"
+#include "Etc/TaskManager.h"
 
 CResultWidget::CResultWidget()
 {
@@ -31,17 +32,33 @@ bool CResultWidget::Init()
 	AddWidget(mResultTitle);
 	mResultTitle->SetPivot(FVector2D::One * 0.5f);
 	mResultTitle->SetSize(FVector2D(500.0f, 100.0f));
-	mResultTitle->SetPos(FVector2D(mResolution.x * 0.5f, mResolution.y * 0.9f));
+	mResultTitle->SetPos(FVector2D(mResolution.x * 0.5f, mResolution.y * 0.95f));
 	mResultTitle->SetText(L"RESULT");
 	mResultTitle->SetTextColor(FVector4D::Green);
 	mResultTitle->SetAlignH(ETextAlignH::Center);
-	mResultTitle->SetFontSize(100.f);
+	mResultTitle->SetFontSize(60.0f);
 	mResultTitle->SetShadowEnable(true);
 	mResultTitle->SetShadowOffset(5.f, 5.f);
 	mResultTitle->SetTextShadowColor(FVector4D::Gray30);
 
+	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>(ARROW_SQUARE_RIGHT_NAME);
+	AddWidget(mNextButton);
+	SetButton(*mNextButton.Get(), ARROW_SQUARE_RIGHT_NAME, ARROW_SQUARE_RIGHT_PATH);
+	mNextButton->SetPivot(FVector2D::One * 0.5f);
+	mNextButton->SetSize(FVector2D::One * 128 * 0.7f);
+	mNextButton->SetPos(FVector2D(1200.0f, 660.0f));
+	mNextButton->SetEventCallback(EButtonEventState::Click
+		, [this]()
+		{
+			CDataStorageManager::GetInst()->ClearCurUserResult();
+			LoadScene(EGameScene::Lobby);
+		});
+
+	InitProperty(FVector2D(120.0f, 640.0f));
+	InitProperty(FVector2D(120.0f, 410.0f));
 	InitMemu();
 	InitUserRankPrint();
+	InitMyResultScore();
 
 	OnClickMainCategoryMenuTapButton(EResultMenuTap::Map);
 	OnClickSubCategoryMenuTapButton(0);
@@ -51,16 +68,14 @@ bool CResultWidget::Init()
 void CResultWidget::Update(float DeltaTime)
 {
 	CSceneWidget::Update(DeltaTime);
-
-
 }
 
 void CResultWidget::InitMemu()
 {
 	// 메인카테고리
 	FVector2D _pivotMain = FVector2D(0.0f, 1.0f);
-	FVector2D _sizeMain = FVector2D(200.0f, 50.0f);
-	FVector2D _basePosMain = FVector2D(180.0f, mResolution.y * 0.8f);
+	FVector2D _sizeMain = FVector2D(200.0f, mMenuTextFontSize + 10.0f);
+	FVector2D _basePosMain = FVector2D(180.0f, mResolution.y * 0.7f);
 	float _gapMainX = 10.0f;
 
 	for (int i = 0; i < (int)EResultMenuTap::End; i++)
@@ -72,13 +87,11 @@ void CResultWidget::InitMemu()
 		_menuTapText->SetPivot(_pivotMain);
 		_menuTapText->SetSize(_sizeMain);
 		_menuTapText->SetPos(_basePosMain + FVector2D((_sizeMain.x + _gapMainX) * i, 0.0f));
-		_menuTapText->SetText(mArrMenuTapText[i]);
+		_menuTapText->SetText(ToUpperWString(mArrMenuTapText[i]).c_str());
 		_menuTapText->SetTextColor(FVector4D::Green);
 		_menuTapText->SetAlignH(ETextAlignH::Center);
 		_menuTapText->SetFontSize(mMenuTextFontSize);
-		_menuTapText->SetShadowEnable(true);
-		_menuTapText->SetShadowOffset(3.f, 3.f);
-		_menuTapText->SetTextShadowColor(FVector4D::Gray30);
+		_menuTapText->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
 		_menuTap.menuTapText = _menuTapText;
 
 		CSharedPtr<CButton> _menuTapButton = mScene->GetUIManager()->CreateWidget<CButton>("_menuTapButton");
@@ -100,7 +113,7 @@ void CResultWidget::InitMemu()
 	}
 
 	FVector2D _pivotSub = FVector2D(0.0f, 1.0f);
-	FVector2D _sizeSub = FVector2D(180.0f, 50.0f);
+	FVector2D _sizeSub = FVector2D(180.0f, _sizeMain.y + 5.0f);
 	FVector2D _basePosSub = _basePosMain + FVector2D(0.0f, -(_sizeSub.y + 5.0f));
 	float _gapSubX = 10.0f;
 
@@ -110,19 +123,18 @@ void CResultWidget::InitMemu()
 	for (int i = 0; i < _mapCount; i++)
 	{
 		FMenuTap _menuTap;
+		auto _mapInfo = CDataStorageManager::GetInst()->GetMapInfo(i);
 
 		CSharedPtr<CTextBlock> _menuTapText = mScene->GetUIManager()->CreateWidget<CTextBlock>("_menuTapText");
 		AddWidget(_menuTapText);
 		_menuTapText->SetPivot(_pivotSub);
 		_menuTapText->SetSize(_sizeSub);
 		_menuTapText->SetPos(_basePosSub + FVector2D((_sizeSub.x + _gapSubX) * i, 0.0f));
-		_menuTapText->SetText(L"abcde");
+		_menuTapText->SetText(ToUpperWString(_mapInfo.Name).c_str());
 		_menuTapText->SetTextColor(FVector4D::Green);
 		_menuTapText->SetAlignH(ETextAlignH::Center);
-		_menuTapText->SetFontSize(mMenuTextFontSize);
-		_menuTapText->SetShadowEnable(true);
-		_menuTapText->SetShadowOffset(3.f, 3.f);
-		_menuTapText->SetTextShadowColor(FVector4D::Gray30);
+		_menuTapText->SetFontSize(mMenuTextFontSize - 5.0f);
+		_menuTapText->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
 		_menuTap.menuTapText = _menuTapText;
 
 		CSharedPtr<CButton> _menuTapButton = mScene->GetUIManager()->CreateWidget<CButton>("_menuTapButton");
@@ -149,19 +161,18 @@ void CResultWidget::InitMemu()
 	for (int i = 0; i < _characterCount; i++)
 	{
 		FMenuTap _menuTap;
+		auto _characterInfo = CDataStorageManager::GetInst()->GetCharacterState(i);
 
 		CSharedPtr<CTextBlock> _menuTapText = mScene->GetUIManager()->CreateWidget<CTextBlock>("_menuTapText");
 		AddWidget(_menuTapText);
 		_menuTapText->SetPivot(_pivotSub);
 		_menuTapText->SetSize(_sizeSub);
 		_menuTapText->SetPos(_basePosSub + FVector2D((_sizeSub.x + _gapSubX) * i, 0.0f));
-		_menuTapText->SetText(L"abcde");
+		_menuTapText->SetText(ToUpperWString(_characterInfo.Name).c_str());
 		_menuTapText->SetTextColor(FVector4D::Green);
 		_menuTapText->SetAlignH(ETextAlignH::Center);
-		_menuTapText->SetFontSize(mMenuTextFontSize);
-		_menuTapText->SetShadowEnable(true);
-		_menuTapText->SetShadowOffset(3.f, 3.f);
-		_menuTapText->SetTextShadowColor(FVector4D::Gray30);
+		_menuTapText->SetFontSize(mMenuTextFontSize - 5.0f);
+		_menuTapText->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
 		_menuTapText->SetEnable(false);
 		_menuTap.menuTapText = _menuTapText;
 
@@ -185,10 +196,51 @@ void CResultWidget::InitMemu()
 	}
 }
 
+void CResultWidget::InitProperty(FVector2D _basePos)
+{
+	// 여기서 Row 모양 세팅
+	FVector2D _pivot = FVector2D(0.0f, 1.0f);
+	FVector2D _sizeName = FVector2D(250.0f, 50.0f);
+	FVector2D _sizeMap = FVector2D(200.0f, 50.0f);
+	FVector2D _sizeCharacter = FVector2D(250.0f, 50.0f);
+	FVector2D _sizeDistance = FVector2D(200.0f, 50.0f);
+	FVector2D _sizeItem = FVector2D(200.0f, 50.0f);
+
+	float _gapX = 5.0f;
+
+	FVector2D _posName = _basePos;
+	FVector2D _posMap = _posName + FVector2D(_sizeName.x + _gapX, 0.0f);
+	FVector2D _posCharacter = _posMap + FVector2D(_sizeMap.x + _gapX, 0.0f);
+	FVector2D _posDistance = _posCharacter + FVector2D(_sizeCharacter.x + _gapX, 0.0f);
+	FVector2D _posItem = _posDistance + FVector2D(_sizeDistance.x + _gapX + 20.0f, 0.0f);
+
+	FVector4D _color = FVector4D::White;
+
+	CSharedPtr<CTextBlock> _nameProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_nameProp");
+	AddWidget(_nameProp);
+	SetInfoTextBlock(_nameProp, _pivot, _sizeName, _posName, _color, L"NAME");
+
+	CSharedPtr<CTextBlock> _mapProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_mapProp");
+	AddWidget(_mapProp);
+	SetInfoTextBlock(_mapProp, _pivot, _sizeMap, _posMap, _color, L"MAP");
+
+	CSharedPtr<CTextBlock> _characterProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_characterProp");
+	AddWidget(_characterProp);
+	SetInfoTextBlock(_characterProp, _pivot, _sizeCharacter, _posCharacter, _color, L"CHARACTER");
+
+	CSharedPtr<CTextBlock> _distanceProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_distanceProp");
+	AddWidget(_distanceProp);
+	SetInfoTextBlock(_distanceProp, _pivot, _sizeDistance, _posDistance, _color, L"DISTANCE");
+
+	CSharedPtr<CTextBlock> _itemProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_itemProp");
+	AddWidget(_itemProp);
+	SetInfoTextBlock(_itemProp, _pivot, _sizeItem, _posItem, _color, L"ITEM");
+}
+
 void CResultWidget::InitUserRankPrint()
 {
 	// mRankMaxCount 인원수에 맞게 미리 위치 세팅
-	FVector2D _basePos = FVector2D(270.0f, mResolution.y * 0.63f);
+	FVector2D _basePos = FVector2D(120.0f, mResolution.y * 0.5f);
 	float _gapY = mRowTextFontSize;
 
 	for (int i = 0; i < mRankMaxCount; i++)
@@ -199,14 +251,47 @@ void CResultWidget::InitUserRankPrint()
 	}
 }
 
+void CResultWidget::InitMyResultScore()
+{
+	FUserRankInfo _myResultInfo = CDataStorageManager::GetInst()->GetCurUserResult();
+	FUserPrintGroup _printGroup;
+	SetPositionUserPrintRow(_printGroup, FVector2D(120.0f, 590.0f));
+
+	auto _mapStat = CDataStorageManager::GetInst()->GetMapInfo(_myResultInfo.Map);
+	auto _charStat = CDataStorageManager::GetInst()->GetCharacterState(_myResultInfo.Character);
+
+	_printGroup.mapText->SetTextColor(FVector4D::GetColorFromString(_mapStat.DifficultyColorName));
+	_printGroup.characterText->SetTextColor(FVector4D::GetColorFromString(_charStat.ColorName));
+
+	_printGroup.nameText->SetText(std::wstring(_myResultInfo.Name.begin(), _myResultInfo.Name.end()).c_str());
+	_printGroup.mapText->SetText(std::wstring(_mapStat.Name.begin(), _mapStat.Name.end()).c_str());
+	_printGroup.characterText->SetText(std::wstring(_charStat.Name.begin(), _charStat.Name.end()).c_str());
+	_printGroup.distanceText->SetText((FormatWithCommaManual(_myResultInfo.Distance) + L"m").c_str());
+
+	bool _isEnable = _myResultInfo.Item_0 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+	_printGroup.arrItemImage[0]->SetEnable(_isEnable);
+	if (_isEnable)
+		_printGroup.arrItemImage[0]->SetTexture(FItemInfo::GetItmeImageName(_myResultInfo.Item_0), FItemInfo::GetItmeImagePath(_myResultInfo.Item_0));
+
+	_isEnable = _myResultInfo.Item_1 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+	_printGroup.arrItemImage[1]->SetEnable(_isEnable);
+	if (_isEnable)
+		_printGroup.arrItemImage[1]->SetTexture(FItemInfo::GetItmeImageName(_myResultInfo.Item_1), FItemInfo::GetItmeImagePath(_myResultInfo.Item_1));
+
+	_isEnable = _myResultInfo.Item_2 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+	_printGroup.arrItemImage[2]->SetEnable(_isEnable);
+	if (_isEnable)
+		_printGroup.arrItemImage[2]->SetTexture(FItemInfo::GetItmeImageName(_myResultInfo.Item_2), FItemInfo::GetItmeImagePath(_myResultInfo.Item_2));
+}
+
 void CResultWidget::SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2D _basePos)
 {
 	// 여기서 Row 모양 세팅
 	FVector2D _pivot = FVector2D(0.0f, 1.0f);
-	FVector2D _sizeName = FVector2D(150.0f, 50.0f);
-	FVector2D _sizeMap = FVector2D(150.0f, 50.0f);
-	FVector2D _sizeCharacter = FVector2D(150.0f, 50.0f);
-	FVector2D _sizeDistance = FVector2D(150.0f, 50.0f);
+	FVector2D _sizeName = FVector2D(250.0f, 50.0f);
+	FVector2D _sizeMap = FVector2D(200.0f, 50.0f);
+	FVector2D _sizeCharacter = FVector2D(250.0f, 50.0f);
+	FVector2D _sizeDistance = FVector2D(200.0f, 50.0f);
 
 	float _gapX = 5.0f;
 
@@ -257,7 +342,6 @@ void CResultWidget::SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2
 		SetImage(_itemImage, _pivotItem, _sizeItem * _innerItemSizeRate, _posItem, _color, ITEM_HP_ICON_NAME, ITEM_HP_ICON_PATH);
 		_groupOut.arrItemImage.push_back(_itemImage);
 	}
-
 }
 
 void CResultWidget::SetInfoTextBlock(CTextBlock* _textBlock, FVector2D _pivot, FVector2D _size, FVector2D _pos, FVector4D _color, const wchar_t* _str)
@@ -368,33 +452,79 @@ void CResultWidget::OnClickSubCategoryMenuTapButton(int _index)
 void CResultWidget::UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo)
 {
 	// 세팅해놓은 텍스트나 이미지의 데이터 업데이트.
-	//for (int i = 0; i < _arrInfo.size(); i++)
-	for (int i = 0; i < mRankMaxCount; i++) 두개들어올 수도 있다 조건봐서 최소값으로 변경
+	// 맥스보다 최소값이 들어올 수 도 있다.
+	int _minCount = mRankMaxCount > _arrInfo.size() ? _arrInfo.size() : mRankMaxCount;
+
+	// row 들 모두 꺼야 함.
+	for (int i = 0; i < mRankMaxCount; i++)
+	{
+		auto& _printGroup = mArrUserInfoText[i];
+		_printGroup.nameText->SetEnable(false);
+		_printGroup.mapText->SetEnable(false);
+		_printGroup.characterText->SetEnable(false);
+		_printGroup.distanceText->SetEnable(false);
+
+		_printGroup.arrItemImage[0]->SetEnable(false);
+		_printGroup.arrSlotImage[0]->SetEnable(false);
+		_printGroup.arrItemImage[1]->SetEnable(false);
+		_printGroup.arrSlotImage[1]->SetEnable(false);
+		_printGroup.arrItemImage[2]->SetEnable(false);
+		_printGroup.arrSlotImage[2]->SetEnable(false);
+	}
+
+	for (int i = 0; i < _minCount; i++)
 	{
 		auto _info = _arrInfo[i];
 		auto& _printGroup = mArrUserInfoText[i];
 		auto _mapStat = CDataStorageManager::GetInst()->GetMapInfo(_info.Map);
 		auto _charStat = CDataStorageManager::GetInst()->GetCharacterState(_info.Character);
 
+		_printGroup.nameText->SetEnable(true);
+		_printGroup.mapText->SetEnable(true);
+		_printGroup.characterText->SetEnable(true);
+		_printGroup.distanceText->SetEnable(true);
+
+		_printGroup.mapText->SetTextColor(FVector4D::GetColorFromString(_mapStat.DifficultyColorName));
+		_printGroup.characterText->SetTextColor(FVector4D::GetColorFromString(_charStat.ColorName));
+
 		_printGroup.nameText->SetText(std::wstring(_info.Name.begin(), _info.Name.end()).c_str());
 		_printGroup.mapText->SetText(std::wstring(_mapStat.Name.begin(), _mapStat.Name.end()).c_str());
 		_printGroup.characterText->SetText(std::wstring(_charStat.Name.begin(), _charStat.Name.end()).c_str());
-		_printGroup.distanceText->SetText(std::wstring(std::to_wstring(_info.Distance) + L"m").c_str());
+		_printGroup.distanceText->SetText((FormatWithCommaManual(_info.Distance) + L"m").c_str());
 
 		bool _isEnable = _info.Item_0 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
 		_printGroup.arrItemImage[0]->SetEnable(_isEnable);
+		_printGroup.arrSlotImage[0]->SetEnable(true);
 		if (_isEnable)
 			_printGroup.arrItemImage[0]->SetTexture(FItemInfo::GetItmeImageName(_info.Item_0), FItemInfo::GetItmeImagePath(_info.Item_0));
 
 		_isEnable = _info.Item_1 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
 		_printGroup.arrItemImage[1]->SetEnable(_isEnable);
+		_printGroup.arrSlotImage[1]->SetEnable(true);
 		if (_isEnable)
 			_printGroup.arrItemImage[1]->SetTexture(FItemInfo::GetItmeImageName(_info.Item_1), FItemInfo::GetItmeImagePath(_info.Item_1));
 
 		_isEnable = _info.Item_2 > PLAYER_ITEM_TYPE_DEFAULT_INDEX;
 		_printGroup.arrItemImage[2]->SetEnable(_isEnable);
+		_printGroup.arrSlotImage[2]->SetEnable(true);
 		if (_isEnable)
 			_printGroup.arrItemImage[2]->SetTexture(FItemInfo::GetItmeImageName(_info.Item_2), FItemInfo::GetItmeImagePath(_info.Item_2));
 
 	}
+}
+
+void CResultWidget::SetButton(CButton& _button, const char* _name, const wchar_t* _path)
+{
+	FVector3D TintNormal = FVector3D(0, 1, 0);
+	FVector3D TintHovered = FVector3D(0, 0.8f, 0);
+	FVector3D TintClick = FVector3D(0, 0.6f, 0);
+
+	_button.SetTexture(EButtonState::Normal, _name, _path);
+	_button.SetTexture(EButtonState::Hovered, _name, _path);
+	_button.SetTexture(EButtonState::Click, _name, _path);
+	_button.SetPivot(FVector2D::One * 0.5f);
+	_button.SetTint(EButtonState::Normal, TintNormal);
+	_button.SetTint(EButtonState::Hovered, TintHovered);
+	_button.SetTint(EButtonState::Click, TintClick);
+
 }

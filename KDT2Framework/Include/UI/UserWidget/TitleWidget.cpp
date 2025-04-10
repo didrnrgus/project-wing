@@ -208,23 +208,6 @@ void CTitleWidget::LoadProcess()
 		})));
 }
 
-void CTitleWidget::LoadScene()
-{
-	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
-		[this]()
-		{
-			ShowLoading(true);
-			AddQueueLoadingDescText(L"로비로 이동중입니다!!!", mIsSkip);
-			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
-
-			ShowLoading(false);
-			CTaskManager::GetInst()->RemoveTask(mTaskID);
-
-			//mScene->GotoLobby();
-			mScene->GotoResult();
-		})));
-}
-
 void CTitleWidget::SinglePlayButtonClick()
 {
 	// 로비로 가야 함.
@@ -233,7 +216,7 @@ void CTitleWidget::SinglePlayButtonClick()
 	if (IsLoading())
 		return;
 
-	LoadScene();
+	LoadScene(EGameScene::Lobby);
 }
 
 void CTitleWidget::MultiPlayButtonClick()
@@ -254,6 +237,8 @@ void CTitleWidget::RankButtonClick()
 
 	if (IsLoading())
 		return;
+
+	LoadScene(EGameScene::Rank);
 }
 
 void CTitleWidget::ExitButtonClick()
@@ -288,7 +273,7 @@ void CTitleWidget::ProcessMessage(const RecvMessage& msg)
 	{
 	case (int)ServerMessage::MSG_ROOM_FULL_INFO:
 	{
-		LoadScene();
+		LoadScene(EGameScene::Lobby);
 		break;
 	}
 	case (int)ServerMessage::MSG_CONNECTED_REJECT:

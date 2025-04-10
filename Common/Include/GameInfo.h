@@ -8,6 +8,7 @@
 #pragma comment(lib, "ws2_32.lib")
 
 #include <algorithm>
+#include <cwctype>  // towupper
 #include <exception>
 #include <fstream>
 #include <functional>
@@ -83,7 +84,9 @@ public:\
 
 int Clamp(int Value, int Min, int Max);
 float Clamp(float Value, float Min, float Max);
-
+std::wstring FormatWithCommaManual(int value);
+std::wstring ToUpperWString(const wchar_t* _str);
+std::wstring ToUpperWString(std::string _str);
 
 namespace EShaderBufferType
 {

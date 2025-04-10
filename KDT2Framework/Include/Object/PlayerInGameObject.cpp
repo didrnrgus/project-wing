@@ -19,6 +19,7 @@
 #include "Etc/MultiplayManager.h"
 #include "Etc/JsonContainer.h"
 #include "Etc/NotionDBController.h"
+#include "UI/UserWidget/SceneWidget.h"
 
 CPlayerInGameObject::CPlayerInGameObject()
 {
@@ -344,27 +345,30 @@ void CPlayerInGameObject::OnPlayerDead()
 	if (sceneInGame)
 		sceneInGame->SetGamePlayState(EGamePlayState::Dead);
 
+	FUserRankInfo rankInfo;
+	rankInfo.Name = "jethrororo";
+	rankInfo.Map = CDataStorageManager::GetInst()->GetSelectedMapIndex();
+	rankInfo.Character = CDataStorageManager::GetInst()->GetSelectedCharacterIndex();
+	rankInfo.Distance = GetPlayDistance();
+	rankInfo.Item_0 = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(0);
+	rankInfo.Item_1 = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(1);
+	rankInfo.Item_2 = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(2);
+
 	if (!CNetworkManager::GetInst()->IsMultiplay())
 	{
-		FUserRankInfo rankInfo;
-		rankInfo.Name = "jethrororo";
-		rankInfo.Map = CDataStorageManager::GetInst()->GetSelectedMapIndex();
-		rankInfo.Character = CDataStorageManager::GetInst()->GetSelectedCharacterIndex();
-		rankInfo.Distance = GetPlayDistance();
-		rankInfo.Item_0 = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(0);
-		rankInfo.Item_1 = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(1);
-		rankInfo.Item_2 = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(2);
-
-		CNotionDBController::GetInst()->CreateUserRecord(rankInfo);
-
 		// 쓰레드 시작.
 		mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
-			[this]()
+			[this, rankInfo]()
 			{
 				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
 				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
-				mScene->GotoLobby();
+				CDataStorageManager::GetInst()->SetCurUserResult(rankInfo);
+				CNotionDBController::GetInst()->CreateUserRecord(rankInfo);
+				
+				CSceneInGame* _inGameScene = dynamic_cast<CSceneInGame*>(mScene);
+				CSceneWidget* _sceneWidget = (CSceneWidget*)_inGameScene->GetInGameWidget();
+				_sceneWidget->LoadScene(EGameScene::Result);
 			})));
 	}
 }
@@ -423,16 +427,6 @@ void CPlayerInGameObject::ProcessMessage(const RecvMessage& msg)
 			return;
 
 		OnPlayerDead();
-		break;
-	}
-	case (int)ServerMessage::MSG_END:
-	{
-		CLog::PrintLog("CPlayerInGameObject::ProcessMessage MSG_END");
-		CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
-		std::this_thread::sleep_for(std::chrono::milliseconds(3000));
-
-		mScene->GotoTitle();
-
 		break;
 	}
 	default:

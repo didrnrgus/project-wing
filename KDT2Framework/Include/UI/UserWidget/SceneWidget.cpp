@@ -6,6 +6,7 @@
 #include "UI/Common/TextBlock.h"
 #include "Etc/ConstValues.h"
 #include "Etc/ZOrderContainer.h"
+#include "Etc/TaskManager.h"
 #include "Share/Timer.h"
 
 CSceneWidget::CSceneWidget()
@@ -38,7 +39,7 @@ bool CSceneWidget::Init()
 	mLoadingBackImage->SetZOrder(ZORDER_LOADING_BACK);
 	mLoadingBackImage->SetEnable(false);
 
-	FVector2D loadingSize = FVector2D(190.0f, 120.0f);
+	FVector2D loadingSize = FVector2D(200.0f, 120.0f);
 	mLoadingText = mScene->GetUIManager()->CreateWidget<CTextBlock>("LoadingText");
 	AddWidget(mLoadingText);
 	mLoadingText->SetText(mLoadingTextStrings[curLoadingTextIndex]);
@@ -166,4 +167,36 @@ void CSceneWidget::UpdateLoading(float DeltaTime)
 			mLoadingTextQueue.pop_front();
 		}
 	}
+}
+
+
+void CSceneWidget::LoadScene(EGameScene::Type _sceneType)
+{
+	mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
+		[this, _sceneType]()
+		{
+			ShowLoading(true);
+			if (_sceneType == EGameScene::Title)
+				AddQueueLoadingDescText(L"타이틀 화면으로 이동중입니다!!!");
+			else if (_sceneType == EGameScene::Lobby)
+				AddQueueLoadingDescText(L"로비 화면으로 이동중입니다!!!");
+			else if (_sceneType == EGameScene::InGame)
+				AddQueueLoadingDescText(L"인게임 화면으로 이동중입니다!!!");
+			else if (_sceneType == EGameScene::Result)
+				AddQueueLoadingDescText(L"결과 화면으로 이동중입니다!!!");
+
+			std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+
+			ShowLoading(false);
+			CTaskManager::GetInst()->RemoveTask(mTaskID);
+
+			if (_sceneType == EGameScene::Title)
+				mScene->GotoTitle();
+			else if (_sceneType == EGameScene::Lobby)
+				mScene->GotoLobby();
+			else if (_sceneType == EGameScene::InGame)
+				mScene->GotoInGame();
+			else if (_sceneType == EGameScene::Result)
+				mScene->GotoResult();
+		})));
 }

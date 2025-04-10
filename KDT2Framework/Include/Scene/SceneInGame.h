@@ -32,6 +32,7 @@ protected:
 public:
 	// 플레이어 캐릭터 종류가 아닌 현재방의 사용자캐릭을 불러오는것이다.
 	virtual CSceneObject* GetPlayer(int index) override;
+	class CInGameWidget* GetInGameWidget() { return mInGameWidget; }
 	bool GetOtherPlayerStatByNetId(int _netId, class IPlayerStatController*& _playerStatOut);
 
 	// 플레이어/서버/씬도 사용할 수 있음.

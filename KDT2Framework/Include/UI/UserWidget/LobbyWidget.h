@@ -109,7 +109,6 @@ private:
 	void InitItemInfoTooltip();
 	void InitOtherPlayersInfo();
 
-	void GoToTitle();
 	void StartGame();
 
 	void OnCharacterLeftButtonClick();
@@ -131,5 +130,6 @@ private:
 	void AddListener() override;
 	void RemoveListener() override;
 	void ProcessMessage(const RecvMessage& msg) override;
+
 };
 

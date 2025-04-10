@@ -58,6 +58,8 @@ public:
 	void SetStartCount(int count);
 	int GetStartCountArrCount() { return mStartCountTextArr.size() - 1; }
 
+	
+
 private:
 	void InitStartCountAndMyDistanceText();
 	void InitTargetPlayerStat();
@@ -66,5 +68,6 @@ private:
 
 	void UpdateTargetPlayerStat(float DeltaTime);
 	void UpdateOtherPlayersInfo();
+
 };
 

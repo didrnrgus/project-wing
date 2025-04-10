@@ -23,7 +23,9 @@ private:
 	std::mutex mQueueMutex;
 
 	CSharedPtr<class CTextBlock> mFpsText;
+
 protected:
+	int mTaskID;
 
 public:
 	virtual bool Init() override;
@@ -31,8 +33,10 @@ public:
 
 	void SetEnableFPS(bool _isEnable);
 	void ShowLoading(bool _isLoading);
-	void AddQueueLoadingDescText(const std::wstring _wstrDesc, bool _isSkip);
+	void AddQueueLoadingDescText(const std::wstring _wstrDesc, bool _isSkip = true);
 	void UpdateLoading(float DeltaTime);
 	bool IsLoading() { return mIsLoading; }
+	void LoadScene(EGameScene::Type _sceneType);
+
 };
 
