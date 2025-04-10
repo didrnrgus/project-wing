@@ -176,6 +176,8 @@ void CSceneWidget::LoadScene(EGameScene::Type _sceneType)
 		[this, _sceneType]()
 		{
 			ShowLoading(true);
+			mScene->SetIsLoadingScene();
+
 			if (_sceneType == EGameScene::Title)
 				AddQueueLoadingDescText(L"타이틀 화면으로 이동중입니다!!!");
 			else if (_sceneType == EGameScene::Lobby)
@@ -184,10 +186,11 @@ void CSceneWidget::LoadScene(EGameScene::Type _sceneType)
 				AddQueueLoadingDescText(L"인게임 화면으로 이동중입니다!!!");
 			else if (_sceneType == EGameScene::Result)
 				AddQueueLoadingDescText(L"결과 화면으로 이동중입니다!!!");
+			else if (_sceneType == EGameScene::Rank)
+				AddQueueLoadingDescText(L"랭킹 화면으로 이동중입니다!!!");
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 
-			ShowLoading(false);
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
 
 			if (_sceneType == EGameScene::Title)
@@ -198,5 +201,8 @@ void CSceneWidget::LoadScene(EGameScene::Type _sceneType)
 				mScene->GotoInGame();
 			else if (_sceneType == EGameScene::Result)
 				mScene->GotoResult();
+			else if (_sceneType == EGameScene::Rank)
+				mScene->GotoRank();
+
 		})));
 }

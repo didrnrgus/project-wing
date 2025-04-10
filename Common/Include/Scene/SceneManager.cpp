@@ -25,6 +25,8 @@ EGameScene::Type CSceneManager::SetCurrentSceneType(CScene* scene)
 		mSceneType = EGameScene::InGame;
 	else if (dynamic_cast<CSceneResult*>(scene))
 		mSceneType = EGameScene::Result;
+	else if (dynamic_cast<CSceneResult*>(scene))
+		mSceneType = EGameScene::Rank;
 	else
 		mSceneType = EGameScene::End;
 

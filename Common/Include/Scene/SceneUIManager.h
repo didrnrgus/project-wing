@@ -15,6 +15,7 @@ private:
 	std::unordered_map<std::string, CSharedPtr<CWindowWidget>>	mWindowMap;
 	std::vector<CSharedPtr<CWidget>>	mWidgetList;
 	CSharedPtr<CWidget>					mMouseHoveredWidget;
+	class CSceneWidget* mSceneWidget = nullptr;
 
 public:
 	void AddWindowWidget(const std::string& Name,
@@ -44,6 +45,8 @@ public:
 	bool CollisionMouse(float DeltaTime, const FVector2D& MousePos);
 	void Collision(float DeltaTime);
 	void Render();
+
+	class CSceneWidget* GetSceneWidget() { return mSceneWidget; }
 
 private:
 	static bool SortCollision(const CSharedPtr<CWidget>& Src,

@@ -2,6 +2,10 @@
 #include "Etc/CURL.h"
 #include "Etc/NotionDBController.h"
 #include "Etc/DataStorageManager.h"
+#include "Scene/SceneManager.h"
+#include "Scene/SceneUIManager.h"
+#include "Scene/Scene.h"
+#include "UI/UserWidget/SceneWidget.h"
 
 DEFINITION_SINGLE(CCURL);
 
@@ -27,6 +31,10 @@ std::string CCURL::SendRequest(const std::string& InURL
 	, const std::string& InMethod
 	, const std::string& InJsonData)
 {
+	auto _scene = CSceneManager::GetInst()->GetCurrentScene();
+	auto _sceneWidget = _scene->GetUIManager()->GetSceneWidget();
+	_sceneWidget->ShowLoading(true);
+
 	CURL* curl = curl_easy_init();
 	if (!curl) return "Failed to initialize cURL";
 
@@ -81,6 +89,9 @@ std::string CCURL::SendRequest(const std::string& InURL
 	// 리소스 해제
 	curl_slist_free_all(headers);
 	curl_easy_cleanup(curl);
+
+	if(_scene->GetIsLoadingScene() == false)
+		_sceneWidget->ShowLoading(false);
 
 	return response;
 }

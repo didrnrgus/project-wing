@@ -109,6 +109,7 @@ void CTitleWidget::LoadGameData()
 		[this]()
 		{
 			ShowLoading(true);
+			mScene->SetIsLoadingScene();
 
 			// config load
 			AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻", mIsSkip);
@@ -158,6 +159,7 @@ void CTitleWidget::LoadGameData()
 
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
 			ShowLoading(false);
+			mScene->SetIsLoadingScene(false);
 
 			LoadRankData();
 		})));
@@ -169,7 +171,7 @@ void CTitleWidget::LoadRankData()
 		[this]()
 		{
 			ShowLoading(true);
-
+			mScene->SetIsLoadingScene();
 			// rank load
 			AddQueueLoadingDescText(L"Ranking Data를 로딩 중 입니다.\n🏃🏻🏃🏻🏃🏻🏃🏻🏃🏻", mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
@@ -177,6 +179,7 @@ void CTitleWidget::LoadRankData()
 
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
 			ShowLoading(false);
+			mScene->SetIsLoadingScene(false);
 		})));
 }
 

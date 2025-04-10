@@ -77,10 +77,12 @@ bool CScene::Init()
 	InitObject();
 	InitWidget();
 
+	mIsLoadingScene = false;
 	mGotoTitle = false;
 	mGotoLobby = false;
 	mGotoInGame = false;
 	mGotoResult = false;
+	mGotoRank = false;
 
 	return true;
 }
@@ -170,6 +172,11 @@ void CScene::Update(float DeltaTime)
 		return;
 	}
 	if (mGotoResult)
+	{
+		CSceneManager::GetInst()->CreateLoadScene<CSceneResult>();
+		return;
+	}
+	if (mGotoRank)
 	{
 		CSceneManager::GetInst()->CreateLoadScene<CSceneResult>();
 		return;

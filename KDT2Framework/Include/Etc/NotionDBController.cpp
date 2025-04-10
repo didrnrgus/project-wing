@@ -15,18 +15,33 @@ CNotionDBController::~CNotionDBController()
 
 }
 
-bool CNotionDBController::CreateUserRecord(const FUserRankInfo& userInfo)
+bool CNotionDBController::CreateUserRecord(const FUserRankInfo& _userInfo)
 {
-    CLog::PrintLog("CNotionDBController::CreateUserRecord()");
+    CLog::PrintLog("CNotionDBController::CreateUserRecord() Check Score By Category.");
   
-    nlohmann::json jsonData = CJsonController::GetInst()->ConvertToJson(userInfo);
+    if (!CheckForUpdate(_userInfo))
+    {
+        CLog::PrintLog("CNotionDBController::CreateUserRecord() Condition not met.");
+        return false;
+    }
+
+    CLog::PrintLog("CNotionDBController::CreateUserRecord() Insert Row into Database.");
+    nlohmann::json jsonData = CJsonController::GetInst()->ConvertToJson(_userInfo);
+
+#ifdef _DEBUG
     std::string jsonString = jsonData.dump(4); // JSON을 문자열로 변환
+#else
+    std::string jsonString = jsonData.dump();
+#endif // _DEBUG
+
     std::string response = CCURL::GetInst()->SendRequest(NOTION_URL_PAGES
         , METHOD_POST
         , jsonString);
 
     if (response.empty())
         return false;
+
+    CDataStorageManager::GetInst()->UpdateUserRankInfos();
 
     return true;
 }
@@ -51,6 +66,40 @@ bool CNotionDBController::ReadRecords()
     return true;
 }
 
+bool CNotionDBController::CheckForUpdate(const FUserRankInfo& _userInfo)
+{
+     // 먼저 넣기전에 현재 있는 데이터에서 데이터 현황 확인 -> 5개 이상? 4등까지 남기고 삭제.
+    auto _mapResult = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(
+        EResultMenuTap::Map, _userInfo.Map);
+    auto _characterResult = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(
+        EResultMenuTap::Character, _userInfo.Character);
+    bool _isMapUpdate = false;
+    bool _isCharacterUpdate = false;
+
+    if (_mapResult.size() >= 5)
+    {
+        // 라스트 받고, 비교해서 Insert 할지 말지.
+        auto _last = _mapResult[_mapResult.size() - 1];
+        _isMapUpdate = _last.Distance < _userInfo.Distance;
+        
+        if (_isMapUpdate)
+            DeleteRecord(_last.PageId);
+    }
+
+    if (_characterResult.size() >= 5)
+    {
+        // 라스트 받고, 비교해서 Insert 할지 말지.
+        auto _last = _characterResult[_characterResult.size() - 1];
+        _isCharacterUpdate = _last.Distance < _userInfo.Distance;
+
+        if (_isCharacterUpdate)
+            DeleteRecord(_last.PageId);
+    }
+
+    // 하나라도 지워졌다면? 추가해도 되기에.
+    return _isMapUpdate || _isCharacterUpdate;
+}
+
 //bool CNotionDBController::UpdateRecord(const std::string& page_id)
 //{
 //    const std::string url = BASE_URL + "pages/" + page_id;
@@ -71,7 +120,7 @@ bool CNotionDBController::ReadRecords()
 bool CNotionDBController::DeleteRecord(const std::string& page_id)
 {
     char url[128] = {};
-    sprintf_s(url, "%spages/%s", BASE_URL, page_id);
+    sprintf_s(url, "%spages/%s", BASE_URL, page_id.c_str());
     nlohmann::json jsonData;
     jsonData[ATT_ARCHIVED] = true;
 

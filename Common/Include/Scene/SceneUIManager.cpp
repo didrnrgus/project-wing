@@ -10,6 +10,7 @@ CSceneUIManager::~CSceneUIManager()
 
 void CSceneUIManager::AddToViewport(CWidget* Widget)
 {
+    mSceneWidget = (class CSceneWidget*)Widget;
     mWidgetList.emplace_back(Widget);
 }
 

@@ -89,7 +89,8 @@ const FLineNode CDataStorageManager::GetLineNodeInSelectedMap(int lineNodeIndex)
 	return mMapInfoDatasByIndex[curSelectedMapIndex].lineNodes[useIndex];
 }
 
-std::vector<FUserRankInfo> CDataStorageManager::GetArrayUserRankByCategory(EResultMenuTap::Type _type, int _value)
+std::vector<FUserRankInfo> CDataStorageManager::GetArrayUserRankByCategory(
+	EResultMenuTap::Type _mainCategoryType, int _subCategoryValue)
 {
 	std::vector<FUserRankInfo> result;
 
@@ -97,16 +98,16 @@ std::vector<FUserRankInfo> CDataStorageManager::GetArrayUserRankByCategory(EResu
 	{
 		const FUserRankInfo& info = pair.second;
 
-		if (_type == EResultMenuTap::Map)
+		if (_mainCategoryType == EResultMenuTap::Map)
 		{
-			if (info.Map == _value)
+			if (info.Map == _subCategoryValue)
 			{
 				result.push_back(info);
 			}
 		}
-		else if (_type == EResultMenuTap::Character)
+		else if (_mainCategoryType == EResultMenuTap::Character)
 		{
-			if (info.Character == _value)
+			if (info.Character == _subCategoryValue)
 			{
 				result.push_back(info);
 			}
@@ -114,8 +115,10 @@ std::vector<FUserRankInfo> CDataStorageManager::GetArrayUserRankByCategory(EResu
 		
 	}
 
-	std::sort(result.begin(), result.end(), [](const FUserRankInfo& a, const FUserRankInfo& b) {
-		return a.Distance > b.Distance; // 내림차순
+	std::sort(result.begin(), result.end()
+		, [](const FUserRankInfo& a, const FUserRankInfo& b) 
+		{
+			return a.Distance > b.Distance; // 내림차순
 		});
 
 	return result;

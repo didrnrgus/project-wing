@@ -346,7 +346,7 @@ void CPlayerInGameObject::OnPlayerDead()
 		sceneInGame->SetGamePlayState(EGamePlayState::Dead);
 
 	FUserRankInfo rankInfo;
-	rankInfo.Name = "jethrororo";
+	rankInfo.Name = "xxxxxxxxxxxxxxx";
 	rankInfo.Map = CDataStorageManager::GetInst()->GetSelectedMapIndex();
 	rankInfo.Character = CDataStorageManager::GetInst()->GetSelectedCharacterIndex();
 	rankInfo.Distance = GetPlayDistance();
@@ -363,12 +363,14 @@ void CPlayerInGameObject::OnPlayerDead()
 				CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
 				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
-				CDataStorageManager::GetInst()->SetCurUserResult(rankInfo);
-				CNotionDBController::GetInst()->CreateUserRecord(rankInfo);
-				
+				// 씬 이동
 				CSceneInGame* _inGameScene = dynamic_cast<CSceneInGame*>(mScene);
 				CSceneWidget* _sceneWidget = (CSceneWidget*)_inGameScene->GetInGameWidget();
 				_sceneWidget->LoadScene(EGameScene::Result);
+				
+				// 씬 이동 하는동안 데이터 처리.
+				CDataStorageManager::GetInst()->SetCurUserResult(rankInfo);
+				CNotionDBController::GetInst()->CreateUserRecord(rankInfo);
 			})));
 	}
 }

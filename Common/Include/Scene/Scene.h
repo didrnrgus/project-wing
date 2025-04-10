@@ -5,6 +5,7 @@
 #include "Etc/ProcessManager.h"
 #include "Etc/NetworkManager.h"
 #include "Etc/MultiplayManager.h"
+#include "Etc/DataStorageManager.h"
 
 class CScene abstract
 {
@@ -28,6 +29,9 @@ private:
 	bool mGotoLobby;
 	bool mGotoInGame;
 	bool mGotoResult;
+	bool mGotoRank;
+
+	bool mIsLoadingScene;
 
 public:
 	class CSceneUIManager* GetUIManager()	const
@@ -66,6 +70,8 @@ public:
 	virtual void RenderUI();
 	virtual void EndFrame();
 
+	bool GetIsLoadingScene() { return mIsLoadingScene; }
+	void SetIsLoadingScene(bool _isLoading = true) { mIsLoadingScene = _isLoading; }
 	void GotoTitle() 
 	{ 
 		CNetworkManager::GetInst()->Clear(
@@ -79,6 +85,11 @@ public:
 	void GotoLobby() { mGotoLobby = true; }
 	void GotoInGame() { mGotoInGame = true; }
 	void GotoResult() { mGotoResult = true; }
+	void GotoRank() 
+	{ 
+		CDataStorageManager::GetInst()->UpdateUserRankInfos();
+		mGotoRank = true; 
+	}
 
 protected:
 	virtual bool InitAsset() = 0;
