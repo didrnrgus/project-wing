@@ -76,7 +76,8 @@ bool CNotionDBController::CheckForUpdate(const FUserRankInfo& _userInfo)
     bool _isMapUpdate = false;
     bool _isCharacterUpdate = false;
 
-    if (_mapResult.size() >= 5)
+    auto _config = CDataStorageManager::GetInst()->GetConfig();
+    if (_mapResult.size() >= _config.RankCountByCategory)
     {
         // 라스트 받고, 비교해서 Insert 할지 말지.
         auto _last = _mapResult[_mapResult.size() - 1];
@@ -86,7 +87,7 @@ bool CNotionDBController::CheckForUpdate(const FUserRankInfo& _userInfo)
             DeleteRecord(_last.PageId);
     }
 
-    if (_characterResult.size() >= 5)
+    if (_characterResult.size() >= _config.RankCountByCategory)
     {
         // 라스트 받고, 비교해서 Insert 할지 말지.
         auto _last = _characterResult[_characterResult.size() - 1];

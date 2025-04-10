@@ -234,7 +234,8 @@ struct FCharacterState
 	"character_file": "character_list.json",
 	"item_file": "item_list.json",
 	"stat_file": "stat_type_list.json",
-	"selectable_item_count": 3
+	"selectable_item_count": 3,
+	"rank_count_by_category": 5
 }
 */
 struct FConfig
@@ -246,6 +247,7 @@ struct FConfig
 	std::string ItemFileName;
 	std::string StatFileName;
 	int SelectableItemCount;
+	int RankCountByCategory;
 };
 
 

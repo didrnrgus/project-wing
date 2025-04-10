@@ -311,6 +311,9 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FConfig& data)
 	if (json.contains("selectable_item_count"))
 		data.SelectableItemCount = json["selectable_item_count"].get<int>();
 
+	if (json.contains("rank_count_by_category"))
+		data.RankCountByCategory = json["rank_count_by_category"].get<int>();
+
 	return true;
 }
 
