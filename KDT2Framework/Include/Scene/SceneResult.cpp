@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "SceneResult.h"
 #include "Scene/SceneUIManager.h"
 #include "UI/UserWidget/ResultWidget.h"

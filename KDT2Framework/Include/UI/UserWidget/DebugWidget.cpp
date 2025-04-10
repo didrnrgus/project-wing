@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "DebugWidget.h"
 #include "UI/Common/TextBlock.h"
 #include "Scene/Scene.h"

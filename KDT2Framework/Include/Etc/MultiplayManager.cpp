@@ -1,4 +1,4 @@
-#include "MultiplayManager.h"
+ï»¿#include "MultiplayManager.h"
 
 DEFINITION_SINGLE(CMultiplayManager);
 
@@ -79,10 +79,10 @@ const Multiplay::FPlayerInfo CMultiplayManager::GetPlayerInfoByIndex(const int _
 	/*int main() {
 			std::list<int> myList = { 10, 20, 30, 40, 50 };
 			auto it = myList.begin();
-			std::advance(it, 3);  // 3Ä­ ¾ÕÀ¸·Î ÀÌµ¿ (10 ¡æ 40)
-			std::cout << "3¹øÂ° ÀÎµ¦½º °ª: " << *it << std::endl;  // Ãâ·Â: 40
-			std::advance(it, -2); // 2Ä­ µÚ·Î ÀÌµ¿ (40 ¡æ 20)
-			std::cout << "´Ù½Ã 2Ä­ µÚ·Î ÀÌµ¿: " << *it << std::endl; // Ãâ·Â: 20
+			std::advance(it, 3);  // 3ì¹¸ ì•žìœ¼ë¡œ ì´ë™ (10 â†’ 40)
+			std::cout << "3ë²ˆì§¸ ì¸ë±ìŠ¤ ê°’: " << *it << std::endl;  // ì¶œë ¥: 40
+			std::advance(it, -2); // 2ì¹¸ ë’¤ë¡œ ì´ë™ (40 â†’ 20)
+			std::cout << "ë‹¤ì‹œ 2ì¹¸ ë’¤ë¡œ ì´ë™: " << *it << std::endl; // ì¶œë ¥: 20
 			return 0;
 		}*/
 

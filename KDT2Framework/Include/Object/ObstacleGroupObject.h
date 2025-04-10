@@ -1,4 +1,4 @@
-#pragma once
+﻿#pragma once
 #include "Object/SceneObject.h"
 #include "Interface/IGamePlayStateController.h"
 #include "Interface/IObjectNetworkController.h"

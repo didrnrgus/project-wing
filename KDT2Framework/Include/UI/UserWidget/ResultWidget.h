@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "UI/UserWidget/SceneWidget.h"
 #include "Etc/JsonContainer.h"
 
@@ -39,8 +39,8 @@ protected:
 	};
 	std::vector<FUserPrintGroup> mArrUserInfoText;
 
-	CSharedPtr<class CTextBlock> mResultTitle; // Å¸ÀÌÆ² Ç¥½Ã
-	FUserPrintGroup mCurResultUserPrint; // ÇöÀç ÇÃ·¹ÀÌ ÇÑ À¯Àú.
+	CSharedPtr<class CTextBlock> mResultTitle; // íƒ€ì´í‹€ í‘œì‹œ
+	FUserPrintGroup mCurResultUserPrint; // í˜„ì¬ í”Œë ˆì´ í•œ ìœ ì €.
 
 	const int mRankMaxCount = 5;
 	const float mMenuTextFontSize = 30.0f;
@@ -56,19 +56,19 @@ public:
 
 private:
 
-	void InitMemu(); // ¸ŞÀÎÄ«Å×°í¸®, ¼­ºêÄ«Å×°í¸®
+	void InitMemu(); // ë©”ì¸ì¹´í…Œê³ ë¦¬, ì„œë¸Œì¹´í…Œê³ ë¦¬ -> ì‹±ê¸€ìš©
 	void InitProperty(FVector2D _basePos);
-	void InitUserRankPrint();
-	void InitMyResultScore();
+	void InitUserRankPrint(); // í…Œì´ë¸” í˜• í¬ë§·ë§Œ ë§Œë“¦. 
+	void InitMyResultScore(); // ì‹±ê¸€ / ë©€í‹°
 
-	void SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2D _basePos); // À§Ä¡½ÃÅ°´Â ¿ªÇÒ.
+	void SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2D _basePos); // ìœ„ì¹˜ì‹œí‚¤ëŠ” ì—­í• .
 	void SetInfoTextBlock(class CTextBlock* _textBlock, FVector2D _pivot, FVector2D _size, FVector2D _pos, FVector4D _color, const wchar_t* _str);
 	void SetImage(class CImage* _image, FVector2D _pivot, FVector2D _size, FVector2D _pos, FVector4D _color, const char* _imageName, const wchar_t* _imagePath);
 
 	void OnClickMainCategoryMenuTapButton(EResultMenuTap::Type _tap);
 	void OnClickSubCategoryMenuTapButton(int _index);
 
-	void UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo); // µ¥ÀÌÅÍ ¾÷µ¥ÀÌÆ®
+	void UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo); // ë°ì´í„° ì—…ë°ì´íŠ¸
 	void SetButton(CButton& _button, const char* _name, const wchar_t* _path);
 
 };

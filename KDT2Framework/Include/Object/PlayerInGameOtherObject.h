@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "Object/PlayerGraphicObject.h"
 #include "Interface/IObjectNetworkController.h"
 #include "Interface/IPlayerStatController.h"
@@ -17,7 +17,7 @@ protected:
 protected:
 	virtual bool Init() override;
 
-	// IObjectNetworkControllerÀ»(¸¦) ÅëÇØ »ó¼ÓµÊ
+	// IObjectNetworkControllerì„(ë¥¼) í†µí•´ ìƒì†ë¨
 	void AddListener() override;
 	void RemoveListener() override;
 	void ProcessMessage(const RecvMessage& msg) override;

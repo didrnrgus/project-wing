@@ -1,4 +1,4 @@
-#include "ObstacleGroupObject.h"
+﻿#include "ObstacleGroupObject.h"
 #include "Device.h"
 #include "Component/SpriteComponent.h"
 #include "Component/WidgetComponent.h"

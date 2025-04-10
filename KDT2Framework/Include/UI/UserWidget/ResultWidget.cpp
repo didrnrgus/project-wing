@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "ResultWidget.h"
 #include "Device.h"
 #include "Scene/Scene.h"
@@ -72,7 +72,7 @@ void CResultWidget::Update(float DeltaTime)
 
 void CResultWidget::InitMemu()
 {
-	// ¸ŞÀÎÄ«Å×°í¸®
+	// ë©”ì¸ì¹´í…Œê³ ë¦¬
 	FVector2D _pivotMain = FVector2D(0.0f, 1.0f);
 	FVector2D _sizeMain = FVector2D(200.0f, mMenuTextFontSize + 10.0f);
 	FVector2D _basePosMain = FVector2D(180.0f, mResolution.y * 0.7f);
@@ -117,7 +117,7 @@ void CResultWidget::InitMemu()
 	FVector2D _basePosSub = _basePosMain + FVector2D(0.0f, -(_sizeSub.y + 5.0f));
 	float _gapSubX = 10.0f;
 
-	// ¼­ºêÄ«Å×°í¸®, ¸Ê
+	// ì„œë¸Œì¹´í…Œê³ ë¦¬, ë§µ
 	int _mapCount = CDataStorageManager::GetInst()->GetMapInfoCount();
 
 	for (int i = 0; i < _mapCount; i++)
@@ -155,7 +155,7 @@ void CResultWidget::InitMemu()
 		mArrSubCategoryMunuTap[(int)EResultMenuTap::Map].push_back(_menuTap);
 	}
 
-	// ¼­ºêÄ«Å×°í¸®, Ä³¸¯ÅÍ
+	// ì„œë¸Œì¹´í…Œê³ ë¦¬, ìºë¦­í„°
 	int _characterCount = CDataStorageManager::GetInst()->GetCharacterCount();
 
 	for (int i = 0; i < _characterCount; i++)
@@ -198,7 +198,7 @@ void CResultWidget::InitMemu()
 
 void CResultWidget::InitProperty(FVector2D _basePos)
 {
-	// ¿©±â¼­ Row ¸ğ¾ç ¼¼ÆÃ
+	// ì—¬ê¸°ì„œ Row ëª¨ì–‘ ì„¸íŒ…
 	FVector2D _pivot = FVector2D(0.0f, 1.0f);
 	FVector2D _sizeName = FVector2D(250.0f, 50.0f);
 	FVector2D _sizeMap = FVector2D(200.0f, 50.0f);
@@ -239,7 +239,9 @@ void CResultWidget::InitProperty(FVector2D _basePos)
 
 void CResultWidget::InitUserRankPrint()
 {
-	// mRankMaxCount ÀÎ¿ø¼ö¿¡ ¸Â°Ô ¹Ì¸® À§Ä¡ ¼¼ÆÃ
+	// mRankMaxCount ì¸ì›ìˆ˜ì— ë§ê²Œ ë¯¸ë¦¬ ìœ„ì¹˜ ì„¸íŒ… -> í…Œì´ë¸” í˜• í¬ë§·ë§Œ ë§Œë“¦.
+	// ë©€í‹°: ë‹¤ë¥¸ì‚¬ëŒë“¤ ìŠ¤ì½”ì–´.
+	// ì‹±ê¸€: ë­í‚¹.
 	FVector2D _basePos = FVector2D(120.0f, mResolution.y * 0.5f);
 	float _gapY = mRowTextFontSize;
 
@@ -286,7 +288,7 @@ void CResultWidget::InitMyResultScore()
 
 void CResultWidget::SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2D _basePos)
 {
-	// ¿©±â¼­ Row ¸ğ¾ç ¼¼ÆÃ
+	// ì—¬ê¸°ì„œ Row ëª¨ì–‘ ì„¸íŒ…
 	FVector2D _pivot = FVector2D(0.0f, 1.0f);
 	FVector2D _sizeName = FVector2D(250.0f, 50.0f);
 	FVector2D _sizeMap = FVector2D(200.0f, 50.0f);
@@ -372,10 +374,10 @@ void CResultWidget::OnClickMainCategoryMenuTapButton(EResultMenuTap::Type _tap)
 {
 	int _beforeMainCategory = mCurMainCategoryMenuTap;
 
-	// ÇöÀç ¸ŞÀÎ Ä«Å×°í¸® ¾÷µ¥ÀÌÆ®.
+	// í˜„ì¬ ë©”ì¸ ì¹´í…Œê³ ë¦¬ ì—…ë°ì´íŠ¸.
 	mCurMainCategoryMenuTap = _tap;
 
-	// ¸ŞÀÎÄ«Å×°í¸® ÅÇÀº »ö±ò º¯È­
+	// ë©”ì¸ì¹´í…Œê³ ë¦¬ íƒ­ì€ ìƒ‰ê¹” ë³€í™”
 	for (int i = 0; i < mArrMainCategoryMenuTap.size(); i++)
 	{
 		if (i == (int)mCurMainCategoryMenuTap)
@@ -384,7 +386,7 @@ void CResultWidget::OnClickMainCategoryMenuTapButton(EResultMenuTap::Type _tap)
 			mArrMainCategoryMenuTap[i].menuTapText->SetTextColor(FVector4D::Green * 0.5f);
 	}
 
-	{// ¼­ºêÄ«Å×°í¸® ÀÌÀü SetEnable
+	{// ì„œë¸Œì¹´í…Œê³ ë¦¬ ì´ì „ SetEnable
 		auto& _arrSub = mArrSubCategoryMunuTap[_beforeMainCategory];
 		for (auto& _sub : _arrSub)
 		{
@@ -393,7 +395,7 @@ void CResultWidget::OnClickMainCategoryMenuTapButton(EResultMenuTap::Type _tap)
 		}
 	}
 
-	{// ¼­ºêÄ«Å×°í¸® ÇöÀç SetEnable
+	{// ì„œë¸Œì¹´í…Œê³ ë¦¬ í˜„ì¬ SetEnable
 		auto& _arrSub = mArrSubCategoryMunuTap[mCurMainCategoryMenuTap];
 		for (auto& _sub : _arrSub)
 		{
@@ -403,17 +405,17 @@ void CResultWidget::OnClickMainCategoryMenuTapButton(EResultMenuTap::Type _tap)
 	}
 
 	{
-		// ¼­ºêÄ«Å×°í¸® ¼±ÅÃµÈ ÅÇ ¿Ü¿¡ ºñÈ°¼ºÈ­
+		// ì„œë¸Œì¹´í…Œê³ ë¦¬ ì„ íƒëœ íƒ­ ì™¸ì— ë¹„í™œì„±í™”
 		auto& _arrSub = mArrSubCategoryMunuTap[mCurMainCategoryMenuTap];
 
 		for (auto& _sub : _arrSub)
 			_sub.menuTapText->SetTextColor(FVector4D::Green * 0.5f);
 
-		// ¼­ºê Ä«Å×°í¸® Áß ¼±ÅÃµÈ ÅÇ È°¼ºÈ­ -> »ö±òº¯È­
+		// ì„œë¸Œ ì¹´í…Œê³ ë¦¬ ì¤‘ ì„ íƒëœ íƒ­ í™œì„±í™” -> ìƒ‰ê¹”ë³€í™”
 		_arrSub[mCurSubCategoryMenuTap[mCurMainCategoryMenuTap]].menuTapText->SetTextColor(FVector4D::Green);
 	}
 
-	// ÇöÀç ¸ŞÀÎ / ¼­ºê Ä«Å×°í¸®¿¡ ¸Â´Â µ¥ÀÌÅÍ °¡Á®¿È.
+	// í˜„ì¬ ë©”ì¸ / ì„œë¸Œ ì¹´í…Œê³ ë¦¬ì— ë§ëŠ” ë°ì´í„° ê°€ì ¸ì˜´.
 	std::vector<FUserRankInfo> _arrRankInfo;
 	_arrRankInfo = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(
 		mCurMainCategoryMenuTap
@@ -424,20 +426,20 @@ void CResultWidget::OnClickMainCategoryMenuTapButton(EResultMenuTap::Type _tap)
 
 void CResultWidget::OnClickSubCategoryMenuTapButton(int _index)
 {
-	// ¼­ºê Ä«Å×°í¸® ¾÷µ¥ÀÌÆ® -> ¸ŞÀÎÀº ³ÀµĞ´Ù.
-	// ÇöÀç ¸ŞÀÎ / ¼­ºê Ä«Å×°í¸®¿¡ ¸Â´Â µ¥ÀÌÅÍ °¡Á®¿È.
+	// ì„œë¸Œ ì¹´í…Œê³ ë¦¬ ì—…ë°ì´íŠ¸ -> ë©”ì¸ì€ ëƒ…ë‘”ë‹¤.
+	// í˜„ì¬ ë©”ì¸ / ì„œë¸Œ ì¹´í…Œê³ ë¦¬ì— ë§ëŠ” ë°ì´í„° ê°€ì ¸ì˜´.
 	const int _menuTapIndex = (int)mCurMainCategoryMenuTap;
 	mCurSubCategoryMenuTap[_menuTapIndex] = _index;
 
-	// ¼­ºê ¸Ş´º ÅÇ º¯°æ.
-	// ÇöÀç ¸ŞÀÎ Ä«Å×°í¸® -> ¼­ºê Ä«Å×°í¸® ¾÷µ¥ÀÌÆ® -> ¼­ºê Ä«Å×°í¸® »ö º¯È­.
+	// ì„œë¸Œ ë©”ë‰´ íƒ­ ë³€ê²½.
+	// í˜„ì¬ ë©”ì¸ ì¹´í…Œê³ ë¦¬ -> ì„œë¸Œ ì¹´í…Œê³ ë¦¬ ì—…ë°ì´íŠ¸ -> ì„œë¸Œ ì¹´í…Œê³ ë¦¬ ìƒ‰ ë³€í™”.
 	auto& _arrSub = mArrSubCategoryMunuTap[_menuTapIndex];
 	for (auto& _sub : _arrSub)
 		_sub.menuTapText->SetTextColor(FVector4D::Green * 0.5f);
 
 	_arrSub[mCurSubCategoryMenuTap[_menuTapIndex]].menuTapText->SetTextColor(FVector4D::Green);
 
-	// µ¥ÀÌÅÍ °¡Á®¿À±â.
+	// ë°ì´í„° ê°€ì ¸ì˜¤ê¸°.
 	std::vector<FUserRankInfo> _arrRankInfo;
 
 	_arrRankInfo = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(
@@ -451,11 +453,11 @@ void CResultWidget::OnClickSubCategoryMenuTapButton(int _index)
 
 void CResultWidget::UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo)
 {
-	// ¼¼ÆÃÇØ³õÀº ÅØ½ºÆ®³ª ÀÌ¹ÌÁöÀÇ µ¥ÀÌÅÍ ¾÷µ¥ÀÌÆ®.
-	// ¸Æ½ºº¸´Ù ÃÖ¼Ò°ªÀÌ µé¾î¿Ã ¼ö µµ ÀÖ´Ù.
+	// ì„¸íŒ…í•´ë†“ì€ í…ìŠ¤íŠ¸ë‚˜ ì´ë¯¸ì§€ì˜ ë°ì´í„° ì—…ë°ì´íŠ¸.
+	// ë§¥ìŠ¤ë³´ë‹¤ ìµœì†Œê°’ì´ ë“¤ì–´ì˜¬ ìˆ˜ ë„ ìˆë‹¤.
 	int _minCount = mRankMaxCount > _arrInfo.size() ? _arrInfo.size() : mRankMaxCount;
 
-	// row µé ¸ğµÎ ²¨¾ß ÇÔ.
+	// row ë“¤ ëª¨ë‘ êº¼ì•¼ í•¨.
 	for (int i = 0; i < mRankMaxCount; i++)
 	{
 		auto& _printGroup = mArrUserInfoText[i];

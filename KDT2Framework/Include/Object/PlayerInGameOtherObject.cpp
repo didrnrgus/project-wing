@@ -1,4 +1,4 @@
-#pragma once
+ï»¿#pragma once
 #include "PlayerInGameOtherObject.h"
 #include "Etc/MultiplayManager.h"
 #include "Interface/ISceneNetworkController.h"
@@ -40,17 +40,17 @@ bool CPlayerInGameOtherObject::Init()
 			int itemSlotCount = CDataStorageManager::GetInst()->GetSelectableItemCount();
 			auto itemDatas = CDataStorageManager::GetInst()->GetItemInfoDatas();
 			auto playerNetInfo = CMultiplayManager::GetInst()->GetPlayerInfoValueById(_netId);
-			// ¼±ÅÃÇÑ Ä³¸¯ÀÇ ÃÊ±â ½ºÅİ µî·Ï.
+			// ì„ íƒí•œ ìºë¦­ì˜ ì´ˆê¸° ìŠ¤í…Ÿ ë“±ë¡.
 			auto initializedStatData = CDataStorageManager::GetInst()->GetCharacterState(playerNetInfo.characterType);
 			InitStat(initializedStatData);
 
-			// ¾ÆÀÌÅÛ Âø¿ëÇÑ°Í ÇÃ·¹ÀÌ¾î¿¡ ½ºÅİ Àû¿ë. º£ÀÌ½º ½ºÅÈ¿¡ Add ÇÏ´Â Çü½ÄÀÓ ÀÌÀü¿¡ InitµÇ¾î ÀÖ¾î¾ß ÇÔ.
+			// ì•„ì´í…œ ì°©ìš©í•œê²ƒ í”Œë ˆì´ì–´ì— ìŠ¤í…Ÿ ì ìš©. ë² ì´ìŠ¤ ìŠ¤íƒ¯ì— Add í•˜ëŠ” í˜•ì‹ì„ ì´ì „ì— Initë˜ì–´ ìˆì–´ì•¼ í•¨.
 			for (int i = 0; i < itemSlotCount; i++)
 			{
 				int itemIndexInSlot = playerNetInfo.arrItemType[i];
 				if (itemIndexInSlot >= 0)
 				{
-					// ¾î¶² ½ºÅÈ¿¡ ¾ó¸¶¸¦ Àû¿ëÇÒ°ÍÀÎÁö.
+					// ì–´ë–¤ ìŠ¤íƒ¯ì— ì–¼ë§ˆë¥¼ ì ìš©í• ê²ƒì¸ì§€.
 					AddValueByStatIndex(
 						static_cast<EStatInfoText::Type>(itemDatas[itemIndexInSlot].StatType)
 						, itemDatas[itemIndexInSlot].AddValue);
@@ -87,7 +87,7 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 	case (int)ServerMessage::MSG_TAKEN_DAMAGE:
 	{
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
-		// mini HP ¿¬°á?
+		// mini HP ì—°ê²°?
 		break;
 	}
 	case (int)ServerMessage::MSG_PLAYER_DEAD:
@@ -104,11 +104,11 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 	}
 	case (int)ServerMessage::MSG_PLAYER_DISTANCE:
 	{
-		// ÇöÀç Å¸°ÔÆÃµÈ ÇÃ·¹ÀÌ¾î¸¦ ±âÁØÀ¸·Î »ó´ëÀûÀÎ È­¸é À§Ä¡¸¦ ÁöÁ¤ÇØ¾ß ÇÔ.
+		// í˜„ì¬ íƒ€ê²ŒíŒ…ëœ í”Œë ˆì´ì–´ë¥¼ ê¸°ì¤€ìœ¼ë¡œ ìƒëŒ€ì ì¸ í™”ë©´ ìœ„ì¹˜ë¥¼ ì§€ì •í•´ì•¼ í•¨.
 		auto info = CMultiplayManager::GetInst()->GetPlayerInfoValueById(GetNetID());
 		float otherDist = info.distance;
 
-		// Å¸°ÙÆÃ ÇÏ°íÀÖ´Â ÇÃ·¹ÀÌ¾î.
+		// íƒ€ê²ŸíŒ… í•˜ê³ ìˆëŠ” í”Œë ˆì´ì–´.
 		auto inGameScene = dynamic_cast<CSceneInGame*>(mScene);
 		auto myPlayerObject = inGameScene->GetMyPlayerObject();
 		auto myPlayerStat = dynamic_cast<IPlayerStatController*>(myPlayerObject);
@@ -116,7 +116,7 @@ void CPlayerInGameOtherObject::ProcessMessage(const RecvMessage& msg)
 
 		SetDebugText(std::wstring(L"distance: " + std::to_wstring(otherDist) + L"\ntargetDist: " + std::to_wstring(myDist)).c_str());
 
-		// Å¸°Ù(³ª)ÀÌ ¾Õ¿¡ÀÖ´Ù¸é, +°¡ ³ª¿È.
+		// íƒ€ê²Ÿ(ë‚˜)ì´ ì•ì—ìˆë‹¤ë©´, +ê°€ ë‚˜ì˜´.
 		float gapBaseOnTarget = myDist - otherDist;
 		FVector3D worldPos = FVector3D(myPlayerObject->GetWorldPosition().x - gapBaseOnTarget * 100.0f, info.height, 0.0f);
 		SetMovePlayer(worldPos);
