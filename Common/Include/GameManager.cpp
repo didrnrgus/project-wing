@@ -26,20 +26,23 @@
 #include "Scene/SceneTitle.h"
 #include "Etc/ConstValues.h"
 
-#define ID_MENU_OPTION1  1000  // 옵션1 메뉴 ID
-#define ID_MENU_CHECKBOX 1001  // 체크박스 ID
-#define ID_MENU_OPTION2  1002  // 옵션2 메뉴 ID
-#define ID_MENU_TEXTBOX  1003  // 입력 필드 띄우는 항목 ID
-#define ID_EDITBOX       2001  // 팝업 내부의 입력 필드 ID
-#define ID_OK_BUTTON     2002  // 팝업 내 OK 버튼 ID
-#define ID_CANCEL_BUTTON 2003  // 팝업 내 Cancel 버튼 ID
+#define ID_MENU_OPTION1		1000  // 옵션1 메뉴 ID
+#define ID_MENU_CHECKBOX	1001  // 체크박스 ID
+#define ID_MENU_OPTION2		1002  // 옵션2 메뉴 ID
+#define ID_MENU_IP_TEXTBOX  1003  // IP 입력 필드 띄우는 항목 ID
+#define ID_MENU_NICKNAME_TEXTBOX  1004  // 닉네임 입력 필드 띄우는 항목 ID
+#define ID_EDITBOX			2001  // 팝업 내부의 입력 필드 ID
+#define ID_IP_INPUT_OK_BUTTON		2002  // 팝업 내 OK 버튼 ID
+#define ID_NICKNAME_INPUT_OK_BUTTON		2003  // 팝업 내 OK 버튼 ID
+#define ID_CANCEL_BUTTON	2004  // 팝업 내 Cancel 버튼 ID
 
-HMENU hMainMenu, hOption2Menu = NULL, hOption1Menu = NULL;
+HMENU hMainMenu, hOption2Menu = NULL, hOption1Menu = NULL, hOption0Menu = NULL;
 BOOL option2Visible = FALSE;  // 옵션2 표시 여부
 
 TCHAR   gRootPath[MAX_PATH];
 char   gRootPathMultibyte[MAX_PATH];
-std::string gIPAddress = IP_ADDRESS_DEFAULT;
+std::string gIPAddress = IP_ADDRESS_DEFAULT_A;
+std::string gNickname = NICKNAME_DEFAULT_A;
 DEFINITION_SINGLE(CGameManager)
 
 bool CGameManager::mLoop = true;
@@ -84,7 +87,7 @@ bool CGameManager::Init(HINSTANCE hInst)
 	mhInst = hInst;
 
 	lstrcpy(mClassName, TEXT("ProjectWing"));
-	lstrcpy(mTitleName, TEXT("ProjectWing"));
+	swprintf_s(mTitleName, TITLE_FORMAT, NICKNAME_DEFAULT_W, IP_ADDRESS_DEFAULT_W);
 
 	RegisterWindowClass();
 
@@ -336,6 +339,9 @@ LRESULT CALLBACK CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 	{
 		hMainMenu = CreateMenu();
 		hOption1Menu = CreatePopupMenu();
+		hOption0Menu = CreatePopupMenu();
+		AppendMenu(hOption0Menu, MF_STRING, ID_MENU_NICKNAME_TEXTBOX, TEXT("닉네임 정하기"));
+		AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR)hOption0Menu, TEXT("닉네임을 정해주세요."));
 		AppendMenu(hOption1Menu, MF_STRING, ID_MENU_CHECKBOX, TEXT("남의 방 들어가기"));
 		AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR)hOption1Menu, TEXT("멀티플레이"));
 		SetMenu(hWnd, hMainMenu);
@@ -350,12 +356,16 @@ LRESULT CALLBACK CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 
 			if (!option2Visible)
 			{
-				gIPAddress = IP_ADDRESS_DEFAULT;
+				gIPAddress = IP_ADDRESS_DEFAULT_A;
 			}
 		}
-		else if (LOWORD(wParam) == ID_MENU_TEXTBOX)
+		else if (LOWORD(wParam) == ID_MENU_IP_TEXTBOX)
 		{
-			OpenPopup(hWnd);  // 팝업 열기
+			OpenIPInputPopup(hWnd);  // 팝업 열기
+		}
+		else if (LOWORD(wParam) == ID_MENU_NICKNAME_TEXTBOX)
+		{
+			OpenNicknameInputPopup(hWnd);  // 팝업 열기
 		}
 	} break;
 
@@ -370,7 +380,7 @@ LRESULT CALLBACK CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 	return 0;
 }
 
-void CGameManager::OpenPopup(HWND hWnd)
+void CGameManager::OpenIPInputPopup(HWND hWnd)
 {
 	POINT pt;
 	GetCursorPos(&pt);  // 마우스 포인터의 현재 위치를 얻어옴
@@ -379,7 +389,7 @@ void CGameManager::OpenPopup(HWND hWnd)
 	HWND hPopup = CreateWindowEx(
 		WS_EX_TOPMOST,  // 항상 위에 나타나도록 설정
 		TEXT("STATIC"), TEXT(""), WS_POPUP | WS_VISIBLE | WS_BORDER,
-		pt.x, pt.y, 300, 150,  // 마우스 포인터 위치 (pt.x, pt.y)에서 창을 열기
+		pt.x, pt.y, 300, 110,  // 마우스 포인터 위치 (pt.x, pt.y)에서 창을 열기
 		hWnd, NULL, GetModuleHandle(NULL), NULL);
 
 	std::wstring _ipAddr(gIPAddress.begin(), gIPAddress.end());
@@ -391,7 +401,7 @@ void CGameManager::OpenPopup(HWND hWnd)
 	// 확인 버튼 추가
 	CreateWindowEx(0, TEXT("BUTTON"), TEXT("확인"),
 		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
-		50, 60, 50, 30, hPopup, (HMENU)ID_OK_BUTTON, GetModuleHandle(NULL), NULL);
+		50, 60, 50, 30, hPopup, (HMENU)ID_IP_INPUT_OK_BUTTON, GetModuleHandle(NULL), NULL);
 
 	// 취소 버튼 추가
 	CreateWindowEx(0, TEXT("BUTTON"), TEXT("취소"),
@@ -402,17 +412,75 @@ void CGameManager::OpenPopup(HWND hWnd)
 	SetWindowLongPtr(hPopup, GWLP_WNDPROC, (LONG_PTR)PopupProc);
 }
 
+void CGameManager::OpenNicknameInputPopup(HWND hWnd)
+{
+	POINT pt;
+	GetCursorPos(&pt);  // 마우스 포인터의 현재 위치를 얻어옴
+
+	// 팝업 창 생성 (마우스 위치에서 열리도록)
+	HWND hPopup = CreateWindowEx(
+		WS_EX_TOPMOST,  // 항상 위에 나타나도록 설정
+		TEXT("STATIC"), TEXT(""), WS_POPUP | WS_VISIBLE | WS_BORDER,
+		pt.x, pt.y, 300, 110,  // 마우스 포인터 위치 (pt.x, pt.y)에서 창을 열기
+		hWnd, NULL, GetModuleHandle(NULL), NULL);
+
+	// 안내 문구 라벨 추가
+	CreateWindowEx(0, TEXT("STATIC"), TEXT("*영문 및 숫자만 입력"),
+		WS_CHILD | WS_VISIBLE,
+		50, 10, 200, 15, hPopup, NULL, GetModuleHandle(NULL), NULL);
+
+	std::wstring _nickname(gNickname.begin(), gNickname.end());
+	
+	// 입력 필드 추가
+	HWND hEditBox = CreateWindowEx(0, TEXT("EDIT"), _nickname.c_str(),
+		WS_CHILD | WS_VISIBLE | WS_BORDER | ES_AUTOHSCROLL,
+		50, 30, 200, 20, hPopup, (HMENU)ID_EDITBOX, GetModuleHandle(NULL), NULL);
+
+	// 확인 버튼 추가
+	CreateWindowEx(0, TEXT("BUTTON"), TEXT("확인"),
+		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
+		50, 60, 50, 30, hPopup, (HMENU)ID_NICKNAME_INPUT_OK_BUTTON, GetModuleHandle(NULL), NULL);
+
+	// 취소 버튼 추가
+	CreateWindowEx(0, TEXT("BUTTON"), TEXT("취소"),
+		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
+		150, 60, 50, 30, hPopup, (HMENU)ID_CANCEL_BUTTON, GetModuleHandle(NULL), NULL);
+
+	// 팝업 창을 닫는 기본 메시지 처리
+	SetWindowLongPtr(hPopup, GWLP_WNDPROC, (LONG_PTR)PopupProc);
+}
+
+void CGameManager::UpdateTitle()
+{
+	std::wstring _nickname(gNickname.begin(), gNickname.end());
+	std::wstring _ipAddr(gIPAddress.begin(), gIPAddress.end());
+
+	swprintf_s(mTitleName, TITLE_FORMAT, _nickname.c_str(), _ipAddr.c_str());
+	SetWindowTextW(mhWnd, mTitleName);
+}
+
 LRESULT CALLBACK CGameManager::PopupProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
 	switch (message)
 	{
 	case WM_COMMAND:
-		if (LOWORD(wParam) == ID_OK_BUTTON)  // 확인 버튼
+		if (LOWORD(wParam) == ID_IP_INPUT_OK_BUTTON)  // 확인 버튼
 		{
 			HWND hEditBox = GetDlgItem(hWnd, ID_EDITBOX);
 			char buffer[256];
 			GetWindowTextA(hEditBox, buffer, sizeof(buffer));
 			gIPAddress = std::string(buffer); // 입력된 값 저장
+			CGameManager::GetInst()->UpdateTitle();
+			DestroyWindow(hWnd);  // 팝업 닫기
+			return TRUE;
+		}
+		if (LOWORD(wParam) == ID_NICKNAME_INPUT_OK_BUTTON)  // 확인 버튼
+		{
+			HWND hEditBox = GetDlgItem(hWnd, ID_EDITBOX);
+			char buffer[256];
+			GetWindowTextA(hEditBox, buffer, sizeof(buffer));
+			gNickname = std::string(buffer); // 입력된 값 저장
+			CGameManager::GetInst()->UpdateTitle();
 			DestroyWindow(hWnd);  // 팝업 닫기
 			return TRUE;
 		}
@@ -441,7 +509,7 @@ void CGameManager::UpdateMenu(HWND hWnd)
 		if (!hOption2Menu)
 		{
 			hOption2Menu = CreatePopupMenu();
-			AppendMenu(hOption2Menu, MF_STRING, ID_MENU_TEXTBOX, TEXT("방장 IP주소 입력하기"));
+			AppendMenu(hOption2Menu, MF_STRING, ID_MENU_IP_TEXTBOX, TEXT("방장 IP주소 입력하기"));
 			AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR)hOption2Menu, TEXT("방장 IP주소 입력하셨나요?"));
 		}
 	}

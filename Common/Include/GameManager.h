@@ -35,7 +35,9 @@ private:
 	bool Create();
 
 	static LRESULT CALLBACK WndProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
-	static void OpenPopup(HWND hWnd);
+	static void OpenIPInputPopup(HWND hWnd);
+	static void OpenNicknameInputPopup(HWND hWnd);
+	void UpdateTitle();
 	static LRESULT CALLBACK PopupProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam);
 	static void UpdateMenu(HWND hWnd);
 

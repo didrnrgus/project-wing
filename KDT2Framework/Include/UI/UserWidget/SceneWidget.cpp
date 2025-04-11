@@ -22,10 +22,20 @@ bool CSceneWidget::Init()
 {
 	CUserWidget::Init();
 
-	mLoadingTextStrings.push_back(L"Loading 🛼");
-	mLoadingTextStrings.push_back(L"Loading  🛼");
-	mLoadingTextStrings.push_back(L"Loading   🛼");
-	mLoadingTextStrings.push_back(L"Loading    🛼");
+	mLoadingTextStrings.push_back(L"Loading.....🏃🏻");
+	mLoadingTextStrings.push_back(L"Loading....🏃🏻");
+	mLoadingTextStrings.push_back(L"Loading...🏃🏻");
+	mLoadingTextStrings.push_back(L"Loading..🏃🏻");
+	mLoadingTextStrings.push_back(L"Loading.🏃🏻");
+	mLoadingTextStrings.push_back(L"Loading🏃🏻");
+	mLoadingTextStrings.push_back(L"Loadin🏃🏻");
+	mLoadingTextStrings.push_back(L"Loadi🏃🏻");
+	mLoadingTextStrings.push_back(L"Load🏃🏻");
+	mLoadingTextStrings.push_back(L"Loa🏃🏻");
+	mLoadingTextStrings.push_back(L"Lo🏃🏻");
+	mLoadingTextStrings.push_back(L"L🏃🏻");
+	mLoadingTextStrings.push_back(L"🏃🏻");
+	mLoadingTextStrings.push_back(L"");
 
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	mLoadingBackImage = mScene->GetUIManager()->CreateWidget<CImage>("LoadingBackImage");
@@ -179,15 +189,15 @@ void CSceneWidget::LoadScene(EGameScene::Type _sceneType)
 			mScene->SetIsLoadingScene();
 
 			if (_sceneType == EGameScene::Title)
-				AddQueueLoadingDescText(L"타이틀 화면으로 이동중입니다!!!");
+				AddQueueLoadingDescText(L"타이틀 화면으로 이동중입니다!!! 🏃🏻");
 			else if (_sceneType == EGameScene::Lobby)
-				AddQueueLoadingDescText(L"로비 화면으로 이동중입니다!!!");
+				AddQueueLoadingDescText(L"로비 화면으로 이동중입니다!!! 🏃🏻");
 			else if (_sceneType == EGameScene::InGame)
-				AddQueueLoadingDescText(L"인게임 화면으로 이동중입니다!!!");
+				AddQueueLoadingDescText(L"인게임 화면으로 이동중입니다!!! 🏃🏻");
 			else if (_sceneType == EGameScene::Result)
-				AddQueueLoadingDescText(L"결과 화면으로 이동중입니다!!!");
+				AddQueueLoadingDescText(L"결과 화면으로 이동중입니다!!! 🏃🏻");
 			else if (_sceneType == EGameScene::Rank)
-				AddQueueLoadingDescText(L"랭킹 화면으로 이동중입니다!!!");
+				AddQueueLoadingDescText(L"랭킹 화면으로 이동중입니다!!! 🏃🏻");
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 

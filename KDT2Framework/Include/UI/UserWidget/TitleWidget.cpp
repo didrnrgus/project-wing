@@ -173,7 +173,7 @@ void CTitleWidget::LoadRankData()
 			ShowLoading(true);
 			mScene->SetIsLoadingScene();
 			// rank load
-			AddQueueLoadingDescText(L"Ranking Data를 로딩 중 입니다.\n🏃🏻🏃🏻🏃🏻🏃🏻🏃🏻", mIsSkip);
+			AddQueueLoadingDescText(L"Ranking Data를 로딩 중 입니다. ✨🎉🎊🎉🎊✨\n랭킹은 맵, 캐릭터 기준 거리 랭킹으로 각 카테고리 내 5위까지 제공됩니다.", mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			CDataStorageManager::GetInst()->UpdateUserRankInfos();
 
@@ -192,7 +192,7 @@ void CTitleWidget::LoadProcess()
 
 			if (!option2Visible)
 			{
-				AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~💻💻💻💻💻", mIsSkip);
+				AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻", mIsSkip);
 				std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 #ifdef _DEBUG
 				CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/Debug/project-wing-socket-server.exe");
@@ -202,7 +202,7 @@ void CTitleWidget::LoadProcess()
 			}
 
 			CNetworkManager::GetInst()->SetIsMultiplay(true);
-			AddQueueLoadingDescText(L"호스트 서버에 접속 중 입니다.\n메뉴 바 에서 호스트 정보 확인하셨죠??", mIsSkip);
+			AddQueueLoadingDescText(L"호스트 서버에 접속 중 입니다.\n메뉴 바 에서 호스트 정보 확인하셨죠??🛜🛜🛜🛜🛜", mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 
 			// 첫번쨰 시도 -> 실패해도 Update() 에서 될때까지 커넥션 한다.
