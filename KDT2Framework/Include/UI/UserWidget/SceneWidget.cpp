@@ -67,7 +67,7 @@ bool CSceneWidget::Init()
 	FVector2D descSize = FVector2D(1000.0f, 120.0f);
 	mLoadingDescText = mScene->GetUIManager()->CreateWidget<CTextBlock>("LoadingDescText");
 	AddWidget(mLoadingDescText);
-	mLoadingDescText->SetText(L"조금만 기다리세요.");
+	mLoadingDescText->SetText(L"잠시만 기다려주세요 로딩 중 입니다. 🙇🏻");
 	mLoadingDescText->SetTextColor(FVector4D::Yellow);
 	mLoadingDescText->SetAlignH(ETextAlignH::Center);
 	mLoadingDescText->SetFontSize(30.f);
