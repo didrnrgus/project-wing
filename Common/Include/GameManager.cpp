@@ -481,6 +481,10 @@ LRESULT CALLBACK CGameManager::PopupProc(HWND hWnd, UINT message, WPARAM wParam,
 			GetWindowTextA(hEditBox, buffer, sizeof(buffer));
 			gNickname = std::string(buffer); // 입력된 값 저장
 			CGameManager::GetInst()->UpdateTitle();
+			
+			if (CNetworkManager::GetInst()->IsMultiplay())
+				CMultiplayManager::GetInst()->ChangeNickname(gNickname);
+
 			DestroyWindow(hWnd);  // 팝업 닫기
 			return TRUE;
 		}

@@ -1,4 +1,5 @@
 ﻿#include "MultiplayManager.h"
+#include "Etc/NetworkManager.h"
 
 DEFINITION_SINGLE(CMultiplayManager);
 
@@ -10,6 +11,15 @@ CMultiplayManager::CMultiplayManager()
 CMultiplayManager::~CMultiplayManager()
 {
 
+}
+
+void CMultiplayManager::ChangeNickname(std::string _newNickname)
+{
+	//auto& info = GetPlayerInfoByID(mMyId);
+	//info.nickname = _newNickname;
+
+	std::vector<char> buffer(_newNickname.begin(), _newNickname.end());
+	CNetworkManager::GetInst()->SendMsg(mMyId, (int)ClientMessage::MSG_CHANGE_NICKNAME, buffer.data(), buffer.size());
 }
 
 bool CMultiplayManager::IsContainID(int _id)
@@ -193,5 +203,13 @@ void CMultiplayManager::SetPlayerHeightInGameFromId(const int _senderId, const f
 		return;
 	auto& playerInfo = GetPlayerInfoByID(_senderId);
 	playerInfo.height = _height;
+}
+
+void CMultiplayManager::SetPlayerNicknameInGameFromId(const int _senderId, const std::string _nickname)
+{
+	if (!IsContainID(_senderId))
+		return;
+	auto& playerInfo = GetPlayerInfoByID(_senderId);
+	playerInfo.nickname = _nickname;
 }
 

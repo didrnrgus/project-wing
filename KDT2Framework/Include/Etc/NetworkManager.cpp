@@ -229,13 +229,29 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		if (msg.body.size() >= sizeof(int))
 		{
 			memcpy(&newId, msg.body.data(), sizeof(int));
-			nickname = std::string(msg.body.data() + sizeof(int), msg.body.size());
+			nickname = std::string(msg.body.data() + sizeof(int), msg.body.size() - sizeof(int));
 		}
 
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New client MSG_JOIN id: " + std::to_string(newId));
 		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New client MSG_JOIN nickname: " + nickname);
 
 		CMultiplayManager::GetInst()->AddPlayer(newId, nickname);
+		break;
+	}
+
+	case (int)ServerMessage::MSG_CHANGE_NICKNAME:
+	{
+		// 누가 닉네임을 바꿈. 나 일수도 있음.
+		std::string nickname;
+		if (msg.body.size() >= sizeof(char))
+		{
+			nickname = std::string(msg.body.data(), msg.body.size());
+		}
+
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CHANGE_NICKNAME id: " + std::to_string(msg.senderId));
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_CHANGE_NICKNAME nickname: " + nickname);
+
+		CMultiplayManager::GetInst()->SetPlayerNicknameInGameFromId(msg.senderId, nickname);
 		break;
 	}
 

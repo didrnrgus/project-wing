@@ -81,6 +81,8 @@ public:
 	int GetCurMapIndex() { return mCurMapIndex; }
 	int GetIsGameStart() { return mIsStart; }
 
+	void ChangeNickname(std::string _newNickname);
+
 private:
 	bool IsContainID(int _id);
 	void AddPlayer(int _id, std::string _nickname);
@@ -97,6 +99,7 @@ private:
 	void SetPlayerCurHpInGameFromId(const int _senderId, const float _curHp);
 	void SetPlayerDistanceInGameFromId(const int _senderId, const float _distance);
 	void SetPlayerHeightInGameFromId(const int _senderId, const float _height);
+	void SetPlayerNicknameInGameFromId(const int _senderId, const std::string _nickname);
 	DECLARE_SINGLE(CMultiplayManager);
 };
 

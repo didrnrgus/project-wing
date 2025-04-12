@@ -793,6 +793,7 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 	case (int)ServerMessage::MSG_DISCONNECT:
 	case (int)ServerMessage::MSG_NEW_OWNER:
 	case (int)ServerMessage::MSG_JOIN:
+	case (int)ServerMessage::MSG_CHANGE_NICKNAME:
 	case (int)ServerMessage::MSG_READY:
 	case (int)ServerMessage::MSG_UNREADY:
 	case (int)ServerMessage::MSG_PICK_CHARACTER:
