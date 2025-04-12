@@ -25,6 +25,7 @@ namespace ClientMessage
 	enum Type
 	{
 		MSG_HEARTBEAT,
+		MSG_WHO_ARE_YOU_RES,
 		MSG_START,
 		MSG_PICK_CHARACTER,
 		MSG_PICK_ITEM,
@@ -35,7 +36,8 @@ namespace ClientMessage
 		MSG_MOVE_DOWN,
 		MSG_TAKE_DAMAGE, // 맵에 박았을때의 트리거
 		MSG_BOOST_ON,
-		MSG_BOOST_OFF
+		MSG_BOOST_OFF,
+		MSG_CHANGE_NICKNAME
 	};
 }
 
@@ -43,6 +45,7 @@ namespace ServerMessage
 {
 	enum Type
 	{
+		MSG_WHO_ARE_YOU_REQ,
 		MSG_CONNECTED,
 		MSG_ROOM_FULL_INFO,
 		MSG_DISCONNECT, // 이건 누가 나간거.
@@ -96,6 +99,7 @@ struct Client : public IPlayerStatController
 	SOCKET sock;
 	int id;
 	std::thread thread;
+	char nickname[64] = {};
 
 	bool isReady = false;
 	bool isAlive = true;
@@ -105,7 +109,6 @@ struct Client : public IPlayerStatController
 	int itemSlots[3] = { -1, -1, -1 };
 
 	float height = 0.0f;
-
 	int lastObstacleStep = 0;  // 16m 단위로 체크됨
 
 	void Init()
@@ -113,10 +116,12 @@ struct Client : public IPlayerStatController
 		isReady = false;
 		isAlive = true;
 		isMovingUp = false;
+
 		characterId = 0;
 		itemSlots[0] = -1;
 		itemSlots[1] = -1;
 		itemSlots[2] = -1;
+
 		height = 0.0f;
 		lastObstacleStep = 0;
 
@@ -239,22 +244,38 @@ void sendRoomFullInfo(Client* client)
 		* (sizeof(int) // id
 			+ sizeof(bool)  // ready
 			+ sizeof(int)  // character
-			+ sizeof(int) * 3); // item*3
+			+ sizeof(int) * 3 // item*3
+			+ sizeof(char) * 64); // nickname
 
 	std::vector<char> buffer(totalSize);
-
 	char* ptr = buffer.data();
 
-	memcpy(ptr, &gRoomOwner, sizeof(int)); ptr += sizeof(int);
-	memcpy(ptr, &gMapId, sizeof(int)); ptr += sizeof(int);
-	memcpy(ptr, &playerCount, sizeof(int)); ptr += sizeof(int);
+	memcpy(ptr, &gRoomOwner, sizeof(int));
+	ptr += sizeof(int);
+
+	memcpy(ptr, &gMapId, sizeof(int));
+	ptr += sizeof(int);
+
+	memcpy(ptr, &playerCount, sizeof(int));
+	ptr += sizeof(int);
+
 
 	for (auto& c : gClients)
 	{
-		memcpy(ptr, &c->id, sizeof(int)); ptr += sizeof(int);
-		memcpy(ptr, &c->isReady, sizeof(bool)); ptr += sizeof(bool);
-		memcpy(ptr, &c->characterId, sizeof(int)); ptr += sizeof(int);
-		memcpy(ptr, c->itemSlots, sizeof(int) * 3); ptr += sizeof(int) * 3;
+		memcpy(ptr, &c->id, sizeof(int));
+		ptr += sizeof(int);
+
+		memcpy(ptr, &c->isReady, sizeof(bool));
+		ptr += sizeof(bool);
+
+		memcpy(ptr, &c->characterId, sizeof(int));
+		ptr += sizeof(int);
+
+		memcpy(ptr, c->itemSlots, sizeof(int) * 3);
+		ptr += sizeof(int) * 3;
+
+		memcpy(ptr, c->nickname, sizeof(char) * 64);
+		ptr += sizeof(char) * 64;
 	}
 
 	sendMessage(client->sock, 0, (int)ServerMessage::MSG_ROOM_FULL_INFO, buffer.data(), totalSize);
@@ -477,7 +498,42 @@ void clientThread(Client* client)
 		case ClientMessage::MSG_HEARTBEAT:
 			sendMessage(client->sock, client->id, (int)ServerMessage::MSG_HEARTBEAT_ACK, nullptr, 0);
 			break;
+		case ClientMessage::MSG_WHO_ARE_YOU_RES:
+		{
+			// 닉네임 넣어주고
+			//client->nickname.assign(body.begin(), body.end());
+			strcpy_s(client->nickname, body.data());
 
+			// 방장 여부 결정.
+			if (gRoomOwner == -1)
+				gRoomOwner = client->id;
+
+			// 연결 되었음을 통지 / 방 정보 전달.
+			sendMessage(client->sock, client->id, (int)ServerMessage::MSG_CONNECTED, &client->id, sizeof(int));
+			sendRoomFullInfo(client);
+
+			// 다른 사람들한테 신규 클라 정보 전달.
+			int packetSize = sizeof(int) + sizeof(client->nickname);
+			std::vector<char> buffer(packetSize);
+			char* ptr = buffer.data();
+
+			memcpy(ptr, &(client->id), sizeof(int));
+			ptr += sizeof(int);
+
+			memcpy(ptr, client->nickname, sizeof(client->nickname));
+			ptr += sizeof(client->nickname);
+
+			std::cout << "client_" << client->id
+				<< " nickname: " << buffer.data() + sizeof(int)
+				<< "\n";
+			for (auto& other : gClients)
+			{
+				// MSG_JOIN 에다가 ID / 닉네임 태워서 보내야 함.
+				if (other->id != client->id)
+					sendMessage(other->sock, client->id, (int)ServerMessage::MSG_JOIN, buffer.data(), packetSize);
+			}
+			break;
+		}
 		case ClientMessage::MSG_START:
 			if (client->id == gRoomOwner)
 			{
@@ -739,17 +795,8 @@ int main()
 
 		std::cout << "[Server] gClients.push_back(c); " << c->id << "\n";
 
-		if (gRoomOwner == -1)
-			gRoomOwner = c->id;
-
-		sendMessage(clientSock, c->id, (int)ServerMessage::MSG_CONNECTED, &c->id, sizeof(int));
-		sendRoomFullInfo(c);
-
-		for (auto& other : gClients)
-		{
-			if (other->id != c->id)
-				sendMessage(other->sock, c->id, (int)ServerMessage::MSG_JOIN, &c->id, sizeof(int));
-		}
+		// 누구냐고 물어봄.
+		sendMessage(clientSock, c->id, (int)ServerMessage::MSG_WHO_ARE_YOU_REQ, &c->id, sizeof(int));
 
 		c->thread = std::thread(clientThread, c);
 		c->thread.detach();
