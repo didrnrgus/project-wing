@@ -4,6 +4,7 @@
 
 #define PORT 12345
 DEFINITION_SINGLE(CNetworkManager);
+extern std::string gNickname;
 
 CNetworkManager::CNetworkManager()
 {
@@ -51,10 +52,10 @@ void CNetworkManager::SendMsg(int senderId, int msgType, const void* body, int b
 bool CNetworkManager::PollMessage(RecvMessage& out)
 {
 	std::lock_guard<std::mutex> lock(mQueueMutex);
-	
-	if (mMessageQueue.empty()) 
+
+	if (mMessageQueue.empty())
 		return false;
-	
+
 	out = std::move(mMessageQueue.front());
 	ProcessMessage(out);
 	mMessageQueue.pop();
@@ -101,6 +102,18 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 	// 인게임 메시지도 마찬가지로 인게임에서 구현하자.
 	switch (msg.msgType)
 	{
+	case (int)ServerMessage::MSG_WHO_ARE_YOU_REQ:
+	{
+		int id;
+		if (msg.body.size() >= sizeof(int))
+			memcpy(&id, msg.body.data(), sizeof(int));
+
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_WHO_ARE_YOU_REQ MyID: " + std::to_string(id));
+
+		SendMsg(0, (int)ClientMessage::MSG_WHO_ARE_YOU_RES, gNickname.c_str(), strlen(gNickname.c_str()) + 1);
+
+		break;
+	}
 	case (int)ServerMessage::MSG_CONNECTED:
 	{
 		mIsConnectCompleted = true;
@@ -115,15 +128,21 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		break;
 	}
 
-	case (int)ServerMessage::MSG_ROOM_FULL_INFO: // 이거 받기전까진 타이틀에 머무른다.
+	case (int)ServerMessage::MSG_ROOM_FULL_INFO: // 기존방의 다른얘들정보 // 이거 받기전까진 타이틀에 머무른다.
 	{
 		if (msg.body.size() >= sizeof(int) * 3)
 		{
 			const char* ptr = msg.body.data();
 			int ownerId, mapId, playerCount;
-			memcpy(&ownerId, ptr, sizeof(int)); ptr += sizeof(int);
-			memcpy(&mapId, ptr, sizeof(int)); ptr += sizeof(int);
-			memcpy(&playerCount, ptr, sizeof(int)); ptr += sizeof(int);
+			memcpy(&ownerId, ptr, sizeof(int));
+			ptr += sizeof(int);
+
+			memcpy(&mapId, ptr, sizeof(int));
+			ptr += sizeof(int);
+
+			memcpy(&playerCount, ptr, sizeof(int));
+			ptr += sizeof(int);
+
 			// CLog::PrintLog("[ROOM_INFO] Owner: " + std::to_string(ownerId) 
 									//+ ", Map: " + std::to_string(mapId) 
 									//+ ", Players: " + std::to_string(playerCount));
@@ -132,15 +151,29 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 			{
 				int id, characterId, items[3];
 				bool ready;
-				memcpy(&id, ptr, sizeof(int)); ptr += sizeof(int);
-				memcpy(&ready, ptr, sizeof(bool)); ptr += sizeof(bool);
-				memcpy(&characterId, ptr, sizeof(int)); ptr += sizeof(int);
-				memcpy(items, ptr, sizeof(int) * 3); ptr += sizeof(int) * 3;
+				//std::string nickname;
+				//std::vector<char> nickname;
+				memcpy(&id, ptr, sizeof(int));
+				ptr += sizeof(int);
+
+				memcpy(&ready, ptr, sizeof(bool));
+				ptr += sizeof(bool);
+
+				memcpy(&characterId, ptr, sizeof(int));
+				ptr += sizeof(int);
+
+				memcpy(items, ptr, sizeof(int) * 3);
+				ptr += sizeof(int) * 3;
+
+				//nickname = std::string(ptr, msg.body.size());
+				std::vector<char> nickname(ptr, ptr + strlen(ptr) + 1);
+				 CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_ROOM_FULL_INFO nickname: " + ptr);
+				
 				// CLog::PrintLog(+ "  Player " + std::to_string(id) + 
 					//" - Ready: " + (ready ? "Yes" : "No") + 
 					//", Items: [" + std::to_string(items[0]) + ", " + std::to_string(items[1]) + ", " + std::to_string(items[2]) + "]");
 
-				CMultiplayManager::GetInst()->AddPlayer(id);
+				CMultiplayManager::GetInst()->AddPlayer(id, std::string(nickname.data()));
 				CMultiplayManager::GetInst()->SetPlayerCharacterFromId(id, characterId);
 				CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(id, ready);
 				CMultiplayManager::GetInst()->SetPlayerItemFromId(id, 0, items[0]);
@@ -190,12 +223,17 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 	{
 		// 방에 다른애가 들어옴.
 		int newId;
+		std::string nickname;
 		if (msg.body.size() >= sizeof(int))
+		{
 			memcpy(&newId, msg.body.data(), sizeof(int));
+			nickname = std::string(msg.body.data() + sizeof(int), msg.body.size());
+		}
 
-		// CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New client MSG_JOIN: " + std::to_string(newId));
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New client MSG_JOIN id: " + std::to_string(newId));
+		CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] New client MSG_JOIN nickname: " + nickname);
 
-		CMultiplayManager::GetInst()->AddPlayer(newId);
+		CMultiplayManager::GetInst()->AddPlayer(newId, nickname);
 		break;
 	}
 
@@ -254,7 +292,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 
 	case (int)ServerMessage::MSG_START_ACK:
 		// CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_START_ACK");
-		
+
 		int allReady;
 		memcpy(&allReady, msg.body.data(), sizeof(int));
 
@@ -334,7 +372,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 	}
 	case (int)ServerMessage::MSG_TAKEN_STUN:
 	{
-		 //CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_TAKEN_STUN");
+		//CLog::PrintLog("[Game] Client " + std::to_string(msg.senderId) + " MSG_TAKEN_STUN");
 		break;
 	}
 	case (int)ServerMessage::MSG_OBSTACLE:
@@ -351,11 +389,11 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 		//CLog::PrintLog(std::string("MSG_OBSTACLE ") + "height: " + std::to_string(height));
 		break;
 	}
-		//////////////////////기타 상시///////////////////////////////////
+	//////////////////////기타 상시///////////////////////////////////
 	default:
 		if (msg.msgType != (int)ServerMessage::MSG_HEARTBEAT_ACK)
 			// CLog::PrintLog("[MSG " + std::to_string(msg.msgType) + "] From " + std::to_string(msg.senderId));
-		break;
+			break;
 	}
 }
 

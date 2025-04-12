@@ -7,6 +7,7 @@ namespace Multiplay
 	struct FPlayerInfo
 	{
 		int id;
+		std::string nickname;
 		int characterType;
 		bool isHost;
 		bool isReady;
@@ -19,6 +20,7 @@ namespace Multiplay
 		FPlayerInfo()
 		{
 			id = -1;
+			nickname = "";
 			isHost = false;
 			arrItemType.resize(PLAYER_ITEM_COUNT_MAX, PLAYER_ITEM_TYPE_DEFAULT_INDEX);
 			Init();
@@ -81,7 +83,7 @@ public:
 
 private:
 	bool IsContainID(int _id);
-	void AddPlayer(int _id);
+	void AddPlayer(int _id, std::string _nickname);
 	Multiplay::FPlayerInfo& GetPlayerInfoByID(const int _id);
 	bool RemovePlayer(const int _id);
 	void SetMyId(const int _myId) { mMyId = _myId; }

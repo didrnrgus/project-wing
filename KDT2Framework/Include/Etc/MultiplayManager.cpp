@@ -21,10 +21,11 @@ bool CMultiplayManager::IsContainID(int _id)
 		});
 }
 
-void CMultiplayManager::AddPlayer(const int _id)
+void CMultiplayManager::AddPlayer(const int _id, std::string _nickname)
 {
 	Multiplay::FPlayerInfo info;
 	info.id = _id;
+	info.nickname = _nickname;
 	mPlayerInfoList.push_back(info);
 }
 

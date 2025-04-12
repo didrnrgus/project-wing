@@ -9,6 +9,7 @@ namespace ClientMessage
 	enum Type
 	{
 		MSG_HEARTBEAT,
+		MSG_WHO_ARE_YOU_RES,
 		MSG_START,
 		MSG_PICK_CHARACTER,
 		MSG_PICK_ITEM,
@@ -19,7 +20,8 @@ namespace ClientMessage
 		MSG_MOVE_DOWN,
 		MSG_TAKE_DAMAGE, // 맵에 박았을때의 트리거
 		MSG_BOOST_ON,
-		MSG_BOOST_OFF
+		MSG_BOOST_OFF,
+		MSG_CHANGE_NICKNAME
 	};
 }
 
@@ -27,6 +29,7 @@ namespace ServerMessage
 {
 	enum Type
 	{
+		MSG_WHO_ARE_YOU_REQ,
 		MSG_CONNECTED,
 		MSG_ROOM_FULL_INFO,
 		MSG_DISCONNECT, // 이건 누가 나간거.

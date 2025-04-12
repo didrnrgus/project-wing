@@ -109,7 +109,7 @@ void CTitleWidget::LoadGameData()
 		[this]()
 		{
 			ShowLoading(true);
-			mScene->SetIsLoadingScene();
+			mScene->SetIsLoadingScene(true);
 
 			// config load
 			AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻", mIsSkip);
@@ -158,8 +158,8 @@ void CTitleWidget::LoadGameData()
 			CDataStorageManager::GetInst()->SetIsLoadedData(true);
 
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
-			ShowLoading(false);
 			mScene->SetIsLoadingScene(false);
+			ShowLoading(false);
 
 			LoadRankData();
 		})));
@@ -171,15 +171,15 @@ void CTitleWidget::LoadRankData()
 		[this]()
 		{
 			ShowLoading(true);
-			mScene->SetIsLoadingScene();
+			mScene->SetIsLoadingScene(true);
 			// rank load
 			AddQueueLoadingDescText(L"Ranking Data를 로딩 중 입니다. ✨🎉🎊🎉🎊✨\n랭킹은 맵, 캐릭터 기준 거리 랭킹으로 각 카테고리 내 5위까지 제공됩니다.", mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			CDataStorageManager::GetInst()->UpdateUserRankInfos();
 
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
-			ShowLoading(false);
 			mScene->SetIsLoadingScene(false);
+			ShowLoading(false);
 		})));
 }
 

@@ -114,6 +114,9 @@ void CSceneWidget::SetEnableFPS(bool _isEnable)
 
 void CSceneWidget::ShowLoading(bool _isLoading)
 {
+	if (mScene->GetIsLoadingScene())
+		return;
+
 	mIsLoading = _isLoading;
 
 	mLoadingBackImage->SetEnable(_isLoading);
