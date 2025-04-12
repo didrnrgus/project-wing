@@ -151,6 +151,7 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 			{
 				int id, characterId, items[3];
 				bool ready;
+				char nickname[64];
 				//std::string nickname;
 				//std::vector<char> nickname;
 				memcpy(&id, ptr, sizeof(int));
@@ -165,15 +166,16 @@ void CNetworkManager::ProcessMessage(const RecvMessage& msg)
 				memcpy(items, ptr, sizeof(int) * 3);
 				ptr += sizeof(int) * 3;
 
-				//nickname = std::string(ptr, msg.body.size());
-				std::vector<char> nickname(ptr, ptr + strlen(ptr) + 1);
-				 CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_ROOM_FULL_INFO nickname: " + ptr);
+				strcpy_s(nickname, ptr);
+				ptr += sizeof(nickname);
+
+				 CLog::PrintLog("[System " + std::to_string(msg.msgType) + "] MSG_ROOM_FULL_INFO nickname: " + nickname);
 				
 				// CLog::PrintLog(+ "  Player " + std::to_string(id) + 
 					//" - Ready: " + (ready ? "Yes" : "No") + 
 					//", Items: [" + std::to_string(items[0]) + ", " + std::to_string(items[1]) + ", " + std::to_string(items[2]) + "]");
 
-				CMultiplayManager::GetInst()->AddPlayer(id, std::string(nickname.data()));
+				CMultiplayManager::GetInst()->AddPlayer(id, nickname);
 				CMultiplayManager::GetInst()->SetPlayerCharacterFromId(id, characterId);
 				CMultiplayManager::GetInst()->SetPlayerIsReadyFromId(id, ready);
 				CMultiplayManager::GetInst()->SetPlayerItemFromId(id, 0, items[0]);

@@ -87,6 +87,7 @@ float Clamp(float Value, float Min, float Max);
 std::wstring FormatWithCommaManual(int value);
 std::wstring ToUpperWString(const wchar_t* _str);
 std::wstring ToUpperWString(std::string _str);
+void ConvertWStringAndCheckTextOverLength(const std::string & _inString, std::wstring & _outString, const float _maxScore);
 
 namespace EShaderBufferType
 {

@@ -168,7 +168,7 @@ void CLobbyWidget::InitScrollSelectButtons()
 		mMapLeftButton->SetEnable(_isHost);
 		mMapRightButton->SetEnable(_isHost);
 	}
-	else 
+	else
 	{
 		mMapLeftButton->SetEnable(true);
 		mMapRightButton->SetEnable(true);
@@ -373,7 +373,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 
 void CLobbyWidget::InitDifficultiImage()
 {
-	if(CNetworkManager::GetInst()->IsMultiplay())
+	if (CNetworkManager::GetInst()->IsMultiplay())
 		curDifficultyIndex = CMultiplayManager::GetInst()->GetCurMapIndex();
 
 	// difficulty Image
@@ -412,7 +412,7 @@ void CLobbyWidget::InitNextPrevButton()
 					return;
 				}
 			}
-			else 
+			else
 			{
 				StartGame();
 			}
@@ -738,7 +738,9 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 		mArrPlayerWidgetGroup[i].mPlayerHostImage->SetEnable(info.isHost);
 
 		// player text
-		mArrPlayerWidgetGroup[i].mPlayerText->SetText((PLAYER_NUMBER_PREFIX_TEXT + std::to_wstring(info.id)).c_str());
+		std::wstring _nickname;
+		ConvertWStringAndCheckTextOverLength(info.nickname, _nickname, PLAYER_LOBBY_NICKNAME_LENGTH_MAX_SCORE);
+		mArrPlayerWidgetGroup[i].mPlayerText->SetText(_nickname.c_str());
 
 		// character color
 		auto characterInfo = CDataStorageManager::GetInst()->GetCharacterState(info.characterType);
@@ -810,7 +812,7 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 	}
 	case (int)ServerMessage::MSG_START_ACK:
 	{
-		if(CMultiplayManager::GetInst()->GetIsGameStart())
+		if (CMultiplayManager::GetInst()->GetIsGameStart())
 			StartGame();
 
 		break;

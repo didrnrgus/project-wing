@@ -250,7 +250,7 @@ void CInGameWidget::InitOtherPlayersInfo()
 		_playerOtherStatInfo.maxHp =_playerStat->GetMaxHP();
 
 		FVector2D _pivotPlayerNameText = FVector2D(0.0f, 1.0);
-		FVector2D _sizePlayerNameText = FVector2D(200.0f, _fontSize);
+		FVector2D _sizePlayerNameText = FVector2D(250.0f, _fontSize);
 		FVector2D _posPlayerNameText = _basePos + FVector2D((_sizePlayerNameText.x + _gapH) * posIndex, 0.0f);
 
 		FVector2D _pivotDistText = FVector2D(0.0f, 1.0);
@@ -263,8 +263,10 @@ void CInGameWidget::InitOtherPlayersInfo()
 
 		auto _charInfo = CDataStorageManager::GetInst()->GetCharacterState(_playerInfo.characterType);
 
-		wchar_t _playerNameStr[16] = {};
-		swprintf_s(_playerNameStr, L"[P%d]", _playerInfo.id);
+		wchar_t _playerNameStr[128] = {};
+		std::wstring _nicknameStr;
+		ConvertWStringAndCheckTextOverLength(_playerInfo.nickname, _nicknameStr, PLAYER_LOBBY_NICKNAME_LENGTH_MAX_SCORE);
+		swprintf_s(_playerNameStr, L"[P%d] %s", _playerInfo.id, _nicknameStr.c_str());
 
 		CSharedPtr<CTextBlock> _playerNameText = mScene->GetUIManager()->CreateWidget<CTextBlock>("_playerNameText_" + std::to_string(_playerInfo.id));
 		AddWidget(_playerNameText);

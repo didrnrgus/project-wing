@@ -34,7 +34,6 @@ std::string CCURL::SendRequest(const std::string& InURL
 	auto _scene = CSceneManager::GetInst()->GetCurrentScene();
 	auto _sceneWidget = _scene->GetUIManager()->GetSceneWidget();
 	_sceneWidget->ShowLoading(true);
-	_sceneWidget->AddQueueLoadingDescText(L"Ranking Data를 로딩 중 입니다. ✨🎉🎊🎉🎊✨\n랭킹은 맵, 캐릭터 기준 거리 랭킹으로 각 카테고리 내 5위까지 제공됩니다.");
 
 	CURL* curl = curl_easy_init();
 	if (!curl) return "Failed to initialize cURL";

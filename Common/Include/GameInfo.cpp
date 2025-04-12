@@ -63,3 +63,42 @@ std::wstring ToUpperWString(std::string _str)
 
 	return str;
 }
+
+void ConvertWStringAndCheckTextOverLength(const std::string& _inString, std::wstring& _outString, const float _maxScore)
+{
+	float score = 0;
+	int cutIndex = 0;
+
+	auto CharScore = [](char c) -> int
+		{
+			// 얇은 문자
+			if (c == '1' || c == 'l' || c == 'I' || c == 'i')
+				return 1.0f;
+			// 넓은 문자 (대문자 알파벳)
+			if (c >= 'A' && c <= 'Z')
+				return 2.3f;
+			// 기본 중간 너비 문자
+			return 2.0f;
+		};
+
+	for (int i = 0; i < _inString.size(); ++i)
+	{
+		score += CharScore(_inString[i]);
+		if (score > _maxScore) break;
+		cutIndex = i + 1;
+	}
+
+	bool isOver = (score > _maxScore);
+
+	if (isOver)
+	{
+		std::string cutStr = _inString.substr(0, cutIndex);
+		_outString = std::wstring(cutStr.begin(), cutStr.end()) + L"...";
+	}
+	else
+	{
+		_outString = std::wstring(_inString.begin(), _inString.end());
+	}
+
+	return;
+}
