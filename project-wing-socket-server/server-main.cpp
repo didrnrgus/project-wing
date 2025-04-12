@@ -59,6 +59,7 @@ namespace ServerMessage
 		MSG_READY,
 		MSG_UNREADY,
 		MSG_START_ACK,
+		MSG_CHANGE_NICKNAME,
 
 		MSG_COUNTDOWN_FINISHED,
 		MSG_PLAYER_DEAD,
@@ -632,6 +633,13 @@ void clientThread(Client* client)
 				CDataStorageManager::GetInst()->SetSelectedMapIndex(gMapId);
 				broadcast(0, (int)ServerMessage::MSG_PICK_MAP, &gMapId, sizeof(int));
 			}
+			break;
+
+		case ClientMessage::MSG_CHANGE_NICKNAME:
+			//std::cout << "ClientMessage::MSG_CHANGE_NICKNAME id: " << client->id << "\n";
+			strcpy_s(client->nickname, body.data());
+			//std::cout << "ClientMessage::MSG_CHANGE_NICKNAME nickname: " << client->nickname << "\n";
+			broadcast(client->id, (int)ServerMessage::MSG_CHANGE_NICKNAME, body.data(), header.bodyLen);
 			break;
 
 		case ClientMessage::MSG_MOVE_UP:
