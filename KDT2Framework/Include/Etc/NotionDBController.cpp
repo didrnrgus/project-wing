@@ -75,9 +75,9 @@ bool CNotionDBController::CheckForUpdate(const FUserRankInfo& _userInfo)
 {
      // 먼저 넣기전에 현재 있는 데이터에서 데이터 현황 확인 -> 5개 이상? 4등까지 남기고 삭제.
     auto _mapResult = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(
-        EResultMenuTap::Map, _userInfo.Map);
+        ERankMenuTap::Map, _userInfo.Map);
     auto _characterResult = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(
-        EResultMenuTap::Character, _userInfo.Character);
+        ERankMenuTap::Character, _userInfo.Character);
 
     // 별일 없으면 그냥 추가.
     bool _isMapUpdate = true;

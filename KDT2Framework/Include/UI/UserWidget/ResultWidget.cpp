@@ -25,8 +25,8 @@ bool CResultWidget::Init()
 	FResolution RS = CDevice::GetInst()->GetResolution();
 	mResolution = FVector2D(RS.Width, RS.Height);
 
-	mArrSubCategoryMunuTap.resize((int)EResultMenuTap::End);
-	mCurSubCategoryMenuTap.resize((int)EResultMenuTap::End, 0);
+	mArrSubCategoryMunuTap.resize((int)ERankMenuTap::End);
+	mCurSubCategoryMenuTap.resize((int)ERankMenuTap::End, 0);
 
 	// 공통
 	InitCommonUI();
@@ -75,7 +75,7 @@ bool CResultWidget::Init()
 		InitProperty(FVector2D(120.0f, 410.0f));
 		InitUserRankPrint(FVector2D(120.0f, mResolution.y * 0.5f), mRankMaxCount);
 
-		OnClickMainCategoryMenuTapButton(EResultMenuTap::Map);
+		OnClickMainCategoryMenuTapButton(ERankMenuTap::Map);
 		OnClickSubCategoryMenuTapButton(0);
 	}
 
@@ -145,7 +145,7 @@ void CResultWidget::InitMemu()
 	FVector2D _basePosMain = FVector2D(180.0f, mResolution.y * 0.7f);
 	float _gapMainX = 10.0f;
 
-	for (int i = 0; i < (int)EResultMenuTap::End; i++)
+	for (int i = 0; i < (int)ERankMenuTap::End; i++)
 	{
 		FMenuTap _menuTap;
 
@@ -172,7 +172,7 @@ void CResultWidget::InitMemu()
 			, [this, i]()
 			{
 				CLog::PrintLog("OnClickMenuTapButton(): " + std::to_string(i));
-				OnClickMainCategoryMenuTapButton(static_cast<EResultMenuTap::Type>(i));
+				OnClickMainCategoryMenuTapButton(static_cast<ERankMenuTap::Type>(i));
 			});
 		_menuTap.menuTapButton = _menuTapButton;
 
@@ -219,7 +219,7 @@ void CResultWidget::InitMemu()
 			});
 		_menuTap.menuTapButton = _menuTapButton;
 
-		mArrSubCategoryMunuTap[(int)EResultMenuTap::Map].push_back(_menuTap);
+		mArrSubCategoryMunuTap[(int)ERankMenuTap::Map].push_back(_menuTap);
 	}
 
 	// 서브카테고리, 캐릭터
@@ -259,7 +259,7 @@ void CResultWidget::InitMemu()
 		_menuTapButton->SetEnable(false);
 		_menuTap.menuTapButton = _menuTapButton;
 
-		mArrSubCategoryMunuTap[(int)EResultMenuTap::Character].push_back(_menuTap);
+		mArrSubCategoryMunuTap[(int)ERankMenuTap::Character].push_back(_menuTap);
 	}
 }
 
@@ -436,7 +436,7 @@ void CResultWidget::SetImage(CImage* _image, FVector2D _pivot, FVector2D _size, 
 	_image->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
 }
 
-void CResultWidget::OnClickMainCategoryMenuTapButton(EResultMenuTap::Type _tap)
+void CResultWidget::OnClickMainCategoryMenuTapButton(ERankMenuTap::Type _tap)
 {
 	int _beforeMainCategory = mCurMainCategoryMenuTap;
 

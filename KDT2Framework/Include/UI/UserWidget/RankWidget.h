@@ -1,22 +1,23 @@
-ï»¿#pragma once
+#pragma once
 #include "UI/UserWidget/SceneWidget.h"
 #include "Etc/JsonContainer.h"
 
-class CResultWidget : public CSceneWidget
+class CRankWidget : public CSceneWidget
 {
 	friend class CSceneUIManager;
 
 protected:
 	std::vector<const wchar_t*> mArrMenuTapText =
 	{
-		TEXT("Map")
+		TEXT("All")
+		,TEXT("Map")
 		,TEXT("Character")
 		,TEXT("End")
 	};
 
 protected:
-	CResultWidget();
-	virtual ~CResultWidget();
+	CRankWidget();
+	virtual ~CRankWidget();
 
 protected:
 
@@ -39,17 +40,15 @@ protected:
 	};
 	std::vector<FUserPrintGroup> mArrUserInfoText;
 
-	CSharedPtr<class CTextBlock> mResultTitle; // íƒ€ì´í‹€ í‘œì‹œ
-	FUserPrintGroup mCurResultUserPrint; // í˜„ì¬ í”Œë ˆì´ í•œ ìœ ì €.
-	CSharedPtr<class CTextBlock> mNewRecordText; // íƒ€ì´í‹€ í‘œì‹œ
+	CSharedPtr<class CTextBlock> mRankTitle; // Å¸ÀÌÆ² Ç¥½Ã
 
-	const int mRankMaxCount = 5;
+	const int mRankMaxCount = 10;
 	const float mMenuTextFontSize = 30.0f;
 	const float mRowTextFontSize = 30.0f;
 	ERankMenuTap::Type mCurMainCategoryMenuTap = ERankMenuTap::Map;
 	std::vector<int> mCurSubCategoryMenuTap;
 	FVector2D mResolution;
-	CSharedPtr<class CButton> mNextButton;
+	CSharedPtr<class CButton> mPrevButton;
 
 public:
 	virtual bool Init() override;
@@ -57,19 +56,18 @@ public:
 
 private:
 	void InitCommonUI();
-	void InitMemu(); // ë©”ì¸ì¹´í…Œê³ ë¦¬, ì„œë¸Œì¹´í…Œê³ ë¦¬ -> ì‹±ê¸€ìš©
+	void InitMemu(); // ¸ŞÀÎÄ«Å×°í¸®, ¼­ºêÄ«Å×°í¸® -> ½Ì±Û¿ë
 	void InitProperty(FVector2D _basePos);
-	void InitUserRankPrint(FVector2D _basePos, int _count); // í…Œì´ë¸” í˜• í¬ë§·ë§Œ ë§Œë“¦. 
-	void InitMyResultScore(); // ì‹±ê¸€ / ë©€í‹°
+	void InitUserRankPrint(FVector2D _basePos, int _count); // Å×ÀÌºí Çü Æ÷¸Ë¸¸ ¸¸µê. 
 
-	void SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2D _basePos); // ìœ„ì¹˜ì‹œí‚¤ëŠ” ì—­í• .
+	void SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2D _basePos); // À§Ä¡½ÃÅ°´Â ¿ªÇÒ.
 	void SetInfoTextBlock(class CTextBlock* _textBlock, FVector2D _pivot, FVector2D _size, FVector2D _pos, FVector4D _color, const wchar_t* _str);
 	void SetImage(class CImage* _image, FVector2D _pivot, FVector2D _size, FVector2D _pos, FVector4D _color, const char* _imageName, const wchar_t* _imagePath);
 
 	void OnClickMainCategoryMenuTapButton(ERankMenuTap::Type _tap);
 	void OnClickSubCategoryMenuTapButton(int _index);
 
-	void UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo); // ë°ì´í„° ì—…ë°ì´íŠ¸
+	void UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo); // µ¥ÀÌÅÍ ¾÷µ¥ÀÌÆ®
 	void SetButton(CButton& _button, const char* _name, const wchar_t* _path);
 
 };

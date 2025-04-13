@@ -115,7 +115,7 @@ public:
 	inline const std::map<int, FItemInfo> GetItemInfoDatas() { return mItemInfoDatasByIndex; }
 	inline const FItemInfo GetItemInfoDataByIndex(int index) { return mItemInfoDatasByIndex[index]; }
 	inline const int GetCurSelectedItemIDBySlotIndex(int index) { return curSelectedItemIndex[index]; }
-	std::vector<FUserRankInfo> GetArrayUserRankByCategory(EResultMenuTap::Type _mainCategoryType, int _subCategoryValue);
+	std::vector<FUserRankInfo> GetArrayUserRankByCategory(ERankMenuTap::Type _mainCategoryType, int _subCategoryValue);
 private:
 	DECLARE_SINGLE(CDataStorageManager)
 };

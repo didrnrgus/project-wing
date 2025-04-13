@@ -3,6 +3,7 @@
 #include "Scene/SceneLobby.h"
 #include "Scene/SceneInGame.h"
 #include "Scene/SceneResult.h"
+#include "Scene/SceneRank.h"
 
 DEFINITION_SINGLE(CSceneManager)
 
@@ -25,7 +26,7 @@ EGameScene::Type CSceneManager::SetCurrentSceneType(CScene* scene)
 		mSceneType = EGameScene::InGame;
 	else if (dynamic_cast<CSceneResult*>(scene))
 		mSceneType = EGameScene::Result;
-	else if (dynamic_cast<CSceneResult*>(scene))
+	else if (dynamic_cast<CSceneRank*>(scene))
 		mSceneType = EGameScene::Rank;
 	else
 		mSceneType = EGameScene::End;

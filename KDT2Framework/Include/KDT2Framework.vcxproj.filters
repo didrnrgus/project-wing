@@ -156,6 +156,12 @@
     <ClCompile Include="UI\UserWidget\ResultWidget.cpp">
       <Filter>UI\UserWidget</Filter>
     </ClCompile>
+    <ClCompile Include="UI\UserWidget\RankWidget.cpp">
+      <Filter>UI\UserWidget</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\SceneRank.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -286,6 +292,12 @@
     </ClInclude>
     <ClInclude Include="UI\UserWidget\ResultWidget.h">
       <Filter>UI\UserWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="UI\UserWidget\RankWidget.h">
+      <Filter>UI\UserWidget</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneRank.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

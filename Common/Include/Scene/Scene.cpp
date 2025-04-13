@@ -12,6 +12,7 @@
 #include "Scene/SceneLobby.h"
 #include "Scene/SceneInGame.h"
 #include "Scene/SceneResult.h"
+#include "Scene/SceneRank.h"
 
 CScene::CScene()
 {
@@ -178,7 +179,7 @@ void CScene::Update(float DeltaTime)
 	}
 	if (mGotoRank)
 	{
-		CSceneManager::GetInst()->CreateLoadScene<CSceneResult>();
+		CSceneManager::GetInst()->CreateLoadScene<CSceneRank>();
 		return;
 	}
 }

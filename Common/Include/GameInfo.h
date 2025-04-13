@@ -390,7 +390,7 @@ namespace EGamePlayState
 	};
 }
 
-namespace EResultMenuTap
+namespace ERankMenuTap
 {
 	enum Type
 	{

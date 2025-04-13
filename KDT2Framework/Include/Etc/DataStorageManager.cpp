@@ -90,7 +90,7 @@ const FLineNode CDataStorageManager::GetLineNodeInSelectedMap(int lineNodeIndex)
 }
 
 std::vector<FUserRankInfo> CDataStorageManager::GetArrayUserRankByCategory(
-	EResultMenuTap::Type _mainCategoryType, int _subCategoryValue)
+	ERankMenuTap::Type _mainCategoryType, int _subCategoryValue)
 {
 	std::vector<FUserRankInfo> result;
 
@@ -98,14 +98,14 @@ std::vector<FUserRankInfo> CDataStorageManager::GetArrayUserRankByCategory(
 	{
 		const FUserRankInfo& info = pair.second;
 
-		if (_mainCategoryType == EResultMenuTap::Map)
+		if (_mainCategoryType == ERankMenuTap::Map)
 		{
 			if (info.Map == _subCategoryValue)
 			{
 				result.push_back(info);
 			}
 		}
-		else if (_mainCategoryType == EResultMenuTap::Character)
+		else if (_mainCategoryType == ERankMenuTap::Character)
 		{
 			if (info.Character == _subCategoryValue)
 			{
