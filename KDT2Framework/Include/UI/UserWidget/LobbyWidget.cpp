@@ -17,6 +17,7 @@
 #include "Etc/MultiplayManager.h"
 #include "Etc/TaskManager.h"
 
+extern bool gIsOpenNicknamePopup;
 CLobbyWidget::CLobbyWidget()
 {
 	mIsHost = false;
@@ -428,6 +429,9 @@ void CLobbyWidget::InitNextPrevButton()
 	mPrevButton->SetEventCallback(EButtonEventState::Click
 		, [this]()
 		{
+			if (gIsOpenNicknamePopup)
+				return;
+
 			CLog::PrintLog("mPrevButton Click");
 			LoadScene(EGameScene::Title);
 		});

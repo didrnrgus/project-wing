@@ -45,6 +45,8 @@ std::string gIPAddress = IP_ADDRESS_DEFAULT_A;
 std::string gNickname = NICKNAME_DEFAULT_A;
 DEFINITION_SINGLE(CGameManager)
 
+bool gIsOpenIPAddrPopup = false;
+bool gIsOpenNicknamePopup = false;
 bool CGameManager::mLoop = true;
 
 CGameManager::CGameManager()
@@ -384,6 +386,7 @@ void CGameManager::OpenIPInputPopup(HWND hWnd)
 {
 	POINT pt;
 	GetCursorPos(&pt);  // 마우스 포인터의 현재 위치를 얻어옴
+	gIsOpenIPAddrPopup = true;
 
 	// 팝업 창 생성 (마우스 위치에서 열리도록)
 	HWND hPopup = CreateWindowEx(
@@ -416,6 +419,7 @@ void CGameManager::OpenNicknameInputPopup(HWND hWnd)
 {
 	POINT pt;
 	GetCursorPos(&pt);  // 마우스 포인터의 현재 위치를 얻어옴
+	gIsOpenNicknamePopup = true;
 
 	// 팝업 창 생성 (마우스 위치에서 열리도록)
 	HWND hPopup = CreateWindowEx(
@@ -471,6 +475,7 @@ LRESULT CALLBACK CGameManager::PopupProc(HWND hWnd, UINT message, WPARAM wParam,
 			GetWindowTextA(hEditBox, buffer, sizeof(buffer));
 			gIPAddress = std::string(buffer); // 입력된 값 저장
 			CGameManager::GetInst()->UpdateTitle();
+			gIsOpenIPAddrPopup = false;
 			DestroyWindow(hWnd);  // 팝업 닫기
 			return TRUE;
 		}
@@ -481,7 +486,7 @@ LRESULT CALLBACK CGameManager::PopupProc(HWND hWnd, UINT message, WPARAM wParam,
 			GetWindowTextA(hEditBox, buffer, sizeof(buffer));
 			gNickname = std::string(buffer); // 입력된 값 저장
 			CGameManager::GetInst()->UpdateTitle();
-			
+			gIsOpenNicknamePopup = false;
 			if (CNetworkManager::GetInst()->IsMultiplay())
 				CMultiplayManager::GetInst()->ChangeNickname(gNickname);
 
@@ -490,6 +495,8 @@ LRESULT CALLBACK CGameManager::PopupProc(HWND hWnd, UINT message, WPARAM wParam,
 		}
 		else if (LOWORD(wParam) == ID_CANCEL_BUTTON)  // 취소 버튼
 		{
+			gIsOpenIPAddrPopup = false;
+			gIsOpenNicknamePopup = false;
 			DestroyWindow(hWnd);  // 팝업 닫기
 			return TRUE;
 		}
