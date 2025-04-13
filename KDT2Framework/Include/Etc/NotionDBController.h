@@ -14,7 +14,7 @@ public:
 	/// </summary>
 	/// <param name="userInfo"></param>
 	/// <returns></returns>
-	bool CreateUserRecord(const FUserRankInfo& userInfo);
+	bool CreateUserRecord(const FUserRankInfo& userInfo, std::string& _newRankPageIdOut);
 	bool DeleteRecord(const std::string& page_id);
 	bool ReadRecords();
 

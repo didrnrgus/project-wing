@@ -366,8 +366,13 @@ void CPlayerInGameObject::OnPlayerDead()
 				std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
 				// 결과 / 랭킹등록 처리
-				bool _isNewRecord = CNotionDBController::GetInst()->CreateUserRecord(rankInfo);
-				CDataStorageManager::GetInst()->SetCurUserResult(rankInfo, _isNewRecord);
+				std::string _newRankPageId = "";
+				bool _isNewRecord = CNotionDBController::GetInst()->CreateUserRecord(rankInfo, _newRankPageId);
+
+				FUserRankInfo _rankInfoModified = rankInfo;
+				_rankInfoModified.PageId = _newRankPageId;
+
+				CDataStorageManager::GetInst()->SetCurUserResult(_rankInfoModified, _isNewRecord);
 
 				// 결과 씬 이동
 				CSceneInGame* _inGameScene = dynamic_cast<CSceneInGame*>(mScene);

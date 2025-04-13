@@ -56,10 +56,10 @@ public:
 	virtual void Update(float DeltaTime) override;
 
 private:
-
+	void InitCommonUI();
 	void InitMemu(); // 메인카테고리, 서브카테고리 -> 싱글용
 	void InitProperty(FVector2D _basePos);
-	void InitUserRankPrint(); // 테이블 형 포맷만 만듦. 
+	void InitUserRankPrint(FVector2D _basePos, int _count); // 테이블 형 포맷만 만듦. 
 	void InitMyResultScore(); // 싱글 / 멀티
 
 	void SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2D _basePos); // 위치시키는 역할.

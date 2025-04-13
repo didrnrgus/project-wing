@@ -84,61 +84,47 @@ bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string
 	{
 		for (const auto& rankInfoJson : json[RESULT])
 		{
-			FUserRankInfo rankInfo;
-			std::string pageID = rankInfoJson[ID];
+			FUserRankInfo rankInfo = ParseJsonFUserRankInfo(rankInfoJson);
+			//std::string pageID = rankInfoJson[ID];
 
-			// name
-			if (rankInfoJson[PROPERTIES].contains("name")
-				&& rankInfoJson[PROPERTIES]["name"].contains("rich_text"))
-			{
-				rankInfo.Name = rankInfoJson[PROPERTIES]["name"]["rich_text"][0]["plain_text"].get<std::string>();
-			}
+			//// name
+			//if (rankInfoJson[PROPERTIES].contains("name")
+			//	&& rankInfoJson[PROPERTIES]["name"].contains("rich_text"))
+			//	rankInfo.Name = rankInfoJson[PROPERTIES]["name"]["rich_text"][0]["plain_text"].get<std::string>();
 
-			// map
-			if (rankInfoJson[PROPERTIES].contains("map")
-				&& rankInfoJson[PROPERTIES]["map"].contains(ATT_NUMBER))
-			{
-				rankInfo.Map = rankInfoJson[PROPERTIES]["map"][ATT_NUMBER].get<int>();
-			}
+			//// map
+			//if (rankInfoJson[PROPERTIES].contains("map")
+			//	&& rankInfoJson[PROPERTIES]["map"].contains(ATT_NUMBER))
+			//	rankInfo.Map = rankInfoJson[PROPERTIES]["map"][ATT_NUMBER].get<int>();
 
-			// character
-			if (rankInfoJson[PROPERTIES].contains("character")
-				&& rankInfoJson[PROPERTIES]["character"].contains(ATT_NUMBER))
-			{
-				rankInfo.Character = rankInfoJson[PROPERTIES]["character"][ATT_NUMBER].get<int>();
-			}
+			//// character
+			//if (rankInfoJson[PROPERTIES].contains("character")
+			//	&& rankInfoJson[PROPERTIES]["character"].contains(ATT_NUMBER))
+			//	rankInfo.Character = rankInfoJson[PROPERTIES]["character"][ATT_NUMBER].get<int>();
 
-			// distance
-			if (rankInfoJson[PROPERTIES].contains("distance")
-				&& rankInfoJson[PROPERTIES]["distance"].contains(ATT_NUMBER))
-			{
-				rankInfo.Distance = rankInfoJson[PROPERTIES]["distance"][ATT_NUMBER].get<int>();
-			}
+			//// distance
+			//if (rankInfoJson[PROPERTIES].contains("distance")
+			//	&& rankInfoJson[PROPERTIES]["distance"].contains(ATT_NUMBER))
+			//	rankInfo.Distance = rankInfoJson[PROPERTIES]["distance"][ATT_NUMBER].get<int>();
 
-			// item_0
-			if (rankInfoJson[PROPERTIES].contains("item_0")
-				&& rankInfoJson[PROPERTIES]["item_0"].contains(ATT_NUMBER))
-			{
-				rankInfo.Item_0 = rankInfoJson[PROPERTIES]["item_0"][ATT_NUMBER].get<int>();
-			}
+			//// item_0
+			//if (rankInfoJson[PROPERTIES].contains("item_0")
+			//	&& rankInfoJson[PROPERTIES]["item_0"].contains(ATT_NUMBER))
+			//	rankInfo.Item_0 = rankInfoJson[PROPERTIES]["item_0"][ATT_NUMBER].get<int>();
 
-			// item_1
-			if (rankInfoJson[PROPERTIES].contains("item_1")
-				&& rankInfoJson[PROPERTIES]["item_1"].contains(ATT_NUMBER))
-			{
-				rankInfo.Item_1 = rankInfoJson[PROPERTIES]["item_1"][ATT_NUMBER].get<int>();
-			}
+			//// item_1
+			//if (rankInfoJson[PROPERTIES].contains("item_1")
+			//	&& rankInfoJson[PROPERTIES]["item_1"].contains(ATT_NUMBER))
+			//	rankInfo.Item_1 = rankInfoJson[PROPERTIES]["item_1"][ATT_NUMBER].get<int>();
 
-			// item_2
-			if (rankInfoJson[PROPERTIES].contains("item_2")
-				&& rankInfoJson[PROPERTIES]["item_2"].contains(ATT_NUMBER))
-			{
-				rankInfo.Item_2 = rankInfoJson[PROPERTIES]["item_2"][ATT_NUMBER].get<int>();
-			}
+			//// item_2
+			//if (rankInfoJson[PROPERTIES].contains("item_2")
+			//	&& rankInfoJson[PROPERTIES]["item_2"].contains(ATT_NUMBER))
+			//	rankInfo.Item_2 = rankInfoJson[PROPERTIES]["item_2"][ATT_NUMBER].get<int>();
 
-			rankInfo.PageId = pageID;
+			//rankInfo.PageId = pageID;
 
-			datas.emplace(std::pair<std::string, FUserRankInfo>(pageID, rankInfo));
+			datas.emplace(std::pair<std::string, FUserRankInfo>(rankInfo.PageId, rankInfo));
 		}
 	}
 
@@ -357,8 +343,6 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FLineNode& data)
 	return true;
 }
 
-
-
 FLineNode CJsonController::ParseJsonFLineNode(const nlohmann::json& json)
 {
 	FLineNode lineNode;
@@ -404,6 +388,55 @@ FSpriteSheetInfo CJsonController::ParseJsonFSpriteSheetInfo(const nlohmann::json
 		spritSheetInfo.PivotY = json["pivotY"].get<float>();
 
 	return spritSheetInfo;
+}
+
+FUserRankInfo CJsonController::ParseJsonFUserRankInfo(const nlohmann::json& json)
+{
+	FUserRankInfo rankInfo;
+
+	if (json.contains(PROPERTIES))
+	{
+		std::string pageID = json[ID];
+
+		// name
+		if (json[PROPERTIES].contains("name")
+			&& json[PROPERTIES]["name"].contains("rich_text"))
+			rankInfo.Name = json[PROPERTIES]["name"]["rich_text"][0]["plain_text"].get<std::string>();
+
+		// map
+		if (json[PROPERTIES].contains("map")
+			&& json[PROPERTIES]["map"].contains(ATT_NUMBER))
+			rankInfo.Map = json[PROPERTIES]["map"][ATT_NUMBER].get<int>();
+
+		// character
+		if (json[PROPERTIES].contains("character")
+			&& json[PROPERTIES]["character"].contains(ATT_NUMBER))
+			rankInfo.Character = json[PROPERTIES]["character"][ATT_NUMBER].get<int>();
+
+		// distance
+		if (json[PROPERTIES].contains("distance")
+			&& json[PROPERTIES]["distance"].contains(ATT_NUMBER))
+			rankInfo.Distance = json[PROPERTIES]["distance"][ATT_NUMBER].get<int>();
+
+		// item_0
+		if (json[PROPERTIES].contains("item_0")
+			&& json[PROPERTIES]["item_0"].contains(ATT_NUMBER))
+			rankInfo.Item_0 = json[PROPERTIES]["item_0"][ATT_NUMBER].get<int>();
+
+		// item_1
+		if (json[PROPERTIES].contains("item_1")
+			&& json[PROPERTIES]["item_1"].contains(ATT_NUMBER))
+			rankInfo.Item_1 = json[PROPERTIES]["item_1"][ATT_NUMBER].get<int>();
+
+		// item_2
+		if (json[PROPERTIES].contains("item_2")
+			&& json[PROPERTIES]["item_2"].contains(ATT_NUMBER))
+			rankInfo.Item_2 = json[PROPERTIES]["item_2"][ATT_NUMBER].get<int>();
+
+		rankInfo.PageId = pageID;
+	}
+
+	return rankInfo;
 }
 
 

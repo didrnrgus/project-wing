@@ -1,4 +1,6 @@
-﻿#include "Etc/NotionDBController.h"
+﻿#pragma once
+
+#include "Etc/NotionDBController.h"
 #include "Etc/CURL.h"
 #include "Etc/JsonController.h"
 #include "Etc/DataStorageManager.h"
@@ -15,7 +17,7 @@ CNotionDBController::~CNotionDBController()
 
 }
 
-bool CNotionDBController::CreateUserRecord(const FUserRankInfo& _userInfo)
+bool CNotionDBController::CreateUserRecord(const FUserRankInfo& _userInfo, std::string& _newRankPageIdOut)
 {
     CLog::PrintLog("CNotionDBController::CreateUserRecord() Check Score By Category.");
   
@@ -41,6 +43,9 @@ bool CNotionDBController::CreateUserRecord(const FUserRankInfo& _userInfo)
     if (response.empty())
         return false;
 
+    nlohmann::json json = nlohmann::json::parse(response);
+    FUserRankInfo _info = CJsonController::GetInst()->ParseJsonFUserRankInfo(json);
+    _newRankPageIdOut = _info.PageId;
     CDataStorageManager::GetInst()->UpdateUserRankInfos();
 
     return true;
@@ -73,31 +78,38 @@ bool CNotionDBController::CheckForUpdate(const FUserRankInfo& _userInfo)
         EResultMenuTap::Map, _userInfo.Map);
     auto _characterResult = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(
         EResultMenuTap::Character, _userInfo.Character);
-    bool _isMapUpdate = false;
-    bool _isCharacterUpdate = false;
+
+    // 별일 없으면 그냥 추가.
+    bool _isMapUpdate = true;
+    bool _isCharacterUpdate = true;
 
     auto _config = CDataStorageManager::GetInst()->GetConfig();
     if (_mapResult.size() >= _config.RankCountByCategory)
     {
+        _isMapUpdate = false;
+
         // 라스트 받고, 비교해서 Insert 할지 말지.
         auto _last = _mapResult[_mapResult.size() - 1];
-        _isMapUpdate = _last.Distance < _userInfo.Distance;
-        
-        if (_isMapUpdate)
+        bool _needDelete = _last.Distance < _userInfo.Distance;
+        _isMapUpdate = _needDelete;
+
+        if (_needDelete)
             DeleteRecord(_last.PageId);
     }
 
     if (_characterResult.size() >= _config.RankCountByCategory)
     {
+        _isCharacterUpdate = false;
+        
         // 라스트 받고, 비교해서 Insert 할지 말지.
         auto _last = _characterResult[_characterResult.size() - 1];
-        _isCharacterUpdate = _last.Distance < _userInfo.Distance;
+        bool _needDelete = _last.Distance < _userInfo.Distance;
+        _isCharacterUpdate = _needDelete;
 
-        if (_isCharacterUpdate)
+        if (_needDelete)
             DeleteRecord(_last.PageId);
     }
 
-    // 하나라도 지워졌다면? 추가해도 되기에.
     return _isMapUpdate || _isCharacterUpdate;
 }
 

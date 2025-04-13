@@ -830,10 +830,11 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 void CLobbyWidget::OnCharacterLeftButtonClick()
 {
 	CLog::PrintLog("CharacterLeftButtonClick()");
-	curPlayerGraphicIndex++;
 
-	if (curPlayerGraphicIndex == CDataStorageManager::GetInst()->GetCharacterCount())
-		curPlayerGraphicIndex = 0;
+	if (curPlayerGraphicIndex > 0)
+		curPlayerGraphicIndex--;
+	else
+		curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
 
 	UpdatePlayerStat();
 
@@ -846,10 +847,11 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 void CLobbyWidget::OnCharacterRightButtonClick()
 {
 	CLog::PrintLog("CharacterRightButtonClick()");
-	if (curPlayerGraphicIndex > 0)
-		curPlayerGraphicIndex--;
-	else
-		curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
+
+	curPlayerGraphicIndex++;
+
+	if (curPlayerGraphicIndex == CDataStorageManager::GetInst()->GetCharacterCount())
+		curPlayerGraphicIndex = 0;
 
 	UpdatePlayerStat();
 

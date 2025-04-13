@@ -288,8 +288,6 @@ void CSceneInGame::ProcessMessage()
 		}
 		case (int)ServerMessage::MSG_GAME_OVER:
 		{
-			CMultiplayManager::GetInst()->ResetPlayerAfterInGame();
-
 			// 쓰레드 시작.
 			mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
 				[this]()
@@ -298,7 +296,7 @@ void CSceneInGame::ProcessMessage()
 					CLog::PrintLog("std::this_thread::sleep_for(std::chrono::milliseconds(3000));");
 					std::this_thread::sleep_for(std::chrono::milliseconds(3000));
 
-					GotoLobby();
+					GotoResult();
 				})));
 			break;
 		}

@@ -28,6 +28,67 @@ bool CResultWidget::Init()
 	mArrSubCategoryMunuTap.resize((int)EResultMenuTap::End);
 	mCurSubCategoryMenuTap.resize((int)EResultMenuTap::End, 0);
 
+	// 공통
+	InitCommonUI();
+
+	// 내 기록.
+	InitProperty(FVector2D(120.0f, 640.0f));
+	InitMyResultScore();
+
+	if (CNetworkManager::GetInst()->IsMultiplay())
+	{
+		// 멀티
+		InitProperty(FVector2D(120.0f, 500.0f));
+
+		int _playerCount = CMultiplayManager::GetInst()->GetPlayerCount();
+		InitUserRankPrint(FVector2D(120.0f, 450.0f), _playerCount);
+
+		std::vector<FUserRankInfo> _arrInfo;
+
+		for (int i = 0; i < _playerCount; i++)
+		{
+			FUserRankInfo _rankInfo;
+			auto _info = CMultiplayManager::GetInst()->GetPlayerInfoByIndex(i);
+			_rankInfo.MultiPlayId = _info.id;
+			_rankInfo.Name = _info.nickname;
+			_rankInfo.Map = CDataStorageManager::GetInst()->GetSelectedMapIndex();
+			_rankInfo.Character = _info.characterType;
+			_rankInfo.Distance = _info.distance;
+			_rankInfo.Item_0 = _info.arrItemType[0];
+			_rankInfo.Item_1 = _info.arrItemType[1];
+			_rankInfo.Item_2 = _info.arrItemType[2];
+			_arrInfo.push_back(_rankInfo);
+		}
+
+		std::sort(_arrInfo.begin(), _arrInfo.end()
+			, [](const FUserRankInfo& a, const FUserRankInfo& b) -> bool
+			{
+				return a.Distance > b.Distance; // 내림차순
+			});
+
+		UpdateUserRankPrint(_arrInfo);
+	}
+	else
+	{
+		// 싱글
+		InitMemu();
+		InitProperty(FVector2D(120.0f, 410.0f));
+		InitUserRankPrint(FVector2D(120.0f, mResolution.y * 0.5f), mRankMaxCount);
+
+		OnClickMainCategoryMenuTapButton(EResultMenuTap::Map);
+		OnClickSubCategoryMenuTapButton(0);
+	}
+
+	return true;
+}
+
+void CResultWidget::Update(float DeltaTime)
+{
+	CSceneWidget::Update(DeltaTime);
+}
+
+void CResultWidget::InitCommonUI()
+{
 	mResultTitle = mScene->GetUIManager()->CreateWidget<CTextBlock>("mResultTitle");
 	AddWidget(mResultTitle);
 	mResultTitle->SetPivot(FVector2D::One * 0.5f);
@@ -54,7 +115,10 @@ bool CResultWidget::Init()
 	mNewRecordText->SetShadowEnable(true);
 	mNewRecordText->SetShadowOffset(3.f, 3.f);
 	mNewRecordText->SetTextShadowColor(FVector4D::Gray30);
-	mNewRecordText->SetEnable(false);
+	bool _isNewRecord =
+		CDataStorageManager::GetInst()->GetIsNewRecord()
+		&& !CNetworkManager::GetInst()->IsMultiplay();
+	mNewRecordText->SetEnable(_isNewRecord);
 
 	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>(ARROW_SQUARE_RIGHT_NAME);
 	AddWidget(mNextButton);
@@ -65,30 +129,12 @@ bool CResultWidget::Init()
 	mNextButton->SetEventCallback(EButtonEventState::Click
 		, [this]()
 		{
+			if(CNetworkManager::GetInst()->IsMultiplay())
+				CMultiplayManager::GetInst()->ResetPlayerAfterInGame();
+
 			CDataStorageManager::GetInst()->ClearCurUserResult();
 			LoadScene(EGameScene::Lobby);
 		});
-
-	// 내 기록.
-	InitProperty(FVector2D(120.0f, 640.0f));
-	InitMyResultScore();
-	bool _isNewRecord = 
-		CDataStorageManager::GetInst()->GetIsNewRecord() 
-		&& !CNetworkManager::GetInst()->IsMultiplay();
-	mNewRecordText->SetEnable(_isNewRecord);
-
-	InitProperty(FVector2D(120.0f, 410.0f));
-	InitUserRankPrint();
-
-	InitMemu();
-	OnClickMainCategoryMenuTapButton(EResultMenuTap::Map);
-	OnClickSubCategoryMenuTapButton(0);
-	return true;
-}
-
-void CResultWidget::Update(float DeltaTime)
-{
-	CSceneWidget::Update(DeltaTime);
 }
 
 void CResultWidget::InitMemu()
@@ -258,15 +304,14 @@ void CResultWidget::InitProperty(FVector2D _basePos)
 	SetInfoTextBlock(_itemProp, _pivot, _sizeItem, _posItem, _color, L"ITEM");
 }
 
-void CResultWidget::InitUserRankPrint()
+void CResultWidget::InitUserRankPrint(FVector2D _basePos, int _count)
 {
 	// mRankMaxCount 인원수에 맞게 미리 위치 세팅 -> 테이블 형 포맷만 만듦.
 	// 멀티: 다른사람들 스코어.
 	// 싱글: 랭킹.
-	FVector2D _basePos = FVector2D(120.0f, mResolution.y * 0.5f);
 	float _gapY = mRowTextFontSize;
 
-	for (int i = 0; i < mRankMaxCount; i++)
+	for (int i = 0; i < _count; i++)
 	{
 		FUserPrintGroup _group;
 		SetPositionUserPrintRow(_group, _basePos + FVector2D(0.0f, -(30.0f + _gapY) * i));
@@ -479,7 +524,7 @@ void CResultWidget::UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo)
 	int _minCount = mRankMaxCount > _arrInfo.size() ? _arrInfo.size() : mRankMaxCount;
 
 	// row 들 모두 꺼야 함.
-	for (int i = 0; i < mRankMaxCount; i++)
+	for (int i = 0; i < mArrUserInfoText.size(); i++)
 	{
 		auto& _printGroup = mArrUserInfoText[i];
 		_printGroup.nameText->SetEnable(false);
@@ -509,6 +554,23 @@ void CResultWidget::UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo)
 
 		_printGroup.mapText->SetTextColor(FVector4D::GetColorFromString(_mapStat.DifficultyColorName));
 		_printGroup.characterText->SetTextColor(FVector4D::GetColorFromString(_charStat.ColorName));
+		_printGroup.nameText->SetTextColor(FVector4D::White);
+
+		if (CNetworkManager::GetInst()->IsMultiplay())
+		{
+			int _myId = CMultiplayManager::GetInst()->GetMyId();
+			int _multiplayId = _info.MultiPlayId;
+
+			if(_myId == _multiplayId)
+				_printGroup.nameText->SetTextColor(FVector4D::Green);
+		}
+		else
+		{
+			auto _myInfo = CDataStorageManager::GetInst()->GetCurUserResult();
+
+			if (_info.PageId.compare(_myInfo.PageId.c_str()) == 0) 
+				_printGroup.nameText->SetTextColor(FVector4D::Green);
+		}
 
 		_printGroup.nameText->SetText(std::wstring(_info.Name.begin(), _info.Name.end()).c_str());
 		_printGroup.mapText->SetText(std::wstring(_mapStat.Name.begin(), _mapStat.Name.end()).c_str());

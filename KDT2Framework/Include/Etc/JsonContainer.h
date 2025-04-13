@@ -6,6 +6,8 @@
 struct FUserRankInfo
 {
 	std::string PageId;
+	int MultiPlayId;
+
 	std::string Name;
 	int Map;
 	int Character;
