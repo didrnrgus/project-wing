@@ -41,6 +41,7 @@ protected:
 
 	CSharedPtr<class CTextBlock> mResultTitle; // 타이틀 표시
 	FUserPrintGroup mCurResultUserPrint; // 현재 플레이 한 유저.
+	CSharedPtr<class CTextBlock> mNewRecordText; // 타이틀 표시
 
 	const int mRankMaxCount = 5;
 	const float mMenuTextFontSize = 30.0f;

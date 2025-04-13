@@ -24,6 +24,7 @@ private:
 	std::map<int, int> curSelectedItemIndex;
 	bool isLoadedData = false;
 	FUserRankInfo curUserResult;
+	bool isNewRecord = false;
 
 public:
 	void InitCurSelectedData();
@@ -41,8 +42,13 @@ public:
 	inline void SetSelectedItemTypeInSlotIndex(int slotIndex, int itemTypeIndex) { curSelectedItemIndex[slotIndex] = itemTypeIndex; }
 
 	void ClearCurUserResult() { curUserResult = FUserRankInfo(); }
-	void SetCurUserResult(FUserRankInfo _info) { curUserResult = _info; }
+	void SetCurUserResult(FUserRankInfo _info, bool _isNewRecord)
+	{
+		curUserResult = _info;
+		isNewRecord = _isNewRecord;
+	}
 	FUserRankInfo GetCurUserResult() { return curUserResult; }
+	bool GetIsNewRecord() { return isNewRecord; }
 	void UpdateUserRankInfos();
 
 	inline bool GetIsLoadedData() { return isLoadedData; }

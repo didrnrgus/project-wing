@@ -41,6 +41,21 @@ bool CResultWidget::Init()
 	mResultTitle->SetShadowOffset(5.f, 5.f);
 	mResultTitle->SetTextShadowColor(FVector4D::Gray30);
 
+	mNewRecordText = mScene->GetUIManager()->CreateWidget<CTextBlock>("mNewRecordText");
+	AddWidget(mNewRecordText);
+	mNewRecordText->SetPivot(FVector2D(0.0f, 1.0f));
+	mNewRecordText->SetSize(FVector2D(200.0f, 30.0f));
+	mNewRecordText->SetPos(FVector2D(120.0f, 660.0f));
+	mNewRecordText->SetText(L"[NEW RECORD!!]");
+	mNewRecordText->SetTextColor(FVector4D::Green);
+	mNewRecordText->SetAlignH(ETextAlignH::Left);
+	mNewRecordText->SetAlignV(ETextAlignV::Top);
+	mNewRecordText->SetFontSize(20);
+	mNewRecordText->SetShadowEnable(true);
+	mNewRecordText->SetShadowOffset(3.f, 3.f);
+	mNewRecordText->SetTextShadowColor(FVector4D::Gray30);
+	mNewRecordText->SetEnable(false);
+
 	mNextButton = mScene->GetUIManager()->CreateWidget<CButton>(ARROW_SQUARE_RIGHT_NAME);
 	AddWidget(mNextButton);
 	SetButton(*mNextButton.Get(), ARROW_SQUARE_RIGHT_NAME, ARROW_SQUARE_RIGHT_PATH);
@@ -54,12 +69,18 @@ bool CResultWidget::Init()
 			LoadScene(EGameScene::Lobby);
 		});
 
+	// 내 기록.
 	InitProperty(FVector2D(120.0f, 640.0f));
-	InitProperty(FVector2D(120.0f, 410.0f));
-	InitMemu();
-	InitUserRankPrint();
 	InitMyResultScore();
+	bool _isNewRecord = 
+		CDataStorageManager::GetInst()->GetIsNewRecord() 
+		&& !CNetworkManager::GetInst()->IsMultiplay();
+	mNewRecordText->SetEnable(_isNewRecord);
 
+	InitProperty(FVector2D(120.0f, 410.0f));
+	InitUserRankPrint();
+
+	InitMemu();
 	OnClickMainCategoryMenuTapButton(EResultMenuTap::Map);
 	OnClickSubCategoryMenuTapButton(0);
 	return true;
