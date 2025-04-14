@@ -49,7 +49,7 @@ bool CSceneWidget::Init()
 	mLoadingBackImage->SetZOrder(ZORDER_LOADING_BACK);
 	mLoadingBackImage->SetEnable(false);
 
-	FVector2D loadingSize = FVector2D(200.0f, 120.0f);
+	FVector2D loadingSize = FVector2D(250.0f, 120.0f);
 	mLoadingText = mScene->GetUIManager()->CreateWidget<CTextBlock>("LoadingText");
 	AddWidget(mLoadingText);
 	mLoadingText->SetText(mLoadingTextStrings[curLoadingTextIndex]);

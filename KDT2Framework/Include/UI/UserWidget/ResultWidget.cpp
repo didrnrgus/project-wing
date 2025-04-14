@@ -82,11 +82,6 @@ bool CResultWidget::Init()
 	return true;
 }
 
-void CResultWidget::Update(float DeltaTime)
-{
-	CSceneWidget::Update(DeltaTime);
-}
-
 void CResultWidget::InitCommonUI()
 {
 	mResultTitle = mScene->GetUIManager()->CreateWidget<CTextBlock>("mResultTitle");
@@ -572,7 +567,9 @@ void CResultWidget::UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo)
 				_printGroup.nameText->SetTextColor(FVector4D::Green);
 		}
 
-		_printGroup.nameText->SetText(std::wstring(_info.Name.begin(), _info.Name.end()).c_str());
+		std::wstring _outName;
+		ConvertWStringAndCheckTextOverLength(_info.Name, _outName, PLAYER_RANK_NICKNAME_LENGTH_MAX_SCORE);
+		_printGroup.nameText->SetText(_outName.c_str());
 		_printGroup.mapText->SetText(std::wstring(_mapStat.Name.begin(), _mapStat.Name.end()).c_str());
 		_printGroup.characterText->SetText(std::wstring(_charStat.Name.begin(), _charStat.Name.end()).c_str());
 		_printGroup.distanceText->SetText((FormatWithCommaManual(_info.Distance) + L"m").c_str());

@@ -9,8 +9,7 @@ class CRankWidget : public CSceneWidget
 protected:
 	std::vector<const wchar_t*> mArrMenuTapText =
 	{
-		TEXT("All")
-		,TEXT("Map")
+		TEXT("Map")
 		,TEXT("Character")
 		,TEXT("End")
 	};
@@ -52,7 +51,6 @@ protected:
 
 public:
 	virtual bool Init() override;
-	virtual void Update(float DeltaTime) override;
 
 private:
 	void InitCommonUI();
