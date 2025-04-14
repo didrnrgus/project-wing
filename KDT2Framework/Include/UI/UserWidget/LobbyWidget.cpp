@@ -101,6 +101,13 @@ bool CLobbyWidget::Init()
 		UpdateOtherPlayerInfo();
 		UpdateMapInfo();
 	}
+	else
+	{
+		InitSimpleCharacterRankInfo();
+		InitSimpleMapRankInfo();
+		UpdateSimpleCharacterRankInfo();
+		UpdateSimpleMapRankInfo();
+	}
 
 	auto pathLeft = DIRECT_LEFT_PATH;
 	auto pathRight = DIRECT_RIGHT_PATH;
@@ -182,9 +189,9 @@ void CLobbyWidget::InitPlayerStatText()
 	int count = (int)ECharacterStatText::End;
 	mArrPlayerStatNameText.resize(count);
 	mArrPlayerStatValueText.resize(count);
-	
+
 	FVector2D textSize = FVector2D(200.0f, 40.0f);
-	
+
 	FVector2D nameBasePivot = FVector2D(0.0f, 0.0f);
 	FVector2D nameBasePos = FVector2D(550.0f, mResolution.y * 0.87f);
 
@@ -211,7 +218,7 @@ void CLobbyWidget::InitPlayerStatText()
 		textBlockName->SetAlignH(ETextAlignH::Left);
 		textBlockName->SetFontSize(fontSize);
 		textBlockName->SetShadowEnable(true);
-		textBlockName->SetShadowOffset(1.f, 1.f);
+		textBlockName->SetShadowOffset(2.f, 2.f);
 		textBlockName->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrPlayerStatNameText[i] = textBlockName;
 
@@ -224,7 +231,7 @@ void CLobbyWidget::InitPlayerStatText()
 		textBlockPlayerStatValue->SetAlignH(ETextAlignH::Left);
 		textBlockPlayerStatValue->SetFontSize(fontSize);
 		textBlockPlayerStatValue->SetShadowEnable(true);
-		textBlockPlayerStatValue->SetShadowOffset(1.f, 1.f);
+		textBlockPlayerStatValue->SetShadowOffset(2.f, 2.f);
 		textBlockPlayerStatValue->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrPlayerStatValueText[i] = textBlockPlayerStatValue;
 
@@ -236,13 +243,13 @@ void CLobbyWidget::InitMapInfoText()
 	int count = (int)EMapInfoText::End;
 	mArrMapInfoNameText.resize(count);
 	mArrMapInfoValueText.resize(count);
-	
+
 	FVector2D nameBasePivot = FVector2D(0.0f, 0.0f);
 	FVector2D nameBasePos = FVector2D(550.0f, mResolution.y * 0.4f);
-	
+
 	FVector2D valueBasePivot = FVector2D(0.0f, 0.0f);
 	FVector2D valueBasePos = FVector2D(700.0f, mResolution.y * 0.4f);
-	
+
 	FVector2D textSize = FVector2D(200.0f, 100.0f);
 	float fontSize = 30.0f;
 	FMapInfo info = CDataStorageManager::GetInst()->GetMapInfo(curDifficultyIndex);
@@ -263,7 +270,7 @@ void CLobbyWidget::InitMapInfoText()
 		textBlockName->SetAlignH(ETextAlignH::Left);
 		textBlockName->SetFontSize(fontSize);
 		textBlockName->SetShadowEnable(true);
-		textBlockName->SetShadowOffset(1.f, 1.f);
+		textBlockName->SetShadowOffset(2.f, 2.f);
 		textBlockName->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrMapInfoNameText[i] = textBlockName;
 
@@ -276,7 +283,7 @@ void CLobbyWidget::InitMapInfoText()
 		textBlockPlayerStatValue->SetAlignH(ETextAlignH::Left);
 		textBlockPlayerStatValue->SetFontSize(fontSize);
 		textBlockPlayerStatValue->SetShadowEnable(true);
-		textBlockPlayerStatValue->SetShadowOffset(1.f, 1.f);
+		textBlockPlayerStatValue->SetShadowOffset(2.f, 2.f);
 		textBlockPlayerStatValue->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrMapInfoValueText[i] = textBlockPlayerStatValue;
 	}
@@ -815,6 +822,150 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 	}
 }
 
+void CLobbyWidget::UpdateSimpleCharacterRankInfo()
+{
+	// init
+	for (int i = 0; i < mArrRankWidgetGroupByCharacter.size(); i++)
+	{
+		// player text init 
+		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetText(PLAYER_EMPTY_TEXT);
+		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetEnable(false);
+
+		// distance text init
+		mArrRankWidgetGroupByCharacter[i].mDistanceText->SetText((FormatWithCommaManual(12345) + L"m").c_str());
+		mArrRankWidgetGroupByCharacter[i].mDistanceText->SetEnable(false);
+
+		// character color init 
+		auto color = FVector4D::GetColorFromString(COLOR_White);
+
+		// ready init 
+		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetTextColor(color);
+
+		// item init 
+		for (int j = 0; j < mArrRankWidgetGroupByCharacter[i].mArrPlayerItemImage.size(); j++)
+		{
+			auto _image = mArrRankWidgetGroupByCharacter[i].mArrPlayerItemImage[j];
+			auto _slotImage = mArrRankWidgetGroupByCharacter[i].mArrPlayerSlotImage[j];
+			_image->SetEnable(false);
+			_slotImage->SetEnable(false);
+
+			_image->SetColor(color);
+			_slotImage->SetColor(color);
+		}
+
+	}
+
+	auto _arrRankInfo = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(ERankMenuTap::Character, curPlayerGraphicIndex);
+	int _minCount = PLAYER_SIMPLE_RANK > _arrRankInfo.size() ? _arrRankInfo.size() : PLAYER_SIMPLE_RANK;
+
+	for (int i = 0; i < _minCount; i++)
+	{
+		auto _info = _arrRankInfo[i];
+		auto mapInfo = CDataStorageManager::GetInst()->GetMapInfo(_info.Map);
+		auto color = FVector4D::GetColorFromString(mapInfo.ColorName);
+
+		std::wstring _nickname;
+		ConvertWStringAndCheckTextOverLength(_info.Name, _nickname, PLAYER_LOBBY_NICKNAME_LENGTH_MAX_SCORE);
+		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetText(_nickname.c_str());
+		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetTextColor(color);
+		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetEnable(true);
+		mArrRankWidgetGroupByCharacter[i].mDistanceText->SetText((FormatWithCommaManual(_info.Distance) + L"m").c_str());
+		mArrRankWidgetGroupByCharacter[i].mDistanceText->SetTextColor(color);
+		mArrRankWidgetGroupByCharacter[i].mDistanceText->SetEnable(true);
+
+		std::vector<int> _arrItemType = { _info.Item_0, _info.Item_1, _info.Item_2 };
+
+		for (int j = 0; j < _arrItemType.size(); j++)
+		{
+			int _itemType = _arrItemType[j];
+			bool _isEnable = _itemType != PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+			auto _image = mArrRankWidgetGroupByCharacter[i].mArrPlayerItemImage[j];
+			auto _slotImage = mArrRankWidgetGroupByCharacter[i].mArrPlayerSlotImage[j];
+
+			_slotImage->SetEnable(true);
+			_image->SetEnable(_isEnable);
+
+			if (_isEnable)
+				_image->SetTexture(mArrItemImageName[_itemType], mArrItemImagePath[_itemType]);
+
+			_image->SetColor(color);
+			_slotImage->SetColor(color);
+		}
+	}
+}
+
+void CLobbyWidget::UpdateSimpleMapRankInfo()
+{
+	// init
+	for (int i = 0; i < mArrRankWidgetGroupByMap.size(); i++)
+	{
+		// player text init 
+		mArrRankWidgetGroupByMap[i].mPlayerText->SetText(PLAYER_EMPTY_TEXT);
+		mArrRankWidgetGroupByMap[i].mPlayerText->SetEnable(false);
+
+		// distance text init
+		mArrRankWidgetGroupByMap[i].mDistanceText->SetText((FormatWithCommaManual(12345) + L"m").c_str());
+		mArrRankWidgetGroupByMap[i].mDistanceText->SetEnable(false);
+
+		// character color init 
+		auto color = FVector4D::GetColorFromString(COLOR_White);
+
+		// ready init 
+		mArrRankWidgetGroupByMap[i].mPlayerText->SetTextColor(color);
+
+		// item init 
+		for (int j = 0; j < mArrRankWidgetGroupByMap[i].mArrPlayerItemImage.size(); j++)
+		{
+			auto _image = mArrRankWidgetGroupByMap[i].mArrPlayerItemImage[j];
+			auto _slotImage = mArrRankWidgetGroupByMap[i].mArrPlayerSlotImage[j];
+			_image->SetEnable(false);
+			_slotImage->SetEnable(false);
+
+			_image->SetColor(color);
+			_slotImage->SetColor(color);
+		}
+
+	}
+
+	auto _arrRankInfo = CDataStorageManager::GetInst()->GetArrayUserRankByCategory(ERankMenuTap::Map, curDifficultyIndex);
+	int _minCount = PLAYER_SIMPLE_RANK > _arrRankInfo.size() ? _arrRankInfo.size() : PLAYER_SIMPLE_RANK;
+
+	for (int i = 0; i < _minCount; i++)
+	{
+		auto _info = _arrRankInfo[i];
+		auto characterInfo = CDataStorageManager::GetInst()->GetCharacterState(_info.Character);
+		auto color = FVector4D::GetColorFromString(characterInfo.ColorName);
+
+		std::wstring _nickname;
+		ConvertWStringAndCheckTextOverLength(_info.Name, _nickname, PLAYER_LOBBY_NICKNAME_LENGTH_MAX_SCORE);
+		mArrRankWidgetGroupByMap[i].mPlayerText->SetText(_nickname.c_str());
+		mArrRankWidgetGroupByMap[i].mPlayerText->SetTextColor(color);
+		mArrRankWidgetGroupByMap[i].mPlayerText->SetEnable(true);
+		mArrRankWidgetGroupByMap[i].mDistanceText->SetText((FormatWithCommaManual(_info.Distance) + L"m").c_str());
+		mArrRankWidgetGroupByMap[i].mDistanceText->SetTextColor(color);
+		mArrRankWidgetGroupByMap[i].mDistanceText->SetEnable(true);
+
+		std::vector<int> _arrItemType = { _info.Item_0, _info.Item_1, _info.Item_2 };
+
+		for (int j = 0; j < _arrItemType.size(); j++)
+		{
+			int _itemType = _arrItemType[j];
+			bool _isEnable = _itemType != PLAYER_ITEM_TYPE_DEFAULT_INDEX;
+			auto _image = mArrRankWidgetGroupByMap[i].mArrPlayerItemImage[j];
+			auto _slotImage = mArrRankWidgetGroupByMap[i].mArrPlayerSlotImage[j];
+
+			_slotImage->SetEnable(true);
+			_image->SetEnable(_isEnable);
+
+			if (_isEnable)
+				_image->SetTexture(mArrItemImageName[_itemType], mArrItemImagePath[_itemType]);
+
+			_image->SetColor(color);
+			_slotImage->SetColor(color);
+		}
+	}
+}
+
 void CLobbyWidget::AddListener()
 {
 	auto sceneNetController = dynamic_cast<ISceneNetworkController*>(mScene);
@@ -879,6 +1030,7 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 		curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
 
 	UpdatePlayerStat();
+	UpdateSimpleCharacterRankInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
@@ -896,6 +1048,7 @@ void CLobbyWidget::OnCharacterRightButtonClick()
 		curPlayerGraphicIndex = 0;
 
 	UpdatePlayerStat();
+	UpdateSimpleCharacterRankInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
@@ -944,7 +1097,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 
 	for (int i = 0; i < mArrPlayerWidgetGroup.size(); i++)
 	{
-		PlayerWidgetGroup group;
+		FPlayerWidgetGroup group;
 
 		auto tempPlayerCheckBackImage = mScene->GetUIManager()->CreateWidget<CImage>("PlayerCheckBackImage_" + std::to_string(i));
 		AddWidget(tempPlayerCheckBackImage);
@@ -1010,6 +1163,192 @@ void CLobbyWidget::InitOtherPlayersInfo()
 	}
 }
 
+void CLobbyWidget::InitSimpleCharacterRankInfo()
+{
+	auto titleTextBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>("titleTextBlock");
+	AddWidget(titleTextBlock);
+	titleTextBlock->SetPivot(FVector2D(0.5f, 0.5f));
+	titleTextBlock->SetSize(FVector2D(500.0f, 70.0f));
+	titleTextBlock->SetPos(FVector2D(280.0f, 580.0f));
+	titleTextBlock->SetText(PLAYER_CHARACTER_RANK_TEXT);
+	titleTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
+	titleTextBlock->SetAlignH(ETextAlignH::Center);
+	titleTextBlock->SetFontSize(50.0f);
+	titleTextBlock->SetShadowEnable(true);
+	titleTextBlock->SetShadowOffset(3.f, 3.f);
+	titleTextBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+
+	float fontSize = 30.0f;
+	float gapX = 10.0f;
+
+	FVector2D nameTextBasePivot = FVector2D(0.0f, 0.4f);
+	FVector2D nameTextBaseSize = FVector2D(220.0f, fontSize + 10.0f);
+	FVector2D nameTextBasePos = FVector2D(40.0f, 510.0f);
+
+	FVector2D distTextBasePivot = FVector2D(0.0f, 0.4f);
+	FVector2D distTextBaseSize = FVector2D(150.0f, fontSize + 10.0f);
+	FVector2D distTextBasePos = nameTextBasePos + FVector2D(nameTextBaseSize.x + gapX, 0.0f);
+
+	FVector2D itemBasePivot = FVector2D(0.5f, 0.5f);
+	// textBaseSize 높이보단 조금 작게
+	FVector2D itemBaseSize = FVector2D(fontSize, fontSize) + FVector2D::One * 0.5f;
+	FVector2D itemBasePos = distTextBasePos + FVector2D(distTextBaseSize.x + itemBaseSize.x * 0.5f, 0.0f);
+
+	mArrRankWidgetGroupByCharacter.resize(PLAYER_SIMPLE_RANK);
+
+	for (int i = 0; i < mArrRankWidgetGroupByCharacter.size(); i++)
+	{
+		FRankWidgetGroup group;
+
+		auto nameTextBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>("nameTextBlock_" + std::to_string(i));
+		AddWidget(nameTextBlock);
+		nameTextBlock->SetPivot(nameTextBasePivot);
+		nameTextBlock->SetSize(nameTextBaseSize);
+		nameTextBlock->SetPos(nameTextBasePos - FVector2D::Axis[EAxis::Y] * (nameTextBaseSize.y) * i);
+		nameTextBlock->SetText(PLAYER_EMPTY_TEXT);
+		nameTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
+		nameTextBlock->SetAlignH(ETextAlignH::Left);
+		nameTextBlock->SetFontSize(fontSize);
+		nameTextBlock->SetShadowEnable(false);
+		nameTextBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+		nameTextBlock->SetZOrder(ZORDER_LOBBY_PLAYER);
+		group.mPlayerText = nameTextBlock;
+
+		auto distTextBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>("distTextBlock_" + std::to_string(i));
+		AddWidget(distTextBlock);
+		distTextBlock->SetPivot(distTextBasePivot);
+		distTextBlock->SetSize(distTextBaseSize);
+		distTextBlock->SetPos(distTextBasePos - FVector2D::Axis[EAxis::Y] * (distTextBaseSize.y) * i);
+		distTextBlock->SetText((FormatWithCommaManual(12345) + L"m").c_str());
+		distTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
+		distTextBlock->SetAlignH(ETextAlignH::Left);
+		distTextBlock->SetFontSize(fontSize);
+		distTextBlock->SetShadowEnable(false);
+		distTextBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+		distTextBlock->SetZOrder(ZORDER_LOBBY_PLAYER);
+		group.mDistanceText = distTextBlock;
+
+		for (int j = 0; j < itemSlotCount; j++)
+		{
+			auto tempItemSlotImage = mScene->GetUIManager()->CreateWidget<CImage>("ItemSlotImage_" + std::to_string(i) + "_" + std::to_string(j));
+			AddWidget(tempItemSlotImage);
+			tempItemSlotImage->SetPivot(itemBasePivot);
+			tempItemSlotImage->SetSize(itemBaseSize);
+			tempItemSlotImage->SetPos(itemBasePos + FVector2D(nameTextBaseSize.y * 0.8f * j, (nameTextBaseSize.y) * i * -1.0f));
+			tempItemSlotImage->SetTexture(ITEM_EMPTY_SQUARE_NAME, ITEM_EMPTY_SQUARE_PATH);
+			tempItemSlotImage->SetColor(FVector4D::GetColorFromString(COLOR_White));
+			tempItemSlotImage->SetZOrder(ZORDER_LOBBY_PLAYER);
+			group.mArrPlayerSlotImage.push_back(tempItemSlotImage);
+
+			auto tempItemImage = mScene->GetUIManager()->CreateWidget<CImage>("ItemaImage_" + std::to_string(i) + "_" + std::to_string(j));
+			AddWidget(tempItemImage);
+			tempItemImage->SetPivot(itemBasePivot);
+			tempItemImage->SetSize(itemBaseSize * mSlotInnerItemSizeRate);
+			tempItemImage->SetPos(itemBasePos + FVector2D(nameTextBaseSize.y * 0.8f * j, (nameTextBaseSize.y) * i * -1.0f));
+			tempItemImage->SetTexture(ITEM_HP_ICON_NAME, ITEM_HP_ICON_PATH);
+			tempItemImage->SetColor(FVector4D::GetColorFromString(COLOR_White));
+			tempItemImage->SetZOrder(ZORDER_LOBBY_PLAYER_ITEM_ICON);
+			tempItemImage->SetEnable(false);
+			group.mArrPlayerItemImage.push_back(tempItemImage);
+		}
+
+		mArrRankWidgetGroupByCharacter[i] = group;
+	}
+}
+
+void CLobbyWidget::InitSimpleMapRankInfo()
+{
+	auto titleTextBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>("titleTextBlock");
+	AddWidget(titleTextBlock);
+	titleTextBlock->SetPivot(FVector2D(0.5f, 0.5f));
+	titleTextBlock->SetSize(FVector2D(500.0f, 70.0f));
+	titleTextBlock->SetPos(FVector2D(280.0f, 360.0f));
+	titleTextBlock->SetText(PLAYER_MAP_RANK_TEXT);
+	titleTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
+	titleTextBlock->SetAlignH(ETextAlignH::Center);
+	titleTextBlock->SetFontSize(50.0f);
+	titleTextBlock->SetShadowEnable(true);
+	titleTextBlock->SetShadowOffset(3.f, 3.f);
+	titleTextBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+
+	float fontSize = 30.0f;
+	float gapX = 10.0f;
+
+	FVector2D nameTextBasePivot = FVector2D(0.0f, 0.4f);
+	FVector2D nameTextBaseSize = FVector2D(220.0f, fontSize + 10.0f);
+	FVector2D nameTextBasePos = FVector2D(40.0f, 290.0f);
+
+	FVector2D distTextBasePivot = FVector2D(0.0f, 0.4f);
+	FVector2D distTextBaseSize = FVector2D(150.0f, fontSize + 10.0f);
+	FVector2D distTextBasePos = nameTextBasePos + FVector2D(nameTextBaseSize.x + gapX, 0.0f);
+
+	FVector2D itemBasePivot = FVector2D(0.5f, 0.5f);
+	// textBaseSize 높이보단 조금 작게
+	FVector2D itemBaseSize = FVector2D(fontSize, fontSize) + FVector2D::One * 0.5f;
+	FVector2D itemBasePos = distTextBasePos + FVector2D(distTextBaseSize.x + itemBaseSize.x * 0.5f, 0.0f);
+
+	mArrRankWidgetGroupByMap.resize(PLAYER_SIMPLE_RANK);
+
+	for (int i = 0; i < mArrRankWidgetGroupByMap.size(); i++)
+	{
+		FRankWidgetGroup group;
+
+		auto nameTextBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>("nameTextBlock_" + std::to_string(i));
+		AddWidget(nameTextBlock);
+		nameTextBlock->SetPivot(nameTextBasePivot);
+		nameTextBlock->SetSize(nameTextBaseSize);
+		nameTextBlock->SetPos(nameTextBasePos - FVector2D::Axis[EAxis::Y] * (nameTextBaseSize.y) * i);
+		nameTextBlock->SetText(PLAYER_EMPTY_TEXT);
+		nameTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
+		nameTextBlock->SetAlignH(ETextAlignH::Left);
+		nameTextBlock->SetFontSize(fontSize);
+		nameTextBlock->SetShadowEnable(false);
+		nameTextBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+		nameTextBlock->SetZOrder(ZORDER_LOBBY_PLAYER);
+		group.mPlayerText = nameTextBlock;
+
+		auto distTextBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>("distTextBlock_" + std::to_string(i));
+		AddWidget(distTextBlock);
+		distTextBlock->SetPivot(distTextBasePivot);
+		distTextBlock->SetSize(distTextBaseSize);
+		distTextBlock->SetPos(distTextBasePos - FVector2D::Axis[EAxis::Y] * (distTextBaseSize.y) * i);
+		distTextBlock->SetText((FormatWithCommaManual(12345) + L"m").c_str());
+		distTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
+		distTextBlock->SetAlignH(ETextAlignH::Left);
+		distTextBlock->SetFontSize(fontSize);
+		distTextBlock->SetShadowEnable(false);
+		distTextBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+		distTextBlock->SetZOrder(ZORDER_LOBBY_PLAYER);
+		group.mDistanceText = distTextBlock;
+
+		for (int j = 0; j < itemSlotCount; j++)
+		{
+			auto tempItemSlotImage = mScene->GetUIManager()->CreateWidget<CImage>("ItemSlotImage_" + std::to_string(i) + "_" + std::to_string(j));
+			AddWidget(tempItemSlotImage);
+			tempItemSlotImage->SetPivot(itemBasePivot);
+			tempItemSlotImage->SetSize(itemBaseSize);
+			tempItemSlotImage->SetPos(itemBasePos + FVector2D(nameTextBaseSize.y * 0.8f * j, (nameTextBaseSize.y) * i * -1.0f));
+			tempItemSlotImage->SetTexture(ITEM_EMPTY_SQUARE_NAME, ITEM_EMPTY_SQUARE_PATH);
+			tempItemSlotImage->SetColor(FVector4D::GetColorFromString(COLOR_White));
+			tempItemSlotImage->SetZOrder(ZORDER_LOBBY_PLAYER);
+			group.mArrPlayerSlotImage.push_back(tempItemSlotImage);
+
+			auto tempItemImage = mScene->GetUIManager()->CreateWidget<CImage>("ItemaImage_" + std::to_string(i) + "_" + std::to_string(j));
+			AddWidget(tempItemImage);
+			tempItemImage->SetPivot(itemBasePivot);
+			tempItemImage->SetSize(itemBaseSize * mSlotInnerItemSizeRate);
+			tempItemImage->SetPos(itemBasePos + FVector2D(nameTextBaseSize.y * 0.8f * j, (nameTextBaseSize.y) * i * -1.0f));
+			tempItemImage->SetTexture(ITEM_HP_ICON_NAME, ITEM_HP_ICON_PATH);
+			tempItemImage->SetColor(FVector4D::GetColorFromString(COLOR_White));
+			tempItemImage->SetZOrder(ZORDER_LOBBY_PLAYER_ITEM_ICON);
+			tempItemImage->SetEnable(false);
+			group.mArrPlayerItemImage.push_back(tempItemImage);
+		}
+
+		mArrRankWidgetGroupByMap[i] = group;
+	}
+}
+
 void CLobbyWidget::UpdatePlayerStat()
 {
 	auto playerController = dynamic_cast<IScenePlayerGraphicController*>(mScene);
@@ -1054,6 +1393,7 @@ void CLobbyWidget::OnMapLeftButtonClick()
 		curDifficultyIndex = CDataStorageManager::GetInst()->GetMapInfoCount() - 1;
 
 	UpdateMapInfo();
+	UpdateSimpleMapRankInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
@@ -1071,6 +1411,7 @@ void CLobbyWidget::OnMapRightButtonClick()
 		curDifficultyIndex = 0;
 
 	UpdateMapInfo();
+	UpdateSimpleMapRankInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{

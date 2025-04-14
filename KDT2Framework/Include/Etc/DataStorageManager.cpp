@@ -106,19 +106,19 @@ std::vector<FUserRankInfo> CDataStorageManager::GetArrayUserRankByCategory(
 
 		if (_mainCategoryType == ERankMenuTap::Map)
 		{
-			if (info.Map == _subCategoryValue)
-			{
+			if (_subCategoryValue < 0)
 				result.push_back(info);
-			}
+			else if (info.Map == _subCategoryValue)
+				result.push_back(info);
 		}
 		else if (_mainCategoryType == ERankMenuTap::Character)
 		{
-			if (info.Character == _subCategoryValue)
-			{
+			if (_subCategoryValue < 0)
 				result.push_back(info);
-			}
+			if (info.Character == _subCategoryValue)
+				result.push_back(info);
 		}
-		
+
 	}
 
 	std::sort(result.begin(), result.end()

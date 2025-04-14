@@ -50,7 +50,7 @@ protected:
 	std::vector<CSharedPtr<class CImage>> mArrItemImageInSlot;
 
 	// player list -> 깔끔하게 구조체로
-	struct PlayerWidgetGroup
+	struct FPlayerWidgetGroup
 	{
 		CSharedPtr<class CImage> mPlayerHostImage;
 		CSharedPtr<class CImage> mPlayerCheckBackImage;
@@ -58,7 +58,18 @@ protected:
 		std::vector<CSharedPtr<class CImage>> mArrPlayerSlotImage;
 		std::vector<CSharedPtr<class CImage>> mArrPlayerItemImage;
 	};
-	std::vector<PlayerWidgetGroup> mArrPlayerWidgetGroup;
+	std::vector<FPlayerWidgetGroup> mArrPlayerWidgetGroup;
+
+	// rank list
+	struct FRankWidgetGroup
+	{
+		CSharedPtr<class CTextBlock> mPlayerText;
+		CSharedPtr<class CTextBlock> mDistanceText;
+		std::vector<CSharedPtr<class CImage>> mArrPlayerSlotImage;
+		std::vector<CSharedPtr<class CImage>> mArrPlayerItemImage;
+	};
+	std::vector<FRankWidgetGroup> mArrRankWidgetGroupByCharacter;
+	std::vector<FRankWidgetGroup> mArrRankWidgetGroupByMap;
 
 	// 슬롯을 누르면 아이템이 윗쪽 방향 세로로 쭉 나온다
 	// 아이템 버튼들이 나왔을때 하나 선택(클릭) 하면 사라짐 3개
@@ -111,6 +122,8 @@ private:
 	void InitMapInfoText();
 	void InitItemInfoTooltip();
 	void InitOtherPlayersInfo();
+	void InitSimpleCharacterRankInfo();
+	void InitSimpleMapRankInfo();
 
 	void StartGame();
 
@@ -128,6 +141,8 @@ private:
 	void SetButton(class CButton& _button, const char* _name, const wchar_t* _path);
 
 	void UpdateOtherPlayerInfo();
+	void UpdateSimpleCharacterRankInfo();
+	void UpdateSimpleMapRankInfo();
 
 	// IObjectNetworkController을(를) 통해 상속됨
 	void AddListener() override;
