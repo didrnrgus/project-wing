@@ -472,7 +472,6 @@ struct FVector4D
 	static FVector4D Black;
 	static FVector4D White;
 	static FVector4D Green;
-	static FVector4D Yellow;
 	static FVector4D Gray;
 
 	static FVector4D GetColorFromString(std::string _colorName);

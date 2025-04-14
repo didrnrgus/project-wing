@@ -50,7 +50,7 @@ void CRankWidget::InitCommonUI()
 	mRankTitle->SetFontSize(60.0f);
 	mRankTitle->SetShadowEnable(true);
 	mRankTitle->SetShadowOffset(5.f, 5.f);
-	mRankTitle->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+	mRankTitle->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
 
 	mPrevButton = mScene->GetUIManager()->CreateWidget<CButton>(ARROW_SQUARE_RIGHT_NAME);
 	AddWidget(mPrevButton);
@@ -319,7 +319,7 @@ void CRankWidget::SetInfoTextBlock(CTextBlock* _textBlock, FVector2D _pivot, FVe
 	_textBlock->SetFontSize(mRowTextFontSize);
 	_textBlock->SetShadowEnable(true);
 	_textBlock->SetShadowOffset(3.f, 3.f);
-	_textBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+	_textBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
 }
 
 void CRankWidget::SetImage(CImage* _image, FVector2D _pivot, FVector2D _size, FVector2D _pos, FVector4D _color, const char* _imageName, const wchar_t* _imagePath)

@@ -91,7 +91,7 @@ void CInGameWidget::InitStartCountAndMyDistanceText()
 		mStartCountText->SetAlignH(ETextAlignH::Center);
 		mStartCountText->SetShadowEnable(true);
 		mStartCountText->SetShadowOffset(10.0f, 10.0f);
-		mStartCountText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+		mStartCountText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
 		mStartCountText->SetZOrder(ZORDER_INGAME_START_COUNT_TEXT);
 	}
 
@@ -112,7 +112,7 @@ void CInGameWidget::InitStartCountAndMyDistanceText()
 		mPlayDistanceText->SetAlignH(ETextAlignH::Right);
 		mPlayDistanceText->SetShadowEnable(true);
 		mPlayDistanceText->SetShadowOffset(5.f, 5.f);
-		mPlayDistanceText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+		mPlayDistanceText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
 		mPlayDistanceText->SetZOrder(ZORDER_INGAME_START_COUNT_TEXT);
 		mPlayDistanceText->SetEnable(false);
 	}
@@ -279,7 +279,7 @@ void CInGameWidget::InitOtherPlayersInfo()
 		_playerNameText->SetAlignH(ETextAlignH::Left);
 		_playerNameText->SetShadowEnable(true);
 		_playerNameText->SetShadowOffset(3.f, 3.f);
-		_playerNameText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+		_playerNameText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
 		_playerNameText->SetZOrder(ZORDER_INGAME_PLAY_OTHER_HP_BACK);
 
 		wchar_t _playerDistStr[64] = {};
@@ -297,7 +297,7 @@ void CInGameWidget::InitOtherPlayersInfo()
 		_distanceText->SetAlignH(ETextAlignH::Left);
 		_distanceText->SetShadowEnable(true);
 		_distanceText->SetShadowOffset(3.f, 3.f);
-		_distanceText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
+		_distanceText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
 		_distanceText->SetZOrder(ZORDER_INGAME_PLAY_OTHER_HP_BACK);
 		
 		CSharedPtr<CImage> _playerHpBack = mScene->GetUIManager()->CreateWidget<CImage>("_playerHpBack_" + std::to_string(_playerInfo.id));
