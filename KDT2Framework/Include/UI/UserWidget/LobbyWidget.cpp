@@ -10,7 +10,6 @@
 #include "Scene/SceneInGame.h"
 #include "Scene/SceneTitle.h"
 #include "Etc/DataStorageManager.h"
-#include "Etc/ConstValues.h"
 #include "Etc/ZOrderContainer.h"
 #include "Etc/NetworkManager.h"
 #include "Etc/ProcessManager.h"
@@ -39,7 +38,7 @@ CLobbyWidget::CLobbyWidget()
 		auto mapInfo = CDataStorageManager::GetInst()->GetMapInfo(i);
 		mArrMapDifficultyImagePath.push_back(FMapInfo::GetIconPath(i));
 		mArrMapDifficultyImageName.push_back(FMapInfo::GetIconName(i));
-		mArrMapDifficultyImageColor.push_back(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
+		mArrMapDifficultyImageColor.push_back(FVector4D::GetColorFromString(mapInfo.ColorName));
 	}
 
 	{ // 아이템 정보 세팅.
@@ -202,12 +201,12 @@ void CLobbyWidget::InitPlayerStatText()
 		textBlockName->SetSize(textSize);
 		textBlockName->SetPos(nameBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 10.0f) * i);
 		textBlockName->SetText(nameText.c_str());
-		textBlockName->SetTextColor(FVector4D::Green);
+		textBlockName->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		textBlockName->SetAlignH(ETextAlignH::Left);
 		textBlockName->SetFontSize(fontSize);
 		textBlockName->SetShadowEnable(true);
 		textBlockName->SetShadowOffset(3.f, 3.f);
-		textBlockName->SetTextShadowColor(FVector4D::Gray30);
+		textBlockName->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrPlayerStatNameText[i] = textBlockName;
 
 		AddWidget(textBlockValue);
@@ -220,7 +219,7 @@ void CLobbyWidget::InitPlayerStatText()
 		textBlockValue->SetFontSize(fontSize);
 		textBlockValue->SetShadowEnable(true);
 		textBlockValue->SetShadowOffset(3.f, 3.f);
-		textBlockValue->SetTextShadowColor(FVector4D::Gray30);
+		textBlockValue->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrPlayerStatValueText[i] = textBlockValue;
 	}
 }
@@ -250,12 +249,12 @@ void CLobbyWidget::InitMapInfoText()
 		textBlockName->SetSize(textSize);
 		textBlockName->SetPos(nameBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 15.0f) * i);
 		textBlockName->SetText(nameText.c_str());
-		textBlockName->SetTextColor(FVector4D::Green);
+		textBlockName->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		textBlockName->SetAlignH(ETextAlignH::Left);
 		textBlockName->SetFontSize(fontSize);
 		textBlockName->SetShadowEnable(true);
 		textBlockName->SetShadowOffset(3.f, 3.f);
-		textBlockName->SetTextShadowColor(FVector4D::Gray30);
+		textBlockName->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrMapInfoNameText[i] = textBlockName;
 
 		AddWidget(textBlockValue);
@@ -263,12 +262,12 @@ void CLobbyWidget::InitMapInfoText()
 		textBlockValue->SetSize(textSize);
 		textBlockValue->SetPos(valueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 15.0f) * i);
 		textBlockValue->SetText(valueText.c_str());
-		textBlockValue->SetTextColor(FVector4D::GetColorFromString(info.DifficultyColorName));
+		textBlockValue->SetTextColor(FVector4D::GetColorFromString(info.ColorName));
 		textBlockValue->SetAlignH(ETextAlignH::Left);
 		textBlockValue->SetFontSize(fontSize);
 		textBlockValue->SetShadowEnable(true);
 		textBlockValue->SetShadowOffset(3.f, 3.f);
-		textBlockValue->SetTextShadowColor(FVector4D::Gray30);
+		textBlockValue->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrMapInfoValueText[i] = textBlockValue;
 	}
 }
@@ -290,7 +289,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 	mToolTipShasdowImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mToolTipShasdowImage->SetPivot(backImagePivot);
 	mToolTipShasdowImage->SetSize(backShadowImageSize);
-	mToolTipShasdowImage->SetColor(FVector4D::Gray30);
+	mToolTipShasdowImage->SetColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 	mToolTipShasdowImage->SetPos(backShadowImagePos);
 	mToolTipShasdowImage->SetZOrder(ZORDER_LOBBY_TOOLTIP_SHADOW);
 
@@ -299,7 +298,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 	mToolTipBack2Image->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mToolTipBack2Image->SetPivot(backImagePivot);
 	mToolTipBack2Image->SetSize(back2ImageSize);
-	mToolTipBack2Image->SetColor(FVector4D::Green);
+	mToolTipBack2Image->SetColor(FVector4D::GetColorFromString(COLOR_Green));
 	mToolTipBack2Image->SetPos(back2ImagePos);
 	mToolTipBack2Image->SetZOrder(ZORDER_LOBBY_TOOLTIP_BACK);
 
@@ -308,7 +307,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 	mToolTipBackImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	mToolTipBackImage->SetPivot(backImagePivot);
 	mToolTipBackImage->SetSize(backImageSize);
-	mToolTipBackImage->SetColor(FVector4D::Black * 0.9f);
+	mToolTipBackImage->SetColor(FVector4D::GetColorFromString(COLOR_Black) * 0.9f);
 	mToolTipBackImage->SetPos(backImagePos);
 	mToolTipBackImage->SetZOrder(ZORDER_LOBBY_TOOLTIP);
 
@@ -337,11 +336,11 @@ void CLobbyWidget::InitItemInfoTooltip()
 		mArrItemInfoNameText[dataIndex]->SetSize(nameSize);
 		mArrItemInfoNameText[dataIndex]->SetPos(namePos - FVector2D::Axis[EAxis::Y] * nameSize.y * posIndex);
 		mArrItemInfoNameText[dataIndex]->SetText(nameText.c_str());
-		mArrItemInfoNameText[dataIndex]->SetTextColor(FVector4D::White);
+		mArrItemInfoNameText[dataIndex]->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
 		mArrItemInfoNameText[dataIndex]->SetFontSize(nameSize.y - 10.0f);
 		mArrItemInfoNameText[dataIndex]->SetAlignH(ETextAlignH::Left);
 		mArrItemInfoNameText[dataIndex]->SetShadowEnable(false);
-		mArrItemInfoNameText[dataIndex]->SetTextShadowColor(FVector4D::Gray30);
+		mArrItemInfoNameText[dataIndex]->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrItemInfoNameText[dataIndex]->SetZOrder(ZORDER_LOBBY_TOOLTIP_TEXT);
 
 		auto valueText = itemInfo.GetItemInfoWString(static_cast<EItemInfoText::Type>(dataIndex));
@@ -361,11 +360,11 @@ void CLobbyWidget::InitItemInfoTooltip()
 		}
 
 		mArrItemInfoValueText[dataIndex]->SetText(valueText.c_str());
-		mArrItemInfoValueText[dataIndex]->SetTextColor(FVector4D::Yellow);
+		mArrItemInfoValueText[dataIndex]->SetTextColor(FVector4D::GetColorFromString(COLOR_Yellow));
 		mArrItemInfoValueText[dataIndex]->SetFontSize(valueSize.y - 10.0f);
 		mArrItemInfoValueText[dataIndex]->SetAlignH(ETextAlignH::Left);
 		mArrItemInfoValueText[dataIndex]->SetShadowEnable(false);
-		mArrItemInfoValueText[dataIndex]->SetTextShadowColor(FVector4D::Gray30);
+		mArrItemInfoValueText[dataIndex]->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mArrItemInfoValueText[dataIndex]->SetZOrder(ZORDER_LOBBY_TOOLTIP_TEXT);
 	}
 
@@ -451,7 +450,7 @@ void CLobbyWidget::InitItemButtons()
 			, mArrSlotImagePath[(int)SlotType::ToAdd]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize);
-		buttonBackImage->SetColor(FVector4D::Green);
+		buttonBackImage->SetColor(FVector4D::GetColorFromString(COLOR_Green));
 		buttonBackImage->SetPos(tempPos);
 		buttonBackImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_SLOT);
 
@@ -462,7 +461,7 @@ void CLobbyWidget::InitItemButtons()
 		buttonImage->SetTexture(mArrItemImageName[i], mArrItemImagePath[i]);
 		buttonImage->SetPivot(FVector2D::One * 0.5f);
 		buttonImage->SetSize(mSlotSize * mSlotInnerItemSizeRate * mSlotInnerItemSizeRate);
-		buttonImage->SetColor(FVector4D::Green);
+		buttonImage->SetColor(FVector4D::GetColorFromString(COLOR_Green));
 		buttonImage->SetPos(tempPos);
 		buttonImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
 		buttonImage->SetEnable(false);
@@ -473,7 +472,7 @@ void CLobbyWidget::InitItemButtons()
 		mArrItemSlotButton.push_back(slotButton);
 		slotButton->SetSize(mSlotSize);
 		slotButton->SetPivot(FVector2D::One * 0.5f);
-		slotButton->SetColor(FVector4D::Transparent);
+		slotButton->SetColor(FVector4D::GetColorFromString(COLOR_Transparent));
 		slotButton->SetPos(tempPos);
 		slotButton->SetZOrder(ZORDER_LOBBY_MY_ITEM_BUTTON);
 		slotButton->SetEventCallback(EButtonEventState::Click
@@ -494,7 +493,7 @@ void CLobbyWidget::InitItemButtons()
 			, mArrSlotImagePath[(int)SlotType::Fully]);
 		buttonBackImage->SetPivot(FVector2D::One * 0.5f);
 		buttonBackImage->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 1));
-		buttonBackImage->SetColor(FVector4D::Black);
+		buttonBackImage->SetColor(FVector4D::GetColorFromString(COLOR_Black));
 		buttonBackImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_SLOT);
 		buttonBackImage->SetEnable(false);
 		mArrSlotImageInList.push_back(buttonBackImage);
@@ -505,7 +504,7 @@ void CLobbyWidget::InitItemButtons()
 			, mArrSlotImagePath[(int)SlotType::Added]);
 		buttonFrameImage->SetPivot(FVector2D::One * 0.5f);
 		buttonFrameImage->SetSize(mSlotSize * pow(mSlotInnerItemSizeRate, 1));
-		buttonFrameImage->SetColor(FVector4D::Green);
+		buttonFrameImage->SetColor(FVector4D::GetColorFromString(COLOR_Green));
 		buttonFrameImage->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
 		buttonFrameImage->SetEnable(false);
 		mArrSlotFrameImageInList.push_back(buttonFrameImage);
@@ -709,7 +708,7 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 		mArrPlayerWidgetGroup[i].mPlayerText->SetText(PLAYER_EMPTY_TEXT);
 
 		// character color init 
-		auto color = FVector4D::White;
+		auto color = FVector4D::GetColorFromString(COLOR_White);
 
 		// ready init 
 		color.w = 0.5f;
@@ -871,12 +870,12 @@ void CLobbyWidget::InitOtherPlayersInfo()
 	titleTextBlock->SetSize(FVector2D(500.0f, 50.0f));
 	titleTextBlock->SetPos(FVector2D(100.0f, 570.0f));
 	titleTextBlock->SetText(PLAYER_TITLE_TEXT);
-	titleTextBlock->SetTextColor(FVector4D::Green);
+	titleTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 	titleTextBlock->SetAlignH(ETextAlignH::Left);
 	titleTextBlock->SetFontSize(50.0f);
 	titleTextBlock->SetShadowEnable(true);
 	titleTextBlock->SetShadowOffset(3.f, 3.f);
-	titleTextBlock->SetTextShadowColor(FVector4D::Gray30);
+	titleTextBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 
 	// 120.0f, 490.0f
 	float fontSize = 30.0f;
@@ -910,7 +909,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 		tempPlayerCheckBackImage->SetSize(playerCheckBackSize);
 		tempPlayerCheckBackImage->SetPos(playerCheckBackPos - FVector2D::Axis[EAxis::Y] * (textBaseSize.y) * i);
 		tempPlayerCheckBackImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
-		tempPlayerCheckBackImage->SetColor(FVector4D::Gray30);
+		tempPlayerCheckBackImage->SetColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		tempPlayerCheckBackImage->SetZOrder(ZORDER_LOBBY_PLAYER_CHECK_BACK);
 		tempPlayerCheckBackImage->SetEnable(false);
 		group.mPlayerCheckBackImage = tempPlayerCheckBackImage;
@@ -921,12 +920,12 @@ void CLobbyWidget::InitOtherPlayersInfo()
 		tempTextBlock->SetSize(textBaseSize);
 		tempTextBlock->SetPos(textBasePos - FVector2D::Axis[EAxis::Y] * (textBaseSize.y) * i);
 		tempTextBlock->SetText(PLAYER_EMPTY_TEXT);
-		tempTextBlock->SetTextColor(FVector4D::White);
+		tempTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
 		tempTextBlock->SetOpacity(0.5f);
 		tempTextBlock->SetAlignH(ETextAlignH::Left);
 		tempTextBlock->SetFontSize(fontSize);
 		tempTextBlock->SetShadowEnable(false);
-		tempTextBlock->SetTextShadowColor(FVector4D::Gray30);
+		tempTextBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		tempTextBlock->SetZOrder(ZORDER_LOBBY_PLAYER);
 		group.mPlayerText = tempTextBlock;
 
@@ -936,7 +935,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 		tempHostImage->SetSize(hostBaseSize);
 		tempHostImage->SetPos(hostBasePos - FVector2D::Axis[EAxis::Y] * (textBaseSize.y) * i);
 		tempHostImage->SetTexture(TEXTURE_HOST_ICON_NAME, TEXTURE_HOST_ICON_PATH);
-		tempHostImage->SetColor(FVector4D::White);
+		tempHostImage->SetColor(FVector4D::GetColorFromString(COLOR_White));
 		tempHostImage->SetZOrder(ZORDER_LOBBY_PLAYER);
 		tempHostImage->SetEnable(false);
 		group.mPlayerHostImage = tempHostImage;
@@ -949,7 +948,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 			tempItemSlotImage->SetSize(itemBaseSize);
 			tempItemSlotImage->SetPos(itemBasePos + FVector2D(textBaseSize.y * 0.8f * j, (textBaseSize.y) * i * -1.0f));
 			tempItemSlotImage->SetTexture(ITEM_EMPTY_SQUARE_NAME, ITEM_EMPTY_SQUARE_PATH);
-			tempItemSlotImage->SetColor(FVector4D::White);
+			tempItemSlotImage->SetColor(FVector4D::GetColorFromString(COLOR_White));
 			tempItemSlotImage->SetZOrder(ZORDER_LOBBY_PLAYER);
 			group.mArrPlayerSlotImage.push_back(tempItemSlotImage);
 
@@ -959,7 +958,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 			tempItemImage->SetSize(itemBaseSize * mSlotInnerItemSizeRate);
 			tempItemImage->SetPos(itemBasePos + FVector2D(textBaseSize.y * 0.8f * j, (textBaseSize.y) * i * -1.0f));
 			tempItemImage->SetTexture(ITEM_HP_ICON_NAME, ITEM_HP_ICON_PATH);
-			tempItemImage->SetColor(FVector4D::White);
+			tempItemImage->SetColor(FVector4D::GetColorFromString(COLOR_White));
 			tempItemImage->SetZOrder(ZORDER_LOBBY_PLAYER_ITEM_ICON);
 			tempItemImage->SetEnable(false);
 			group.mArrPlayerItemImage.push_back(tempItemImage);
@@ -1040,7 +1039,7 @@ void CLobbyWidget::UpdateMapInfo()
 		auto valueText = info.GetInfoToWString(static_cast<EMapInfoText::Type>(i));
 
 		mArrMapInfoNameText[i]->SetText(nameText.c_str());
-		mArrMapInfoValueText[i]->SetTextColor(FVector4D::GetColorFromString(info.DifficultyColorName));
+		mArrMapInfoValueText[i]->SetTextColor(FVector4D::GetColorFromString(info.ColorName));
 		mArrMapInfoValueText[i]->SetText(valueText.c_str());
 	}
 }

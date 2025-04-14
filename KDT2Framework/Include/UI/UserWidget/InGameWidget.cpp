@@ -12,7 +12,6 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/MultiplayManager.h"
 #include "Etc/NetworkManager.h"
-#include "Etc/ConstValues.h"
 #include "Interface/IPlayerStatController.h"
 #include "Interface/IGamePlayStateController.h"
 #include "Object/PlayerInGameObject.h"
@@ -87,12 +86,12 @@ void CInGameWidget::InitStartCountAndMyDistanceText()
 		mStartCountText->SetSize(size);
 		mStartCountText->SetPos(pos);
 		mStartCountText->SetText(mStartCountTextArr[mStartCountTextArr.size() - 1]);
-		mStartCountText->SetTextColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
+		mStartCountText->SetTextColor(FVector4D::GetColorFromString(mapInfo.ColorName));
 		mStartCountText->SetFontSize(200.0f);
 		mStartCountText->SetAlignH(ETextAlignH::Center);
 		mStartCountText->SetShadowEnable(true);
 		mStartCountText->SetShadowOffset(10.0f, 10.0f);
-		mStartCountText->SetTextShadowColor(FVector4D::Gray30);
+		mStartCountText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mStartCountText->SetZOrder(ZORDER_INGAME_START_COUNT_TEXT);
 	}
 
@@ -108,12 +107,12 @@ void CInGameWidget::InitStartCountAndMyDistanceText()
 		mPlayDistanceText->SetSize(size);
 		mPlayDistanceText->SetPos(pos);
 		mPlayDistanceText->SetText((std::to_wstring(0) + L"m").c_str());
-		mPlayDistanceText->SetTextColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
+		mPlayDistanceText->SetTextColor(FVector4D::GetColorFromString(mapInfo.ColorName));
 		mPlayDistanceText->SetFontSize(100.0f);
 		mPlayDistanceText->SetAlignH(ETextAlignH::Right);
 		mPlayDistanceText->SetShadowEnable(true);
 		mPlayDistanceText->SetShadowOffset(5.f, 5.f);
-		mPlayDistanceText->SetTextShadowColor(FVector4D::Gray30);
+		mPlayDistanceText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		mPlayDistanceText->SetZOrder(ZORDER_INGAME_START_COUNT_TEXT);
 		mPlayDistanceText->SetEnable(false);
 	}
@@ -138,7 +137,7 @@ void CInGameWidget::InitTargetPlayerStat()
 	hpBackImage->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	hpBackImage->SetPivot(pivot);
 	hpBackImage->SetSize(backSize);
-	hpBackImage->SetColor(FVector4D::Gray70);
+	hpBackImage->SetColor(FVector4D::GetColorFromString(COLOR_LightGray));
 	hpBackImage->SetOpacity(0.5f);
 	hpBackImage->SetPos(backPos);
 
@@ -280,7 +279,7 @@ void CInGameWidget::InitOtherPlayersInfo()
 		_playerNameText->SetAlignH(ETextAlignH::Left);
 		_playerNameText->SetShadowEnable(true);
 		_playerNameText->SetShadowOffset(3.f, 3.f);
-		_playerNameText->SetTextShadowColor(FVector4D::Gray30);
+		_playerNameText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		_playerNameText->SetZOrder(ZORDER_INGAME_PLAY_OTHER_HP_BACK);
 
 		wchar_t _playerDistStr[64] = {};
@@ -298,7 +297,7 @@ void CInGameWidget::InitOtherPlayersInfo()
 		_distanceText->SetAlignH(ETextAlignH::Left);
 		_distanceText->SetShadowEnable(true);
 		_distanceText->SetShadowOffset(3.f, 3.f);
-		_distanceText->SetTextShadowColor(FVector4D::Gray30);
+		_distanceText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 		_distanceText->SetZOrder(ZORDER_INGAME_PLAY_OTHER_HP_BACK);
 		
 		CSharedPtr<CImage> _playerHpBack = mScene->GetUIManager()->CreateWidget<CImage>("_playerHpBack_" + std::to_string(_playerInfo.id));
@@ -308,7 +307,7 @@ void CInGameWidget::InitOtherPlayersInfo()
 		_playerHpBack->SetPivot(_pivotHpBack);
 		_playerHpBack->SetSize(_sizeHpBack);
 		_playerHpBack->SetPos(_posHpBack);
-		_playerHpBack->SetColor(FVector4D::Gray70);
+		_playerHpBack->SetColor(FVector4D::GetColorFromString(COLOR_LightGray));
 		_playerHpBack->SetZOrder(ZORDER_INGAME_PLAY_OTHER_HP_BACK);
 
 		CSharedPtr<CImage> _playerHp = mScene->GetUIManager()->CreateWidget<CImage>("_playerHp_" + std::to_string(_playerInfo.id));

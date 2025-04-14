@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "GameInfo.h"
-#include "Etc/ConstValues.h"
 
 struct FUserRankInfo
 {
@@ -68,7 +67,7 @@ namespace EMapInfoText
 {
 	"index": 0,
 	"name": "Easy",
-	"difficulty_color_name": "Cyan",
+	"color_name": "Cyan",
 	"difficulty_rate": 10.0,
 	"collision_damage": 20.0,
 	"obstacle_interval_time": 2.0,
@@ -84,7 +83,7 @@ struct FMapInfo
 {
 	int Index;
 	std::string Name;
-	std::string DifficultyColorName;
+	std::string ColorName;
 	float DifficultyRate;
 	float CollisionDamage;
 	float ObstacleIntervalTime;
@@ -129,7 +128,7 @@ struct FMapInfo
 		case EMapInfoText::Name:
 			return std::wstring(Name.begin(), Name.end());
 		case EMapInfoText::Color:
-			return std::wstring(DifficultyColorName.begin(), DifficultyColorName.end());
+			return std::wstring(ColorName.begin(), ColorName.end());
 		case EMapInfoText::DiffRate:
 			return std::to_wstring((int)DifficultyRate);
 		case EMapInfoText::ColDmg:
@@ -236,8 +235,9 @@ struct FCharacterState
 	"character_file": "character_list.json",
 	"item_file": "item_list.json",
 	"stat_file": "stat_type_list.json",
+	"color_file": "color_list.json",
 	"selectable_item_count": 3,
-	"rank_count_by_category": 5
+	"rank_count_by_category": 10
 }
 */
 struct FConfig
@@ -248,10 +248,32 @@ struct FConfig
 	std::string CharacterFileName;
 	std::string ItemFileName;
 	std::string StatFileName;
+	std::string ColorFileName;
 	int SelectableItemCount;
 	int RankCountByCategory;
 };
 
+/*
+{
+	"colors": [
+	  {
+		"color_name": "Magenta"
+		, "hex": "#FF00FFFF"
+		, "r": 1.0
+		, "g": 0.0
+		, "b": 1.0
+		, "a": 1.0 
+	},
+*/
+struct FColorInfo
+{
+	std::string ColorName;
+	std::string HexName;
+	float R;
+	float G;
+	float B;
+	float A;
+};
 
 /*
 {

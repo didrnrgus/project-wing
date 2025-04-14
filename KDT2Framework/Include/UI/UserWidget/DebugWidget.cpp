@@ -23,7 +23,7 @@ bool CDebugWidget::Init()
 	mDebugText->SetSize(FVector2D(500.0, 200.0f));
 	mDebugText->SetPos(FVector2D(0.0f, 0.0f));
 	mDebugText->SetText(L"DebugText");
-	mDebugText->SetTextColor(FVector4D::Red);
+	mDebugText->SetTextColor(FVector4D::GetColorFromString(COLOR_Red));
 	mDebugText->SetAlignH(ETextAlignH::Left);
 	mDebugText->SetFontSize(30.0f);
 	mDebugText->SetShadowEnable(false);

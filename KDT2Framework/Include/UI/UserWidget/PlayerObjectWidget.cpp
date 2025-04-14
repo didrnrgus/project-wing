@@ -25,12 +25,12 @@ bool CPlayerObjectWidget::Init()
 	mInfoText->SetSize(FVector2D(100.0f, 200.0f));
 	mInfoText->SetPos(FVector2D(0.0f, 0.0f));
 	mInfoText->SetText(L"InfoText");
-	mInfoText->SetTextColor(FVector4D::White);
+	mInfoText->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
 	mInfoText->SetAlignH(ETextAlignH::Left);
 	mInfoText->SetFontSize(30.0f);
 	mInfoText->SetShadowEnable(true);
 	mInfoText->SetShadowOffset(3.f, 3.f);
-	mInfoText->SetTextShadowColor(FVector4D::Gray30);
+	mInfoText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 	mInfoText->SetZOrder(ZORDER_INGAME_PLAY_OTHER_NAME_TAG);
 	return true;
 }

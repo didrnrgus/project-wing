@@ -50,7 +50,7 @@ bool CObstacleGroupObject::Init()
 		mRoot->AddChild(_image);
 		_image->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 		_image->SetPivot(0.5f, 0.5f);
-		_image->SetColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
+		_image->SetColor(FVector4D::GetColorFromString(mapInfo.ColorName));
 		_image->SetEnable(false);
 
 		auto _body = CreateComponent<CColliderOBB2D>("CColliderOBB2D");

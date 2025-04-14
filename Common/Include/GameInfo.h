@@ -34,6 +34,7 @@
 #include <dwrite_3.h>	// 위의 기능에 Window10 기능 추가
 #include <d2d1.h>
 
+#include "Etc/ConstValues.h"
 #include "Vector2D.h"
 #include "Vector3D.h"
 #include "Vector4D.h"

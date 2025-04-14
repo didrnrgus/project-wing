@@ -44,6 +44,24 @@ template<typename T>
 bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string, T>& datas) { return false; }
 
 template<>
+bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string, FColorInfo>& datas) 
+{
+	if (json.contains("colors") && json["colors"].is_array())
+	{
+		for (auto& jsonColorInfo : json["colors"])
+		{
+			auto _info = ParseJsonFColorInfo(jsonColorInfo);
+			datas.emplace(std::make_pair(_info.ColorName, _info));
+		}
+	}
+
+	if (datas.empty())
+		return false;
+
+	return true; 
+}
+
+template<>
 bool CJsonController::ParseJson(const nlohmann::json& json
 	, std::map<std::string, std::map<std::string, FSpriteSheetInfo>>& datas)
 {
@@ -85,45 +103,6 @@ bool CJsonController::ParseJson(const nlohmann::json& json, std::map<std::string
 		for (const auto& rankInfoJson : json[RESULT])
 		{
 			FUserRankInfo rankInfo = ParseJsonFUserRankInfo(rankInfoJson);
-			//std::string pageID = rankInfoJson[ID];
-
-			//// name
-			//if (rankInfoJson[PROPERTIES].contains("name")
-			//	&& rankInfoJson[PROPERTIES]["name"].contains("rich_text"))
-			//	rankInfo.Name = rankInfoJson[PROPERTIES]["name"]["rich_text"][0]["plain_text"].get<std::string>();
-
-			//// map
-			//if (rankInfoJson[PROPERTIES].contains("map")
-			//	&& rankInfoJson[PROPERTIES]["map"].contains(ATT_NUMBER))
-			//	rankInfo.Map = rankInfoJson[PROPERTIES]["map"][ATT_NUMBER].get<int>();
-
-			//// character
-			//if (rankInfoJson[PROPERTIES].contains("character")
-			//	&& rankInfoJson[PROPERTIES]["character"].contains(ATT_NUMBER))
-			//	rankInfo.Character = rankInfoJson[PROPERTIES]["character"][ATT_NUMBER].get<int>();
-
-			//// distance
-			//if (rankInfoJson[PROPERTIES].contains("distance")
-			//	&& rankInfoJson[PROPERTIES]["distance"].contains(ATT_NUMBER))
-			//	rankInfo.Distance = rankInfoJson[PROPERTIES]["distance"][ATT_NUMBER].get<int>();
-
-			//// item_0
-			//if (rankInfoJson[PROPERTIES].contains("item_0")
-			//	&& rankInfoJson[PROPERTIES]["item_0"].contains(ATT_NUMBER))
-			//	rankInfo.Item_0 = rankInfoJson[PROPERTIES]["item_0"][ATT_NUMBER].get<int>();
-
-			//// item_1
-			//if (rankInfoJson[PROPERTIES].contains("item_1")
-			//	&& rankInfoJson[PROPERTIES]["item_1"].contains(ATT_NUMBER))
-			//	rankInfo.Item_1 = rankInfoJson[PROPERTIES]["item_1"][ATT_NUMBER].get<int>();
-
-			//// item_2
-			//if (rankInfoJson[PROPERTIES].contains("item_2")
-			//	&& rankInfoJson[PROPERTIES]["item_2"].contains(ATT_NUMBER))
-			//	rankInfo.Item_2 = rankInfoJson[PROPERTIES]["item_2"][ATT_NUMBER].get<int>();
-
-			//rankInfo.PageId = pageID;
-
 			datas.emplace(std::pair<std::string, FUserRankInfo>(rankInfo.PageId, rankInfo));
 		}
 	}
@@ -291,6 +270,9 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FConfig& data)
 	if (json.contains("item_file"))
 		data.ItemFileName = json["item_file"].get<std::string>();
 
+	if (json.contains("color_file"))
+		data.ColorFileName = json["color_file"].get<std::string>();
+
 	if (json.contains("stat_file"))
 		data.StatFileName = json["stat_file"].get<std::string>();
 
@@ -312,8 +294,8 @@ bool CJsonController::ParseJson(const nlohmann::json& json, FMapInfo& data)
 	if (json.contains("name"))
 		data.Name = json["name"].get<std::string>();
 
-	if (json.contains("difficulty_color_name"))
-		data.DifficultyColorName = json["difficulty_color_name"].get<std::string>();
+	if (json.contains("color_name"))
+		data.ColorName = json["color_name"].get<std::string>();
 
 	if (json.contains("difficulty_rate"))
 		data.DifficultyRate = json["difficulty_rate"].get<float>();
@@ -437,6 +419,37 @@ FUserRankInfo CJsonController::ParseJsonFUserRankInfo(const nlohmann::json& json
 	}
 
 	return rankInfo;
+}
+
+FColorInfo CJsonController::ParseJsonFColorInfo(const nlohmann::json& json)
+{
+	FColorInfo colorInfo;
+
+	// ColorName
+	if (json.contains("color_name"))
+		colorInfo.ColorName = json["color_name"].get<std::string>();
+
+	// HexName
+	if (json.contains("hex"))
+		colorInfo.HexName = json["hex"].get<std::string>();
+
+	// R
+	if (json.contains("r"))
+		colorInfo.R = json["r"].get<float>();
+
+	// G
+	if (json.contains("g"))
+		colorInfo.G = json["g"].get<float>();
+
+	// B
+	if (json.contains("b"))
+		colorInfo.B = json["b"].get<float>();
+
+	// A
+	if (json.contains("a"))
+		colorInfo.A = json["a"].get<float>();
+
+	return colorInfo;
 }
 
 

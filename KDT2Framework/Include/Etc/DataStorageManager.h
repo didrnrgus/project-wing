@@ -9,6 +9,7 @@ private:
 	FConfig mConfigData;
 	std::map<int, FCharacterState> mCharacterInfoDatas;
 	std::map<std::string, FStatInfo> mStatInfoDatasByName;
+	std::map<std::string, FColorInfo> mColorInfoDatasByName;
 	std::map<int, FItemInfo> mItemInfoDatasByIndex;
 	std::map<int, FMapInfo> mMapInfoDatasByIndex;
 
@@ -31,6 +32,7 @@ public:
 	void SetConfigData(std::string strJson);
 	void SetCharacterData(std::string strJson);
 	void SetStatInfoData(std::string strJson);
+	void SetColorInfoData(std::string strJson);
 	void SetItemInfoData(std::string strJson);
 	void SetMapData(std::string strJson);
 	void SetSpriteAtlasInfo(std::string strJson);
@@ -116,6 +118,10 @@ public:
 	inline const FItemInfo GetItemInfoDataByIndex(int index) { return mItemInfoDatasByIndex[index]; }
 	inline const int GetCurSelectedItemIDBySlotIndex(int index) { return curSelectedItemIndex[index]; }
 	std::vector<FUserRankInfo> GetArrayUserRankByCategory(ERankMenuTap::Type _mainCategoryType, int _subCategoryValue);
+	inline const FColorInfo GetColorInfoFromName(std::string _colorName)
+	{
+		return mColorInfoDatasByName[_colorName];
+	}
 private:
 	DECLARE_SINGLE(CDataStorageManager)
 };

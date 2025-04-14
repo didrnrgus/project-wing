@@ -90,12 +90,12 @@ void CResultWidget::InitCommonUI()
 	mResultTitle->SetSize(FVector2D(500.0f, 100.0f));
 	mResultTitle->SetPos(FVector2D(mResolution.x * 0.5f, mResolution.y * 0.95f));
 	mResultTitle->SetText(L"RESULT");
-	mResultTitle->SetTextColor(FVector4D::Green);
+	mResultTitle->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 	mResultTitle->SetAlignH(ETextAlignH::Center);
 	mResultTitle->SetFontSize(60.0f);
 	mResultTitle->SetShadowEnable(true);
 	mResultTitle->SetShadowOffset(5.f, 5.f);
-	mResultTitle->SetTextShadowColor(FVector4D::Gray30);
+	mResultTitle->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 
 	mNewRecordText = mScene->GetUIManager()->CreateWidget<CTextBlock>("mNewRecordText");
 	AddWidget(mNewRecordText);
@@ -103,13 +103,13 @@ void CResultWidget::InitCommonUI()
 	mNewRecordText->SetSize(FVector2D(200.0f, 30.0f));
 	mNewRecordText->SetPos(FVector2D(120.0f, 660.0f));
 	mNewRecordText->SetText(L"[NEW RECORD!!]");
-	mNewRecordText->SetTextColor(FVector4D::Green);
+	mNewRecordText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 	mNewRecordText->SetAlignH(ETextAlignH::Left);
 	mNewRecordText->SetAlignV(ETextAlignV::Top);
 	mNewRecordText->SetFontSize(20);
 	mNewRecordText->SetShadowEnable(true);
 	mNewRecordText->SetShadowOffset(3.f, 3.f);
-	mNewRecordText->SetTextShadowColor(FVector4D::Gray30);
+	mNewRecordText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 	bool _isNewRecord =
 		CDataStorageManager::GetInst()->GetIsNewRecord()
 		&& !CNetworkManager::GetInst()->IsMultiplay();
@@ -150,7 +150,7 @@ void CResultWidget::InitMemu()
 		_menuTapText->SetSize(_sizeMain);
 		_menuTapText->SetPos(_basePosMain + FVector2D((_sizeMain.x + _gapMainX) * i, 0.0f));
 		_menuTapText->SetText(ToUpperWString(mArrMenuTapText[i]).c_str());
-		_menuTapText->SetTextColor(FVector4D::Green);
+		_menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		_menuTapText->SetAlignH(ETextAlignH::Center);
 		_menuTapText->SetFontSize(mMenuTextFontSize);
 		_menuTapText->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
@@ -160,7 +160,7 @@ void CResultWidget::InitMemu()
 		AddWidget(_menuTapButton);
 		_menuTapButton->SetPivot(_pivotMain);
 		_menuTapButton->SetSize(_sizeMain);
-		_menuTapButton->SetColor(FVector4D::Transparent);
+		_menuTapButton->SetColor(FVector4D::GetColorFromString(COLOR_Transparent));
 		_menuTapButton->SetPos(_basePosMain + FVector2D((_sizeMain.x + _gapMainX) * i, 0.0f));
 		_menuTapButton->SetZOrder(ZORDER_LOBBY_MY_ITEM_BUTTON);
 		_menuTapButton->SetEventCallback(EButtonEventState::Click
@@ -193,7 +193,7 @@ void CResultWidget::InitMemu()
 		_menuTapText->SetSize(_sizeSub);
 		_menuTapText->SetPos(_basePosSub + FVector2D((_sizeSub.x + _gapSubX) * i, 0.0f));
 		_menuTapText->SetText(ToUpperWString(_mapInfo.Name).c_str());
-		_menuTapText->SetTextColor(FVector4D::Green);
+		_menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		_menuTapText->SetAlignH(ETextAlignH::Center);
 		_menuTapText->SetFontSize(mMenuTextFontSize - 5.0f);
 		_menuTapText->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
@@ -203,7 +203,7 @@ void CResultWidget::InitMemu()
 		AddWidget(_menuTapButton);
 		_menuTapButton->SetPivot(_pivotSub);
 		_menuTapButton->SetSize(_sizeSub);
-		_menuTapButton->SetColor(FVector4D::Transparent);
+		_menuTapButton->SetColor(FVector4D::GetColorFromString(COLOR_Transparent));
 		_menuTapButton->SetPos(_basePosSub + FVector2D((_sizeSub.x + _gapSubX) * i, 0.0f));
 		_menuTapButton->SetZOrder(ZORDER_LOBBY_MY_ITEM_BUTTON);
 		_menuTapButton->SetEventCallback(EButtonEventState::Click
@@ -231,7 +231,7 @@ void CResultWidget::InitMemu()
 		_menuTapText->SetSize(_sizeSub);
 		_menuTapText->SetPos(_basePosSub + FVector2D((_sizeSub.x + _gapSubX) * i, 0.0f));
 		_menuTapText->SetText(ToUpperWString(_characterInfo.Name).c_str());
-		_menuTapText->SetTextColor(FVector4D::Green);
+		_menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		_menuTapText->SetAlignH(ETextAlignH::Center);
 		_menuTapText->SetFontSize(mMenuTextFontSize - 5.0f);
 		_menuTapText->SetZOrder(ZORDER_LOBBY_MY_ITEM_ICON);
@@ -242,7 +242,7 @@ void CResultWidget::InitMemu()
 		AddWidget(_menuTapButton);
 		_menuTapButton->SetPivot(_pivotSub);
 		_menuTapButton->SetSize(_sizeSub);
-		_menuTapButton->SetColor(FVector4D::Transparent);
+		_menuTapButton->SetColor(FVector4D::GetColorFromString(COLOR_Transparent));
 		_menuTapButton->SetPos(_basePosSub + FVector2D((_sizeSub.x + _gapSubX) * i, 0.0f));
 		_menuTapButton->SetZOrder(ZORDER_LOBBY_MY_ITEM_BUTTON);
 		_menuTapButton->SetEventCallback(EButtonEventState::Click
@@ -276,7 +276,7 @@ void CResultWidget::InitProperty(FVector2D _basePos)
 	FVector2D _posDistance = _posCharacter + FVector2D(_sizeCharacter.x + _gapX, 0.0f);
 	FVector2D _posItem = _posDistance + FVector2D(_sizeDistance.x + _gapX + 20.0f, 0.0f);
 
-	FVector4D _color = FVector4D::White;
+	FVector4D _color = FVector4D::GetColorFromString(COLOR_White);
 
 	CSharedPtr<CTextBlock> _nameProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_nameProp");
 	AddWidget(_nameProp);
@@ -323,7 +323,7 @@ void CResultWidget::InitMyResultScore()
 	auto _mapStat = CDataStorageManager::GetInst()->GetMapInfo(_myResultInfo.Map);
 	auto _charStat = CDataStorageManager::GetInst()->GetCharacterState(_myResultInfo.Character);
 
-	_printGroup.mapText->SetTextColor(FVector4D::GetColorFromString(_mapStat.DifficultyColorName));
+	_printGroup.mapText->SetTextColor(FVector4D::GetColorFromString(_mapStat.ColorName));
 	_printGroup.characterText->SetTextColor(FVector4D::GetColorFromString(_charStat.ColorName));
 
 	_printGroup.nameText->SetText(std::wstring(_myResultInfo.Name.begin(), _myResultInfo.Name.end()).c_str());
@@ -363,7 +363,7 @@ void CResultWidget::SetPositionUserPrintRow(FUserPrintGroup& _groupOut, FVector2
 	FVector2D _posCharacter = _posMap + FVector2D(_sizeMap.x + _gapX, 0.0f);
 	FVector2D _posDistance = _posCharacter + FVector2D(_sizeCharacter.x + _gapX, 0.0f);
 
-	FVector4D _color = FVector4D::White;
+	FVector4D _color = FVector4D::GetColorFromString(COLOR_White);
 
 	CSharedPtr<CTextBlock> _nameText = mScene->GetUIManager()->CreateWidget<CTextBlock>("_nameText");
 	AddWidget(_nameText);
@@ -418,7 +418,7 @@ void CResultWidget::SetInfoTextBlock(CTextBlock* _textBlock, FVector2D _pivot, F
 	_textBlock->SetFontSize(mRowTextFontSize);
 	_textBlock->SetShadowEnable(true);
 	_textBlock->SetShadowOffset(3.f, 3.f);
-	_textBlock->SetTextShadowColor(FVector4D::Gray30);
+	_textBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 }
 
 void CResultWidget::SetImage(CImage* _image, FVector2D _pivot, FVector2D _size, FVector2D _pos, FVector4D _color, const char* _imageName, const wchar_t* _imagePath)
@@ -442,9 +442,9 @@ void CResultWidget::OnClickMainCategoryMenuTapButton(ERankMenuTap::Type _tap)
 	for (int i = 0; i < mArrMainCategoryMenuTap.size(); i++)
 	{
 		if (i == (int)mCurMainCategoryMenuTap)
-			mArrMainCategoryMenuTap[i].menuTapText->SetTextColor(FVector4D::Green);
+			mArrMainCategoryMenuTap[i].menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		else
-			mArrMainCategoryMenuTap[i].menuTapText->SetTextColor(FVector4D::Green * 0.5f);
+			mArrMainCategoryMenuTap[i].menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green) * 0.5f);
 	}
 
 	{// 서브카테고리 이전 SetEnable
@@ -470,10 +470,10 @@ void CResultWidget::OnClickMainCategoryMenuTapButton(ERankMenuTap::Type _tap)
 		auto& _arrSub = mArrSubCategoryMunuTap[mCurMainCategoryMenuTap];
 
 		for (auto& _sub : _arrSub)
-			_sub.menuTapText->SetTextColor(FVector4D::Green * 0.5f);
+			_sub.menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green) * 0.5f);
 
 		// 서브 카테고리 중 선택된 탭 활성화 -> 색깔변화
-		_arrSub[mCurSubCategoryMenuTap[mCurMainCategoryMenuTap]].menuTapText->SetTextColor(FVector4D::Green);
+		_arrSub[mCurSubCategoryMenuTap[mCurMainCategoryMenuTap]].menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 	}
 
 	// 현재 메인 / 서브 카테고리에 맞는 데이터 가져옴.
@@ -496,9 +496,9 @@ void CResultWidget::OnClickSubCategoryMenuTapButton(int _index)
 	// 현재 메인 카테고리 -> 서브 카테고리 업데이트 -> 서브 카테고리 색 변화.
 	auto& _arrSub = mArrSubCategoryMunuTap[_menuTapIndex];
 	for (auto& _sub : _arrSub)
-		_sub.menuTapText->SetTextColor(FVector4D::Green * 0.5f);
+		_sub.menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green) * 0.5f);
 
-	_arrSub[mCurSubCategoryMenuTap[_menuTapIndex]].menuTapText->SetTextColor(FVector4D::Green);
+	_arrSub[mCurSubCategoryMenuTap[_menuTapIndex]].menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 
 	// 데이터 가져오기.
 	std::vector<FUserRankInfo> _arrRankInfo;
@@ -547,9 +547,9 @@ void CResultWidget::UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo)
 		_printGroup.characterText->SetEnable(true);
 		_printGroup.distanceText->SetEnable(true);
 
-		_printGroup.mapText->SetTextColor(FVector4D::GetColorFromString(_mapStat.DifficultyColorName));
+		_printGroup.mapText->SetTextColor(FVector4D::GetColorFromString(_mapStat.ColorName));
 		_printGroup.characterText->SetTextColor(FVector4D::GetColorFromString(_charStat.ColorName));
-		_printGroup.nameText->SetTextColor(FVector4D::White);
+		_printGroup.nameText->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
 
 		if (CNetworkManager::GetInst()->IsMultiplay())
 		{
@@ -557,14 +557,14 @@ void CResultWidget::UpdateUserRankPrint(std::vector<FUserRankInfo> _arrInfo)
 			int _multiplayId = _info.MultiPlayId;
 
 			if(_myId == _multiplayId)
-				_printGroup.nameText->SetTextColor(FVector4D::Green);
+				_printGroup.nameText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		}
 		else
 		{
 			auto _myInfo = CDataStorageManager::GetInst()->GetCurUserResult();
 
 			if (_info.PageId.compare(_myInfo.PageId.c_str()) == 0) 
-				_printGroup.nameText->SetTextColor(FVector4D::Green);
+				_printGroup.nameText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		}
 
 		std::wstring _outName;

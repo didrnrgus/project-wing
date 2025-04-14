@@ -1,72 +1,19 @@
 ﻿#pragma once
 
 #include "Vector4D.h"
+#include "Etc/DataStorageManager.h"
 
-
-#ifdef _DEBUG
-FVector4D FVector4D::Transparent = { 1.f, 1.f, 1.f, 0.1f };
-#else
-FVector4D FVector4D::Transparent = { 1.f, 1.f, 1.f, 0.0f };
-#endif // !_DEBUG
-
+FVector4D FVector4D::Transparent = { 0.f, 0.f, 0.f, 0.0f };
 FVector4D FVector4D::Black = { 0.f, 0.f, 0.f, 1.f };
 FVector4D FVector4D::White = { 1.f, 1.f, 1.f, 1.f };
-FVector4D FVector4D::Red = { 1.f, 0.f, 0.f, 1.f };
-FVector4D FVector4D::Blue = { 0.f, 0.f, 1.f, 1.f };
 FVector4D FVector4D::Green = { 0.f, 1.f, 0.f, 1.f };
 FVector4D FVector4D::Yellow = { 1.f, 1.f, 0.f, 1.f };
-FVector4D FVector4D::Cyan = { 0.f, 1.f, 1.f, 1.f };
-FVector4D FVector4D::Pink = { 0.82f, 0.55f, 1.f, 1.f };
-FVector4D FVector4D::Orange = { 1.f, 0.53f, 0.27f, 1.f };
+FVector4D FVector4D::Gray = { 0.5f, 0.5f, 0.5f, 1.f };
 
-FVector4D FVector4D::Gray10 = { 0.1f, 0.1f, 0.1f, 1.f };
-FVector4D FVector4D::Gray20 = { 0.2f, 0.2f, 0.2f, 1.f };
-FVector4D FVector4D::Gray30 = { 0.3f, 0.3f, 0.3f, 1.f };
-FVector4D FVector4D::Gray40 = { 0.4f, 0.4f, 0.4f, 1.f };
-FVector4D FVector4D::Gray50 = { 0.5f, 0.5f, 0.5f, 1.f };
-FVector4D FVector4D::Gray60 = { 0.6f, 0.6f, 0.6f, 1.f };
-FVector4D FVector4D::Gray70 = { 0.7f, 0.7f, 0.7f, 1.f };
-FVector4D FVector4D::Gray80 = { 0.8f, 0.8f, 0.8f, 1.f };
-FVector4D FVector4D::Gray90 = { 0.9f, 0.9f, 0.9f, 1.f };
-
-FVector4D FVector4D::GetColorFromString(std::string colorName)
+FVector4D FVector4D::GetColorFromString(std::string _colorName)
 {
-	if (strcmp(colorName.c_str(), "Black") == 0)
-	{
-		return FVector4D::Black;
-	}
-	else if (strcmp(colorName.c_str(), "White") == 0)
-	{
-		return FVector4D::White;
-	}
-	else if (strcmp(colorName.c_str(), "Red") == 0)
-	{
-		return FVector4D::Red;
-	}
-	else if (strcmp(colorName.c_str(), "Blue") == 0)
-	{
-		return FVector4D::Blue;
-	}
-	else if (strcmp(colorName.c_str(), "Green") == 0)
-	{
-		return FVector4D::Green;
-	}
-	else if (strcmp(colorName.c_str(), "Yellow") == 0)
-	{
-		return FVector4D::Yellow;
-	}
-	else if (strcmp(colorName.c_str(), "Cyan") == 0)
-	{
-		return FVector4D::Cyan;
-	}
-	else if (strcmp(colorName.c_str(), "Pink") == 0)
-	{
-		return FVector4D::Pink;
-	}
-	else if (strcmp(colorName.c_str(), "Orange") == 0)
-	{
-		return FVector4D::Orange;
-	}
+	auto _info = CDataStorageManager::GetInst()->GetColorInfoFromName(_colorName);
 
-	return FVector4D::White;
+	FVector4D _color(_info.R, _info.G, _info.B, _info.A);
+	return _color;
 }

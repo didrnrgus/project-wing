@@ -468,26 +468,12 @@ struct FVector4D
 
 #pragma endregion Function
 
-	static FVector4D	Transparent;
-	static FVector4D	Black;
-	static FVector4D	White;
-	static FVector4D	Red;
-	static FVector4D	Blue;
-	static FVector4D	Green;
-	static FVector4D	Yellow;
-	static FVector4D	Cyan;
-	static FVector4D	Pink;
-	static FVector4D	Orange;
+	static FVector4D Transparent;
+	static FVector4D Black;
+	static FVector4D White;
+	static FVector4D Green;
+	static FVector4D Yellow;
+	static FVector4D Gray;
 
-	static FVector4D	Gray10;
-	static FVector4D	Gray20;
-	static FVector4D	Gray30;
-	static FVector4D	Gray40;
-	static FVector4D	Gray50;
-	static FVector4D	Gray60;
-	static FVector4D	Gray70;
-	static FVector4D	Gray80;
-	static FVector4D	Gray90;
-
-	static FVector4D GetColorFromString(std::string colorName);
+	static FVector4D GetColorFromString(std::string _colorName);
 };

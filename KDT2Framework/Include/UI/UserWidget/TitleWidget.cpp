@@ -58,7 +58,7 @@ bool CTitleWidget::Init()
 	mTitleText->SetFontSize(100.0f);
 	mTitleText->SetShadowEnable(true);
 	mTitleText->SetShadowOffset(5.f, 5.f);
-	mTitleText->SetTextShadowColor(FVector4D::Gray30);
+	mTitleText->SetTextShadowColor(FVector4D::Gray);
 
 	FVector2D size = FVector2D(200.0f, 100.0f);
 	FVector2D singlePos = FVector2D(mResolution.x * 0.5f, mResolution.y * 0.15f * 4) - size * 0.5f;
@@ -135,7 +135,7 @@ void CTitleWidget::SetButtonWithTextBlock(ETitleUIType _type
 	textBlock->SetFontSize(30.f);
 	textBlock->SetShadowEnable(true);
 	textBlock->SetShadowOffset(3.f, 3.f);
-	textBlock->SetTextShadowColor(FVector4D::Gray30);
+	textBlock->SetTextShadowColor(FVector4D::Gray);
 }
 
 void CTitleWidget::LoadGameData()
@@ -155,14 +155,6 @@ void CTitleWidget::LoadGameData()
 			CLog::PrintLog("configResult: " + configResult);
 			CDataStorageManager::GetInst()->SetConfigData(configResult);
 
-			// characters load
-			AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽", mIsSkip);
-			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
-			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
-			std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-			CLog::PrintLog("charactersResult: " + charactersResult);
-			CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
-
 			// maps load
 			AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️", mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
@@ -174,13 +166,13 @@ void CTitleWidget::LoadGameData()
 				CDataStorageManager::GetInst()->SetMapData(mapResult);
 			}
 
-			// stat load
-			AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력.스피드.민첩.디펜스 4가지가 있어요.", mIsSkip);
+			// characters load
+			AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽", mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
-			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
-			std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
-			CLog::PrintLog("statsResult: " + statsResult);
-			CDataStorageManager::GetInst()->SetStatInfoData(statsResult);
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
+			std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("charactersResult: " + charactersResult);
+			CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
 
 			// item load
 			AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 소유한 아이템의 스텟 패시브 효과만 있어요.", mIsSkip);
@@ -189,7 +181,24 @@ void CTitleWidget::LoadGameData()
 			std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
 			CLog::PrintLog("itemResult: " + itemResult);
 			CDataStorageManager::GetInst()->SetItemInfoData(itemResult);
+			
+			// stat load
+			AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력.스피드.민첩.디펜스 4가지가 있어요.", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
+			std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("statsResult: " + statsResult);
+			CDataStorageManager::GetInst()->SetStatInfoData(statsResult);
 
+			// color load
+			AddQueueLoadingDescText(L"컬러 데이터를 로딩 중 입니다.\n🎨✖️30", mIsSkip);
+			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
+			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ColorFileName;
+			std::string colorResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
+			CLog::PrintLog("colorResult: " + colorResult);
+			CDataStorageManager::GetInst()->SetColorInfoData(colorResult);
+
+			// 컨피그 관련 데이터 로드 끝 표시.
 			CDataStorageManager::GetInst()->SetIsLoadedData(true);
 
 			CTaskManager::GetInst()->RemoveTask(mTaskID);

@@ -1,7 +1,6 @@
 ﻿#pragma once
 
 #include "GameInfo.h"
-#include "Etc/ConstValues.h"
 #include "Etc/JsonContainer.h"
 
 namespace nlohmann
@@ -49,6 +48,7 @@ public:
 	FLineNode ParseJsonFLineNode(const nlohmann::json& json);
 	FSpriteSheetInfo ParseJsonFSpriteSheetInfo(const nlohmann::json& json);
 	FUserRankInfo ParseJsonFUserRankInfo(const nlohmann::json& json);
+	FColorInfo ParseJsonFColorInfo(const nlohmann::json& json);
 
 	std::string ReadJsonFile(const std::string& filePath)
 	{

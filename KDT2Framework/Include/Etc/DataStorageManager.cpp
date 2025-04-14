@@ -48,6 +48,12 @@ void CDataStorageManager::SetStatInfoData(std::string strJson)
 	CJsonController::GetInst()->ParseJson(json, mStatInfoDatasByName);
 }
 
+void CDataStorageManager::SetColorInfoData(std::string strJson)
+{
+	nlohmann::json json = nlohmann::json::parse(strJson);
+	CJsonController::GetInst()->ParseJson(json, mColorInfoDatasByName);
+}
+
 void CDataStorageManager::SetItemInfoData(std::string strJson)
 {
 	nlohmann::json json = nlohmann::json::parse(strJson);

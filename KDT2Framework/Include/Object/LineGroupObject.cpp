@@ -6,7 +6,6 @@
 #include "Scene/Input.h"
 #include "Scene/Scene.h"
 #include "Etc/DataStorageManager.h"
-#include "Etc/ConstValues.h"
 #include "Interface/IPlayerStatController.h"
 #include "Interface/IGamePlayStateController.h"
 
@@ -96,7 +95,7 @@ void CLineGroupObject::AddLine(ELinePosType::Type type, int lineNodeIndex)
 	tempSpriteComp->SetTexture(TEXTURE_BASIC_NAME, TEXTURE_BASIC_PATH);
 	tempSpriteComp->SetPivot(FVector2D::Axis[EAxis::X] * 0.5f);
 
-	tempSpriteComp->SetColor(FVector4D::GetColorFromString(mapInfo.DifficultyColorName));
+	tempSpriteComp->SetColor(FVector4D::GetColorFromString(mapInfo.ColorName));
 #ifdef _DEBUG
 	tempSpriteComp->SetOpacity(0.5f);
 #endif // _DEBUG
