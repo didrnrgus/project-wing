@@ -58,7 +58,7 @@ bool CSceneWidget::Init()
 	mLoadingText->SetFontSize(30.f);
 	mLoadingText->SetShadowEnable(true);
 	mLoadingText->SetShadowOffset(3.f, 3.f);
-	mLoadingText->SetTextShadowColor(FVector4D::Gray);
+	mLoadingText->SetTextShadowColor(FVector4D::DarkGray);
 	mLoadingText->SetSize(loadingSize);
 	mLoadingText->SetPos(FVector2D(RS.Width, RS.Height) * 0.5f - loadingSize * 0.5f - FVector2D(0.0f, 60.0f));
 	mLoadingText->SetZOrder(ZORDER_LOADING);
@@ -73,7 +73,7 @@ bool CSceneWidget::Init()
 	mLoadingDescText->SetFontSize(30.f);
 	mLoadingDescText->SetShadowEnable(true);
 	mLoadingDescText->SetShadowOffset(3.f, 3.f);
-	mLoadingDescText->SetTextShadowColor(FVector4D::Gray);
+	mLoadingDescText->SetTextShadowColor(FVector4D::DarkGray);
 	mLoadingDescText->SetSize(descSize);
 	mLoadingDescText->SetPos(FVector2D(RS.Width, RS.Height) * 0.5f - descSize * 0.5f + FVector2D::Axis[EAxis::Y] * 40);
 	mLoadingDescText->SetZOrder(ZORDER_LOADING);

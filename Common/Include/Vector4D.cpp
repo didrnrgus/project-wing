@@ -7,7 +7,7 @@ FVector4D FVector4D::Transparent = { 0.f, 0.f, 0.f, 0.0f };
 FVector4D FVector4D::Black = { 0.f, 0.f, 0.f, 1.f };
 FVector4D FVector4D::White = { 1.f, 1.f, 1.f, 1.f };
 FVector4D FVector4D::Green = { 0.f, 1.f, 0.f, 1.f };
-FVector4D FVector4D::Gray = { 0.5f, 0.5f, 0.5f, 1.f };
+FVector4D FVector4D::DarkGray = { 0.3f, 0.3f, 0.3f, 1.f };
 
 FVector4D FVector4D::GetColorFromString(std::string _colorName)
 {

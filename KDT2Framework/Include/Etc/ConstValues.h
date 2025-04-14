@@ -5,7 +5,7 @@
 #define IP_ADDRESS_DEFAULT_A "127.0.0.1"
 #define NICKNAME_DEFAULT_A "Unknown"
 #define TITLE_FORMAT TEXT("ProjectWing | Nickname: %s | Host IP: %s")
-#define PLAYER_COUNT_MAX 5
+#define PLAYER_COUNT_MAX 8
 #define PLAYER_ITEM_COUNT_MAX 3
 #define PLAYER_ITEM_TYPE_DEFAULT_INDEX -1
 #define PLAYER_EMPTY_TEXT L"Player_Empty"
@@ -115,7 +115,6 @@
 #define COLOR_Indigo "Indigo"
 #define COLOR_Navy "Navy"
 #define COLOR_SkyBlue "SkyBlue"
-#define COLOR_SlateGray "SlateGray"
 #define COLOR_Gray "Gray"
 #define COLOR_DarkGray "DarkGray"
 #define COLOR_LightGray "LightGray"

@@ -58,7 +58,7 @@ bool CTitleWidget::Init()
 	mTitleText->SetFontSize(100.0f);
 	mTitleText->SetShadowEnable(true);
 	mTitleText->SetShadowOffset(5.f, 5.f);
-	mTitleText->SetTextShadowColor(FVector4D::Gray);
+	mTitleText->SetTextShadowColor(FVector4D::DarkGray);
 
 	FVector2D size = FVector2D(200.0f, 100.0f);
 	FVector2D singlePos = FVector2D(mResolution.x * 0.5f, mResolution.y * 0.15f * 4) - size * 0.5f;
@@ -135,7 +135,7 @@ void CTitleWidget::SetButtonWithTextBlock(ETitleUIType _type
 	textBlock->SetFontSize(30.f);
 	textBlock->SetShadowEnable(true);
 	textBlock->SetShadowOffset(3.f, 3.f);
-	textBlock->SetTextShadowColor(FVector4D::Gray);
+	textBlock->SetTextShadowColor(FVector4D::DarkGray);
 }
 
 void CTitleWidget::LoadGameData()

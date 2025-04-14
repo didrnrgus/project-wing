@@ -30,7 +30,7 @@ bool CPlayerObjectWidget::Init()
 	mInfoText->SetFontSize(30.0f);
 	mInfoText->SetShadowEnable(true);
 	mInfoText->SetShadowOffset(3.f, 3.f);
-	mInfoText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
+	mInfoText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 	mInfoText->SetZOrder(ZORDER_INGAME_PLAY_OTHER_NAME_TAG);
 	return true;
 }

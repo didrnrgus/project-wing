@@ -95,7 +95,7 @@ void CResultWidget::InitCommonUI()
 	mResultTitle->SetFontSize(60.0f);
 	mResultTitle->SetShadowEnable(true);
 	mResultTitle->SetShadowOffset(5.f, 5.f);
-	mResultTitle->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
+	mResultTitle->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 
 	mNewRecordText = mScene->GetUIManager()->CreateWidget<CTextBlock>("mNewRecordText");
 	AddWidget(mNewRecordText);
@@ -109,7 +109,7 @@ void CResultWidget::InitCommonUI()
 	mNewRecordText->SetFontSize(20);
 	mNewRecordText->SetShadowEnable(true);
 	mNewRecordText->SetShadowOffset(3.f, 3.f);
-	mNewRecordText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
+	mNewRecordText->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 	bool _isNewRecord =
 		CDataStorageManager::GetInst()->GetIsNewRecord()
 		&& !CNetworkManager::GetInst()->IsMultiplay();
@@ -418,7 +418,7 @@ void CResultWidget::SetInfoTextBlock(CTextBlock* _textBlock, FVector2D _pivot, F
 	_textBlock->SetFontSize(mRowTextFontSize);
 	_textBlock->SetShadowEnable(true);
 	_textBlock->SetShadowOffset(3.f, 3.f);
-	_textBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
+	_textBlock->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_DarkGray));
 }
 
 void CResultWidget::SetImage(CImage* _image, FVector2D _pivot, FVector2D _size, FVector2D _pos, FVector4D _color, const char* _imageName, const wchar_t* _imagePath)
