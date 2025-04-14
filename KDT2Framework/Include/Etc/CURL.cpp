@@ -31,9 +31,9 @@ std::string CCURL::SendRequest(const std::string& InURL
 	, const std::string& InMethod
 	, const std::string& InJsonData)
 {
-	auto _scene = CSceneManager::GetInst()->GetCurrentScene();
-	auto _sceneWidget = _scene->GetUIManager()->GetSceneWidget();
-	_sceneWidget->ShowLoading(true);
+	//auto _scene = CSceneManager::GetInst()->GetCurrentScene();
+	//auto _sceneWidget = _scene->GetUIManager()->GetSceneWidget();
+	//_sceneWidget->ShowLoading(true);
 
 	CURL* curl = curl_easy_init();
 	if (!curl) return "Failed to initialize cURL";
@@ -90,8 +90,8 @@ std::string CCURL::SendRequest(const std::string& InURL
 	curl_slist_free_all(headers);
 	curl_easy_cleanup(curl);
 
-	if(_scene->GetIsLoadingScene() == false)
-		_sceneWidget->ShowLoading(false);
+	//if(_scene->GetIsLoadingScene() == false)
+	//	_sceneWidget->ShowLoading(false);
 
 	return response;
 }

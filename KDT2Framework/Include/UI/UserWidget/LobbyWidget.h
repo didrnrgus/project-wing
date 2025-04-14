@@ -35,6 +35,9 @@ protected:
 	std::vector<CSharedPtr<class CTextBlock>> mArrPlayerStatNameText;
 	std::vector<CSharedPtr<class CTextBlock>> mArrPlayerStatValueText;
 
+	// itemAddStat
+	std::vector<float> mArrItemStatAddValue;
+
 	// mapInfo
 	std::vector<CSharedPtr<class CTextBlock>> mArrMapInfoNameText;
 	std::vector<CSharedPtr<class CTextBlock>> mArrMapInfoValueText;

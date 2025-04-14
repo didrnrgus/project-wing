@@ -110,6 +110,7 @@ bool CLobbyWidget::Init()
 	SetButton(*(mMapLeftButton.Get()), "MapLeftButton", pathLeft);
 	SetButton(*(mMapRightButton.Get()), "MapRightButton", pathRight);
 
+	mArrItemStatAddValue.resize(ECharacterStatText::End, 0.0f);
 
 	return true;
 }
@@ -181,12 +182,17 @@ void CLobbyWidget::InitPlayerStatText()
 	int count = (int)ECharacterStatText::End;
 	mArrPlayerStatNameText.resize(count);
 	mArrPlayerStatValueText.resize(count);
-	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.87f);
-	FVector2D valueBasePos = FVector2D(650.0f, mResolution.y * 0.87f);
+	
 	FVector2D textSize = FVector2D(200.0f, 40.0f);
+	
 	FVector2D nameBasePivot = FVector2D(0.0f, 0.0f);
-	FVector2D valueBasePivot = FVector2D(0.0f, 0.0f);
+	FVector2D nameBasePos = FVector2D(510.0f, mResolution.y * 0.87f);
+
+	FVector2D playerStatValueBasePivot = FVector2D(0.0f, 0.0f);
+	FVector2D playerStatValueBasePos = FVector2D(650.0f, mResolution.y * 0.87f);
+
 	float fontSize = 30.0f;
+
 	FCharacterState stat = CDataStorageManager::GetInst()->GetCharacterState(curPlayerGraphicIndex);
 
 	for (int i = 0; i < count; i++)
@@ -194,7 +200,7 @@ void CLobbyWidget::InitPlayerStatText()
 		auto nameText = std::wstring(ECharacterStatText::gArrCharacterStatText[i]) + L" :";
 		auto valueText = stat.GetStatToWString(static_cast<ECharacterStatText::Type>(i));
 		auto textBlockName = mScene->GetUIManager()->CreateWidget<CTextBlock>("playerStatName_" + std::to_string(i));
-		auto textBlockValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("playerStatValue_" + std::to_string(i));
+		auto textBlockPlayerStatValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("playerStatValue_" + std::to_string(i));
 
 		AddWidget(textBlockName);
 		textBlockName->SetPivot(nameBasePivot);
@@ -205,22 +211,23 @@ void CLobbyWidget::InitPlayerStatText()
 		textBlockName->SetAlignH(ETextAlignH::Left);
 		textBlockName->SetFontSize(fontSize);
 		textBlockName->SetShadowEnable(true);
-		textBlockName->SetShadowOffset(3.f, 3.f);
+		textBlockName->SetShadowOffset(1.f, 1.f);
 		textBlockName->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
 		mArrPlayerStatNameText[i] = textBlockName;
 
-		AddWidget(textBlockValue);
-		textBlockValue->SetPivot(valueBasePivot);
-		textBlockValue->SetSize(textSize);
-		textBlockValue->SetPos(valueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 10.0f) * i);
-		textBlockValue->SetText(valueText.c_str());
-		textBlockValue->SetTextColor(FVector4D::GetColorFromString(stat.ColorName));
-		textBlockValue->SetAlignH(ETextAlignH::Left);
-		textBlockValue->SetFontSize(fontSize);
-		textBlockValue->SetShadowEnable(true);
-		textBlockValue->SetShadowOffset(3.f, 3.f);
-		textBlockValue->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
-		mArrPlayerStatValueText[i] = textBlockValue;
+		AddWidget(textBlockPlayerStatValue);
+		textBlockPlayerStatValue->SetPivot(playerStatValueBasePivot);
+		textBlockPlayerStatValue->SetSize(textSize);
+		textBlockPlayerStatValue->SetPos(playerStatValueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 10.0f) * i);
+		textBlockPlayerStatValue->SetText(valueText.c_str());
+		textBlockPlayerStatValue->SetTextColor(FVector4D::GetColorFromString(stat.ColorName));
+		textBlockPlayerStatValue->SetAlignH(ETextAlignH::Left);
+		textBlockPlayerStatValue->SetFontSize(fontSize);
+		textBlockPlayerStatValue->SetShadowEnable(true);
+		textBlockPlayerStatValue->SetShadowOffset(1.f, 1.f);
+		textBlockPlayerStatValue->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
+		mArrPlayerStatValueText[i] = textBlockPlayerStatValue;
+
 	}
 }
 
@@ -242,7 +249,7 @@ void CLobbyWidget::InitMapInfoText()
 		auto nameText = std::wstring(EMapInfoText::gArrMapInfoText[i]) + L" :";
 		auto valueText = info.GetInfoToWString(static_cast<EMapInfoText::Type>(i));
 		auto textBlockName = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoName_" + std::to_string(i));
-		auto textBlockValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoValue_" + std::to_string(i));
+		auto textBlockPlayerStatValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoValue_" + std::to_string(i));
 
 		AddWidget(textBlockName);
 		textBlockName->SetPivot(nameBasePivot);
@@ -253,22 +260,22 @@ void CLobbyWidget::InitMapInfoText()
 		textBlockName->SetAlignH(ETextAlignH::Left);
 		textBlockName->SetFontSize(fontSize);
 		textBlockName->SetShadowEnable(true);
-		textBlockName->SetShadowOffset(3.f, 3.f);
+		textBlockName->SetShadowOffset(1.f, 1.f);
 		textBlockName->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
 		mArrMapInfoNameText[i] = textBlockName;
 
-		AddWidget(textBlockValue);
-		textBlockValue->SetPivot(valueBasePivot);
-		textBlockValue->SetSize(textSize);
-		textBlockValue->SetPos(valueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 15.0f) * i);
-		textBlockValue->SetText(valueText.c_str());
-		textBlockValue->SetTextColor(FVector4D::GetColorFromString(info.ColorName));
-		textBlockValue->SetAlignH(ETextAlignH::Left);
-		textBlockValue->SetFontSize(fontSize);
-		textBlockValue->SetShadowEnable(true);
-		textBlockValue->SetShadowOffset(3.f, 3.f);
-		textBlockValue->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
-		mArrMapInfoValueText[i] = textBlockValue;
+		AddWidget(textBlockPlayerStatValue);
+		textBlockPlayerStatValue->SetPivot(valueBasePivot);
+		textBlockPlayerStatValue->SetSize(textSize);
+		textBlockPlayerStatValue->SetPos(valueBasePos - FVector2D::Axis[EAxis::Y] * (fontSize + 15.0f) * i);
+		textBlockPlayerStatValue->SetText(valueText.c_str());
+		textBlockPlayerStatValue->SetTextColor(FVector4D::GetColorFromString(info.ColorName));
+		textBlockPlayerStatValue->SetAlignH(ETextAlignH::Left);
+		textBlockPlayerStatValue->SetFontSize(fontSize);
+		textBlockPlayerStatValue->SetShadowEnable(true);
+		textBlockPlayerStatValue->SetShadowOffset(1.f, 1.f);
+		textBlockPlayerStatValue->SetTextShadowColor(FVector4D::GetColorFromString(COLOR_SlateGray));
+		mArrMapInfoValueText[i] = textBlockPlayerStatValue;
 	}
 }
 
@@ -525,6 +532,8 @@ void CLobbyWidget::InitItemButtons()
 				//CLog::PrintLog("selectItemButton Click index: " + std::to_string(i));
 				// 해당 아이템 선택했다는것.
 				this->SelectItemForSlot(curSelectedSlot, i);
+				this->UpdatePlayerStat();
+
 				// 아이템 배열 창 닫기.
 				this->TriggerItemArrayButtons(ITEM_SLOT_DEFAULT_INDEX);
 			});
@@ -552,6 +561,7 @@ void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemTypeIndex)
 	//CLog::PrintLog("_slotIndex: " + std::to_string(_slotIndex));
 	//CLog::PrintLog("_itemTypeIndex: " + std::to_string(_itemTypeIndex));
 
+	// 현재 내가 선택한 아이템 세팅.
 	CDataStorageManager::GetInst()->SetSelectedItemTypeInSlotIndex(_slotIndex, _itemTypeIndex);
 
 	auto slotImage = mArrItemSlotImage[_slotIndex];
@@ -562,6 +572,36 @@ void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemTypeIndex)
 	itemImage->SetTexture(mArrItemImageName[_itemTypeIndex]
 		, mArrItemImagePath[_itemTypeIndex]);
 	itemImage->SetEnable(true);
+
+	for (float& e : mArrItemStatAddValue)
+		e = 0.0f;
+
+
+	for (int i = 0; i < itemSlotCount; i++)
+	{
+		auto _selectedItemIndex = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(i);
+		auto _itemStatInfo = CDataStorageManager::GetInst()->GetItemInfoDataByIndex(_selectedItemIndex);
+
+		int _indexPlayerStatFromCommonStat = 0;
+
+		switch ((EStatInfoText::Type)_itemStatInfo.StatType)
+		{
+		case EStatInfoText::HP:
+			_indexPlayerStatFromCommonStat = (int)ECharacterStatText::HP;
+			break;
+		case EStatInfoText::Speed:
+			_indexPlayerStatFromCommonStat = (int)ECharacterStatText::Speed;
+			break;
+		case EStatInfoText::Dex:
+			_indexPlayerStatFromCommonStat = (int)ECharacterStatText::Dex;
+			break;
+		case EStatInfoText::Def:
+			_indexPlayerStatFromCommonStat = (int)ECharacterStatText::Def;
+			break;
+		}
+
+		mArrItemStatAddValue[_indexPlayerStatFromCommonStat] += _itemStatInfo.AddValue;
+	}
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
@@ -985,8 +1025,19 @@ void CLobbyWidget::UpdatePlayerStat()
 		auto valueText = stat.GetStatToWString(static_cast<ECharacterStatText::Type>(i));
 
 		mArrPlayerStatNameText[i]->SetText(nameText.c_str());
-		mArrPlayerStatValueText[i]->SetTextColor(FVector4D::GetColorFromString(stat.ColorName));
-		mArrPlayerStatValueText[i]->SetText(valueText.c_str());
+
+		if (mArrItemStatAddValue[i] > 0.0f)
+		{
+			mArrPlayerStatValueText[i]->SetTextColor(FVector4D::GetColorFromString(COLOR_Red));
+			wchar_t _wc_str[64] = {};
+			swprintf_s(_wc_str, L"%s(+%.0f)", valueText.c_str(), mArrItemStatAddValue[i]);
+			mArrPlayerStatValueText[i]->SetText(_wc_str);
+		}
+		else
+		{
+			mArrPlayerStatValueText[i]->SetTextColor(FVector4D::GetColorFromString(stat.ColorName));
+			mArrPlayerStatValueText[i]->SetText(valueText.c_str());
+		}
 	}
 }
 
