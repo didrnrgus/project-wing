@@ -3,6 +3,7 @@
 #include "GameManager.h"
 #include "Scene/Scene.h"
 #include "Scene/SceneLobby.h"
+#include "Scene/SceneTitle.h"
 #include "Scene/SceneUIManager.h"
 #include "Scene/SceneManager.h"
 #include "UI/Common/Button.h"
@@ -196,6 +197,8 @@ void CTitleWidget::LoadGameData()
 			ShowLoading(false);
 
 			LoadRankData();
+			auto _sceneTitle = dynamic_cast<CSceneTitle*>(mScene);
+			_sceneTitle->InitObjectAfterDataLoad();
 		})));
 }
 

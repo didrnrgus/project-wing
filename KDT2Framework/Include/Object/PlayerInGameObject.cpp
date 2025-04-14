@@ -260,19 +260,19 @@ void CPlayerInGameObject::SetMovePlayer(FVector3D moveValueVector)
 	mRoot->SetWorldPos(resultPos);
 }
 
-void CPlayerInGameObject::SetMovePlayer(float _height)
-{
-	// 자기 자신이 호출
-	if (!IsGamePlayEnableByState())
-		return;
-
-	if (GetIsStun())
-		return;
-
-	auto pos = mRoot->GetWorldPosition();
-	pos.y = _height;
-	mRoot->SetWorldPos(pos);
-}
+//void CPlayerInGameObject::SetMovePlayer(float _height)
+//{
+//	// 자기 자신이 호출
+//	if (!IsGamePlayEnableByState())
+//		return;
+//
+//	if (GetIsStun())
+//		return;
+//
+//	auto pos = mRoot->GetWorldPosition();
+//	pos.y = _height;
+//	mRoot->SetWorldPos(pos);
+//}
 
 void CPlayerInGameObject::UpdateDecreaseHp(float DeltaTime)
 {

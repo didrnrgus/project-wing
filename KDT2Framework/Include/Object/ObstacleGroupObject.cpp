@@ -70,7 +70,7 @@ bool CObstacleGroupObject::Init()
 	mDebugWidget = mScene->GetUIManager()->CreateWidget<CDebugWidget>("mDebugWidget");
 	mDebugTextComp->SetWidget(mDebugWidget);
 #ifdef _DEBUG
-	mDebugTextComp->SetEnable(true);
+	mDebugTextComp->SetEnable(false);
 #else
 	mDebugTextComp->SetEnable(false);
 #endif // _DEBUG

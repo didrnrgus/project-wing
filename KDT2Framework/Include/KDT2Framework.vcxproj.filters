@@ -162,6 +162,9 @@
     <ClCompile Include="Scene\SceneRank.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Object\PlayerTitleObject.cpp">
+      <Filter>Object</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="resource.h">
@@ -298,6 +301,9 @@
     </ClInclude>
     <ClInclude Include="Scene\SceneRank.h">
       <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerTitleObject.h">
+      <Filter>Object</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

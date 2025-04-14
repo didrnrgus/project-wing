@@ -28,6 +28,7 @@ bool CCameraObject::Init()
 	mCamera->SetWorldPos(FVector3D(0.0f, 0.0f, -10.0f));
 	SetRootComponent(mCamera);
 
+#ifdef _DEBUG
 	mScene->GetInput()->AddBindKey("TestShake", 'S');
 	mScene->GetInput()->AddBindFunction("TestShake", EInputType::Down
 		, [this](float DeltaTime)
@@ -35,6 +36,7 @@ bool CCameraObject::Init()
 			CLog::PrintLog("mScene->GetInput()->AddBindFunction TestShake");
 			SetShakeSceneObject(2.0f, 10.0f);
 		});
+#endif // _DEBUG
 
 	return true;
 }

@@ -178,6 +178,7 @@
     <ClCompile Include="Object\PlayerGraphicObject.cpp" />
     <ClCompile Include="Object\PlayerInGameObject.cpp" />
     <ClCompile Include="Object\PlayerInGameOtherObject.cpp" />
+    <ClCompile Include="Object\PlayerTitleObject.cpp" />
     <ClCompile Include="Scene\Collision.cpp" />
     <ClCompile Include="Scene\CollisionQuadTree.cpp" />
     <ClCompile Include="Scene\SceneCollision.cpp" />
@@ -224,6 +225,7 @@
     <ClInclude Include="Object\PlayerGraphicObject.h" />
     <ClInclude Include="Object\PlayerInGameObject.h" />
     <ClInclude Include="Object\PlayerInGameOtherObject.h" />
+    <ClInclude Include="Object\PlayerTitleObject.h" />
     <ClInclude Include="resource.h" />
     <ClInclude Include="Scene\Collision.h" />
     <ClInclude Include="Scene\CollisionQuadTree.h" />
