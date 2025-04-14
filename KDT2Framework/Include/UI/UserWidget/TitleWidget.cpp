@@ -44,20 +44,39 @@ bool CTitleWidget::Init()
 	AddListener();
 
 	FResolution RS = CDevice::GetInst()->GetResolution();
-	FVector2D size = FVector2D(200.0f, 100.0f);
-	FVector2D singlePos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 4) - size * 0.5f;
-	FVector2D multiPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 3) - size * 0.5f;
-	FVector2D rankPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 2) - size * 0.5f;
-	FVector2D exitPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.2f * 1) - size * 0.5f;
+	mResolution = FVector2D(RS.Width, RS.Height);
 
-	SetButtonWithTextBlock(mSinglePlayButton, "SinglePlay", singlePos
+	mTitleText = mScene->GetUIManager()->CreateWidget<CTextBlock>("mTitleText");
+	AddWidget(mTitleText);
+	mTitleText->SetPivot(FVector2D::One * 0.5f);
+	mTitleText->SetSize(FVector2D(1000.0f, 100.0f));
+	mTitleText->SetPos(FVector2D(mResolution.x * 0.5f, mResolution.y * 0.8f));
+	mTitleText->SetText(L"🐦PROJ-WING🐦");
+	mTitleText->SetTextColor(FVector4D::Green);
+	mTitleText->SetAlignH(ETextAlignH::Center);
+	mTitleText->SetFontSize(100.0f);
+	mTitleText->SetShadowEnable(true);
+	mTitleText->SetShadowOffset(5.f, 5.f);
+	mTitleText->SetTextShadowColor(FVector4D::Gray30);
+
+	FVector2D size = FVector2D(200.0f, 100.0f);
+	FVector2D singlePos = FVector2D(mResolution.x * 0.5f, mResolution.y * 0.15f * 4) - size * 0.5f;
+	FVector2D multiPos = FVector2D(mResolution.x * 0.5f, mResolution.y * 0.15f * 3) - size * 0.5f;
+	FVector2D rankPos = FVector2D(mResolution.x * 0.5f, mResolution.y * 0.15f * 2) - size * 0.5f;
+	FVector2D exitPos = FVector2D(mResolution.x * 0.5f, mResolution.y * 0.15f * 1) - size * 0.5f;
+
+	SetButtonWithTextBlock(ETitleUIType::SinglePlay, mSinglePlayButton, "SinglePlay", singlePos
 		, &CTitleWidget::SinglePlayButtonClick, mSinglePlayTextBlock, TEXT("SinglePlay"));
-	SetButtonWithTextBlock(mMultiPlayButton, "MultiPlay", multiPos
+	mArrTextBlock.push_back(mSinglePlayTextBlock);
+	SetButtonWithTextBlock(ETitleUIType::MultiPlay, mMultiPlayButton, "MultiPlay", multiPos
 		, &CTitleWidget::MultiPlayButtonClick, mMultiPlayTextBlock, TEXT("MultiPlay"));
-	SetButtonWithTextBlock(mRankButton, "Rank", rankPos
+	mArrTextBlock.push_back(mMultiPlayTextBlock);
+	SetButtonWithTextBlock(ETitleUIType::Rank, mRankButton, "Rank", rankPos
 		, &CTitleWidget::RankButtonClick, mRankTextBlock, TEXT("Rank"));
-	SetButtonWithTextBlock(mExitButton, "Exit", exitPos
+	mArrTextBlock.push_back(mRankTextBlock);
+	SetButtonWithTextBlock(ETitleUIType::Exit, mExitButton, "Exit", exitPos
 		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
+	mArrTextBlock.push_back(mExitTextBlock);
 
 	if (CDataStorageManager::GetInst()->GetIsLoadedData() == false)
 		LoadGameData();
@@ -83,19 +102,34 @@ void CTitleWidget::Update(float DeltaTime)
 	}
 }
 
-void CTitleWidget::SetButtonWithTextBlock(CSharedPtr<CButton>& button, std::string name, FVector2D pos
-	, void(CTitleWidget::* Func)(), CSharedPtr<CTextBlock>& textBlock, const wchar_t* textBlockContent)
+void CTitleWidget::SetButtonWithTextBlock(ETitleUIType _type
+	, CSharedPtr<CButton>& button
+	, std::string name
+	, FVector2D pos
+	, void(CTitleWidget::* ClickCallbackFunc)()
+	, CSharedPtr<CTextBlock>& textBlock
+	, const wchar_t* textBlockContent)
 {
 	button = mScene->GetUIManager()->CreateWidget<CButton>(name + "Button");
 	AddWidget(button);
 	button->SetPos(pos);
 	button->SetSize(200.f, 100.f);
 	button->SetColor(0, 0, 0, 0);
-	button->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, Func);
+	button->SetEventCallback<CTitleWidget>(EButtonEventState::Click, this, ClickCallbackFunc);
+	button->SetEventCallback(EButtonEventState::Hovered
+		, [this, _type]()
+		{
+			mArrTextBlock[(int)_type]->SetTextColor(FVector4D::Green);
+		});
+	button->SetEventCallback(EButtonEventState::Unhoverd
+		, [this, _type]()
+		{
+			mArrTextBlock[(int)_type]->SetTextColor(FVector4D::White);
+		});
 	textBlock = mScene->GetUIManager()->CreateWidget<CTextBlock>(name + "Text");
 	button->SetChild(textBlock);
 	textBlock->SetText(textBlockContent);
-	textBlock->SetTextColor(FVector4D::Green);
+	textBlock->SetTextColor(FVector4D::White);
 	textBlock->SetAlignH(ETextAlignH::Center);
 	textBlock->SetFontSize(30.f);
 	textBlock->SetShadowEnable(true);
