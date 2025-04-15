@@ -319,7 +319,7 @@ void CServer::InGameUpdateLoop()
 #ifdef _DEBUG
 				client->DamagedPerDistance(dt * 10.0f);
 #else
-				c->DamagedPerDistance(dt);
+				client->DamagedPerDistance(dt);
 #endif
 				if (client->isAlive && client->GetCurHP() <= 0.0f)
 				{
