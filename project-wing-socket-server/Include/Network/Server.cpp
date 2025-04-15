@@ -47,13 +47,13 @@ bool CServer::Init()
 
 	std::thread(&CServer::InGameUpdateLoop, this).detach();
 
-	server = socket(AF_INET, SOCK_STREAM, 0);
+	mServer = socket(AF_INET, SOCK_STREAM, 0);
 	sockaddr_in addr{};
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = INADDR_ANY;
 	addr.sin_port = htons(PORT);
-	bind(server, (sockaddr*)&addr, sizeof(addr));
-	listen(server, SOMAXCONN);
+	bind(mServer, (sockaddr*)&addr, sizeof(addr));
+	listen(mServer, SOMAXCONN);
 
 	std::cout << "\n";
 	std::cout << "[Server] Listening on port " << PORT << "...\n";
@@ -66,127 +66,127 @@ void CServer::Run()
 	{
 		sockaddr_in clientAddr{};
 		int size = sizeof(clientAddr);
-		SOCKET clientSock = accept(server, (sockaddr*)&clientAddr, &size);
-		std::lock_guard<std::recursive_mutex> lock(gMutex);
+		SOCKET clientSock = accept(mServer, (sockaddr*)&clientAddr, &size);
+		std::lock_guard<std::recursive_mutex> lock(mMutex);
 
-		if ((int)gClients.size() >= MAX_PLAYERS)
+		if ((int)mClients.size() >= MAX_PLAYERS)
 		{
 			const char* msg = "Room is full.";
-			sendMessage(clientSock, 0, (int)ServerMessage::MSG_CONNECTED_REJECT, msg, strlen(msg) + 1);
+			SendMsg(clientSock, 0, (int)ServerMessage::MSG_CONNECTED_REJECT, msg, strlen(msg) + 1);
 			closesocket(clientSock);
 			continue;
 		}
 
-		CClient* c = new CClient;
-		c->sock = clientSock;
-		c->id = gNextId++;
-		gClients.push_back(c);
-		c->Init();
+		CClient* client = new CClient;
+		client->sock = clientSock;
+		client->id = mNextId++;
+		mClients.push_back(client);
+		client->Init();
 
-		std::cout << "[Server] gClients.push_back(c); " << c->id << "\n";
+		std::cout << "[Server] gClients.push_back(c); " << client->id << "\n";
 
 		// 누구냐고 물어봄.
-		sendMessage(clientSock, c->id, (int)ServerMessage::MSG_WHO_ARE_YOU_REQ, &c->id, sizeof(int));
+		SendMsg(clientSock, client->id, (int)ServerMessage::MSG_WHO_ARE_YOU_REQ, &client->id, sizeof(int));
 
-		c->thread = std::thread(&CServer::clientThread, this, c);
-		c->thread.detach();
+		client->thread = std::thread(&CServer::ClientThread, this, client);
+		client->thread.detach();
 	}
-	closesocket(server);
+	closesocket(mServer);
 	WSACleanup();
 }
 
-bool CServer::sendAll(SOCKET sock, const char* data, int len)
+bool CServer::SendAll(SOCKET sock, const char* data, int len)
 {
 	int sent = 0;
 
 	while (sent < len)
 	{
-		int r = send(sock, data + sent, len - sent, 0);
+		int result = send(sock, data + sent, len - sent, 0);
 
-		if (r == SOCKET_ERROR)
+		if (result == SOCKET_ERROR)
 			return false;
 
-		sent += r;
+		sent += result;
 	}
 	return true;
 }
 
-bool CServer::sendMessage(SOCKET sock, int senderId, int msgType, const void* body, int bodyLen)
+bool CServer::SendMsg(SOCKET sock, int senderId, int msgType, const void* body, int bodyLen)
 {
 	MessageHeader header{ senderId, msgType, bodyLen };
 
-	if (!sendAll(sock, (char*)&header, sizeof(header)))
+	if (!SendAll(sock, (char*)&header, sizeof(header)))
 		return false;
 
 	if (body && bodyLen > 0)
-		return sendAll(sock, (char*)body, bodyLen);
+		return SendAll(sock, (char*)body, bodyLen);
 
 	return true;
 }
 
-void CServer::broadcast(int senderId, int msgType, const void* data, int len)
+void CServer::Broadcast(int senderId, int msgType, const void* data, int len)
 {
-	for (auto& c : gClients)
-		sendMessage(c->sock, senderId, msgType, data, len);
+	for (auto& client : mClients)
+		SendMsg(client->sock, senderId, msgType, data, len);
 }
 
-bool CServer::recvAll(SOCKET sock, char* buffer, int len)
+bool CServer::RecvAll(SOCKET sock, char* buffer, int len)
 {
 	int recvd = 0;
 
 	while (recvd < len)
 	{
-		int r = recv(sock, buffer + recvd, len - recvd, 0);
+		int result = recv(sock, buffer + recvd, len - recvd, 0);
 
-		if (r <= 0)
+		if (result <= 0)
 			return false;
 
-		recvd += r;
+		recvd += result;
 	}
 	return true;
 }
 
-bool CServer::receiveMessage(SOCKET sock, MessageHeader& header, std::vector<char>& body)
+bool CServer::ReceiveMsg(SOCKET sock, MessageHeader& header, std::vector<char>& body)
 {
-	if (!recvAll(sock, (char*)&header, sizeof(header)))
+	if (!RecvAll(sock, (char*)&header, sizeof(header)))
 		return false;
 
 	body.resize(header.bodyLen);
 
 	if (header.bodyLen > 0)
-		return recvAll(sock, body.data(), header.bodyLen);
+		return RecvAll(sock, body.data(), header.bodyLen);
 
 	return true;
 }
 
-void CServer::checkGameOver()
+void CServer::CheckGameOver()
 {
 	int aliveCount = 0;
 
-	for (auto& c : gClients)
+	for (auto& client : mClients)
 	{
-		if (c->isAlive)
+		if (client->isAlive)
 			aliveCount++;
 	}
 
 	if (aliveCount == 0)
 	{
-		for (auto& c : gClients)
+		for (auto& client : mClients)
 		{
-			auto _statInfo = CDataStorageManager::GetInst()->GetCharacterState(c->characterId);
-			c->InitStat(_statInfo);
-			c->Init();
+			auto _statInfo = CDataStorageManager::GetInst()->GetCharacterState(client->characterId);
+			client->InitStat(_statInfo);
+			client->Init();
 		}
-		gMapId = 0;
-		gState = WAITING;
+		mMapId = 0;
+		mState = WAITING;
 		const char* msg = "All players dead. Game over.";
-		broadcast(0, (int)ServerMessage::MSG_GAME_OVER, msg, strlen(msg) + 1);
+		Broadcast(0, (int)ServerMessage::MSG_GAME_OVER, msg, strlen(msg) + 1);
 	}
 }
 
-void CServer::sendRoomFullInfo(CClient* client)
+void CServer::SendRoomFullInfo(CClient* client)
 {
-	int playerCount = (int)gClients.size();
+	int playerCount = (int)mClients.size();
 	int totalSize = sizeof(int)  // roomOwner
 		+ sizeof(int) // mapId
 		+ sizeof(int) // playerCount
@@ -200,35 +200,35 @@ void CServer::sendRoomFullInfo(CClient* client)
 	std::vector<char> buffer(totalSize);
 	char* ptr = buffer.data();
 
-	memcpy(ptr, &gRoomOwner, sizeof(int));
+	memcpy(ptr, &mRoomOwner, sizeof(int));
 	ptr += sizeof(int);
 
-	memcpy(ptr, &gMapId, sizeof(int));
+	memcpy(ptr, &mMapId, sizeof(int));
 	ptr += sizeof(int);
 
 	memcpy(ptr, &playerCount, sizeof(int));
 	ptr += sizeof(int);
 
 
-	for (auto& c : gClients)
+	for (auto& client : mClients)
 	{
-		memcpy(ptr, &c->id, sizeof(int));
+		memcpy(ptr, &client->id, sizeof(int));
 		ptr += sizeof(int);
 
-		memcpy(ptr, &c->isReady, sizeof(bool));
+		memcpy(ptr, &client->isReady, sizeof(bool));
 		ptr += sizeof(bool);
 
-		memcpy(ptr, &c->characterId, sizeof(int));
+		memcpy(ptr, &client->characterId, sizeof(int));
 		ptr += sizeof(int);
 
-		memcpy(ptr, c->itemSlots, sizeof(int) * 3);
+		memcpy(ptr, client->itemSlots, sizeof(int) * 3);
 		ptr += sizeof(int) * 3;
 
-		memcpy(ptr, c->nickname, sizeof(char) * 64);
+		memcpy(ptr, client->nickname, sizeof(char) * 64);
 		ptr += sizeof(char) * 64;
 	}
 
-	sendMessage(client->sock, 0, (int)ServerMessage::MSG_ROOM_FULL_INFO, buffer.data(), totalSize);
+	SendMsg(client->sock, 0, (int)ServerMessage::MSG_ROOM_FULL_INFO, buffer.data(), totalSize);
 }
 
 void CServer::InGameUpdateLoop()
@@ -246,10 +246,10 @@ void CServer::InGameUpdateLoop()
 	while (true)
 	{
 		Sleep(1);
-		std::lock_guard<std::recursive_mutex> lock(gMutex);
+		std::lock_guard<std::recursive_mutex> lock(mMutex);
 		float dt = UpdateTimer(); // 이번 프레임 시간
 
-		if (gState != RUNNING)
+		if (mState != RUNNING)
 		{
 			isFinishCountDown = false;
 			continue;
@@ -272,101 +272,101 @@ void CServer::InGameUpdateLoop()
 			{
 				isFinishCountDown = true;
 				curCountDownTime = 0.0f;
-				broadcast(0, (int)ServerMessage::MSG_COUNTDOWN_FINISHED, nullptr, 0);
+				Broadcast(0, (int)ServerMessage::MSG_COUNTDOWN_FINISHED, nullptr, 0);
 			}
 		}
 
 		// 🧠 스탯 업데이트는 매 프레임 처리
-		for (auto& c : gClients)
+		for (auto& client : mClients)
 		{
-			if (!c->isAlive) continue;
+			if (!client->isAlive) continue;
 
-			if (c->GetIsProtection())
+			if (client->GetIsProtection())
 			{
-				c->ReleaseProtection(dt);
+				client->ReleaseProtection(dt);
 			}
 
-			if (c->GetIsStun())
+			if (client->GetIsStun())
 			{
-				c->ReleaseStun(dt);
+				client->ReleaseStun(dt);
 			}
 
-			//std::cout << "client_" << c->id
-			//	<< " c->GetIsStun(): " << c->GetIsStun() << "\n";
+			//std::cout << "client_" << client->id
+			//	<< " client->GetIsStun(): " << client->GetIsStun() << "\n";
 
-			if (!c->GetIsStun())
+			if (!client->GetIsStun())
 			{
-				float _height = c->GetDex() * dt * (c->isMovingUp ? 1.0f : -1.0f);
-				c->height += _height;
-				c->height = clamp(c->height, SCREEN_HEIGHT * -0.5f, SCREEN_HEIGHT * 0.5f);
+				float _height = client->GetDex() * dt * (client->isMovingUp ? 1.0f : -1.0f);
+				client->height += _height;
+				client->height = clamp(client->height, SCREEN_HEIGHT * -0.5f, SCREEN_HEIGHT * 0.5f);
 
-				//std::cout << "client_" << c->id
-				//	<< " c->isMovingUp: " << c->isMovingUp
-				//	<< " c->GetDex(): " << c->GetDex()
+				//std::cout << "client_" << client->id
+				//	<< " client->isMovingUp: " << client->isMovingUp
+				//	<< " client->GetDex(): " << client->GetDex()
 				//	<< " dt: " << dt
 				//	<< " _height: " << _height
-				//	<< " c->height: " << c->height << "\n";
+				//	<< " client->height: " << client->height << "\n";
 
 				// 거리 & HP 갱신
-				float speed = c->GetSpeed();
-				float boostMultiplyValue = c->GetBoostValue();
+				float speed = client->GetSpeed();
+				float boostMultiplyValue = client->GetBoostValue();
 				float speedPerFrame = speed * dt * 0.01f * boostMultiplyValue;
-				c->AddPlayDistance(speedPerFrame);
+				client->AddPlayDistance(speedPerFrame);
 			}
 
-			if (!c->GetIsStun() && !c->GetIsProtection())
+			if (!client->GetIsStun() && !client->GetIsProtection())
 			{
 #ifdef _DEBUG
-				c->DamagedPerDistance(dt * 10.0f);
+				client->DamagedPerDistance(dt * 10.0f);
 #else
 				c->DamagedPerDistance(dt);
 #endif
-				if (c->isAlive && c->GetCurHP() <= 0.0f)
+				if (client->isAlive && client->GetCurHP() <= 0.0f)
 				{
-					std::cout << "DamagedPerDistance Dead id: " << c->id << "\n";
-					c->isAlive = false;
-					gDeadPlayers.insert(c->id);
-					broadcast(c->id, (int)ServerMessage::MSG_PLAYER_DEAD, nullptr, 0);
-					checkGameOver();
+					std::cout << "DamagedPerDistance Dead id: " << client->id << "\n";
+					client->isAlive = false;
+					mDeadPlayers.insert(client->id);
+					Broadcast(client->id, (int)ServerMessage::MSG_PLAYER_DEAD, nullptr, 0);
+					CheckGameOver();
 				}
 			}
 		}
 
-		for (auto& c : gClients)
+		for (auto& client : mClients)
 		{
-			if (!c->isAlive)
+			if (!client->isAlive)
 				continue;
 
-			int currentStep = static_cast<int>(c->GetPlayDistance() / 16.0f);
-			//std::cout << "client_" << c->id
-			//	<< " c->lastObstacleStep: " << c->lastObstacleStep
+			int currentStep = static_cast<int>(client->GetPlayDistance() / 16.0f);
+			//std::cout << "client_" << client->id
+			//	<< " client->lastObstacleStep: " << client->lastObstacleStep
 			//	<< " currentStep: " << currentStep << "\n";
 
-			if (currentStep > c->lastObstacleStep)
+			if (currentStep > client->lastObstacleStep)
 			{
-				c->lastObstacleStep = currentStep;
+				client->lastObstacleStep = currentStep;
 
 				Obstacle obs;
 
-				if (gObstaclesByStep.count(currentStep))
+				if (mObstaclesByStep.count(currentStep))
 				{
-					obs = gObstaclesByStep[currentStep];
+					obs = mObstaclesByStep[currentStep];
 				}
 				else
 				{
 					obs.scale = rand() % 50 + 100.0f;
 					obs.rotation = rand() % 360;
 					obs.height = (rand() % (int)SCREEN_HEIGHT) - (SCREEN_HEIGHT * 0.5f);
-					gObstaclesByStep.emplace(std::make_pair(currentStep, obs));
+					mObstaclesByStep.emplace(std::make_pair(currentStep, obs));
 				}
 
-				//std::cout << "client_" << c->id
+				//std::cout << "client_" << client->id
 				//	<< " scale: " << obs.scale
 				//	<< " rotation: " << obs.rotation
 				//	<< " scheightale: " << obs.height << "\n";
 
 				// 다보낼 필요 없음.
-				sendMessage(c->sock, c->id, ServerMessage::MSG_OBSTACLE, &obs, sizeof(obs));
+				SendMsg(client->sock, client->id, ServerMessage::MSG_OBSTACLE, &obs, sizeof(obs));
 			}
 		}
 
@@ -375,47 +375,47 @@ void CServer::InGameUpdateLoop()
 		{
 			broadcastAccumulated -= targetDelta;
 
-			for (auto& c : gClients)
+			for (auto& client : mClients)
 			{
-				//if (!c->isAlive) continue;
+				//if (!client->isAlive) continue;
 
 				// 죽은 캐릭이라도 계속 보내야 함.
-				float _dist = c->GetPlayDistance();
-				float _height = c->height;
-				float _curHp = c->GetCurHP();
+				float _dist = client->GetPlayDistance();
+				float _height = client->height;
+				float _curHp = client->GetCurHP();
 
-				//std::cout << "client_" << c->id
+				//std::cout << "client_" << client->id
 				//	<< " _dist: " << _dist
 				//	<< " _height: " << _height
 				//	<< " _curHp: " << _curHp << "\n";
 
-				if (gState == RUNNING)
+				if (mState == RUNNING)
 				{
-					broadcast(c->id, (int)ServerMessage::MSG_PLAYER_DISTANCE, &_dist, sizeof(float));
-					broadcast(c->id, (int)ServerMessage::MSG_PLAYER_HEIGHT, &_height, sizeof(float));
-					broadcast(c->id, (int)ServerMessage::MSG_TAKEN_DAMAGE, &_curHp, sizeof(float));
+					Broadcast(client->id, (int)ServerMessage::MSG_PLAYER_DISTANCE, &_dist, sizeof(float));
+					Broadcast(client->id, (int)ServerMessage::MSG_PLAYER_HEIGHT, &_height, sizeof(float));
+					Broadcast(client->id, (int)ServerMessage::MSG_TAKEN_DAMAGE, &_curHp, sizeof(float));
 				}
 			}
 		}
 	}
 }
 
-void CServer::clientThread(CClient* client)
+void CServer::ClientThread(CClient* client)
 {
 	while (true)
 	{
 		MessageHeader header;
 		std::vector<char> body;
 
-		if (!receiveMessage(client->sock, header, body))
+		if (!ReceiveMsg(client->sock, header, body))
 			break;
 
-		std::lock_guard<std::recursive_mutex> lock(gMutex);
+		std::lock_guard<std::recursive_mutex> lock(mMutex);
 
 		switch ((ClientMessage::Type)header.msgType)
 		{
 		case ClientMessage::MSG_HEARTBEAT:
-			sendMessage(client->sock, client->id, (int)ServerMessage::MSG_HEARTBEAT_ACK, nullptr, 0);
+			SendMsg(client->sock, client->id, (int)ServerMessage::MSG_HEARTBEAT_ACK, nullptr, 0);
 			break;
 		case ClientMessage::MSG_WHO_ARE_YOU_RES:
 		{
@@ -424,12 +424,12 @@ void CServer::clientThread(CClient* client)
 			strcpy_s(client->nickname, body.data());
 
 			// 방장 여부 결정.
-			if (gRoomOwner == -1)
-				gRoomOwner = client->id;
+			if (mRoomOwner == -1)
+				mRoomOwner = client->id;
 
 			// 연결 되었음을 통지 / 방 정보 전달.
-			sendMessage(client->sock, client->id, (int)ServerMessage::MSG_CONNECTED, &client->id, sizeof(int));
-			sendRoomFullInfo(client);
+			SendMsg(client->sock, client->id, (int)ServerMessage::MSG_CONNECTED, &client->id, sizeof(int));
+			SendRoomFullInfo(client);
 
 			// 다른 사람들한테 신규 클라 정보 전달.
 			int packetSize = sizeof(int) + sizeof(client->nickname);
@@ -445,62 +445,62 @@ void CServer::clientThread(CClient* client)
 			std::cout << "client_" << client->id
 				<< " nickname: " << buffer.data() + sizeof(int)
 				<< "\n";
-			for (auto& other : gClients)
+			for (auto& other : mClients)
 			{
 				// MSG_JOIN 에다가 ID / 닉네임 태워서 보내야 함.
 				if (other->id != client->id)
-					sendMessage(other->sock, client->id, (int)ServerMessage::MSG_JOIN, buffer.data(), packetSize);
+					SendMsg(other->sock, client->id, (int)ServerMessage::MSG_JOIN, buffer.data(), packetSize);
 			}
 			break;
 		}
 		case ClientMessage::MSG_START:
-			if (client->id == gRoomOwner)
+			if (client->id == mRoomOwner)
 			{
-				bool allReady = std::all_of(gClients.begin(), gClients.end(),
+				bool allReady = std::all_of(mClients.begin(), mClients.end(),
 					[this](CClient* c)
 					{
-						return (c->id == gRoomOwner) || c->isReady;
+						return (c->id == mRoomOwner) || c->isReady;
 					});
 
 				if (allReady)
 				{
-					gState = RUNNING;
-					gObstaclesByStep.clear();
-					gDeadPlayers.clear();
-					for (auto& c : gClients)
+					mState = RUNNING;
+					mObstaclesByStep.clear();
+					mDeadPlayers.clear();
+					for (auto& client : mClients)
 					{
-						c->isAlive = true;
+						client->isAlive = true;
 
 						// 스탯 계산해서 Init 하기.
 						// 테이블 읽어서 기본 스텟 초기화.
-						auto _statInfo = CDataStorageManager::GetInst()->GetCharacterState(c->characterId);
+						auto _statInfo = CDataStorageManager::GetInst()->GetCharacterState(client->characterId);
 
-						std::cout << "client_" << c->id
+						std::cout << "client_" << client->id
 							<< " _statInfo.HP: " << _statInfo.HP
 							<< " _statInfo.Speed: " << _statInfo.Speed
 							<< " _statInfo.Dex: " << _statInfo.Dex
 							<< " _statInfo.Def: " << _statInfo.Def
 							<< "\n";
 
-						c->InitStat(_statInfo);
+						client->InitStat(_statInfo);
 
-						std::cout << "client_" << c->id
-							<< " c->GetHP: " << c->GetCurHP()
-							<< " c->GetSpeed: " << c->GetSpeed()
-							<< " c->GetDex: " << c->GetDex()
-							<< " c->GetDef: " << c->GetDef()
+						std::cout << "client_" << client->id
+							<< " c->GetHP: " << client->GetCurHP()
+							<< " c->GetSpeed: " << client->GetSpeed()
+							<< " c->GetDex: " << client->GetDex()
+							<< " c->GetDef: " << client->GetDef()
 							<< "\n";
 
 						// 착용한 아이템 스텟에 적용.
 						auto _itemDatas = CDataStorageManager::GetInst()->GetItemInfoDatas();
-						int _itemLength = sizeof(c->itemSlots) / sizeof(c->itemSlots[0]);
+						int _itemLength = sizeof(client->itemSlots) / sizeof(client->itemSlots[0]);
 						for (int i = 0; i < _itemLength; i++)
 						{
-							int _itemIndexInSlot = c->itemSlots[i];
+							int _itemIndexInSlot = client->itemSlots[i];
 							if (_itemIndexInSlot >= 0)
 							{
 								// 어떤 스탯에 얼마를 적용할것인지.
-								c->AddValueByStatIndex(
+								client->AddValueByStatIndex(
 									static_cast<EStatInfo::Type>(_itemDatas[_itemIndexInSlot].StatType)
 									, _itemDatas[_itemIndexInSlot].AddValue);
 							}
@@ -511,25 +511,25 @@ void CServer::clientThread(CClient* client)
 
 				// 시작에 대한 결과를 알려줘야 함.
 				int readyFlag = static_cast<int>(allReady);
-				broadcast(client->id, (int)ServerMessage::MSG_START_ACK, &readyFlag, sizeof(int));
+				Broadcast(client->id, (int)ServerMessage::MSG_START_ACK, &readyFlag, sizeof(int));
 			}
 			break;
 
 		case ClientMessage::MSG_READY:
 			client->isReady = true;
-			broadcast(client->id, (int)ServerMessage::MSG_READY, nullptr, 0);
+			Broadcast(client->id, (int)ServerMessage::MSG_READY, nullptr, 0);
 			break;
 
 		case ClientMessage::MSG_UNREADY:
 			client->isReady = false;
-			broadcast(client->id, (int)ServerMessage::MSG_UNREADY, nullptr, 0);
+			Broadcast(client->id, (int)ServerMessage::MSG_UNREADY, nullptr, 0);
 			break;
 
 		case ClientMessage::MSG_PICK_CHARACTER:
 			if (header.bodyLen == sizeof(int))
 			{
 				memcpy(&client->characterId, body.data(), sizeof(int));
-				broadcast(client->id, (int)ServerMessage::MSG_PICK_CHARACTER, body.data(), sizeof(int));
+				Broadcast(client->id, (int)ServerMessage::MSG_PICK_CHARACTER, body.data(), sizeof(int));
 			}
 			break;
 
@@ -540,16 +540,16 @@ void CServer::clientThread(CClient* client)
 				memcpy(&slot, body.data(), sizeof(int));
 				memcpy(&itemId, body.data() + sizeof(int), sizeof(int));
 				if (slot >= 0 && slot < 3) client->itemSlots[slot] = itemId;
-				broadcast(client->id, (int)ServerMessage::MSG_PICK_ITEM, body.data(), sizeof(int) * 2);
+				Broadcast(client->id, (int)ServerMessage::MSG_PICK_ITEM, body.data(), sizeof(int) * 2);
 			}
 			break;
 
 		case ClientMessage::MSG_PICK_MAP:
-			if (client->id == gRoomOwner && header.bodyLen == sizeof(int))
+			if (client->id == mRoomOwner && header.bodyLen == sizeof(int))
 			{
-				memcpy(&gMapId, body.data(), sizeof(int));
-				CDataStorageManager::GetInst()->SetSelectedMapIndex(gMapId);
-				broadcast(0, (int)ServerMessage::MSG_PICK_MAP, &gMapId, sizeof(int));
+				memcpy(&mMapId, body.data(), sizeof(int));
+				CDataStorageManager::GetInst()->SetSelectedMapIndex(mMapId);
+				Broadcast(0, (int)ServerMessage::MSG_PICK_MAP, &mMapId, sizeof(int));
 			}
 			break;
 
@@ -557,18 +557,18 @@ void CServer::clientThread(CClient* client)
 			//std::cout << "ClientMessage::MSG_CHANGE_NICKNAME id: " << client->id << "\n";
 			strcpy_s(client->nickname, body.data());
 			//std::cout << "ClientMessage::MSG_CHANGE_NICKNAME nickname: " << client->nickname << "\n";
-			broadcast(client->id, (int)ServerMessage::MSG_CHANGE_NICKNAME, body.data(), header.bodyLen);
+			Broadcast(client->id, (int)ServerMessage::MSG_CHANGE_NICKNAME, body.data(), header.bodyLen);
 			break;
 
 		case ClientMessage::MSG_MOVE_UP:
 			client->isMovingUp = true;
-			broadcast(client->id, (int)ServerMessage::MSG_MOVE_UP, nullptr, 0);
+			Broadcast(client->id, (int)ServerMessage::MSG_MOVE_UP, nullptr, 0);
 			//std::cout << "ClientMessage::MSG_MOVE_UP id: " << client->id << "\n";
 			break;
 
 		case ClientMessage::MSG_MOVE_DOWN:
 			client->isMovingUp = false;
-			broadcast(client->id, (int)ServerMessage::MSG_MOVE_DOWN, nullptr, 0);
+			Broadcast(client->id, (int)ServerMessage::MSG_MOVE_DOWN, nullptr, 0);
 			//std::cout << "ClientMessage::MSG_MOVE_DOWN id: " << client->id << "\n";
 			break;
 
@@ -579,31 +579,31 @@ void CServer::clientThread(CClient* client)
 				// 맵 테이블에 의한 데이지.
 				float _damage = CDataStorageManager::GetInst()->GetSelectedMapInfo().CollisionDamage;
 				client->SetStun();
-				broadcast(client->id, (int)ServerMessage::MSG_TAKEN_STUN, nullptr, 0);
+				Broadcast(client->id, (int)ServerMessage::MSG_TAKEN_STUN, nullptr, 0);
 				client->Damaged(_damage);
 
 				struct { int id; float hp; } packetHp{ client->id, client->GetCurHP() };
-				broadcast(client->id, (int)ServerMessage::MSG_TAKEN_DAMAGE, &packetHp, sizeof(packetHp));
+				Broadcast(client->id, (int)ServerMessage::MSG_TAKEN_DAMAGE, &packetHp, sizeof(packetHp));
 
 				if (client->isAlive && client->GetCurHP() <= 0.0f)
 				{
 					std::cout << "ClientMessage::MSG_TAKE_DAMAGE Dead######## id: " << client->id << "\n";
 					client->isAlive = false;
-					gDeadPlayers.insert(client->id);
-					broadcast(client->id, (int)ServerMessage::MSG_PLAYER_DEAD, nullptr, 0);
-					checkGameOver();
+					mDeadPlayers.insert(client->id);
+					Broadcast(client->id, (int)ServerMessage::MSG_PLAYER_DEAD, nullptr, 0);
+					CheckGameOver();
 				}
 			}
 			break;
 
 		case ClientMessage::MSG_BOOST_ON:
 			client->SetIsBoostMode(true);
-			broadcast(client->id, (int)ServerMessage::MSG_BOOST_ON, nullptr, 0);
+			Broadcast(client->id, (int)ServerMessage::MSG_BOOST_ON, nullptr, 0);
 			break;
 
 		case ClientMessage::MSG_BOOST_OFF:
 			client->SetIsBoostMode(false);
-			broadcast(client->id, (int)ServerMessage::MSG_BOOST_OFF, nullptr, 0);
+			Broadcast(client->id, (int)ServerMessage::MSG_BOOST_OFF, nullptr, 0);
 			break;
 
 		default:
@@ -612,25 +612,25 @@ void CServer::clientThread(CClient* client)
 	}
 
 	{
-		std::lock_guard<std::recursive_mutex> lock(gMutex);
-		auto it = std::find_if(gClients.begin(), gClients.end()
-			, [client](CClient* c)
+		std::lock_guard<std::recursive_mutex> lock(mMutex);
+		auto it = std::find_if(mClients.begin(), mClients.end()
+			, [client](CClient* client)
 			{
-				return c->id == client->id;
+				return client->id == client->id;
 			});
 
-		if (it != gClients.end())
+		if (it != mClients.end())
 		{
-			bool wasOwner = (client->id == gRoomOwner);
-			gClients.erase(it);
-			broadcast(client->id, (int)ServerMessage::MSG_DISCONNECT, &client->id, sizeof(int));
+			bool wasOwner = (client->id == mRoomOwner);
+			mClients.erase(it);
+			Broadcast(client->id, (int)ServerMessage::MSG_DISCONNECT, &client->id, sizeof(int));
 
-			if (gClients.empty())
-				gRoomOwner = -1;
+			if (mClients.empty())
+				mRoomOwner = -1;
 			else if (wasOwner)
 			{
-				gRoomOwner = gClients.front()->id;
-				broadcast(0, (int)ServerMessage::MSG_NEW_OWNER, &gRoomOwner, sizeof(int));
+				mRoomOwner = mClients.front()->id;
+				Broadcast(0, (int)ServerMessage::MSG_NEW_OWNER, &mRoomOwner, sizeof(int));
 			}
 		}
 	}

@@ -17,16 +17,16 @@ public:
 	~CServer();
 
 private:
-	SOCKET server;
-	std::recursive_mutex gMutex;
-	std::vector<struct CClient*> gClients;
-	std::unordered_set<int> gDeadPlayers;
-	std::map<int, Obstacle> gObstaclesByStep;
+	SOCKET mServer;
+	std::recursive_mutex mMutex;
+	std::vector<struct CClient*> mClients;
+	std::unordered_set<int> mDeadPlayers;
+	std::map<int, Obstacle> mObstaclesByStep;
 
-	GameState gState = WAITING;
-	int gNextId = 1;
-	int gRoomOwner = -1;
-	int gMapId = 0;
+	GameState mState = WAITING;
+	int mNextId = 1;
+	int mRoomOwner = -1;
+	int mMapId = 0;
 
 	LARGE_INTEGER mSecond = {};
 	LARGE_INTEGER mTime = {};
@@ -46,18 +46,18 @@ public:
 	void Run();
 
 private:
-	bool sendAll(SOCKET sock, const char* data, int len);
-	bool sendMessage(SOCKET sock, int senderId, int msgType, const void* body, int bodyLen);
-	void broadcast(int senderId, int msgType, const void* data, int len);
-	bool recvAll(SOCKET sock, char* buffer, int len);
-	bool receiveMessage(SOCKET sock, MessageHeader& header, std::vector<char>& body);
+	bool SendAll(SOCKET sock, const char* data, int len);
+	bool SendMsg(SOCKET sock, int senderId, int msgType, const void* body, int bodyLen);
+	void Broadcast(int senderId, int msgType, const void* data, int len);
+	bool RecvAll(SOCKET sock, char* buffer, int len);
+	bool ReceiveMsg(SOCKET sock, MessageHeader& header, std::vector<char>& body);
 
 
 private:
-	void checkGameOver();
-	void sendRoomFullInfo(struct CClient* client);
+	void CheckGameOver();
+	void SendRoomFullInfo(struct CClient* client);
 	void InGameUpdateLoop();
-	void clientThread(struct CClient* client);
+	void ClientThread(struct CClient* client);
 
 };
 
