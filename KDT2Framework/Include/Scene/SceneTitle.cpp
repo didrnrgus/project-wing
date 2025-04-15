@@ -154,7 +154,7 @@ void CSceneTitle::InitObjectAfterDataLoad()
 	if (obstacleGamePlayStateCtlr)
 		mArrGamePlayStateCtlr.push_back(obstacleGamePlayStateCtlr);
 
-
+	lineGroup->SetIsTitle(true);
 	SetGamePlayState(EGamePlayState::Start);
 }
 

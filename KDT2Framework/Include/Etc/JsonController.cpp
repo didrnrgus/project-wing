@@ -335,12 +335,6 @@ FLineNode CJsonController::ParseJsonFLineNode(const nlohmann::json& json)
 	if (json.contains("bottom_y_pos"))
 		lineNode.BottomYPos = json["bottom_y_pos"].get<float>();
 
-	if (json.contains("item_type"))
-		lineNode.ItemType = json["item_type"].get<int>();
-
-	if (json.contains("obstacle_type"))
-		lineNode.ObstacleType = json["obstacle_type"].get<int>();
-
 	return lineNode;
 }
 

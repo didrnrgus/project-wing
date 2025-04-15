@@ -29,12 +29,14 @@ bool CLineGroupObject::Init()
 {
 	CSceneObject::Init();
 	FResolution RS = CDevice::GetInst()->GetResolution();
+	mResolution = FVector2D(RS.Width, RS.Height);
 	mToAddPos = FVector2D(RS.Width * 0.5f, RS.Height * 0.5f);
 	mCurLineNodeIndex = 0;
 	mLineNodesCount = CDataStorageManager::GetInst()->GetLineNodeCountInSelectedMap();
 	mLineNodesCycleCount = 0;
 	mDifficultyRate = CDataStorageManager::GetInst()->GetSelectedMapInfo().DifficultyRate;
 	mMovedValue = 0.0f;
+	mIsTitle = false;
 
 	mRoot = CreateComponent<CSceneComponent>("Root");
 	SetRootComponent(mRoot);
@@ -105,15 +107,21 @@ void CLineGroupObject::AddLine(ELinePosType::Type type, int lineNodeIndex)
 	tempLine2DComp->SetCollisionProfile(PROFILE_MAP);
 	tempLine2DComp->SetRelativePos(FVector2D::Zero);
 
-	AddLineSetting(type, lineNodeIndex, tempSpriteComp, tempLine2DComp);
+	CSharedPtr<CColliderLine2D> tempLine2DCompForEmptySpace = CreateComponent<CColliderLine2D>();
+	tempSpriteComp->AddChild(tempLine2DCompForEmptySpace);
+	tempLine2DCompForEmptySpace->SetCollisionProfile(PROFILE_MAP);
+	tempLine2DCompForEmptySpace->SetRelativePos(FVector2D::Zero);
+
+	AddLineSetting(type, lineNodeIndex, tempSpriteComp, tempLine2DComp, tempLine2DCompForEmptySpace);
 }
 
 void CLineGroupObject::AddLineSetting(ELinePosType::Type type, int lineNodeIndex
-	, CSpriteComponent* spriteComponent, CColliderLine2D* colliderLine3D)
+	, CSpriteComponent* spriteComponent
+	, CColliderLine2D* colliderLine2D
+	, CColliderLine2D* colliderLine2DForEmptySpace)
 {
 	auto lineNode = CDataStorageManager::GetInst()->GetLineNodeInSelectedMap(lineNodeIndex);
 	auto lineNodeNext = CDataStorageManager::GetInst()->GetLineNodeInSelectedMap(lineNodeIndex + 1);
-
 
 	lineNodeIndex = lineNodeIndex >= mMaxLineCount - 1 ? mMaxLineCount - 1 : lineNodeIndex;
 	float startX = mSnapXValue * lineNodeIndex;
@@ -140,18 +148,23 @@ void CLineGroupObject::AddLineSetting(ELinePosType::Type type, int lineNodeIndex
 	spriteComponent->SetWorldPos(lineInfo.Start);
 	spriteComponent->SetWorldRotationZ(lineInfo.GetRotationAngle());
 	spriteComponent->SetWorldScale(FVector2D(20.0f, lineInfo.GetLength()));
-	colliderLine3D->SetWorldRotationZ(lineInfo.GetRotationAngle());
-	colliderLine3D->SetLineDistance(lineInfo.GetLength());
+	colliderLine2D->SetWorldRotationZ(lineInfo.GetRotationAngle());
+	colliderLine2D->SetLineDistance(lineInfo.GetLength());
+	colliderLine2DForEmptySpace->SetLineDistance(mResolution.y * 0.5f);
 
 	if (type == ELinePosType::Top)
 	{
+		colliderLine2DForEmptySpace->SetWorldRotationZ(0.0f);
 		mTopLines.push_back(spriteComponent);
-		mTopColliderLines.push_back(colliderLine3D);
+		mTopColliderLines.push_back(colliderLine2D);
+		mTopColliderLinesForEmptySpace.push_back(colliderLine2DForEmptySpace);
 	}
 	else
 	{
+		colliderLine2DForEmptySpace->SetWorldRotationZ(180.0f);
 		mBottomLines.push_back(spriteComponent);
-		mBottomColliderLines.push_back(colliderLine3D);
+		mBottomColliderLines.push_back(colliderLine2D);
+		mBottomColliderLinesForEmptySpace.push_back(colliderLine2DForEmptySpace);
 	}
 }
 
@@ -161,20 +174,25 @@ void CLineGroupObject::ArrangeLines()
 
 	(*mTopLines.begin()).Get()->Destroy();
 	(*mTopColliderLines.begin()).Get()->Destroy();
+	(*mTopColliderLinesForEmptySpace.begin()).Get()->Destroy();
 	(*mBottomLines.begin()).Get()->Destroy();
 	(*mBottomColliderLines.begin()).Get()->Destroy();
+	(*mBottomColliderLinesForEmptySpace.begin()).Get()->Destroy();
 
 	mTopLine2DInfos.pop_front();
 	mTopLines.pop_front();
 	mTopColliderLines.pop_front();
+	mTopColliderLinesForEmptySpace.pop_front();
 	mBottomLine2DInfos.pop_front();
 	mBottomLines.pop_front();
 	mBottomColliderLines.pop_front();
+	mBottomColliderLinesForEmptySpace.pop_front();
 
 	mCurLineNodeIndex++;
 	if (mCurLineNodeIndex % mLineNodesCount == 0)
 	{
-		//mLineNodesCycleCount++;
+		if (!mIsTitle)
+			mLineNodesCycleCount++;
 	}
 
 	AddLine(ELinePosType::Top, mCurLineNodeIndex);

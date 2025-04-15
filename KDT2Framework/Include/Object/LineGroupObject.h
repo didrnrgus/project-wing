@@ -30,10 +30,13 @@ protected:
 	std::list<FLine2D> mTopLine2DInfos;
 	std::list<CSharedPtr<class CSpriteComponent>> mTopLines;
 	std::list<CSharedPtr<class CColliderLine2D>> mTopColliderLines;
+	std::list<CSharedPtr<class CColliderLine2D>> mTopColliderLinesForEmptySpace;
 	std::list<FLine2D> mBottomLine2DInfos;
 	std::list<CSharedPtr<class CSpriteComponent>> mBottomLines;
 	std::list<CSharedPtr<class CColliderLine2D>> mBottomColliderLines;
+	std::list<CSharedPtr<class CColliderLine2D>> mBottomColliderLinesForEmptySpace;
 
+	FVector2D mResolution;
 	FVector2D mToAddPos;
 	const int mMaxLineCount = 7; // 보여질 라인
 	const float mSnapXValue = 300.0f; // 데이터는 Y값만 있을거라서 -> 라인의 x축 투영길이.
@@ -41,8 +44,8 @@ protected:
 	int mCurLineNodeIndex;
 	int mLineNodesCount;
 	int mLineNodesCycleCount;
-
 	float mMovedValue;
+	bool mIsTitle;
 
 public:
 	virtual bool Init() override;
@@ -50,18 +53,21 @@ public:
 	virtual void Update(float DeltaTime) override;
 
 	virtual void SetGamePlayState(EGamePlayState::Type type) override;
-public:
+protected:
 	// 씬에서 호출 -> 로드된 데이터를 받는 용도.
 	void InitLines();
 	void AddLine(ELinePosType::Type type, int lineNodeIndex);
 	void AddLineSetting(ELinePosType::Type type, int lineNodeIndex
-		, class CSpriteComponent* spriteComponent, class CColliderLine2D* colliderLine3D);
+		, class CSpriteComponent* spriteComponent
+		, class CColliderLine2D* colliderLine2D
+		, class CColliderLine2D* colliderLine2DForEmptySpace);
 	void ArrangeLines();
 	void MoveLines(float DeltaTime);
 	template<typename T>
 	void MoveLine(std::list<CSharedPtr<T>>& list, FVector3D moveVal);
 
 public:
+	void SetIsTitle(bool _isTitle) { mIsTitle = _isTitle; }
 	void SetTargetStat(class IPlayerStatController* targetPlayerStat) { mTargetPlayerStat = targetPlayerStat; }
 };
 
