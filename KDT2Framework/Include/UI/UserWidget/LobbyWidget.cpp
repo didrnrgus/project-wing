@@ -1030,12 +1030,11 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 		curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
 
 	UpdatePlayerStat();
-	UpdateSimpleCharacterRankInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
-	{
 		SendMessageTriggerInt(ClientMessage::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
-	}
+	else
+		UpdateSimpleCharacterRankInfo();
 }
 
 void CLobbyWidget::OnCharacterRightButtonClick()
@@ -1048,13 +1047,11 @@ void CLobbyWidget::OnCharacterRightButtonClick()
 		curPlayerGraphicIndex = 0;
 
 	UpdatePlayerStat();
-	UpdateSimpleCharacterRankInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
-	{
 		SendMessageTriggerInt(ClientMessage::MSG_PICK_CHARACTER, curPlayerGraphicIndex);
-	}
-
+	else
+		UpdateSimpleCharacterRankInfo();
 }
 
 void CLobbyWidget::InitOtherPlayersInfo()
@@ -1393,12 +1390,11 @@ void CLobbyWidget::OnMapLeftButtonClick()
 		curDifficultyIndex = CDataStorageManager::GetInst()->GetMapInfoCount() - 1;
 
 	UpdateMapInfo();
-	UpdateSimpleMapRankInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
-	{
 		SendMessageTriggerInt(ClientMessage::MSG_PICK_MAP, curDifficultyIndex);
-	}
+	else
+		UpdateSimpleMapRankInfo();
 }
 
 void CLobbyWidget::OnMapRightButtonClick()
@@ -1411,12 +1407,11 @@ void CLobbyWidget::OnMapRightButtonClick()
 		curDifficultyIndex = 0;
 
 	UpdateMapInfo();
-	UpdateSimpleMapRankInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
-	{
 		SendMessageTriggerInt(ClientMessage::MSG_PICK_MAP, curDifficultyIndex);
-	}
+	else
+		UpdateSimpleMapRankInfo();
 }
 
 void CLobbyWidget::UpdateMapInfo()
