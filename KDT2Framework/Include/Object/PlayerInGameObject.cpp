@@ -355,7 +355,11 @@ void CPlayerInGameObject::OnPlayerDead()
 	rankInfo.Item_1 = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(1);
 	rankInfo.Item_2 = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(2);
 
-	if (!CNetworkManager::GetInst()->IsMultiplay())
+	if (CNetworkManager::GetInst()->IsMultiplay())
+	{
+		CDataStorageManager::GetInst()->SetCurUserResult(rankInfo, false);
+	}
+	else
 	{
 		// 쓰레드 시작.
 		mTaskID = CTaskManager::GetInst()->AddTask(std::move(std::thread(
@@ -377,7 +381,7 @@ void CPlayerInGameObject::OnPlayerDead()
 				CSceneInGame* _inGameScene = dynamic_cast<CSceneInGame*>(mScene);
 				CSceneWidget* _sceneWidget = (CSceneWidget*)_inGameScene->GetInGameWidget();
 				_sceneWidget->LoadScene(EGameScene::Result);
-				
+
 			})));
 	}
 }
