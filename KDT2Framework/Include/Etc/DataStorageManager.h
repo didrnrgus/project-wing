@@ -115,7 +115,14 @@ public:
 	}
 
 	inline const std::map<int, FItemInfo> GetItemInfoDatas() { return mItemInfoDatasByIndex; }
-	inline const FItemInfo GetItemInfoDataByIndex(int index) { return mItemInfoDatasByIndex[index]; }
+	inline const FItemInfo GetItemInfoDataByIndex(int index)
+	{
+		if (mItemInfoDatasByIndex.count(index))
+			return mItemInfoDatasByIndex[index];
+
+		if (index < 0)
+			throw;
+	}
 	inline const int GetCurSelectedItemIDBySlotIndex(int index) { return curSelectedItemIndex[index]; }
 	std::vector<FUserRankInfo> GetArrayUserRankByCategory(ERankMenuTap::Type _mainCategoryType, int _subCategoryValue = -1);
 	inline const FColorInfo GetColorInfoFromName(std::string _colorName)

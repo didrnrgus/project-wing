@@ -500,8 +500,6 @@ void CLobbyWidget::InitItemButtons()
 			});
 	}
 
-	// 슬롯 눌렀을때 아이템 버튼 세개 쪼르륵 나오는거 세팅.
-	// 하이라키 세팅은 하지말자.
 	for (int i = 0; i < itemTypeCount; i++)
 	{
 		CSharedPtr<CImage> buttonBackImage = mScene->GetUIManager()->CreateWidget<CImage>(mArrSlotImageName[(int)SlotType::Fully]);
@@ -590,6 +588,10 @@ void CLobbyWidget::SelectItemForSlot(int _slotIndex, int _itemTypeIndex)
 	for (int i = 0; i < itemSlotCount; i++)
 	{
 		auto _selectedItemIndex = CDataStorageManager::GetInst()->GetCurSelectedItemIDBySlotIndex(i);
+
+		if (_selectedItemIndex < 0)
+			continue;
+
 		auto _itemStatInfo = CDataStorageManager::GetInst()->GetItemInfoDataByIndex(_selectedItemIndex);
 
 		int _indexPlayerStatFromCommonStat = 0;
