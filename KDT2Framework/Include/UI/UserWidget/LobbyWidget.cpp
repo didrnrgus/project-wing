@@ -1004,6 +1004,7 @@ void CLobbyWidget::ProcessMessage(const RecvMessage& msg)
 		mMapRightButton->SetEnable(_isHost);
 
 		curDifficultyIndex = CMultiplayManager::GetInst()->GetCurMapIndex();
+		CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
 		UpdateMapInfo();
 
 		break;
