@@ -740,8 +740,6 @@ void CLobbyWidget::StartGame()
 {
 	CLog::PrintLog("mNextButton Click curPlayerGraphicIndex: " + std::to_string(curPlayerGraphicIndex));
 	CLog::PrintLog("mNextButton Click curDifficultyIndex: " + std::to_string(curDifficultyIndex));
-	CDataStorageManager::GetInst()->SetSelectedCharacterIndex(curPlayerGraphicIndex);
-	CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
 	LoadScene(EGameScene::InGame);
 }
 
@@ -1031,6 +1029,7 @@ void CLobbyWidget::OnCharacterLeftButtonClick()
 	else
 		curPlayerGraphicIndex = CDataStorageManager::GetInst()->GetCharacterCount() - 1;
 
+	CDataStorageManager::GetInst()->SetSelectedCharacterIndex(curPlayerGraphicIndex);
 	UpdatePlayerStat();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
@@ -1048,6 +1047,7 @@ void CLobbyWidget::OnCharacterRightButtonClick()
 	if (curPlayerGraphicIndex == CDataStorageManager::GetInst()->GetCharacterCount())
 		curPlayerGraphicIndex = 0;
 
+	CDataStorageManager::GetInst()->SetSelectedCharacterIndex(curPlayerGraphicIndex);
 	UpdatePlayerStat();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
@@ -1391,6 +1391,7 @@ void CLobbyWidget::OnMapLeftButtonClick()
 	if (curDifficultyIndex < 0)
 		curDifficultyIndex = CDataStorageManager::GetInst()->GetMapInfoCount() - 1;
 
+	CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
 	UpdateMapInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
@@ -1408,6 +1409,7 @@ void CLobbyWidget::OnMapRightButtonClick()
 	if (curDifficultyIndex == CDataStorageManager::GetInst()->GetMapInfoCount())
 		curDifficultyIndex = 0;
 
+	CDataStorageManager::GetInst()->SetSelectedMapIndex(curDifficultyIndex);
 	UpdateMapInfo();
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
