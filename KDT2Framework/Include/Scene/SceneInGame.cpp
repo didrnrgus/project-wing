@@ -17,6 +17,7 @@
 #include "Etc/NetworkManager.h"
 #include "Etc/MultiplayManager.h"
 #include "Etc/TaskManager.h"
+#include "Etc/ConstValues.h"
 
 CSceneInGame::CSceneInGame()
 {
@@ -88,7 +89,7 @@ bool CSceneInGame::InitObject()
 	CObstacleGroupObject* obstacle = CreateObj<CObstacleGroupObject>("Obstacle");
 
 	// players init
-	players.resize(5, nullptr); // 미리 칸 만들어놓기.
+	players.resize(PLAYER_COUNT_MAX, nullptr); // 미리 칸 만들어놓기.
 
 	if (CNetworkManager::GetInst()->IsMultiplay())
 	{
