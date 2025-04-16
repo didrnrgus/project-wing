@@ -5,7 +5,7 @@
 #define IP_ADDRESS_DEFAULT_A "127.0.0.1"
 #define NICKNAME_DEFAULT_A "Unknown"
 #define TITLE_FORMAT TEXT("ProjectWing | Nickname: %s | Host IP: %s")
-#define PLAYER_COUNT_MAX 8
+#define PLAYER_COUNT_MAX 5
 #define PLAYER_SIMPLE_RANK 3
 #define PLAYER_ITEM_COUNT_MAX 3
 #define PLAYER_ITEM_TYPE_DEFAULT_INDEX -1

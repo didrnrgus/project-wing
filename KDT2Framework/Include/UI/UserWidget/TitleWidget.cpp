@@ -198,16 +198,17 @@ void CTitleWidget::LoadGameData()
 			CLog::PrintLog("colorResult: " + colorResult);
 			CDataStorageManager::GetInst()->SetColorInfoData(colorResult);
 
-			// 컨피그 관련 데이터 로드 끝 표시.
-			CDataStorageManager::GetInst()->SetIsLoadedData(true);
-
 			CTaskManager::GetInst()->RemoveTask(mTaskID);
 			mScene->SetIsLoadingScene(false);
 			ShowLoading(false);
 
-			LoadRankData();
+			// 컨피그 관련 데이터 로드 끝 표시.
+			CDataStorageManager::GetInst()->SetIsLoadedData(true);
+
 			auto _sceneTitle = dynamic_cast<CSceneTitle*>(mScene);
 			_sceneTitle->InitObjectAfterDataLoad();
+
+			LoadRankData();
 		})));
 }
 

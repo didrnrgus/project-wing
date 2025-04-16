@@ -19,6 +19,9 @@ int CTaskManager::AddTask(std::thread&& task)
     CLog::PrintLog("CTaskManager::AddTask taskStart: " + std::to_string(taskID));
 
     mThreadTasks.insert(std::make_pair(taskID, std::move(task)));
+
+    //if (mThreadTasks[taskID].joinable())
+    //    mThreadTasks[taskID].join();
     mThreadTasks[taskID].detach();
     return taskID;
 }
