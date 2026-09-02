@@ -1,0 +1,8 @@
+.vs/
+.github/
+.idea/
+
+project-wing-socket-client/x64/*
+project-wing-socket-server/Include/x64/*
+project-wing-socket-client/x86/*
+project-wing-socket-server/Include/x86/*

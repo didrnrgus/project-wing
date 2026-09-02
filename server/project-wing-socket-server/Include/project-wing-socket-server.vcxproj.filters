@@ -1,0 +1,72 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="소스 파일">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="헤더 파일">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="리소스 파일">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Singleton">
+      <UniqueIdentifier>{31db95d4-70c2-45ed-84c2-2f75cf25c89a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{23c48bc6-0894-4160-b3c6-8270f33dd792}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Interface">
+      <UniqueIdentifier>{cb373382-c2ef-4a06-8363-65eaf0be756c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Network">
+      <UniqueIdentifier>{5d4e07d5-1f38-4549-a7a2-55f854c5422a}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Etc\CURL.cpp">
+      <Filter>Singleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Etc\DataStorageManager.cpp">
+      <Filter>Singleton</Filter>
+    </ClCompile>
+    <ClCompile Include="Etc\JsonController.cpp">
+      <Filter>Singleton</Filter>
+    </ClCompile>
+    <ClCompile Include="server-main.cpp">
+      <Filter>소스 파일</Filter>
+    </ClCompile>
+    <ClCompile Include="Network\Server.cpp">
+      <Filter>Network</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Etc\CURL.h">
+      <Filter>Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\DataStorageManager.h">
+      <Filter>Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\JsonController.h">
+      <Filter>Singleton</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\JsonContainer.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Interface\IPlayerStatController.h">
+      <Filter>Interface</Filter>
+    </ClInclude>
+    <ClInclude Include="GameInfo.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Client.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+    <ClInclude Include="Network\Server.h">
+      <Filter>Network</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>
