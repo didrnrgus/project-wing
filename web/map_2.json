@@ -1,0 +1,70 @@
+{
+    "index": 2,
+    "name": "Hard",
+    "color_name": "Red",
+    "difficulty_rate": 9.0,
+    "collision_damage": 40.0,
+    "obstacle_interval_time": 1.0,
+    "line_node_list": [
+        {
+            "top_y_pos": 720.0,
+            "bottom_y_pos": 0.0
+        },
+        {
+            "top_y_pos": 700.0,
+            "bottom_y_pos": 40.0
+        },
+        {
+            "top_y_pos": 690.0,
+            "bottom_y_pos": 60.0
+        },
+        {
+            "top_y_pos": 700.0,
+            "bottom_y_pos": 70.0
+        },
+        {
+            "top_y_pos": 630.0,
+            "bottom_y_pos": 100.0
+        },
+        {
+            "top_y_pos": 720.0,
+            "bottom_y_pos": 0.0
+        },
+        {
+            "top_y_pos": 640.0,
+            "bottom_y_pos": 40.0
+        },
+        {
+            "top_y_pos": 690.0,
+            "bottom_y_pos": 60.0
+        },
+        {
+            "top_y_pos": 700.0,
+            "bottom_y_pos": 70.0
+        },
+        {
+            "top_y_pos": 630.0,
+            "bottom_y_pos": 100.0
+        },
+        {
+            "top_y_pos": 720.0,
+            "bottom_y_pos": 0.0
+        },
+        {
+            "top_y_pos": 600.0,
+            "bottom_y_pos": 40.0
+        },
+        {
+            "top_y_pos": 690.0,
+            "bottom_y_pos": 60.0
+        },
+        {
+            "top_y_pos": 700.0,
+            "bottom_y_pos": 70.0
+        },
+        {
+            "top_y_pos": 630.0,
+            "bottom_y_pos": 100.0
+        }
+    ]
+}

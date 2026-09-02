@@ -1,0 +1,32 @@
+{
+    "item_list": [
+        {
+            "index": 0,
+            "name": "Potion",
+            "stat_type": 0,
+            "add_value": 20.0,
+            "desc": "When held, maximum stamina increases."
+        },
+        {
+            "index": 1,
+            "name": "Fast",
+            "stat_type": 1,
+            "add_value": 40.0,
+            "desc": "Speed increases when in possession."
+        },
+        {
+            "index": 2,
+            "name": "PowerUp",
+            "stat_type": 2,
+            "add_value": 40.0,
+            "desc": "Increases agility when possessed."
+        },
+        {
+            "index": 3,
+            "name": "Shild",
+            "stat_type": 3,
+            "add_value": 5.0,
+            "desc": "Defense increases when possessed."
+        }
+    ]
+}

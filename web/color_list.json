@@ -1,0 +1,36 @@
+{
+    "colors": [
+      { "color_name": "Magenta", "hex": "#FF00FF", "r": 1.0, "g": 0.0, "b": 1.0, "a": 1.0 },
+      { "color_name": "Red", "hex": "#FF0000", "r": 1.0, "g": 0.0, "b": 0.0, "a": 1.0 },
+      { "color_name": "Green", "hex": "#00FF00", "r": 0.0, "g": 1.0, "b": 0.0, "a": 1.0 },
+      { "color_name": "Blue", "hex": "#0000FF", "r": 0.0, "g": 0.0, "b": 1.0, "a": 1.0 },
+      { "color_name": "Cyan", "hex": "#00FFFF", "r": 0.0, "g": 1.0, "b": 1.0, "a": 1.0 },
+      { "color_name": "Yellow", "hex": "#FFFF00", "r": 1.0, "g": 1.0, "b": 0.0, "a": 1.0 },
+      { "color_name": "Lime", "hex": "#BFFF00", "r": 0.75, "g": 1.0, "b": 0.0, "a": 1.0 },
+      { "color_name": "Orange", "hex": "#FFA500", "r": 1.0, "g": 0.65, "b": 0.0, "a": 1.0 },
+      { "color_name": "Coral", "hex": "#FF7F50", "r": 1.0, "g": 0.5, "b": 0.31, "a": 1.0 },
+      { "color_name": "Salmon", "hex": "#FA8072", "r": 0.98, "g": 0.5, "b": 0.45, "a": 1.0 },
+      { "color_name": "Brown", "hex": "#A52A2A", "r": 0.65, "g": 0.16, "b": 0.16, "a": 1.0 },
+      { "color_name": "Turquoise", "hex": "#40E0D0", "r": 0.25, "g": 0.88, "b": 0.82, "a": 1.0 },
+      { "color_name": "Pink", "hex": "#FF99AB", "r": 1.0, "g": 0.6, "b": 0.67, "a": 1.0 },
+      { "color_name": "Mint", "hex": "#98FF98", "r": 0.6, "g": 1.0, "b": 0.6, "a": 1.0 },
+      { "color_name": "DarkRed", "hex": "#8B0000", "r": 0.55, "g": 0.0, "b": 0.0, "a": 1.0 },
+      { "color_name": "DarkGreen", "hex": "#006400", "r": 0.0, "g": 0.39, "b": 0.0, "a": 1.0 },
+      { "color_name": "DarkBlue", "hex": "#00008B", "r": 0.0, "g": 0.0, "b": 0.55, "a": 1.0 },
+      { "color_name": "Purple", "hex": "#800080", "r": 0.5, "g": 0.0, "b": 0.5, "a": 1.0 },
+      { "color_name": "Olive", "hex": "#808000", "r": 0.5, "g": 0.5, "b": 0.0, "a": 1.0 },
+      { "color_name": "Teal", "hex": "#008080", "r": 0.0, "g": 0.5, "b": 0.5, "a": 1.0 },
+      { "color_name": "Indigo", "hex": "#4B0082", "r": 0.29, "g": 0.0, "b": 0.51, "a": 1.0 },
+      { "color_name": "Navy", "hex": "#000080", "r": 0.0, "g": 0.0, "b": 0.5, "a": 1.0 },
+      { "color_name": "SkyBlue", "hex": "#87CEEB", "r": 0.53, "g": 0.81, "b": 0.92, "a": 1.0 },
+      { "color_name": "Gray", "hex": "#808080", "r": 0.5, "g": 0.5, "b": 0.5, "a": 1.0 },
+      { "color_name": "DarkGray", "hex": "#4D4D4D", "r": 0.3, "g": 0.3, "b": 0.3, "a": 1.0 },
+      { "color_name": "LightGray", "hex": "#B3B3B3", "r": 0.7, "g": 0.7, "b": 0.7, "a": 1.0 },
+      { "color_name": "Beige", "hex": "#F5F5DC", "r": 0.96, "g": 0.96, "b": 0.86, "a": 1.0 },
+      { "color_name": "Lavender", "hex": "#E6E6FA", "r": 0.9, "g": 0.9, "b": 0.98, "a": 1.0 },
+      { "color_name": "White", "hex": "#FFFFFF", "r": 1.0, "g": 1.0, "b": 1.0, "a": 1.0 },
+      { "color_name": "Black", "hex": "#000000", "r": 0.0, "g": 0.0, "b": 0.0, "a": 1.0 },
+      { "color_name": "Transparent", "hex": "#00000000", "r": 0.0, "g": 0.0, "b": 0.0, "a": 0.0 }
+    ]
+  }
+  

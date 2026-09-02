@@ -1,0 +1,30 @@
+{
+    "index": 0,
+    "name": "Easy",
+    "color_name": "SkyBlue",
+    "difficulty_rate": 5.0,
+    "collision_damage": 30.0,
+    "obstacle_interval_time": 2.0,
+    "line_node_list": [
+        {
+            "top_y_pos": 720.0,
+            "bottom_y_pos": 0.0
+        },
+        {
+            "top_y_pos": 700.0,
+            "bottom_y_pos": 40.0
+        },
+        {
+            "top_y_pos": 690.0,
+            "bottom_y_pos": 60.0
+        },
+        {
+            "top_y_pos": 700.0,
+            "bottom_y_pos": 70.0
+        },
+        {
+            "top_y_pos": 630.0,
+            "bottom_y_pos": 100.0
+        }
+    ]
+}
