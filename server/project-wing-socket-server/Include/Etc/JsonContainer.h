@@ -96,9 +96,9 @@ struct FCharacterState
 
 /*
 {
-	"db_id": "19e45759635e8028adb0d83e3cf969ff",
-	"db_url": "https://api.notion.com/v1/databases/19e45759635e8028adb0d83e3cf969ff",
-	"api_key": "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",
+	"db_id": "<YOUR_NOTION_DATABASE_ID>",
+	"db_url": "https://api.notion.com/v1/databases/<YOUR_NOTION_DATABASE_ID>",
+	"api_key": "<YOUR_NOTION_INTEGRATION_TOKEN>",
 	"map_file_list": [
 		"map_0.json",
 		"map_1.json",

@@ -223,8 +223,8 @@ struct FCharacterState
 
 /*
 {
-	"db_id": "19e45759635e8028adb0d83e3cf969ff",
-	"api_key": "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",
+	"db_id": "<YOUR_NOTION_DATABASE_ID>",
+	"api_key": "<YOUR_NOTION_INTEGRATION_TOKEN>",
 	"map_file_list": [
 		"map_0.json",
 		"map_1.json",
