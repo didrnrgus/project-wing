@@ -6,3 +6,14 @@ project-wing-socket-client/x64/*
 project-wing-socket-server/Include/x64/*
 project-wing-socket-client/x86/*
 project-wing-socket-server/Include/x86/*
+
+# --- 통합 후 추가 (2026-09-02) ---
+# x64/ 는 산출물 전용 폴더가 아니다. libcurl 재배포물과 pem/cacert.pem 은
+# 빌드 입력물이므로 추적을 유지한다. 실행 파일/디버그 심볼만 제외한다.
+# (.exe, .pdb 는 루트 .gitignore 의 **/*.exe, **/*.pdb 규칙이 이미 처리)
+*.ilk
+*.idb
+*.iobj
+*.ipdb
+**/*.tlog
+x64/*/*.log

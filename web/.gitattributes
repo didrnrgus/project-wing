@@ -1,0 +1,11 @@
+# 이 디렉터리는 project-wing-webserver 레포(GitHub Pages)로 그대로 미러링된다.
+# GitHub Pages는 LFS 객체를 서빙하지 않고 포인터 텍스트를 그대로 내보내므로,
+# 루트 .gitattributes의 LFS 규칙을 여기서 반드시 해제해야 한다.
+# (해제하지 않으면 배포된 color_list.png가 깨진다)
+*.png  -filter -diff -merge -text
+*.jpg  -filter -diff -merge -text
+*.jpeg -filter -diff -merge -text
+
+# 데이터 파일은 웹에서 그대로 서빙되므로 개행 변환 금지
+*.json -text
+*.html -text
