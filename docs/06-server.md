@@ -29,7 +29,7 @@
 | `Server/Include/project-wing-socket-server.vcxproj` | x64 Debug/Release. `ProjectWing.sln`에 포함 |
 
 - 솔루션을 빌드하면 서버도 같이 빌드되어 `KDT2Framework/Bin/Server/{Debug|Release}/project-wing-socket-server.exe`로 바로 출력됩니다. 중간 파일은 `Server/BinObj/`(gitignore).
-- `.gitignore`가 모든 `*.exe`를 제외하지만 `KDT2Framework/Bin/Server/**/*.exe`는 예외로 커밋합니다. 서버를 고쳤으면 Debug, Release를 둘 다 빌드해 두 exe를 함께 커밋해야 클라이언트 빌드 구성과 맞습니다.
+- `.gitignore`가 모든 `*.exe`를 제외하지만 `KDT2Framework/Bin/Server/**/*.exe`는 예외로 커밋합니다. 서버를 고쳤으면 Debug, Release를 둘 다 빌드해 두 exe를 함께 커밋해야 클라이언트 빌드 구성과 맞습니다. GitHub Release zip에 들어가는 서버 exe는 커밋된 exe가 아니라 CI에서 새로 빌드한 것입니다([09-release.md](09-release.md)).
 - 외부 의존: nlohmann/json(`KDT2Framework/Include/json-develop`을 include 경로로 공유), `ws2_32.lib`, `winhttp.lib`. libcurl과 `pem/`은 필요 없습니다. 폴더에 남아 있는 `libcurl-x64.*`, `pem/`은 원본 서버용입니다.
 - Release는 정적 CRT(`/MT`)라 VC 재배포 패키지 없이 exe 하나로 실행됩니다.
 - 수동 실행: `project-wing-socket-server.exe [port]`. 클라이언트 없이 띄워 두고 프로토콜 테스트를 돌릴 때 씁니다.

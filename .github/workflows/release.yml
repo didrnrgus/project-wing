@@ -1,0 +1,172 @@
+# main에 push되면 버전을 올리고 Release|x64로 빌드한 뒤 GitHub Release에 배포 zip을 올린다.
+#
+# 버전 규칙 (태그 형식: 1.2.3, 접두사 없음)
+#   - 기본: patch +1
+#   - 이번 push에 포함된 커밋 메시지에 #minor 가 있으면 minor +1, #major 가 있으면 major +1
+#   - 수동 실행(workflow_dispatch)에서는 bump 입력으로 고른다.
+#   - HEAD에 이미 버전 태그가 있으면(재실행) 그 버전을 그대로 쓴다.
+# 태그는 빌드가 성공한 뒤 릴리즈를 만들 때 함께 생성되므로, 빌드가 실패하면 버전이 올라가지 않는다.
+
+name: Release
+
+on:
+  push:
+    branches: [main]
+    paths-ignore:
+      - 'docs/**'
+      - '**/*.md'
+      - '.gitignore'
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: '올릴 버전 자리'
+        type: choice
+        options: [patch, minor, major]
+        default: patch
+
+permissions:
+  contents: write
+
+# 동시에 여러 push가 들어와도 버전이 겹치지 않도록 한 번에 하나씩 실행한다.
+concurrency:
+  group: release
+  cancel-in-progress: false
+
+jobs:
+  release:
+    # VS 2022(v143 툴셋)가 필요하다. windows-latest는 2026-06부터 VS 2026(v145만 포함)이라 빌드가 안 된다.
+    runs-on: windows-2022
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0      # 태그와 커밋 기록 전체 (버전 계산용)
+          lfs: false          # LFS는 아래에서 캐시와 함께 받는다
+
+      # LFS 대역폭 절약: LFS 객체를 캐시하고 바뀐 것만 받는다.
+      - name: List LFS objects
+        shell: bash
+        run: git lfs ls-files --long | cut -d ' ' -f1 | sort > .lfs-assets-id
+
+      - name: Restore LFS cache
+        uses: actions/cache@v4
+        with:
+          path: .git/lfs
+          key: lfs-${{ hashFiles('.lfs-assets-id') }}
+          restore-keys: lfs-
+
+      - name: Pull LFS objects
+        shell: bash
+        run: git lfs pull
+
+      - name: Compute version
+        id: version
+        shell: pwsh
+        env:
+          BUMP_INPUT: ${{ github.event.inputs.bump }}
+        run: |
+          $semver = '^\d+\.\d+\.\d+$'
+
+          # 재실행: HEAD에 이미 버전 태그가 있으면 재사용
+          $headTag = git tag --points-at HEAD | Where-Object { $_ -match $semver } | Select-Object -First 1
+          $versions = @(git tag --list | Where-Object { $_ -match $semver } | ForEach-Object { [version]$_ } | Sort-Object -Descending)
+
+          if ($headTag) {
+            $next = $headTag
+            $prev = ($versions | Where-Object { $_ -lt [version]$headTag } | Select-Object -First 1)
+          } else {
+            $latest = if ($versions.Count -gt 0) { $versions[0] } else { $null }
+            $base = if ($latest) { $latest } else { [version]'0.0.0' }
+
+            $bump = $env:BUMP_INPUT
+            if (-not $bump) {
+              $range = if ($latest) { "$latest..HEAD" } else { 'HEAD~1..HEAD' }
+              $messages = (git log --format=%B $range) -join "`n"
+              if ($messages -match '#major') { $bump = 'major' }
+              elseif ($messages -match '#minor') { $bump = 'minor' }
+              else { $bump = 'patch' }
+            }
+
+            switch ($bump) {
+              'major' { $next = "$($base.Major + 1).0.0" }
+              'minor' { $next = "$($base.Major).$($base.Minor + 1).0" }
+              default { $next = "$($base.Major).$($base.Minor).$($base.Build + 1)" }
+            }
+            $prev = $latest
+          }
+
+          Write-Host "previous: $prev  ->  next: $next"
+          "version=$next" >> $env:GITHUB_OUTPUT
+          "previous=$prev" >> $env:GITHUB_OUTPUT
+
+      - name: Setup MSBuild
+        uses: microsoft/setup-msbuild@v2
+        with:
+          vs-version: '[17.0,18.0)'
+
+      - name: Build (Release|x64)
+        run: msbuild ProjectWing.sln /p:Configuration=Release /p:Platform=x64 /m /nologo /verbosity:minimal
+
+      # 배포 폴더 구조 (게임은 exe 폴더 기준 ../Bin/... 을 읽는다)
+      #   ProjectWing-<ver>/
+      #     ProjectWing.bat                 실행용 (작업 폴더를 Release로 맞춤)
+      #     Release/ProjectWing.exe, fmod.dll, libcurl-x64.dll, VC++ 런타임 DLL, pem/
+      #     Bin/Asset/, Bin/Shader/, Bin/Server/Release/project-wing-socket-server.exe, Bin/Log/
+      - name: Package
+        id: package
+        shell: pwsh
+        run: |
+          $ver = '${{ steps.version.outputs.version }}'
+          $name = "ProjectWing-$ver"
+          $stage = Join-Path $env:RUNNER_TEMP $name
+          $zip = Join-Path $env:RUNNER_TEMP "$name-win-x64.zip"
+
+          $rel = 'KDT2Framework/Release'
+          $bin = 'KDT2Framework/Bin'
+
+          New-Item -ItemType Directory -Force "$stage/Release/pem", "$stage/Bin/Server/Release", "$stage/Bin/Log" | Out-Null
+
+          Copy-Item "$rel/ProjectWing.exe", "$rel/fmod.dll", "$rel/libcurl-x64.dll" "$stage/Release/"
+          Copy-Item "$rel/pem/cacert.pem" "$stage/Release/pem/"
+          Copy-Item "$bin/Asset" "$stage/Bin/Asset" -Recurse
+          Copy-Item "$bin/Shader" "$stage/Bin/Shader" -Recurse
+          Copy-Item "$bin/Server/Release/project-wing-socket-server.exe" "$stage/Bin/Server/Release/"
+
+          # VC++ 런타임 (게임 exe가 /MD라 필요). 앱 로컬 배포로 재배포 패키지 설치 없이 실행되게 한다.
+          $vsPath = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * -version '[17.0,18.0)' -property installationPath
+          $crt = Get-ChildItem "$vsPath\VC\Redist\MSVC\*\x64\Microsoft.VC14*.CRT" -Directory |
+                 Sort-Object FullName -Descending | Select-Object -First 1
+          if (-not $crt) { throw "VC++ CRT redist folder not found under $vsPath" }
+          Write-Host "CRT: $($crt.FullName)"
+          Copy-Item "$($crt.FullName)\*.dll" "$stage/Release/"
+
+          Set-Content "$stage/ProjectWing.bat" -Encoding ascii -Value @(
+            '@echo off'
+            'cd /d "%~dp0Release"'
+            'start "" ProjectWing.exe'
+          )
+
+          Get-ChildItem $stage -Recurse -File | ForEach-Object { $_.FullName.Substring($stage.Length + 1) }
+          Compress-Archive -Path $stage -DestinationPath $zip -CompressionLevel Optimal
+          "zip=$zip" >> $env:GITHUB_OUTPUT
+
+      - name: Create GitHub Release
+        shell: pwsh
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          $ver  = '${{ steps.version.outputs.version }}'
+          $prev = '${{ steps.version.outputs.previous }}'
+          $zip  = '${{ steps.package.outputs.zip }}'
+
+          gh release view $ver *> $null
+          if ($LASTEXITCODE -eq 0) {
+            # 재실행: 릴리즈가 이미 있으면 파일만 교체
+            gh release upload $ver $zip --clobber
+          } else {
+            $notesArgs = @('--generate-notes')
+            if ($prev) { $notesArgs += @('--notes-start-tag', $prev) }
+            gh release create $ver $zip --target $env:GITHUB_SHA --title "ProjectWing $ver" @notesArgs
+          }
+          if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }

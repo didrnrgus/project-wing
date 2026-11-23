@@ -16,6 +16,7 @@ ProjectWing은 위아래 벽 사이를 날며 장애물을 피하고, 비행 거
 | [06-server.md](06-server.md) | 소켓 서버(`Server/Include`): 빌드, 실행 방식, 구조, 메시지별 실제 동작, 검증 방법 | 서버 |
 | [07-data-and-backend.md](07-data-and-backend.md) | 게임 데이터 JSON 스키마(GitHub Pages), 로딩 순서, Notion 랭킹 DB와 등록 알고리즘 | 클라이언트, 기획 |
 | [08-known-issues.md](08-known-issues.md) | 코드 분석 중 발견한 버그, 위험 요소, 불일치 | 전원 |
+| [09-release.md](09-release.md) | GitHub Actions 자동 릴리즈: 트리거, 버전 규칙, 빌드 환경, 배포 zip 구성 | 전원 |
 
 ## 한눈에 보는 구조
 
