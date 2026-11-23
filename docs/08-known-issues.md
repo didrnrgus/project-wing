@@ -52,5 +52,6 @@
 | 중간 | `GetItemInfoDataByIndex`: 없는 양수 인덱스면 반환값 없이 끝나고(정의되지 않은 동작), 음수면 처리 중인 예외 없이 `throw;`를 호출해 프로그램 종료 | `DataStorageManager.h` | 잘못된 아이템 번호가 들어오면 크래시 |
 | 낮음 | `FMapInfo::GetIconPath/GetIconName`이 0~2 외에는 반환값 없음 | `JsonContainer.h` | 맵을 4개 이상으로 늘리면 정의되지 않은 동작 |
 | 낮음 | 파일 경로 기준이 섞여 있음(텍스처/폰트는 exe 폴더, 셰이더/인증서/서버 exe는 작업 폴더) | `Texture.cpp`, `GraphicShader.cpp`, `CURL.h`, `TitleWidget.cpp` | 다른 폴더에서 exe를 실행하면 셰이더 로드 실패 |
+| 낮음 | `SetRelativeScale`이 자식 위치를 `상대 위치 × 부모 스케일 + 부모 위치`로 다시 계산. 부모 회전을 무시하고, 다른 위치 함수(스케일 미적용)와 규칙이 다름 | `Common/Include/Component/SceneComponent.cpp` `SetRelativeScale` | 지금은 호출하는 곳이 없어 영향 없음. 회전한 부모나 오프셋 있는 자식에 쓰면 위치가 어긋남 |
 | 낮음 | `Common`(엔진)이 게임 코드(`KDT2Framework/Include`)를 include | `SceneManager.cpp`, `Scene.cpp`, `GameManager.cpp` | 엔진 재사용 불가, 빌드 의존성 꼬임 |
 | 낮음 | `RankWidget.h`가 아직 CP949 인코딩 | `UI/UserWidget/RankWidget.h` | 다른 파일과 인코딩이 섞임. 편집 시 주의 |

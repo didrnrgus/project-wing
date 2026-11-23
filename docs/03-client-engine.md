@@ -91,6 +91,9 @@ classDiagram
 - **`CObject`**: 참조 카운트(`AddRef/Release`)와 활성 상태를 가진 기반 클래스. `CSharedPtr<T>`가 참조 카운트를 관리합니다.
 - **`CSceneObject`**: 씬에 놓이는 게임 오브젝트. 루트 `CSceneComponent`를 하나 갖고(`SetRootComponent`), 그 아래 컴포넌트 트리를 만듭니다. 생성은 `mScene->CreateObj<T>(이름)`.
 - **`CSceneComponent`**: 위치/회전/크기(로컬, 월드)를 갖고 부모-자식 트리를 이룹니다. `AddChild`로 붙이면 부모 변환을 따라갑니다.
+  - 위치 규칙: `월드 위치 = 상대 위치 × 부모 월드 회전 + 부모 월드 위치`. `SetRelativePos`, `SetWorldPos`(역회전으로 상대 위치를 구함), `SetWorldRotation`/`SetRelativeRotation`, `AddChild`(`ComputeTransform`)가 모두 이 규칙을 따르고, 자식과 손자까지 재귀로 다시 배치합니다.
+  - 그래서 자식은 부모만 옮기면 같이 움직입니다. 부모와 자식을 둘 다 `SetWorldPos`로 옮기면 자식이 두 번 이동합니다.
+  - 예외: `SetRelativeScale`은 자식 위치에 부모 스케일을 곱하고 회전은 무시하는 옛 방식 그대로입니다([08. 알려진 이슈](08-known-issues.md#코드-안정성)).
 - **`CMovementComponent`, `CRotationComponent`**: 변환 없이 `CComponent`를 바로 상속한 로직 컴포넌트(이동, 회전).
 - 컴포넌트 생성은 오브젝트 안에서 `CreateComponent<T>(이름)`.
 - 콜라이더 4종(AABB, OBB, Sphere, Line)의 실제 구현은 게임 프로젝트 `KDT2Framework/Include/Component/`에 있고, 충돌 계산은 `Scene/Collision.*`에 있습니다.

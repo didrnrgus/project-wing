@@ -219,10 +219,10 @@ void CLineGroupObject::MoveLines(float DeltaTime)
 	{
 		FVector3D moveValVector = FVector3D::Axis[EAxis::X] * moveValue;
 
+		// 콜라이더 라인은 스프라이트의 자식이라 SetWorldPos 전파로 같이 움직인다.
+		// 콜라이더까지 따로 옮기면 이중 이동 + 부모 회전이 누적돼 위치가 어긋난다.
 		MoveLine(mTopLines, moveValVector);
-		MoveLine(mTopColliderLines, moveValVector);
 		MoveLine(mBottomLines, moveValVector);
-		MoveLine(mBottomColliderLines, moveValVector);
 	}
 
 }
