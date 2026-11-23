@@ -15,6 +15,7 @@
 #include "Etc/ProcessManager.h"
 #include "Etc/MultiplayManager.h"
 #include "Etc/TaskManager.h"
+#include "Etc/Localization.h"
 
 extern bool gIsOpenNicknamePopup;
 CLobbyWidget::CLobbyWidget()
@@ -204,7 +205,7 @@ void CLobbyWidget::InitPlayerStatText()
 
 	for (int i = 0; i < count; i++)
 	{
-		auto nameText = std::wstring(ECharacterStatText::gArrCharacterStatText[i]) + L" :";
+		auto nameText = std::wstring(CLocalization::Get(ECharacterStatText::gArrCharacterStatText[i])) + L" :";
 		auto valueText = stat.GetStatToWString(static_cast<ECharacterStatText::Type>(i));
 		auto textBlockName = mScene->GetUIManager()->CreateWidget<CTextBlock>("playerStatName_" + std::to_string(i));
 		auto textBlockPlayerStatValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("playerStatValue_" + std::to_string(i));
@@ -256,7 +257,7 @@ void CLobbyWidget::InitMapInfoText()
 
 	for (int i = 0; i < count; i++)
 	{
-		auto nameText = std::wstring(EMapInfoText::gArrMapInfoText[i]) + L" :";
+		auto nameText = std::wstring(CLocalization::Get(EMapInfoText::gArrMapInfoText[i])) + L" :";
 		auto valueText = info.GetInfoToWString(static_cast<EMapInfoText::Type>(i));
 		auto textBlockName = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoName_" + std::to_string(i));
 		auto textBlockPlayerStatValue = mScene->GetUIManager()->CreateWidget<CTextBlock>("mapInfoValue_" + std::to_string(i));
@@ -346,7 +347,7 @@ void CLobbyWidget::InitItemInfoTooltip()
 
 	for (int dataIndex = 0, posIndex = 0; dataIndex < itemInfoNameCount; dataIndex++, posIndex++)
 	{
-		auto nameText = std::wstring(EItemInfoText::gArrItemInfoText[dataIndex]) + L":";
+		auto nameText = std::wstring(CLocalization::Get(EItemInfoText::gArrItemInfoText[dataIndex])) + L":";
 		mArrItemInfoNameText[dataIndex] = mScene->GetUIManager()->CreateWidget<CTextBlock>("itemInfoName_" + std::to_string(dataIndex));
 		AddWidget(mArrItemInfoNameText[dataIndex]);
 		mArrItemInfoNameText[dataIndex]->SetPivot(namePivot);
@@ -705,7 +706,7 @@ void CLobbyWidget::TriggerItemTooltip(int _itemTypeIndex, FVector2D _pos)
 		mArrItemInfoNameText[dataIndex].Get()->SetEnable(true);
 		mArrItemInfoValueText[dataIndex].Get()->SetEnable(true);
 
-		auto nameText = std::wstring(EItemInfoText::gArrItemInfoText[dataIndex]) + L":";
+		auto nameText = std::wstring(CLocalization::Get(EItemInfoText::gArrItemInfoText[dataIndex])) + L":";
 		mArrItemInfoNameText[dataIndex]->SetPos(namePos - FVector2D::Axis[EAxis::Y] * nameSize.y * posIndex);
 		mArrItemInfoNameText[dataIndex]->SetText(nameText.c_str());
 
@@ -755,7 +756,7 @@ void CLobbyWidget::UpdateOtherPlayerInfo()
 		mArrPlayerWidgetGroup[i].mPlayerHostImage->SetEnable(false);
 
 		// player text init 
-		mArrPlayerWidgetGroup[i].mPlayerText->SetText(PLAYER_EMPTY_TEXT);
+		mArrPlayerWidgetGroup[i].mPlayerText->SetText(LOC(LobbyPlayerEmpty));
 
 		// character color init 
 		auto color = FVector4D::GetColorFromString(COLOR_White);
@@ -828,7 +829,7 @@ void CLobbyWidget::UpdateSimpleCharacterRankInfo()
 	for (int i = 0; i < mArrRankWidgetGroupByCharacter.size(); i++)
 	{
 		// player text init 
-		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetText(PLAYER_EMPTY_TEXT);
+		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetText(LOC(LobbyPlayerEmpty));
 		mArrRankWidgetGroupByCharacter[i].mPlayerText->SetEnable(false);
 
 		// distance text init
@@ -900,7 +901,7 @@ void CLobbyWidget::UpdateSimpleMapRankInfo()
 	for (int i = 0; i < mArrRankWidgetGroupByMap.size(); i++)
 	{
 		// player text init 
-		mArrRankWidgetGroupByMap[i].mPlayerText->SetText(PLAYER_EMPTY_TEXT);
+		mArrRankWidgetGroupByMap[i].mPlayerText->SetText(LOC(LobbyPlayerEmpty));
 		mArrRankWidgetGroupByMap[i].mPlayerText->SetEnable(false);
 
 		// distance text init
@@ -1065,7 +1066,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 	titleTextBlock->SetPivot(FVector2D(0.0f, 1.0f));
 	titleTextBlock->SetSize(FVector2D(500.0f, 50.0f));
 	titleTextBlock->SetPos(FVector2D(100.0f, 590.0f));
-	titleTextBlock->SetText(PLAYER_TITLE_TEXT);
+	titleTextBlock->SetText(LOC(LobbyPlayerTitle));
 	titleTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 	titleTextBlock->SetAlignH(ETextAlignH::Left);
 	titleTextBlock->SetFontSize(50.0f);
@@ -1115,7 +1116,7 @@ void CLobbyWidget::InitOtherPlayersInfo()
 		tempTextBlock->SetPivot(textBasePivot);
 		tempTextBlock->SetSize(textBaseSize);
 		tempTextBlock->SetPos(textBasePos - FVector2D::Axis[EAxis::Y] * (textBaseSize.y) * i);
-		tempTextBlock->SetText(PLAYER_EMPTY_TEXT);
+		tempTextBlock->SetText(LOC(LobbyPlayerEmpty));
 		tempTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
 		tempTextBlock->SetOpacity(0.5f);
 		tempTextBlock->SetAlignH(ETextAlignH::Left);
@@ -1170,7 +1171,7 @@ void CLobbyWidget::InitSimpleCharacterRankInfo()
 	titleTextBlock->SetPivot(FVector2D(0.5f, 0.5f));
 	titleTextBlock->SetSize(FVector2D(500.0f, 70.0f));
 	titleTextBlock->SetPos(FVector2D(280.0f, 580.0f));
-	titleTextBlock->SetText(PLAYER_CHARACTER_RANK_TEXT);
+	titleTextBlock->SetText(LOC(LobbyRankByCharacter));
 	titleTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 	titleTextBlock->SetAlignH(ETextAlignH::Center);
 	titleTextBlock->SetFontSize(50.0f);
@@ -1205,7 +1206,7 @@ void CLobbyWidget::InitSimpleCharacterRankInfo()
 		nameTextBlock->SetPivot(nameTextBasePivot);
 		nameTextBlock->SetSize(nameTextBaseSize);
 		nameTextBlock->SetPos(nameTextBasePos - FVector2D::Axis[EAxis::Y] * (nameTextBaseSize.y) * i);
-		nameTextBlock->SetText(PLAYER_EMPTY_TEXT);
+		nameTextBlock->SetText(LOC(LobbyPlayerEmpty));
 		nameTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
 		nameTextBlock->SetAlignH(ETextAlignH::Left);
 		nameTextBlock->SetFontSize(fontSize);
@@ -1263,7 +1264,7 @@ void CLobbyWidget::InitSimpleMapRankInfo()
 	titleTextBlock->SetPivot(FVector2D(0.5f, 0.5f));
 	titleTextBlock->SetSize(FVector2D(500.0f, 70.0f));
 	titleTextBlock->SetPos(FVector2D(280.0f, 360.0f));
-	titleTextBlock->SetText(PLAYER_MAP_RANK_TEXT);
+	titleTextBlock->SetText(LOC(LobbyRankByMap));
 	titleTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 	titleTextBlock->SetAlignH(ETextAlignH::Center);
 	titleTextBlock->SetFontSize(50.0f);
@@ -1298,7 +1299,7 @@ void CLobbyWidget::InitSimpleMapRankInfo()
 		nameTextBlock->SetPivot(nameTextBasePivot);
 		nameTextBlock->SetSize(nameTextBaseSize);
 		nameTextBlock->SetPos(nameTextBasePos - FVector2D::Axis[EAxis::Y] * (nameTextBaseSize.y) * i);
-		nameTextBlock->SetText(PLAYER_EMPTY_TEXT);
+		nameTextBlock->SetText(LOC(LobbyPlayerEmpty));
 		nameTextBlock->SetTextColor(FVector4D::GetColorFromString(COLOR_White));
 		nameTextBlock->SetAlignH(ETextAlignH::Left);
 		nameTextBlock->SetFontSize(fontSize);
@@ -1363,7 +1364,7 @@ void CLobbyWidget::UpdatePlayerStat()
 
 	for (int i = 0; i < count; i++)
 	{
-		auto nameText = std::wstring(ECharacterStatText::gArrCharacterStatText[i]) + L" :";
+		auto nameText = std::wstring(CLocalization::Get(ECharacterStatText::gArrCharacterStatText[i])) + L" :";
 		auto valueText = stat.GetStatToWString(static_cast<ECharacterStatText::Type>(i));
 
 		mArrPlayerStatNameText[i]->SetText(nameText.c_str());
@@ -1430,7 +1431,7 @@ void CLobbyWidget::UpdateMapInfo()
 
 	for (int i = 0; i < count; i++)
 	{
-		auto nameText = std::wstring(EMapInfoText::gArrMapInfoText[i]) + L" :";
+		auto nameText = std::wstring(CLocalization::Get(EMapInfoText::gArrMapInfoText[i])) + L" :";
 		auto valueText = info.GetInfoToWString(static_cast<EMapInfoText::Type>(i));
 
 		mArrMapInfoNameText[i]->SetText(nameText.c_str());

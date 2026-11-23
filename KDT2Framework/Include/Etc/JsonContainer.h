@@ -1,6 +1,7 @@
 ﻿#pragma once
 
 #include "GameInfo.h"
+#include "Etc/Localization.h"
 
 struct FUserRankInfo
 {
@@ -52,12 +53,12 @@ namespace EMapInfoText
 		End
 	};
 
-	static std::vector<const wchar_t*> gArrMapInfoText =
+	static std::vector<ELocKey::Type> gArrMapInfoText =
 	{
-		TEXT("Name")
-		,TEXT("Color")
-		,TEXT("DiffRate")
-		,TEXT("ColDmg")
+		ELocKey::LabelName
+		,ELocKey::LabelColor
+		,ELocKey::LabelDiffRate
+		,ELocKey::LabelColDmg
 	};
 }
 
@@ -152,15 +153,15 @@ namespace ECharacterStatText
 		End
 	};
 
-	static std::vector<const wchar_t*> gArrCharacterStatText =
+	static std::vector<ELocKey::Type> gArrCharacterStatText =
 	{
-		TEXT("Name")
-		,TEXT("HP")
-		,TEXT("Speed")
-		,TEXT("Dex")
-		,TEXT("Def")
-		,TEXT("Stun")
-		,TEXT("Size")
+		ELocKey::LabelName
+		,ELocKey::LabelHP
+		,ELocKey::LabelSpeed
+		,ELocKey::LabelDex
+		,ELocKey::LabelDef
+		,ELocKey::LabelStun
+		,ELocKey::LabelSize
 	};
 }
 
@@ -322,12 +323,12 @@ namespace EStatInfoText
 		End
 	};
 
-	static std::vector<const wchar_t*> gArrFStatInfoText =
+	static std::vector<ELocKey::Type> gArrFStatInfoText =
 	{
-		TEXT("HP")
-		,TEXT("Speed")
-		,TEXT("Dex")
-		,TEXT("Def")
+		ELocKey::LabelHP
+		,ELocKey::LabelSpeed
+		,ELocKey::LabelDex
+		,ELocKey::LabelDef
 	};
 }
 
@@ -360,12 +361,12 @@ namespace EItemInfoText
 		End
 	};
 
-	static std::vector<const wchar_t*> gArrItemInfoText =
+	static std::vector<ELocKey::Type> gArrItemInfoText =
 	{
-		TEXT("Name")
-		,TEXT("Desc")
-		,TEXT("StatType")
-		,TEXT("AddVal")
+		ELocKey::LabelName
+		,ELocKey::LabelDesc
+		,ELocKey::LabelStatType
+		,ELocKey::LabelAddVal
 	};
 }
 
@@ -430,7 +431,7 @@ struct FItemInfo
 			return std::wstring(Name.begin(), Name.end());
 
 		case EItemInfoText::StatType:
-			return EStatInfoText::gArrFStatInfoText[StatType];
+			return CLocalization::Get(EStatInfoText::gArrFStatInfoText[StatType]);
 
 		case EItemInfoText::AddVal:
 			return std::to_wstring((int)AddValue);

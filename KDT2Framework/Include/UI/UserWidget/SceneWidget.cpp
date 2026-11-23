@@ -7,6 +7,7 @@
 #include "Etc/ConstValues.h"
 #include "Etc/ZOrderContainer.h"
 #include "Etc/TaskManager.h"
+#include "Etc/Localization.h"
 #include "Share/Timer.h"
 
 CSceneWidget::CSceneWidget()
@@ -22,19 +23,10 @@ bool CSceneWidget::Init()
 {
 	CUserWidget::Init();
 
-	mLoadingTextStrings.push_back(L"Loading.....🏃🏻");
-	mLoadingTextStrings.push_back(L"Loading....🏃🏻");
-	mLoadingTextStrings.push_back(L"Loading...🏃🏻");
-	mLoadingTextStrings.push_back(L"Loading..🏃🏻");
-	mLoadingTextStrings.push_back(L"Loading.🏃🏻");
-	mLoadingTextStrings.push_back(L"Loading🏃🏻");
-	mLoadingTextStrings.push_back(L"Loadin🏃🏻");
-	mLoadingTextStrings.push_back(L"Loadi🏃🏻");
-	mLoadingTextStrings.push_back(L"Load🏃🏻");
-	mLoadingTextStrings.push_back(L"Loa🏃🏻");
-	mLoadingTextStrings.push_back(L"Lo🏃🏻");
-	mLoadingTextStrings.push_back(L"L🏃🏻");
-	mLoadingTextStrings.push_back(L"🏃🏻");
+	// "Loading....." -> "L" 처럼 한 글자씩 줄어드는 애니메이션 프레임을 현재 언어 문구로 만든다.
+	const std::wstring loadingWord = std::wstring(LOC(LoadingWord)) + L".....";
+	for (int len = (int)loadingWord.length(); len >= 0; len--)
+		mLoadingTextStrings.push_back(loadingWord.substr(0, len) + L"🏃🏻");
 	mLoadingTextStrings.push_back(L"");
 
 	FResolution RS = CDevice::GetInst()->GetResolution();
@@ -52,7 +44,7 @@ bool CSceneWidget::Init()
 	FVector2D loadingSize = FVector2D(250.0f, 120.0f);
 	mLoadingText = mScene->GetUIManager()->CreateWidget<CTextBlock>("LoadingText");
 	AddWidget(mLoadingText);
-	mLoadingText->SetText(mLoadingTextStrings[curLoadingTextIndex]);
+	mLoadingText->SetText(mLoadingTextStrings[curLoadingTextIndex].c_str());
 	mLoadingText->SetTextColor(FVector4D::Green);
 	mLoadingText->SetAlignH(ETextAlignH::Left);
 	mLoadingText->SetFontSize(30.f);
@@ -67,7 +59,7 @@ bool CSceneWidget::Init()
 	FVector2D descSize = FVector2D(1000.0f, 120.0f);
 	mLoadingDescText = mScene->GetUIManager()->CreateWidget<CTextBlock>("LoadingDescText");
 	AddWidget(mLoadingDescText);
-	mLoadingDescText->SetText(L"잠시만 기다려주세요 로딩 중 입니다. 🙇🏻");
+	mLoadingDescText->SetText(LOC(LoadingWait));
 	mLoadingDescText->SetTextColor(FVector4D::Green);
 	mLoadingDescText->SetAlignH(ETextAlignH::Center);
 	mLoadingDescText->SetFontSize(30.f);
@@ -161,7 +153,7 @@ void CSceneWidget::UpdateLoading(float DeltaTime)
 			curLoadingTextIndex = 0;
 		}
 
-		mLoadingText->SetText(mLoadingTextStrings[curLoadingTextIndex]);
+		mLoadingText->SetText(mLoadingTextStrings[curLoadingTextIndex].c_str());
 	}
 
 
@@ -192,15 +184,15 @@ void CSceneWidget::LoadScene(EGameScene::Type _sceneType)
 			mScene->SetIsLoadingScene();
 
 			if (_sceneType == EGameScene::Title)
-				AddQueueLoadingDescText(L"타이틀 화면으로 이동중입니다!!! 🏃🏻");
+				AddQueueLoadingDescText(LOC(LoadingToTitle));
 			else if (_sceneType == EGameScene::Lobby)
-				AddQueueLoadingDescText(L"로비 화면으로 이동중입니다!!! 🏃🏻");
+				AddQueueLoadingDescText(LOC(LoadingToLobby));
 			else if (_sceneType == EGameScene::InGame)
-				AddQueueLoadingDescText(L"인게임 화면으로 이동중입니다!!! 🏃🏻");
+				AddQueueLoadingDescText(LOC(LoadingToInGame));
 			else if (_sceneType == EGameScene::Result)
-				AddQueueLoadingDescText(L"결과 화면으로 이동중입니다!!! 🏃🏻");
+				AddQueueLoadingDescText(LOC(LoadingToResult));
 			else if (_sceneType == EGameScene::Rank)
-				AddQueueLoadingDescText(L"랭킹 화면으로 이동중입니다!!! 🏃🏻");
+				AddQueueLoadingDescText(LOC(LoadingToRank));
 
 			std::this_thread::sleep_for(std::chrono::milliseconds(2000));
 

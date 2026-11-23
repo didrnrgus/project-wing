@@ -24,18 +24,21 @@
 #include "Etc/NetworkManager.h"
 #include "Etc/MultiplayManager.h"
 #include "Scene/SceneTitle.h"
+#include "Etc/Localization.h"
 
 #define ID_MENU_OPTION1		1000  // 옵션1 메뉴 ID
 #define ID_MENU_CHECKBOX	1001  // 체크박스 ID
 #define ID_MENU_OPTION2		1002  // 옵션2 메뉴 ID
 #define ID_MENU_IP_TEXTBOX  1003  // IP 입력 필드 띄우는 항목 ID
 #define ID_MENU_NICKNAME_TEXTBOX  1004  // 닉네임 입력 필드 띄우는 항목 ID
+#define ID_MENU_LANGUAGE_EN	1005  // 언어: English
+#define ID_MENU_LANGUAGE_KO	1006  // 언어: 한국어
 #define ID_EDITBOX			2001  // 팝업 내부의 입력 필드 ID
 #define ID_IP_INPUT_OK_BUTTON		2002  // 팝업 내 OK 버튼 ID
 #define ID_NICKNAME_INPUT_OK_BUTTON		2003  // 팝업 내 OK 버튼 ID
 #define ID_CANCEL_BUTTON	2004  // 팝업 내 Cancel 버튼 ID
 
-HMENU hMainMenu, hOption2Menu = NULL, hOption1Menu = NULL, hOption0Menu = NULL;
+HMENU hMainMenu = NULL;
 BOOL option2Visible = FALSE;  // 옵션2 표시 여부
 
 TCHAR   gRootPath[MAX_PATH];
@@ -87,8 +90,11 @@ bool CGameManager::Init(HINSTANCE hInst)
 
 	mhInst = hInst;
 
+	// 메뉴와 타이틀 문구가 언어 설정을 쓰므로 윈도우 생성 전에 초기화한다.
+	CLocalization::Init();
+
 	lstrcpy(mClassName, TEXT("ProjectWing"));
-	swprintf_s(mTitleName, TITLE_FORMAT, NICKNAME_DEFAULT_W, IP_ADDRESS_DEFAULT_W);
+	swprintf_s(mTitleName, LOC(WindowTitleFormat), NICKNAME_DEFAULT_W, IP_ADDRESS_DEFAULT_W);
 
 	RegisterWindowClass();
 
@@ -338,14 +344,7 @@ LRESULT CALLBACK CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 	{
 	case WM_CREATE:
 	{
-		hMainMenu = CreateMenu();
-		hOption1Menu = CreatePopupMenu();
-		hOption0Menu = CreatePopupMenu();
-		AppendMenu(hOption0Menu, MF_STRING, ID_MENU_NICKNAME_TEXTBOX, TEXT("닉네임 정하기"));
-		AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR)hOption0Menu, TEXT("닉네임을 정해주세요."));
-		AppendMenu(hOption1Menu, MF_STRING, ID_MENU_CHECKBOX, TEXT("남의 방 들어가기"));
-		AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR)hOption1Menu, TEXT("멀티플레이"));
-		SetMenu(hWnd, hMainMenu);
+		UpdateMenu(hWnd);
 	} break;
 
 	case WM_COMMAND:
@@ -367,6 +366,15 @@ LRESULT CALLBACK CGameManager::WndProc(HWND hWnd, UINT message, WPARAM wParam, L
 		else if (LOWORD(wParam) == ID_MENU_NICKNAME_TEXTBOX)
 		{
 			OpenNicknameInputPopup(hWnd);  // 팝업 열기
+		}
+		else if (LOWORD(wParam) == ID_MENU_LANGUAGE_EN
+			|| LOWORD(wParam) == ID_MENU_LANGUAGE_KO)
+		{
+			// 메뉴와 창 제목은 바로 바뀌고, 게임 UI 는 다음 화면 전환부터 반영된다.
+			CLocalization::SetLanguage(LOWORD(wParam) == ID_MENU_LANGUAGE_KO
+				? ELanguage::Korean : ELanguage::English);
+			UpdateMenu(hWnd);
+			CGameManager::GetInst()->UpdateTitle();
 		}
 	} break;
 
@@ -401,12 +409,12 @@ void CGameManager::OpenIPInputPopup(HWND hWnd)
 		50, 30, 200, 20, hPopup, (HMENU)ID_EDITBOX, GetModuleHandle(NULL), NULL);
 
 	// 확인 버튼 추가
-	CreateWindowEx(0, TEXT("BUTTON"), TEXT("확인"),
+	CreateWindowEx(0, TEXT("BUTTON"), LOC(PopupOK),
 		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
 		50, 60, 50, 30, hPopup, (HMENU)ID_IP_INPUT_OK_BUTTON, GetModuleHandle(NULL), NULL);
 
 	// 취소 버튼 추가
-	CreateWindowEx(0, TEXT("BUTTON"), TEXT("취소"),
+	CreateWindowEx(0, TEXT("BUTTON"), LOC(PopupCancel),
 		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
 		150, 60, 50, 30, hPopup, (HMENU)ID_CANCEL_BUTTON, GetModuleHandle(NULL), NULL);
 
@@ -428,7 +436,7 @@ void CGameManager::OpenNicknameInputPopup(HWND hWnd)
 		hWnd, NULL, GetModuleHandle(NULL), NULL);
 
 	// 안내 문구 라벨 추가
-	CreateWindowEx(0, TEXT("STATIC"), TEXT("*영문 및 숫자만 입력"),
+	CreateWindowEx(0, TEXT("STATIC"), LOC(PopupNicknameHint),
 		WS_CHILD | WS_VISIBLE,
 		50, 10, 200, 15, hPopup, NULL, GetModuleHandle(NULL), NULL);
 
@@ -440,12 +448,12 @@ void CGameManager::OpenNicknameInputPopup(HWND hWnd)
 		50, 30, 200, 20, hPopup, (HMENU)ID_EDITBOX, GetModuleHandle(NULL), NULL);
 
 	// 확인 버튼 추가
-	CreateWindowEx(0, TEXT("BUTTON"), TEXT("확인"),
+	CreateWindowEx(0, TEXT("BUTTON"), LOC(PopupOK),
 		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
 		50, 60, 50, 30, hPopup, (HMENU)ID_NICKNAME_INPUT_OK_BUTTON, GetModuleHandle(NULL), NULL);
 
 	// 취소 버튼 추가
-	CreateWindowEx(0, TEXT("BUTTON"), TEXT("취소"),
+	CreateWindowEx(0, TEXT("BUTTON"), LOC(PopupCancel),
 		WS_CHILD | WS_VISIBLE | BS_DEFPUSHBUTTON,
 		150, 60, 50, 30, hPopup, (HMENU)ID_CANCEL_BUTTON, GetModuleHandle(NULL), NULL);
 
@@ -458,7 +466,7 @@ void CGameManager::UpdateTitle()
 	std::wstring _nickname(gNickname.begin(), gNickname.end());
 	std::wstring _ipAddr(gIPAddress.begin(), gIPAddress.end());
 
-	swprintf_s(mTitleName, TITLE_FORMAT, _nickname.c_str(), _ipAddr.c_str());
+	swprintf_s(mTitleName, LOC(WindowTitleFormat), _nickname.c_str(), _ipAddr.c_str());
 	SetWindowTextW(mhWnd, mTitleName);
 }
 
@@ -509,29 +517,41 @@ LRESULT CALLBACK CGameManager::PopupProc(HWND hWnd, UINT message, WPARAM wParam,
 	return DefWindowProc(hWnd, message, wParam, lParam);
 }
 
+// 현재 언어와 멀티플레이 옵션 상태에 맞춰 메뉴 바 전체를 다시 만든다.
+// 메뉴 순서: 닉네임 | 멀티플레이 | (방장 IP) | 언어
 void CGameManager::UpdateMenu(HWND hWnd)
 {
-	ModifyMenu(hOption1Menu, ID_MENU_CHECKBOX, MF_BYCOMMAND | MF_STRING,
-		ID_MENU_CHECKBOX, option2Visible ? TEXT("멀티에서 내가 방장") : TEXT("남의 방 들어가기"));
+	HMENU hNewMenu = CreateMenu();
+
+	HMENU hNicknameMenu = CreatePopupMenu();
+	AppendMenu(hNicknameMenu, MF_STRING, ID_MENU_NICKNAME_TEXTBOX, LOC(MenuNicknameInput));
+	AppendMenu(hNewMenu, MF_POPUP, (UINT_PTR)hNicknameMenu, LOC(MenuNickname));
+
+	HMENU hMultiplayMenu = CreatePopupMenu();
+	AppendMenu(hMultiplayMenu, MF_STRING, ID_MENU_CHECKBOX,
+		option2Visible ? LOC(MenuHostRoom) : LOC(MenuJoinRoom));
+	AppendMenu(hNewMenu, MF_POPUP, (UINT_PTR)hMultiplayMenu, LOC(MenuMultiplay));
 
 	if (option2Visible)
 	{
-		if (!hOption2Menu)
-		{
-			hOption2Menu = CreatePopupMenu();
-			AppendMenu(hOption2Menu, MF_STRING, ID_MENU_IP_TEXTBOX, TEXT("방장 IP주소 입력하기"));
-			AppendMenu(hMainMenu, MF_POPUP, (UINT_PTR)hOption2Menu, TEXT("방장 IP주소 입력하셨나요?"));
-		}
+		HMENU hHostIPMenu = CreatePopupMenu();
+		AppendMenu(hHostIPMenu, MF_STRING, ID_MENU_IP_TEXTBOX, LOC(MenuHostIPInput));
+		AppendMenu(hNewMenu, MF_POPUP, (UINT_PTR)hHostIPMenu, LOC(MenuHostIP));
 	}
-	else
-	{
-		if (hOption2Menu)
-		{
-			// 옵션2 메뉴가 존재하면 제거
-			RemoveMenu(hMainMenu, (UINT_PTR)hOption2Menu, MF_POPUP);
-			DestroyMenu(hOption2Menu);
-			hOption2Menu = NULL;
-		}
-	}
+
+	// 언어 이름은 어느 언어에서든 알아볼 수 있게 각 언어 표기 그대로 둔다.
+	const bool isKorean = CLocalization::GetLanguage() == ELanguage::Korean;
+	HMENU hLanguageMenu = CreatePopupMenu();
+	AppendMenu(hLanguageMenu, MF_STRING | (isKorean ? MF_UNCHECKED : MF_CHECKED), ID_MENU_LANGUAGE_EN, TEXT("English"));
+	AppendMenu(hLanguageMenu, MF_STRING | (isKorean ? MF_CHECKED : MF_UNCHECKED), ID_MENU_LANGUAGE_KO, TEXT("한국어"));
+	AppendMenu(hNewMenu, MF_POPUP, (UINT_PTR)hLanguageMenu, LOC(MenuLanguage));
+
+	SetMenu(hWnd, hNewMenu);
+
+	// 이전 메뉴는 하위 팝업까지 함께 해제된다.
+	if (hMainMenu)
+		DestroyMenu(hMainMenu);
+	hMainMenu = hNewMenu;
+
 	DrawMenuBar(hWnd);
 }

@@ -13,7 +13,7 @@ private:
 	CSharedPtr<class CImage> mLoadingBackImage;
 	CSharedPtr<class CTextBlock> mLoadingText;
 	CSharedPtr<class CTextBlock> mLoadingDescText;
-	std::vector<const wchar_t*> mLoadingTextStrings;
+	std::vector<std::wstring> mLoadingTextStrings;
 	bool mIsLoading = false;
 	float loadingUpdateTime = 0.0f;
 	float loadingTextUpdateTime = 0.0f;

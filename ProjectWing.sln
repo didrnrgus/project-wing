@@ -9,6 +9,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Common", "Common\Include\Co
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AssetProj", "AssetProj\Include\AssetProj.vcxproj", "{E46032EC-47FF-4FAA-AA6A-C540578CE36F}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "project-wing-socket-server", "Server\Include\project-wing-socket-server.vcxproj", "{7C3B5E2A-4D1F-4A8B-9E6C-2F0A1B3C5D7E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|x64 = Debug|x64
@@ -41,6 +43,12 @@ Global
 		{E46032EC-47FF-4FAA-AA6A-C540578CE36F}.Release|x64.Build.0 = Release|x64
 		{E46032EC-47FF-4FAA-AA6A-C540578CE36F}.Release|x86.ActiveCfg = Release|Win32
 		{E46032EC-47FF-4FAA-AA6A-C540578CE36F}.Release|x86.Build.0 = Release|Win32
+		{7C3B5E2A-4D1F-4A8B-9E6C-2F0A1B3C5D7E}.Debug|x64.ActiveCfg = Debug|x64
+		{7C3B5E2A-4D1F-4A8B-9E6C-2F0A1B3C5D7E}.Debug|x64.Build.0 = Debug|x64
+		{7C3B5E2A-4D1F-4A8B-9E6C-2F0A1B3C5D7E}.Debug|x86.ActiveCfg = Debug|x64
+		{7C3B5E2A-4D1F-4A8B-9E6C-2F0A1B3C5D7E}.Release|x64.ActiveCfg = Release|x64
+		{7C3B5E2A-4D1F-4A8B-9E6C-2F0A1B3C5D7E}.Release|x64.Build.0 = Release|x64
+		{7C3B5E2A-4D1F-4A8B-9E6C-2F0A1B3C5D7E}.Release|x86.ActiveCfg = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

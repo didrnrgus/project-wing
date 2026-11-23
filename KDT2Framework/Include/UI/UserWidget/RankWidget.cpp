@@ -44,7 +44,7 @@ void CRankWidget::InitCommonUI()
 	mRankTitle->SetPivot(FVector2D::One * 0.5f);
 	mRankTitle->SetSize(FVector2D(1000.0f, 100.0f));
 	mRankTitle->SetPos(FVector2D(mResolution.x * 0.5f, mResolution.y * 0.85f));
-	mRankTitle->SetText(L"🏴🏴🏴RANKING🏴🏴🏴");
+	mRankTitle->SetText(LOC(RankTitle));
 	mRankTitle->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 	mRankTitle->SetAlignH(ETextAlignH::Center);
 	mRankTitle->SetFontSize(60.0f);
@@ -83,7 +83,7 @@ void CRankWidget::InitMemu()
 		_menuTapText->SetPivot(_pivotMain);
 		_menuTapText->SetSize(_sizeMain);
 		_menuTapText->SetPos(_basePosMain + FVector2D((_sizeMain.x + _gapMainX) * i, 0.0f));
-		_menuTapText->SetText(ToUpperWString(mArrMenuTapText[i]).c_str());
+		_menuTapText->SetText(ToUpperWString(CLocalization::Get(mArrMenuTapText[i])).c_str());
 		_menuTapText->SetTextColor(FVector4D::GetColorFromString(COLOR_Green));
 		_menuTapText->SetAlignH(ETextAlignH::Center);
 		_menuTapText->SetFontSize(mMenuTextFontSize);
@@ -214,23 +214,23 @@ void CRankWidget::InitProperty(FVector2D _basePos)
 
 	CSharedPtr<CTextBlock> _nameProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_nameProp");
 	AddWidget(_nameProp);
-	SetInfoTextBlock(_nameProp, _pivot, _sizeName, _posName, _color, L"NAME");
+	SetInfoTextBlock(_nameProp, _pivot, _sizeName, _posName, _color, LOC(HeaderName));
 
 	CSharedPtr<CTextBlock> _mapProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_mapProp");
 	AddWidget(_mapProp);
-	SetInfoTextBlock(_mapProp, _pivot, _sizeMap, _posMap, _color, L"MAP");
+	SetInfoTextBlock(_mapProp, _pivot, _sizeMap, _posMap, _color, LOC(HeaderMap));
 
 	CSharedPtr<CTextBlock> _characterProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_characterProp");
 	AddWidget(_characterProp);
-	SetInfoTextBlock(_characterProp, _pivot, _sizeCharacter, _posCharacter, _color, L"CHARACTER");
+	SetInfoTextBlock(_characterProp, _pivot, _sizeCharacter, _posCharacter, _color, LOC(HeaderCharacter));
 
 	CSharedPtr<CTextBlock> _distanceProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_distanceProp");
 	AddWidget(_distanceProp);
-	SetInfoTextBlock(_distanceProp, _pivot, _sizeDistance, _posDistance, _color, L"DISTANCE");
+	SetInfoTextBlock(_distanceProp, _pivot, _sizeDistance, _posDistance, _color, LOC(HeaderDistance));
 
 	CSharedPtr<CTextBlock> _itemProp = mScene->GetUIManager()->CreateWidget<CTextBlock>("_itemProp");
 	AddWidget(_itemProp);
-	SetInfoTextBlock(_itemProp, _pivot, _sizeItem, _posItem, _color, L"ITEM");
+	SetInfoTextBlock(_itemProp, _pivot, _sizeItem, _posItem, _color, LOC(HeaderItem));
 }
 
 void CRankWidget::InitUserRankPrint(FVector2D _basePos, int _count)

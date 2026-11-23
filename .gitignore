@@ -30,3 +30,7 @@ KDT2Framework/**/Common.pdb
 KDT2Framework/**/AssetProj.lib
 KDT2Framework/**/AssetProj.idb
 KDT2Framework/**/AssetProj.pdb
+# 로컬라이징 언어 설정 (실행 파일 옆에 생성)
+KDT2Framework/**/Language.ini
+
+Server/BinObj/

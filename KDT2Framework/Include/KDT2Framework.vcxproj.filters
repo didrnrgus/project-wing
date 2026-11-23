@@ -123,6 +123,9 @@
     <ClCompile Include="Etc\TaskManager.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
+    <ClCompile Include="Etc\Localization.cpp">
+      <Filter>Etc</Filter>
+    </ClCompile>
     <ClCompile Include="Etc\ProcessManager.cpp">
       <Filter>Etc</Filter>
     </ClCompile>
@@ -243,6 +246,9 @@
       <Filter>Etc</Filter>
     </ClInclude>
     <ClInclude Include="Etc\TaskManager.h">
+      <Filter>Etc</Filter>
+    </ClInclude>
+    <ClInclude Include="Etc\Localization.h">
       <Filter>Etc</Filter>
     </ClInclude>
     <ClInclude Include="Etc\ZOrderContainer.h">

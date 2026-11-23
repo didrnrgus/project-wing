@@ -14,6 +14,7 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/ProcessManager.h"
 #include "Etc/NetworkManager.h"
+#include "Etc/Localization.h"
 #include "Interface/ISceneNetworkController.h"
 
 extern BOOL option2Visible;
@@ -67,16 +68,16 @@ bool CTitleWidget::Init()
 	FVector2D exitPos = FVector2D(mResolution.x * 0.5f, mResolution.y * 0.15f * 1) - size * 0.5f;
 
 	SetButtonWithTextBlock(ETitleUIType::SinglePlay, mSinglePlayButton, "SinglePlay", singlePos
-		, &CTitleWidget::SinglePlayButtonClick, mSinglePlayTextBlock, TEXT("SinglePlay"));
+		, &CTitleWidget::SinglePlayButtonClick, mSinglePlayTextBlock, LOC(TitleSinglePlay));
 	mArrTextBlock.push_back(mSinglePlayTextBlock);
 	SetButtonWithTextBlock(ETitleUIType::MultiPlay, mMultiPlayButton, "MultiPlay", multiPos
-		, &CTitleWidget::MultiPlayButtonClick, mMultiPlayTextBlock, TEXT("MultiPlay"));
+		, &CTitleWidget::MultiPlayButtonClick, mMultiPlayTextBlock, LOC(TitleMultiPlay));
 	mArrTextBlock.push_back(mMultiPlayTextBlock);
 	SetButtonWithTextBlock(ETitleUIType::Rank, mRankButton, "Rank", rankPos
-		, &CTitleWidget::RankButtonClick, mRankTextBlock, TEXT("Rank"));
+		, &CTitleWidget::RankButtonClick, mRankTextBlock, LOC(TitleRank));
 	mArrTextBlock.push_back(mRankTextBlock);
 	SetButtonWithTextBlock(ETitleUIType::Exit, mExitButton, "Exit", exitPos
-		, &CTitleWidget::ExitButtonClick, mExitTextBlock, TEXT("Exit"));
+		, &CTitleWidget::ExitButtonClick, mExitTextBlock, LOC(TitleExit));
 	mArrTextBlock.push_back(mExitTextBlock);
 
 	if (CDataStorageManager::GetInst()->GetIsLoadedData() == false)
@@ -147,7 +148,7 @@ void CTitleWidget::LoadGameData()
 			mScene->SetIsLoadingScene(true);
 
 			// config load
-			AddQueueLoadingDescText(L"Config Data를 로딩 중 입니다.\n👨🏻‍💻", mIsSkip);
+			AddQueueLoadingDescText(LOC(TitleLoadConfig), mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			std::string webserverPath = WEBSERVER_PATH;
 			std::string path = webserverPath + CONFIG_PATH;
@@ -156,7 +157,7 @@ void CTitleWidget::LoadGameData()
 			CDataStorageManager::GetInst()->SetConfigData(configResult);
 
 			// maps load
-			AddQueueLoadingDescText(L"맵 데이터를 로딩 중 입니다.\n맵은 난이도별로 세가지가 있어요.\n🏜️,🏖️,🏞️", mIsSkip);
+			AddQueueLoadingDescText(LOC(TitleLoadMap), mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			for (auto mapFileName : CDataStorageManager::GetInst()->GetConfig().mapFileNameList)
 			{
@@ -167,7 +168,7 @@ void CTitleWidget::LoadGameData()
 			}
 
 			// characters load
-			AddQueueLoadingDescText(L"캐릭터 데이터를 로딩 중 입니다.\n캐릭터는 다섯가지가 있어요.\n👹.👺.💀.👻.👽", mIsSkip);
+			AddQueueLoadingDescText(LOC(TitleLoadCharacter), mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().CharacterFileName;
 			std::string charactersResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -175,7 +176,7 @@ void CTitleWidget::LoadGameData()
 			CDataStorageManager::GetInst()->SetCharacterData(charactersResult);
 
 			// item load
-			AddQueueLoadingDescText(L"아이템 데이터를 로딩 중 입니다.\n아이템 은 4가지 이고, 소유한 아이템의 스텟 패시브 효과만 있어요.", mIsSkip);
+			AddQueueLoadingDescText(LOC(TitleLoadItem), mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ItemFileName;
 			std::string itemResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -183,7 +184,7 @@ void CTitleWidget::LoadGameData()
 			CDataStorageManager::GetInst()->SetItemInfoData(itemResult);
 			
 			// stat load
-			AddQueueLoadingDescText(L"스텟 데이터를 로딩 중 입니다.\n스텟은 체력.스피드.민첩.디펜스 4가지가 있어요.", mIsSkip);
+			AddQueueLoadingDescText(LOC(TitleLoadStat), mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().StatFileName;
 			std::string statsResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -191,7 +192,7 @@ void CTitleWidget::LoadGameData()
 			CDataStorageManager::GetInst()->SetStatInfoData(statsResult);
 
 			// color load
-			AddQueueLoadingDescText(L"컬러 데이터를 로딩 중 입니다.\n🎨✖️30", mIsSkip);
+			AddQueueLoadingDescText(LOC(TitleLoadColor), mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			path = webserverPath + CDataStorageManager::GetInst()->GetConfig().ColorFileName;
 			std::string colorResult = CCURL::GetInst()->SendRequest(path, METHOD_GET);
@@ -220,7 +221,7 @@ void CTitleWidget::LoadRankData()
 			ShowLoading(true);
 			mScene->SetIsLoadingScene(true);
 			// rank load
-			AddQueueLoadingDescText(L"Ranking Data를 로딩 중 입니다. ✨🎉🎊🎉🎊✨\n랭킹은 맵, 캐릭터 기준 거리 랭킹으로 각 카테고리 내 5위까지 제공됩니다.", mIsSkip);
+			AddQueueLoadingDescText(LOC(TitleLoadRank), mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 			CDataStorageManager::GetInst()->UpdateUserRankInfos();
 
@@ -239,7 +240,7 @@ void CTitleWidget::LoadProcess()
 
 			if (!option2Visible)
 			{
-				AddQueueLoadingDescText(L"서버 프로세스를 Child로 실행합니다.\n내가 호스트니까요~🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻🧑🏻‍💻", mIsSkip);
+				AddQueueLoadingDescText(LOC(TitleLaunchServer), mIsSkip);
 				std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 #ifdef _DEBUG
 				CProcessManager::GetInst()->LaunchProcess(L"../Bin/Server/Debug/project-wing-socket-server.exe");
@@ -249,7 +250,7 @@ void CTitleWidget::LoadProcess()
 			}
 
 			CNetworkManager::GetInst()->SetIsMultiplay(true);
-			AddQueueLoadingDescText(L"호스트 서버에 접속 중 입니다.\n메뉴 바 에서 호스트 정보 확인하셨죠??🛜🛜🛜🛜🛜", mIsSkip);
+			AddQueueLoadingDescText(LOC(TitleConnectHost), mIsSkip);
 			std::this_thread::sleep_for(std::chrono::milliseconds(mWaitTime));
 
 			// 첫번쨰 시도 -> 실패해도 Update() 에서 될때까지 커넥션 한다.

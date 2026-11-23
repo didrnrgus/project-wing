@@ -1,17 +1,18 @@
 ﻿#pragma once
 #include "UI/UserWidget/SceneWidget.h"
 #include "Etc/JsonContainer.h"
+#include "Etc/Localization.h"
 
 class CResultWidget : public CSceneWidget
 {
 	friend class CSceneUIManager;
 
 protected:
-	std::vector<const wchar_t*> mArrMenuTapText =
+	// ERankMenuTap 순서와 같아야 한다.
+	std::vector<ELocKey::Type> mArrMenuTapText =
 	{
-		TEXT("Map")
-		,TEXT("Character")
-		,TEXT("End")
+		ELocKey::TabMap
+		,ELocKey::TabCharacter
 	};
 
 protected:

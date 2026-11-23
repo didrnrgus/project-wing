@@ -12,6 +12,7 @@
 #include "Etc/DataStorageManager.h"
 #include "Etc/MultiplayManager.h"
 #include "Etc/NetworkManager.h"
+#include "Etc/Localization.h"
 #include "Interface/IPlayerStatController.h"
 #include "Interface/IGamePlayStateController.h"
 #include "Object/PlayerInGameObject.h"
@@ -70,11 +71,11 @@ void CInGameWidget::InitStartCountAndMyDistanceText()
 	auto mapInfo = CDataStorageManager::GetInst()->GetSelectedMapInfo();
 
 	{ // start count setting
-		mStartCountTextArr.push_back(L"START!!");
+		mStartCountTextArr.push_back(LOC(InGameStart));
 		mStartCountTextArr.push_back(L"1");
 		mStartCountTextArr.push_back(L"2");
 		mStartCountTextArr.push_back(L"3");
-		mStartCountTextArr.push_back(L"READY~");
+		mStartCountTextArr.push_back(LOC(InGameReady));
 
 		FVector2D pivot = FVector2D(0.5f, 0.5f);
 		FVector2D size = FVector2D(1000.0f, 200.5f);
@@ -283,7 +284,7 @@ void CInGameWidget::InitOtherPlayersInfo()
 		_playerNameText->SetZOrder(ZORDER_INGAME_PLAY_OTHER_HP_BACK);
 
 		wchar_t _playerDistStr[64] = {};
-		swprintf_s(_playerDistStr, L"Dist: %dm", 0);
+		swprintf_s(_playerDistStr, LOC(InGameDistFormat), 0.0f);
 
 		CSharedPtr<CTextBlock> _distanceText = mScene->GetUIManager()->CreateWidget<CTextBlock>("_distanceText_" + std::to_string(_playerInfo.id));
 		AddWidget(_distanceText);
@@ -405,7 +406,7 @@ void CInGameWidget::UpdateOtherPlayersInfo()
 	{
 		auto _netInfo = CMultiplayManager::GetInst()->GetPlayerInfoValueById(statInfo.id);
 		wchar_t _playerDistStr[64] = {};
-		swprintf_s(_playerDistStr, L"Dist: %.0fm", _netInfo.distance);
+		swprintf_s(_playerDistStr, LOC(InGameDistFormat), _netInfo.distance);
 		statInfo.distText->SetText(_playerDistStr);
 
 		float _rate = _netInfo.curHp / statInfo.maxHp;
