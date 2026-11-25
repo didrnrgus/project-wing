@@ -29,7 +29,7 @@ ProjectWing: 위아래 벽 사이를 날며 장애물을 피하고 비행 거리
 ## 릴리즈 (GitHub Actions)
 
 - `.github/workflows/release.yml`: `main`에 push하면 버전을 올리고 Release|x64로 빌드한 뒤 GitHub Release에 `ProjectWing-<ver>-win-x64.zip`을 올린다. `docs/**`, `*.md`만 바뀐 push에서는 실행되지 않는다. Actions 탭에서 수동 실행(`workflow_dispatch`)도 할 수 있다.
-- 버전은 태그 `X.Y.Z`(접두사 없음, 기존 `1.0.0` 형식)다. 기본은 patch +1이고, 커밋 메시지에 `#minor` / `#major`를 넣으면 그 자리를 올린다. 태그는 빌드가 성공해야 생성된다. `server-*` 태그는 계산에서 빠진다.
+- 버전은 태그 `X.Y.Z`(접두사 없음, 기존 `1.0.0` 형식)다. 기본은 patch +1이고, 커밋 **제목(첫 줄)**에 `#minor` / `#major`를 넣으면 그 자리를 올린다(본문은 보지 않는다). 태그는 빌드가 성공해야 생성된다. `server-*` 태그는 계산에서 빠진다.
 - 러너는 `windows-2022`에 고정돼 있다. `windows-latest`는 VS 2026(v145 툴셋만 포함)이라 v143 프로젝트가 빌드되지 않는다.
 - zip 구성: `ProjectWing.bat`, `Release/`(exe, `fmod.dll`, `libcurl-x64.dll`, VC++ 런타임 DLL, `pem/`), `Bin/Asset`, `Bin/Shader`, `Bin/Server/Release/`(서버 exe), `Bin/Log`. 실행 시 필요한 파일이 늘어나면 워크플로의 Package 단계도 고친다.
 - 에셋과 lib/dll은 Git LFS다. 워크플로는 LFS 객체를 캐시해 대역폭을 아낀다.

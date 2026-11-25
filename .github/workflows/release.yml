@@ -2,7 +2,7 @@
 #
 # 버전 규칙 (태그 형식: 1.2.3, 접두사 없음)
 #   - 기본: patch +1
-#   - 이번 push에 포함된 커밋 메시지에 #minor 가 있으면 minor +1, #major 가 있으면 major +1
+#   - 이번 push에 포함된 커밋 제목(첫 줄)에 #minor 가 있으면 minor +1, #major 가 있으면 major +1 (본문은 보지 않음)
 #   - 수동 실행(workflow_dispatch)에서는 bump 입력으로 고른다.
 #   - HEAD에 이미 버전 태그가 있으면(재실행) 그 버전을 그대로 쓴다.
 # 태그는 빌드가 성공한 뒤 릴리즈를 만들 때 함께 생성되므로, 빌드가 실패하면 버전이 올라가지 않는다.
@@ -82,7 +82,8 @@ jobs:
             $bump = $env:BUMP_INPUT
             if (-not $bump) {
               $range = if ($latest) { "$latest..HEAD" } else { 'HEAD~1..HEAD' }
-              $messages = (git log --format=%B $range) -join "`n"
+              # 커밋 제목(첫 줄)만 본다. 본문에서 키워드를 설명하다가 잘못 올라가는 것을 막는다.
+              $messages = (git log --format=%s $range) -join "`n"
               if ($messages -match '#major') { $bump = 'major' }
               elseif ($messages -match '#minor') { $bump = 'minor' }
               else { $bump = 'patch' }
