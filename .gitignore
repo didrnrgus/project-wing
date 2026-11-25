@@ -34,3 +34,6 @@ KDT2Framework/**/AssetProj.pdb
 KDT2Framework/**/Language.ini
 
 Server/BinObj/
+
+# 포트폴리오 노션 가져오기용 묶음 (images, videos와 중복)
+portfolio/*.zip

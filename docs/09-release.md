@@ -6,7 +6,7 @@
 
 | 트리거 | 동작 |
 | --- | --- |
-| `main`에 push | 자동 실행. 단, `docs/**`, `*.md`, `.gitignore`만 바뀐 push는 건너뜀 |
+| `main`에 push | 자동 실행. 단, `docs/**`, `portfolio/**`, `*.md`, `.gitignore`만 바뀐 push는 건너뜀 |
 | Actions 탭 → Release → Run workflow | 수동 실행. `patch` / `minor` / `major` 중 올릴 자리를 고름 |
 
 여러 push가 연달아 들어와도 실행은 한 번에 하나씩 순서대로 돕니다(`concurrency: release`). 그래서 버전이 겹치지 않습니다.
